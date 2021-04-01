@@ -1,0 +1,35 @@
+
+alive_rv32im.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	fe010113          	addi	sp,sp,-32
+   4:	00812e23          	sw	s0,28(sp)
+   8:	02010413          	addi	s0,sp,32
+   c:	00500793          	li	a5,5
+  10:	fef42623          	sw	a5,-20(s0)
+  14:	00300793          	li	a5,3
+  18:	fef42423          	sw	a5,-24(s0)
+  1c:	fec42703          	lw	a4,-20(s0)
+  20:	fe842783          	lw	a5,-24(s0)
+  24:	02f707b3          	mul	a5,a4,a5
+  28:	fef42223          	sw	a5,-28(s0)
+  2c:	00500793          	li	a5,5
+  30:	fef42623          	sw	a5,-20(s0)
+  34:	00300793          	li	a5,3
+  38:	fef42423          	sw	a5,-24(s0)
+  3c:	fec42703          	lw	a4,-20(s0)
+  40:	fe842783          	lw	a5,-24(s0)
+  44:	02f707b3          	mul	a5,a4,a5
+  48:	fef42223          	sw	a5,-28(s0)
+  4c:	000017b7          	lui	a5,0x1
+  50:	f0078793          	addi	a5,a5,-256 # f00 <main+0xf00>
+  54:	fe442703          	lw	a4,-28(s0)
+  58:	00e7a023          	sw	a4,0(a5)
+  5c:	00000793          	li	a5,0
+  60:	00078513          	mv	a0,a5
+  64:	01c12403          	lw	s0,28(sp)
+  68:	02010113          	addi	sp,sp,32
+  6c:	00008067          	ret

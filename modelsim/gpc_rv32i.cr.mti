@@ -1,0 +1,13 @@
+{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv} {0 {vlog -work work -sv -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(20): Cannot open `include file "dom_defines.sv".
+-- Compiling module core
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(21): (vlog-13006) Could not find the package (gpc_rv32i_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(35): near "dft_signlas": syntax error, unexpected IDENTIFIER, expecting ')'.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(118): (vlog-2163) Macro `DOM_EN_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(164): (vlog-2163) Macro `DOM_EN_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(165): (vlog-2163) Macro `DOM_EN_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(166): (vlog-2163) Macro `DOM_EN_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/models_gpc_rv32i/gpc_rv32i/source/rtl/core_rv32i.sv(167): (vlog-2163) Macro `DOM_EN_MSFF is undefined.
+
+} {3.0 4.0 5.0 12.0} {}}
