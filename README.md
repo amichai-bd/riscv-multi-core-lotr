@@ -12,3 +12,4 @@ d_mem (Data Memory) - compiler Scratchpad + MMIO + MMIO CRs (Control Register)
 Ring EP (EndPoint) to Mangae the core & ring RD/WR traffic.
 
 ## Software stack for multi-thread processing
+Proof of concept for multi-thread applications for the multi-core design
