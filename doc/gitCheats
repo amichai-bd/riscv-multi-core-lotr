@@ -1,0 +1,42 @@
+tree //to show the dir tree
+got pull origin
+gvim PATH
+git citool &
+gitk &
+
+
+----------git commands----------
+clone - Bring a repository that is hosted somewhere like Github into a folder on yur local machine.
+add - Track your files and changes in Git.
+	git add . - Track all files.
+commit - Save your files in Git.
+	git commit -m "msg" -m "discription"
+	-a - Add (can do add from commit).
+	-am - Add and write msg (only works for modified files, not new).
+push - Upload Git commits to a remote repository, like Github.
+	git push
+	origin - Location of Git repository.
+	master - The branch that we want to push to.
+pull - Download changes from remote repo to your local machine, the opposite of push.
+status - Show all files that were updated or created or deleted but haven't been saved in a commit yet.
+init - Turn a folder into a Git repository.
+	git init
+remote - Add a remote to a Git repo somewhere else (usualy Github).
+	git remote add origin "link to repo somewhere"
+	-v showes any remote repo that are connected to this repo.
+branch - Show the branch of repo.
+	git branch
+checkout - Move between branches.
+	git checkout "BranchName"
+	-b "name" - Create new branch.
+	-d "name" - Delete branch.
+diff - Show files that are modified in branch compared to the master.
+	git diff "branch name"
+merge - Merge current branch to master.
+	git merge master
+reset - Undo changes.
+	git reset "FileName"
+	git reset HEAD~1
+	git reset "commit number"
+log - Log of all commits.
+	git log
