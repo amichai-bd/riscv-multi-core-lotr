@@ -1,10 +1,9 @@
-{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv}
+{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
--- Compiling module d_mem_wrap
--- Importing package gpc_4t_pkg
+-- Compiling module gpc_4t_tb
 
 Top level modules:
-	d_mem_wrap
+	gpc_4t_tb
 
 } {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
@@ -14,21 +13,13 @@ Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 
 Top level modules:
 	i_mem
 
-} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv}
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
--- Compiling module gpc_4t_tb
-
-Top level modules:
-	gpc_4t_tb
-
-} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv} {2 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv}
-Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
--- Compiling module core_4t
+-- Compiling module d_mem_wrap
 -- Importing package gpc_4t_pkg
-** Warning: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv(39): (vlog-13314) Defaulting port 'CRQnnnH' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
 
 Top level modules:
-	core_4t
+	d_mem_wrap
 
 } {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem_wrap.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem_wrap.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
@@ -46,16 +37,6 @@ Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 
 Top level modules:
 	gpc_4t
 
-} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv}
-Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
--- Compiling package gpc_4t_pkg
-
-Top level modules:
-	--none--
-
-} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv}
-Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
-
 } {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
 -- Compiling module d_mem
@@ -63,5 +44,15 @@ Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 
 
 Top level modules:
 	d_mem
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling package gpc_4t_pkg
+
+Top level modules:
+	--none--
 
 } {} {}}

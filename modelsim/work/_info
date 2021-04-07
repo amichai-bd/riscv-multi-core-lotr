@@ -39,24 +39,24 @@ dC:/intelFPGA_pro/20.4
 vcore_4t
 Z2 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
 Z3 DXx4 work 10 gpc_4t_pkg 0 22 TUOW87]jV:KnV7EWV;GaY0
-!s110 1617302400
+Z4 !s110 1617808480
 !i10b 1
-!s100 g`GO4Ld]o@D=nzzQlbBek1
-Z4 !s11b Dg1SIo80bB@j0V0VzS_@n1
-IkD]<ozOI:c12_SPJa<`Ei3
+!s100 <VXc]G5^8B;Tb:ZK4LVWI3
+Z5 !s11b Dg1SIo80bB@j0V0VzS_@n1
+IlZVFhj?XH>N;FGP2`DWH]2
 S1
-Z5 dC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/modelsim
-Z6 w1617290165
+Z6 dC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/modelsim
+w1617808442
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv
-!i122 168
-L0 23 307
+!i122 192
+L0 23 309
 Z7 VDg1SIo80bB@j0V0VzS_@n1
 Z8 OV;L;2020.3;71
 r1
 !s85 0
 31
-!s108 1617302400.000000
+!s108 1617808480.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/core_4t.sv|
 !i113 1
@@ -66,24 +66,24 @@ Z11 tCvgOpt 0
 vd_mem
 R2
 R3
-!s110 1617302401
+!s110 1617808481
 !i10b 1
 !s100 im`PBOFRfG@h[0fY2^=aR3
-R4
+R5
 ISPa3EUYH68:YZfn=Z_NhX1
 S1
-R5
 R6
+Z12 w1617290165
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem.sv
-!i122 169
+!i122 193
 L0 18 51
 R7
 R8
 r1
 !s85 0
 31
-!s108 1617302401.000000
+!s108 1617808481.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem.sv|
 !i113 1
@@ -93,24 +93,24 @@ R11
 vd_mem_wrap
 R2
 R3
-!s110 1617302402
+!s110 1617808483
 !i10b 1
 !s100 @^@SjL>aZ[i7Oo:eC6<;=3
-R4
+R5
 IlKnX[;=z7T7Kc^Ook8XjY1
 S1
-R5
 R6
+R12
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv
-!i122 170
+!i122 194
 L0 17 117
 R7
 R8
 r1
 !s85 0
 31
-Z12 !s108 1617302402.000000
+!s108 1617808482.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/d_mem_wrap.sv|
 !i113 1
@@ -120,24 +120,24 @@ R11
 vgpc_4t
 R2
 R3
-Z13 !s110 1617302403
+Z13 !s110 1617808485
 !i10b 1
 !s100 ngAd_TjdWn]3]gm0lGUgL2
-R4
+R5
 I6ZQNAiVj:V^c4G]nDXz_M1
 S1
-R5
 R6
+R12
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/gpc_4t.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/gpc_4t.sv
-!i122 173
+!i122 197
 L0 22 65
 R7
 R8
 r1
 !s85 0
 31
-Z14 !s108 1617302403.000000
+!s108 1617808485.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/gpc_4t.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/gpc_4t.sv|
 !i113 1
@@ -146,25 +146,25 @@ R10
 R11
 Xgpc_4t_pkg
 R2
-!s110 1617302399
+R4
 !i10b 1
 !s100 AQ[X9:A<HzSkZdIRb;ogX0
-R4
+R5
 ITUOW87]jV:KnV7EWV;GaY0
 S1
-R5
 R6
-Z15 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv
-Z16 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv
-!i122 167
-Z17 L0 13 0
+R12
+Z14 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv
+Z15 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv
+!i122 191
+Z16 L0 13 0
 VTUOW87]jV:KnV7EWV;GaY0
 R8
 r1
 !s85 0
 31
-!s108 1617302398.000000
-Z18 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv|
+!s108 1617808479.000000
+Z17 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv|
 !i113 1
 R9
@@ -172,24 +172,24 @@ R10
 R11
 vgpc_4t_tb
 R2
-!s110 1617302404
+!s110 1617808487
 !i10b 1
 !s100 `A;:dboW^9fFIz]oHbNjK3
-R4
+R5
 Inea6ZWM57?^jORc_Z<^S90
 S1
-R5
 R6
+R12
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv
-!i122 174
+!i122 198
 L0 5 92
 R7
 R8
 r1
 !s85 0
 31
-!s108 1617302404.000000
+!s108 1617808486.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv|
 !i113 1
@@ -201,22 +201,22 @@ R2
 !s110 1617217309
 !i10b 1
 !s100 6]T[lOoITMMo0_0ma8O:V1
-R4
+R5
 Ig_`UgO^B^W8S^eh@zjPfn0
 S1
-R5
+R6
 w1617217245
+R14
 R15
-R16
 !i122 2
-R17
+R16
 Vg_`UgO^B^W8S^eh@zjPfn0
 R8
 r1
 !s85 0
 31
 !s108 1617217308.000000
-R18
+R17
 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_param_pkg.sv|
 !i113 1
 R9
@@ -224,24 +224,24 @@ R11
 vi_mem
 R2
 R3
-R13
+!s110 1617808484
 !i10b 1
 !s100 TIl74daS<X6?4R>@B:]_J3
-R4
+R5
 Izg<DXR]2kN^RNmEGISia11
 S1
-R5
 R6
+R12
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem.sv
-!i122 171
+!i122 195
 L0 16 38
 R7
 R8
 r1
 !s85 0
 31
-R12
+!s108 1617808483.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem.sv|
 !i113 1
@@ -254,21 +254,21 @@ R3
 R13
 !i10b 1
 !s100 lz?Q65SC43FL5<@a[nWfH3
-R4
+R5
 IHaGS83o9oPgP[DOd4Cd=m1
 S1
-R5
 R6
+R12
 8C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem_wrap.sv
 FC:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem_wrap.sv
-!i122 172
+!i122 196
 L0 26 35
 R7
 R8
 r1
 !s85 0
 31
-R14
+!s108 1617808484.000000
 !s107 C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common/gpc_4t_defines.sv|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem_wrap.sv|
 !s90 -reportprogress|300|-work|work|-sv|+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/common|-stats=none|C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/rtl/i_mem_wrap.sv|
 !i113 1

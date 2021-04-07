@@ -95,13 +95,14 @@ logic               CtrlMemWrQ101H    ;
 logic               CtrlStoreQ101H    ;
 logic               CtrlInsertNopQ101H;
 logic               CtrlInsertNopQ102H;
+logic               CtrlMemToRegQ102H;
+logic               CtrlPcToRegQ102H;
+logic               CtrlFreezePcQ101H;
 
+logic [6:0]         OpcodeQ101H;
 
 
 logic [31:0] PcPlus4Q102H;
-logic CtrlMemToRegQ102H;
-logic CtrlPcToRegQ102H;
-logic        CtrlFreezePcQ101H;
 logic [31:0] PcBranchQ101H;
 logic [31:0] PcQ101H;
 logic [31:0] PcPlus4Q100H;
@@ -150,7 +151,8 @@ always_comb begin : set_next_pc
         default : NextPcQ100H = PcPlus4Q100H;
     endcase
 end
-`GPC_EN_RST_MSFF( PcQ100H, NextPcQ100H, QClk, EnPcQnnnH, (RstPcQnnnH || RstQnnnH)) 
+//`GPC_EN_RST_MSFF( PcQ100H, NextPcQ100H, QClk, EnPcQnnnH, (RstPcQnnnH || RstQnnnH)) 
+`GPC_EN_RST_MSFF( PcQ100H, NextPcQ100H, QClk, 1'b1, (RstPcQnnnH || RstQnnnH)) 
 `GPC_MSFF       ( PcQ101H, PcQ100H,     QClk ) 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +211,7 @@ always_comb begin : write_register_file
 end //always_comb
 
 //========The registers=========================
-`GPC_MSFF(RegisterQnnnH, NextRegisterQnnnH, QClk) 
+`GPC_RST_MSFF(RegisterQnnnH, NextRegisterQnnnH, QClk, RstQnnnH) 
 //==============================================
 
 //Read from RegisterQnnnH - Include fowording units 
@@ -289,7 +291,9 @@ always_comb begin : alu_logic
         4'b0111  : AluOutQ101H = AluIn1Q101H & AluIn2Q101H                            ;//AND
         default  : AluOutQ101H = 32'b0                                                ;
     endcase
+end
 
+always_comb begin : branch_comp
     //for branch condition.
     unique casez ({CtrlBranchQ101H , Funct3Q101H})
        4'b1_000 : BranchCondMetQ101H =  (AluIn1Q101H==AluIn1Q102H)                   ;// BEQ
@@ -300,7 +304,6 @@ always_comb begin : alu_logic
        4'b1_111 : BranchCondMetQ101H = ~(AluIn1Q101H<AluIn1Q102H)                    ;// BGEU
        default  : BranchCondMetQ101H = 1'b0                                          ;
     endcase
-
 end
 
 
