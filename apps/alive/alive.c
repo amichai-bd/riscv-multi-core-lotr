@@ -19,12 +19,7 @@ int d;
 
 a = 5;
 b = 3;
-c = a*b; //5*3
-//d = c/b; //
-a = 5;
-b = 3;
-c = a*b; //5*3
-//d = c/b; //
+c = a*b; //
 MMIO_GENERAL[0] = c;
 
 return 0;
