@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 // File             : core_4t 
 // Original Author  : Amichai Ben-David
+// Code Owner       : 
 // Created          : 2/2021
 //-----------------------------------------------------------------------------
 // Description :
@@ -42,7 +43,7 @@ module core_4t
 
 //  program counter
 logic [31:0]        PcPlus4Q101H; 
-logic [31:0]        NextPcQ100H;
+logic [31:0]        NextPcQnnnH;
 logic               EnPcQnnnH;
 logic               RstPcQnnnH;
 
@@ -145,14 +146,14 @@ always_comb begin : set_next_pc
     PcBranchQ101H = PcQ101H + B_ImmediateQ101H; // ALU will set if branch condition met
     PcPlus4Q100H  = PcQ100H + 32'd4;
     unique casez ({ CtrlJalrQ101h , CtrlJalQ101H , BranchCondMetQ101H}) 
-        3'b001  : NextPcQ100H = PcBranchQ101H;     // OP_BRANCH 
-        3'b010  : NextPcQ100H = J_ImmediateQ101H;  // OP_JAL
-        3'b100  : NextPcQ100H = AluOutQ101H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
-        default : NextPcQ100H = PcPlus4Q100H;
+        3'b001  : NextPcQnnnH = PcBranchQ101H;     // OP_BRANCH 
+        3'b010  : NextPcQnnnH = J_ImmediateQ101H;  // OP_JAL
+        3'b100  : NextPcQnnnH = AluOutQ101H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
+        default : NextPcQnnnH = PcPlus4Q100H;
     endcase
 end
-//`GPC_EN_RST_MSFF( PcQ100H, NextPcQ100H, QClk, EnPcQnnnH, (RstPcQnnnH || RstQnnnH)) 
-`GPC_EN_RST_MSFF( PcQ100H, NextPcQ100H, QClk, 1'b1, (RstPcQnnnH || RstQnnnH)) 
+//`GPC_EN_RST_MSFF( PcQ100H, NextPcQnnnH, QClk, EnPcQnnnH, (RstPcQnnnH || RstQnnnH)) 
+`GPC_EN_RST_MSFF( PcQ100H, NextPcQnnnH, QClk, 1'b1, (RstPcQnnnH || RstQnnnH)) 
 `GPC_MSFF       ( PcQ101H, PcQ100H,     QClk ) 
 
 ////////////////////////////////////////////////////////////////////////////////////////
