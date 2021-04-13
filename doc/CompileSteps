@@ -1,0 +1,13 @@
+GNU_DIR=/home/saar/projects/riscv/install/rv32i/bin
+
+# Compile .c file to RISCV32 assembly file
+$GNU_DIR/riscv32-unknown-elf-gcc -S test.c
+
+# Now we go to the .s file and change "main" with _start
+
+# Compile .s file to object file
+$GNU_DIR/riscv32-unknown-elf-gcc -ffreestanding -fno-pic /
+	-march=rv32i -mabi=ilp32 -nostdlib -Wl,-Ttext=0x0 -Wl,--no-relax test.s -o testFileS
+
+# Comand to open o files
+hexdump -C testFileS
