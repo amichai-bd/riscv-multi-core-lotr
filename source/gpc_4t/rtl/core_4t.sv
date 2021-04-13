@@ -45,12 +45,10 @@ module core_4t
 logic [31:0]        PcPlus4Q101H; 
 logic [31:0]        NextPcQnnnH;
 logic               EnPcQnnnH;
-logic               RstPcQnnnH;
 
 //  registers
 logic [4:0]         RegRdPtr1Q101H;
 logic [4:0]         RegRdPtr2Q101H;
-logic [4:0]         RegRdPtr3Q101H;
 logic [31:0]        RegRdData1Q101H;
 logic [31:0]        RegRdData2Q101H;
 logic [31:0]        RegRdData3Q101H;
@@ -98,27 +96,67 @@ logic               CtrlInsertNopQ101H;
 logic               CtrlInsertNopQ102H;
 logic               CtrlMemToRegQ102H;
 logic               CtrlPcToRegQ102H;
-logic               CtrlFreezePcQ101H;
 
 logic [6:0]         OpcodeQ101H;
 
 
-logic [31:0] PcPlus4Q102H;
-logic [31:0] PcBranchQ101H;
-logic [31:0] PcQ101H;
-logic [31:0] PcPlus4Q100H;
-logic        BranchCondMetQ101H;
-logic        CtrlMemToRegQ103H;
-logic        CtrlPcToRegQ103H;
-logic [31:0] PcPlus4Q103H;
-logic        CtrlRegWrQ103H;
+logic [31:0]        PcPlus4Q102H;
+logic [31:0]        PcBranchQ101H;
+logic [31:0]        PcQ101H;
+logic [31:0]        PcPlus4Q100H;
+logic               BranchCondMetQ101H;
+logic               CtrlMemToRegQ103H;
+logic               CtrlPcToRegQ103H;
+logic [31:0]        PcPlus4Q103H;
+logic               CtrlRegWrQ103H;
+
+logic [3:0]         NextThreadQ100H;
+logic [3:0]         ThreadQ100H;
+logic [3:0]         ThreadQ101H;
+logic [3:0]         ThreadQ102H;
+logic [3:0]         ThreadQ103H;
+logic [3:0]         ShftRegQ100H;
+logic [3:0]         NextShftRegQ100H;
+logic [3:0]         EnPCQnnnH;
+logic               T0EnPcQnnnH;
+logic               T1EnPcQnnnH;
+logic               T2EnPcQnnnH;
+logic               T3EnPcQnnnH;
+logic [31:0]        T0PcQ100H;
+logic [31:0]        T1PcQ100H;
+logic [31:0]        T2PcQ100H;
+logic [31:0]        T3PcQ100H;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //          CORE_4t Module Code
 ////////////////////////////////////////////////////////////////////////////////////////
-// Insert NOP when Next PC is not PC+4
-`GPC_MSFF ( CtrlInsertNopQ102H, CtrlInsertNopQ101H, QClk ) 
-assign InstructionQ101H = CtrlInsertNopQ102H ? NOP : InstFetchQ101H;
 
+
+// ========= Thread Logic ==============
+// Shift register to move the "valid" thread for each Cycle.
+assign NextThreadQ100H = {ThreadQ100H[2:0], ThreadQ100H[3]};
+`GPC_RST_VAL_MSFF(ThreadQ100H, NextThreadQ100H, QClk, RstQnnnH, 4'b0001)
+assign ThreadQ101H = {ThreadQ100H[0] , ThreadQ100H[3:1]} ; //`GPC_MSFF(ThreadQ101H, ThreadQ100H, QClk)
+assign ThreadQ102H = {ThreadQ101H[0] , ThreadQ101H[3:1]} ; //`GPC_MSFF(ThreadQ102H, ThreadQ101H, QClk)
+assign ThreadQ103H = {ThreadQ102H[0] , ThreadQ102H[3:1]} ; //`GPC_MSFF(ThreadQ103H, ThreadQ102H, QClk) 
+// TODO - Please add documentation comment on this logic - explain the assign and the GPC_MSFF are equvelent 
+//-----------------------------------------
+//          |  Q100H  Q101H  Q102H  Q103H
+//-----------------------------------------
+// cycle 0  |  0001   1000   0100   0010
+// cycle 1  |  0010   0001   1000   0100   
+// cycle 2  |  0100   0010   0001   1000
+// cycle 3  |  1000   0100   0010   0001
+// cycle 4  |  0001   1000   0100   0010
+// cycle 5  |  0010   0001   1000   0100   
+// cycle 6  |  0100   0010   0001   1000
+// cycle 7  |  1000   0100   0010   0001
+
+
+// Insert NOP - (back pressure, Wait for Read, ext..)
+// FIXME - currently Enable only Thread0; ->Insert NOP for any other Thread
+assign CtrlInsertNopQ101H = (ThreadQ101H != 4'b0001);          
+assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Instruction "Decode" per Opcode Type - R/I/S/B/U/J Types
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +167,6 @@ assign B_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[7]    
 assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12] , InstructionQ101H[20]    , InstructionQ101H[30:21] , 1'b0}; 
 assign RegRdPtr1Q101H   = InstructionQ101H[19:15];
 assign RegRdPtr2Q101H   = InstructionQ101H[24:20];
-assign RegRdPtr3Q101H   = CRQnnnH.rd_ptr;
 assign RegWrPtrQ101H    = InstructionQ101H[11:7];
 assign Funct3Q101H      = InstructionQ101H[14:12];
 assign Funct7Q101H      = InstructionQ101H[31:25];
@@ -140,8 +177,6 @@ assign OpcodeQ101H      = InstructionQ101H[6:0];
 //          PC - Program Counter
 ////////////////////////////////////////////////////////////////////////////////////////
 
-assign EnPcQnnnH  = ~CtrlFreezePcQ101H;
-assign RstPcQnnnH = CRQnnnH.rst_pc;
 always_comb begin : set_next_pc
     PcBranchQ101H = PcQ101H + B_ImmediateQ101H; // ALU will set if branch condition met
     PcPlus4Q100H  = PcQ100H + 32'd4;
@@ -152,8 +187,29 @@ always_comb begin : set_next_pc
         default : NextPcQnnnH = PcPlus4Q100H;
     endcase
 end
-//`GPC_EN_RST_MSFF( PcQ100H, NextPcQnnnH, QClk, EnPcQnnnH, (RstPcQnnnH || RstQnnnH)) 
-`GPC_EN_RST_MSFF( PcQ100H, NextPcQnnnH, QClk, 1'b1, (RstPcQnnnH || RstQnnnH)) 
+
+
+
+assign BrOrJmpQ102H = ( CtrlJalrQ101h || CtrlJalQ101H || BranchCondMetQ101H);
+
+
+assign EnPCQnnnH   = 4'b0001; //Enable Only Thread 0 FIXME - this is Temp for Enabling the PIPE for Single Thread.
+assign T0EnPcQnnnH = EnPCQnnnH[0] && (ThreadQ100H[0] || (BrOrJmpQ102H && ThreadQ102H[0]) );
+assign T1EnPcQnnnH = EnPCQnnnH[1] && (ThreadQ100H[1] || (BrOrJmpQ102H && ThreadQ102H[1]) );
+assign T2EnPcQnnnH = EnPCQnnnH[2] && (ThreadQ100H[2] || (BrOrJmpQ102H && ThreadQ102H[2]) );
+assign T3EnPcQnnnH = EnPCQnnnH[3] && (ThreadQ100H[3] || (BrOrJmpQ102H && ThreadQ102H[3]) );
+
+
+`GPC_EN_RST_MSFF( T0PcQ100H, NextPcQnnnH, QClk, T0EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T1PcQ100H, NextPcQnnnH, QClk, T1EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T2PcQ100H, NextPcQnnnH, QClk, T2EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T3PcQ100H, NextPcQnnnH, QClk, T3EnPcQnnnH, RstQnnnH) 
+
+assign PcQ100H = ThreadQ100H[0] ? T0PcQ100H :
+                 ThreadQ100H[1] ? T1PcQ100H :
+                 ThreadQ100H[2] ? T2PcQ100H :
+                                  T3PcQ100H ;
+
 `GPC_MSFF       ( PcQ101H, PcQ100H,     QClk ) 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -173,12 +229,6 @@ always_comb begin : decode_opcode
     CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
     CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
 
-    // Hazard Detection Unit
-    // freeze PC and inster NOP when LOAD to register and rs1/0 are the Same
-    CtrlFreezePcQ101H   = ( CtrlMemRdQ102H && (RegWrPtrQ102H == RegRdPtr1Q101H)) || 
-                          ( CtrlMemRdQ102H && (RegWrPtrQ102H == RegRdPtr2Q101H))  ;
-    CtrlInsertNopQ101H  = CtrlFreezePcQ101H || (OpcodeQ101H == OP_JAL) || (OpcodeQ101H == OP_JALR) || BranchCondMetQ101H;
-    
     // ALU will perform the encoded fubct3 operation.
     CtrlAluOpQ101H      = {1'b0,Funct3Q101H};
     // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
@@ -219,8 +269,6 @@ end //always_comb
 always_comb begin : read_register_file
     RegRdData1Q101H = RegisterQnnnH[RegRdPtr1Q101H];
     RegRdData2Q101H = RegisterQnnnH[RegRdPtr2Q101H];
-    //RegRdData3Q101H is used for DFD - Access the Register Content
-    RegRdData3Q101H = RegisterQnnnH[RegRdPtr3Q101H];
     //////////////////////
     //   fowording units
     //////////////////////

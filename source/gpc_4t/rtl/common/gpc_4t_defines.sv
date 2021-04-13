@@ -26,6 +26,12 @@
             else     q <= i;            \
          end
         
+`define  GPC_RST_VAL_MSFF(q,i,clk,rst,val) \
+         always_ff @(posedge clk) begin    \
+            if (rst) q <= val;             \
+            else     q <= i;               \
+         end
+
 `define  GPC_EN_RST_MSFF(q,i,clk,en,rst)\
          always_ff @(posedge clk)       \
             if (rst)    q <='0;         \

@@ -24,7 +24,7 @@ parameter OP_OP        = 7'b0110011;
 parameter OP_FENCE     = 7'b0001111;
 parameter OP_SYSTEM    = 7'b1110011;
 
-parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //add x0 , x0 , 0
+parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 , 0
 
 //---------------------MEMORY------------------------
 //                 start   size    end     # of words

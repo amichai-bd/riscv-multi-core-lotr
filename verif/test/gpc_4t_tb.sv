@@ -25,9 +25,9 @@ module gpc_4t_tb ();
 
     // reset generation
     initial begin: reset_gen
+            $readmemh("../apps/alive/alive_rv32e_inst_mem.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
             rst = 1'b1;
         #80 rst = 1'b0;
-            $readmemh("../apps/alive/alive_rv32e_inst_mem.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
     end: reset_gen
 
 gpc_4t gpc_4t(
