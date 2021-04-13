@@ -18,11 +18,11 @@ Instantiating the Cores and Ring into a single IP design.
 Proof of concept for multi-thread applications for the multi-core design
 
 # Pointers To Get Started
-- RISCV Tool Chain: 
-- Core - RTL Design
-- Ring - RTL Deisgn
-- Validation - SW Stack
-- Proof Of Concept - SW Stack
+- RISCV Tool Chain: TODO  
+- Core - RTL Design: TODO  
+- Ring - RTL Deisgn: TODO  
+- Validation - SW Stack: TODO  
+- Proof Of Concept - SW Stack:TODO  
 
 # 
 
