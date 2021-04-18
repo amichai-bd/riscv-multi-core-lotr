@@ -52,8 +52,8 @@ altera_sram_512x32_take3	altera_sram_512x32_data_mem (
 	.address  (offset_address[10:2]),
 	.byteena  (byteena),
 	.data     (data),
-	.rden     (rden && in_range_data),
-	.wren     (wren && in_range_data),
+	.rden     (rden),
+	.wren     (wren),
 	.q        (data_q),
 	);
 `else
@@ -62,8 +62,8 @@ d_mem d_mem (
     .address  (offset_address[31:0]),
     .byteena  (byteena),
     .data     (data),
-    .rden     (rden&&in_range_data),
-    .wren     (wren&&in_range_data),
+    .rden     (rden),
+    .wren     (wren),
     .q        (data_q)
     );
 `endif
@@ -123,9 +123,8 @@ end
 
 //mux between the MMIO and the DATA
 always_comb begin
-    q      = sample_in_range_data      ? data_q:
-             sample_in_range_mmio_data ? mmio_q:
-                                         32'b0;
+    q      =  data_q;
+
     cr       = mmio_mem.cr;
     drct_out = mmio_mem.drct_out.out;
 end

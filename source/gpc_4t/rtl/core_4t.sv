@@ -40,6 +40,9 @@ module core_4t
     input  t_cr         CRQnnnH,
     output t_dfd_reg    DftSignlasQnnnH
     );
+//	general signals
+logic 	RstQnn1H;
+logic 	DervRstQnn1H;
 
 //  program counter
 logic [31:0]        PcPlus4Q101H; 
@@ -259,8 +262,15 @@ always_comb begin : write_register_file
         NextRegisterQnnnH[RegWrPtrQ103H] = RegWrDataQ103H;// If CtrlRegWrQ103H - Write to register file Only in the RegWrPtrQ103H location
     end //if
     NextRegisterQnnnH[0]         = 32'b0;           // Register[0] always '0;
-end //always_comb
+	if (DervRstQnn1H) begin
+		NextRegisterQnnnH[2]		 = 32'hf00;		//sp
+		NextRegisterQnnnH[7] 		 = 32'hf00; 	//s0		
+	end
 
+
+end //always_comb
+`GPC_MSFF(RstQnn1H,RstQnnnH,QClk)
+assign DervRstQnn1H = (RstQnn1H && (!RstQnnnH));
 //========The registers=========================
 `GPC_RST_MSFF(RegisterQnnnH, NextRegisterQnnnH, QClk, RstQnnnH) 
 //==============================================
