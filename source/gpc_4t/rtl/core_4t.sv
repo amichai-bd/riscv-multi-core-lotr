@@ -11,9 +11,11 @@
 // The "core_4t" in a single RTL core module that supports 4 threads
 // ----4 PipeStage----
 // 1) Q100H Send Pc to Instruction Memory - Instruction Fetch
-// 2) Q101H Instruction Decode + Excecute
-// 3) Q102H Sent Address+Data to Data Memory 
-// 4) Q103H Writeback data from Memory/ALU to Registerfile
+// 2) Q101H Instruction Decode 
+// 3) Q102H Excecute 
+// 4) Q103H Sent Address+Data to Data Memory 
+// 4) Q104H Writeback data from Memory/ALU to Registerfile
+
 //------------------------------------------------------------------------------
 // Modification history :
 //
@@ -28,7 +30,7 @@ module core_4t
     input  logic        RstQnnnH        ,
     //Instruction Memory
     output logic [31:0] PcQ100H         ,
-    input  logic [31:0] InstFetchQ101H,
+    input  logic [31:0] InstFetchQ101H, 		//the input from the i_mem. the instruction. already sampled in a @ff at the i_mem
     //Data Memory
     output logic [31:0] MemAdrsQ102H    ,
     output logic [31:0] MemWrDataWQ102H ,
@@ -72,7 +74,7 @@ logic [31:0]        AluIn1Q102H;
 logic [31:0]        AluIn2Q101H;
 
 //  Immediate Formats
-logic [31:0]        InstructionQ101H;
+logic [31:0]        InstructionQ101H;			//intenal logic to assign the input instruction or a NOP
 logic [31:0]        I_ImmediateQ101H; 
 logic [31:0]        S_ImmediateQ101H; 
 logic [31:0]        B_ImmediateQ101H; 
@@ -135,110 +137,118 @@ logic [31:0]        T3PcQ100H;
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
+//**************************************************************Q100H**************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+
+
 // ========= Thread Logic ==============
-// Shift register to move the "valid" thread for each Cycle.
+// 		Shift register to move the "valid" thread for each Cycle.
+//		As long as RstQnnnH is up, ThreadQ100H is 0001 (Thread 0)
+//		Due to the assign bits breakdown form , NextThreadQ100H gets the value 0010 from ThreadQ100H bits
+//		ThreadQ101H, ThreadQ102H and ThreadQ103H will get the values 1000 , 0100 ,0010 
+//		When RstQnnnH sets down the Shift register start moving the valid bit with only a single flip-flop that
+//		sets ThreadQ100H to NextThreadQ100H value (0010) in the next cycle and because of assign statments all other Threads
+//		are shifted as shows on the table
+//		The assign statments are equivalent to use `GPC_MSFF with much less resources
+// 		Great credit to Amichai Ben-David for the economical and efficient implementation
+
+logic [3:0]	RstVal = 4'b0001;
 assign NextThreadQ100H = {ThreadQ100H[2:0], ThreadQ100H[3]};
-`GPC_RST_VAL_MSFF(ThreadQ100H, NextThreadQ100H, QClk, RstQnnnH, 4'b0001)
+`GPC_RST_VAL_MSFF(ThreadQ100H, NextThreadQ100H, QClk, RstQnnnH, RstVal)
 assign ThreadQ101H = {ThreadQ100H[0] , ThreadQ100H[3:1]} ; //`GPC_MSFF(ThreadQ101H, ThreadQ100H, QClk)
 assign ThreadQ102H = {ThreadQ101H[0] , ThreadQ101H[3:1]} ; //`GPC_MSFF(ThreadQ102H, ThreadQ101H, QClk)
 assign ThreadQ103H = {ThreadQ102H[0] , ThreadQ102H[3:1]} ; //`GPC_MSFF(ThreadQ103H, ThreadQ102H, QClk) 
-// TODO - Please add documentation comment on this logic - explain the assign and the GPC_MSFF are equvelent 
-//-----------------------------------------
-//          |  Q100H  Q101H  Q102H  Q103H
-//-----------------------------------------
-// cycle 0  |  0001   1000   0100   0010
-// cycle 1  |  0010   0001   1000   0100   
-// cycle 2  |  0100   0010   0001   1000
-// cycle 3  |  1000   0100   0010   0001
-// cycle 4  |  0001   1000   0100   0010
-// cycle 5  |  0010   0001   1000   0100   
-// cycle 6  |  0100   0010   0001   1000
-// cycle 7  |  1000   0100   0010   0001
+//    	-----------------------------------------
+//    	          |  Q100H  Q101H  Q102H  Q103H
+//    	-----------------------------------------
+//    	 cycle 0  |  0001   1000   0100   0010
+//    	 cycle 1  |  0010   0001   1000   0100   
+//    	 cycle 2  |  0100   0010   0001   1000
+//    	 cycle 3  |  1000   0100   0010   0001
+//    	 cycle 4  |  0001   1000   0100   0010
+//    	 cycle 5  |  0010   0001   1000   0100   
+//    	 cycle 6  |  0100   0010   0001   1000
+//    	 cycle 7  |  1000   0100   0010   0001
 
 
-// Insert NOP - (back pressure, Wait for Read, ext..)
-// FIXME - currently Enable only Thread0; ->Insert NOP for any other Thread
-assign CtrlInsertNopQ101H = (ThreadQ101H != 4'b0001);          
-assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;
+////////////////////////////////////////////////////////////////////////////////////////
+//          Instruction "Fetch" - Send Pc to Instruction Memory 
+//			Four Seperate Program Counters - one for each thread.
+//			The next PC for each thread calculated at Q102H pipe stage
+//			Each PC samples the value from Q102H and its enable signal toggle when 
+//			the thread he represents is currently running on Q102H
+////////////////////////////////////////////////////////////////////////////////////////   
+   
+   
+assign EnPCQnnnH   = 4'b0001; //Enable Only Thread 0 FIXME - this is Temp for Enabling the PIPE for Single Thread.
+assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
+assign T1EnPcQ100H = EnPCQnnnH[1] && ThreadQ102H[1];
+assign T2EnPcQ100H = EnPCQnnnH[2] && ThreadQ102H[2];
+assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
+  
+`GPC_EN_RST_MSFF( T0PcQ100H, PcQ102H, QClk, T0EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T1PcQ100H, PcQ102H, QClk, T1EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T2PcQ100H, PcQ102H, QClk, T2EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T3PcQ100H, PcQ102H, QClk, T3EnPcQnnnH, RstQnnnH) 
+
+always_comb begin : next_thread's_pc_sel
+	//mux 4:1
+    unique casez (ThreadQ100H) 
+        4'b0001  : PcQ100H = T0PcQ100H; 
+        4'b0010  : PcQ100H = T1PcQ100H; 
+        4'b0100  : PcQ100H = T2PcQ100H; 
+        default  : PcQ100H = T3PcQ100H;
+    endcase
+end
+
+//the PC+4 adder
+PcPlus4Q100H  = PcQ100H + 32'd4;
+
+
+/// 	Q100H to Q101H Flip Flops. 
+///		Data from I_MEM is sampled inside I_MEM module
+`GPC_MSFF       ( PcQ101H, PcQ100H,  QClk ) 
+`GPC_MSFF       ( PcPlus4Q101H, PcPlus4Q100H,  QClk ) 
+
+
+//**************************************************************Q101H**************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Instruction "Decode" per Opcode Type - R/I/S/B/U/J Types
+// 			Here we break the InstructionQ101H into every possible Type 
 ////////////////////////////////////////////////////////////////////////////////////////
+
+assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;		//internal logic for the instruction - the input or NOP
+////////////////////////////////////////
+//			Immediate Generator
+////////////////////////////////////////
 assign U_ImmediateQ101H = { InstructionQ101H[31:12] , 12'b0 } ; 
 assign I_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[24:20] }; 
 assign S_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[11:7]  }; 
 assign B_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[7]     , InstructionQ101H[30:25] , InstructionQ101H[11:8]  , 1'b0}; 
 assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12] , InstructionQ101H[20]    , InstructionQ101H[30:21] , 1'b0}; 
-assign RegRdPtr1Q101H   = InstructionQ101H[19:15];
-assign RegRdPtr2Q101H   = InstructionQ101H[24:20];
-assign RegWrPtrQ101H    = InstructionQ101H[11:7];
-assign Funct3Q101H      = InstructionQ101H[14:12];
-assign Funct7Q101H      = InstructionQ101H[31:25];
-assign ShamtQ101H       = InstructionQ101H[24:20];
-assign OpcodeQ101H      = InstructionQ101H[6:0];
+////////////////////////////////////////
+//			Instruction "BreakDown"
+////////////////////////////////////////
+assign RegRdPtr1Q101H   = InstructionQ101H[19:15];			// rs1 register for R/S/I/B Type
+assign RegRdPtr2Q101H   = InstructionQ101H[24:20];			// rs2 register for R/S/B Type
+assign RegWrPtrQ101H    = InstructionQ101H[11:7];			// rd register for R/I/U/J Type
+assign Funct3Q101H      = InstructionQ101H[14:12];			// function3 for R/S/I/B Type
+assign Funct7Q101H      = InstructionQ101H[31:25];			// function7 for R Type
+assign ShamtQ101H       = InstructionQ101H[24:20];			// number to logical shift 
+assign OpcodeQ101H      = InstructionQ101H[6:0];			// opcode for each possible Type  
 
-////////////////////////////////////////////////////////////////////////////////////////
-//          PC - Program Counter
-////////////////////////////////////////////////////////////////////////////////////////
-
-always_comb begin : set_next_pc
-    PcBranchQ101H = PcQ101H + B_ImmediateQ101H; // ALU will set if branch condition met
-    PcPlus4Q100H  = PcQ100H + 32'd4;
-    unique casez ({ CtrlJalrQ101h , CtrlJalQ101H , BranchCondMetQ101H}) 
-        3'b001  : NextPcQnnnH = PcBranchQ101H;     // OP_BRANCH 
-        3'b010  : NextPcQnnnH = J_ImmediateQ101H;  // OP_JAL
-        3'b100  : NextPcQnnnH = AluOutQ101H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
-        default : NextPcQnnnH = PcPlus4Q100H;
-    endcase
-end
-
-
-
-assign BrOrJmpQ102H = ( CtrlJalrQ101h || CtrlJalQ101H || BranchCondMetQ101H);
-
-
-assign EnPCQnnnH   = 4'b0001; //Enable Only Thread 0 FIXME - this is Temp for Enabling the PIPE for Single Thread.
-assign T0EnPcQnnnH = EnPCQnnnH[0] && (ThreadQ100H[0] || (BrOrJmpQ102H && ThreadQ102H[0]) );
-assign T1EnPcQnnnH = EnPCQnnnH[1] && (ThreadQ100H[1] || (BrOrJmpQ102H && ThreadQ102H[1]) );
-assign T2EnPcQnnnH = EnPCQnnnH[2] && (ThreadQ100H[2] || (BrOrJmpQ102H && ThreadQ102H[2]) );
-assign T3EnPcQnnnH = EnPCQnnnH[3] && (ThreadQ100H[3] || (BrOrJmpQ102H && ThreadQ102H[3]) );
-
-
-`GPC_EN_RST_MSFF( T0PcQ100H, NextPcQnnnH, QClk, T0EnPcQnnnH, RstQnnnH) 
-`GPC_EN_RST_MSFF( T1PcQ100H, NextPcQnnnH, QClk, T1EnPcQnnnH, RstQnnnH) 
-`GPC_EN_RST_MSFF( T2PcQ100H, NextPcQnnnH, QClk, T2EnPcQnnnH, RstQnnnH) 
-`GPC_EN_RST_MSFF( T3PcQ100H, NextPcQnnnH, QClk, T3EnPcQnnnH, RstQnnnH) 
-
-assign PcQ100H = ThreadQ100H[0] ? T0PcQ100H :
-                 ThreadQ100H[1] ? T1PcQ100H :
-                 ThreadQ100H[2] ? T2PcQ100H :
-                                  T3PcQ100H ;
-
-`GPC_MSFF       ( PcQ101H, PcQ100H,     QClk ) 
-
-////////////////////////////////////////////////////////////////////////////////////////
-//          Control
-////////////////////////////////////////////////////////////////////////////////////////
-always_comb begin : decode_opcode
-    //Decode control bits
-    CtrlJalQ101H        =   (OpcodeQ101H == OP_JAL);
-    CtrlJalrQ101h       =   (OpcodeQ101H == OP_JALR);
-    CtrlBranchQ101H     =   (OpcodeQ101H == OP_BRANCH);
-    CtrlITypeImmQ101H   =   (OpcodeQ101H == OP_OPIMM) || (OpcodeQ101H == OP_LOAD) || (OpcodeQ101H == OP_JALR) ;
-    CtrlRegWrQ101H      = ~((OpcodeQ101H == OP_STORE) || (OpcodeQ101H == OP_BRANCH)) ;
-    CtrlLuiQ101H        =   (OpcodeQ101H == OP_LUI);
-    CtrlAuiPcQ101H      =   (OpcodeQ101H == OP_AUIPC);
-    CtrlMemToRegQ101H   =   (OpcodeQ101H == OP_LOAD);
-    CtrlMemRdQ101H      =   (OpcodeQ101H == OP_LOAD);
-    CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
-    CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
-
-    // ALU will perform the encoded fubct3 operation.
-    CtrlAluOpQ101H      = {1'b0,Funct3Q101H};
-    // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
-    if( (OpcodeQ101H == OP_OP) || ((OpcodeQ101H == OP_OPIMM) && (Funct3Q101H[1:0]==2'b01))) begin
-       CtrlAluOpQ101H[3] = Funct7Q101H[5];
-    end
-end
+// Insert NOP - (back pressure, Wait for Read, ext..)
+// FIXME - currently Enable only Thread0; ->Insert NOP for any other Thread
+assign CtrlInsertNopQ101H = (ThreadQ101H != 4'b0001);       
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Registers
@@ -261,10 +271,12 @@ always_comb begin : write_register_file
     if ( CtrlRegWrQ103H ) begin
         NextRegisterQnnnH[RegWrPtrQ103H] = RegWrDataQ103H;// If CtrlRegWrQ103H - Write to register file Only in the RegWrPtrQ103H location
     end //if
+	
+	//init for stack pointer
     NextRegisterQnnnH[0]         = 32'b0;           // Register[0] always '0;
 	if (DervRstQnn1H) begin
 		NextRegisterQnnnH[2]		 = 32'hf00;		//sp
-		NextRegisterQnnnH[7] 		 = 32'hf00; 	//s0		
+		NextRegisterQnnnH[8] 		 = 32'hf00; 	//s0		
 	end
 
 
@@ -280,22 +292,22 @@ always_comb begin : read_register_file
     RegRdData1Q101H = RegisterQnnnH[RegRdPtr1Q101H];
     RegRdData2Q101H = RegisterQnnnH[RegRdPtr2Q101H];
     //////////////////////
-    //   fowording units
+    //   fowording units  - no need
     //////////////////////
     // Q102H WrPtr == Q101H RdPtr
-    if((RegRdPtr1Q101H == RegWrPtrQ102H ) && CtrlRegWrQ102H && (RegWrPtrQ102H!=5'b0)) begin
-        RegRdData1Q101H = AluOutQ102H; 
-    end
-    if((RegRdPtr2Q101H == RegWrPtrQ102H ) && CtrlRegWrQ102H && (RegWrPtrQ102H!=5'b0)) begin
-        RegRdData2Q101H = AluOutQ102H; 
-    end
-    // Q103H WrPtr == Q101H RdPtr
-    if((RegRdPtr1Q101H == RegWrPtrQ103H ) && CtrlRegWrQ103H && (RegWrPtrQ103H!=5'b0)) begin
-        RegRdData1Q101H = RegWrDataQ103H; 
-    end
-    if((RegRdPtr2Q101H == RegWrPtrQ103H ) && CtrlRegWrQ103H && (RegWrPtrQ103H!=5'b0)) begin
-        RegRdData2Q101H = RegWrDataQ103H; 
-    end
+    // if((RegRdPtr1Q101H == RegWrPtrQ102H ) && CtrlRegWrQ102H && (RegWrPtrQ102H!=5'b0)) begin
+        // RegRdData1Q101H = AluOutQ102H; 
+    // end
+    // if((RegRdPtr2Q101H == RegWrPtrQ102H ) && CtrlRegWrQ102H && (RegWrPtrQ102H!=5'b0)) begin
+        // RegRdData2Q101H = AluOutQ102H; 
+    // end
+    // // Q103H WrPtr == Q101H RdPtr
+    // if((RegRdPtr1Q101H == RegWrPtrQ103H ) && CtrlRegWrQ103H && (RegWrPtrQ103H!=5'b0)) begin
+        // RegRdData1Q101H = RegWrDataQ103H; 
+    // end
+    // if((RegRdPtr2Q101H == RegWrPtrQ103H ) && CtrlRegWrQ103H && (RegWrPtrQ103H!=5'b0)) begin
+        // RegRdData2Q101H = RegWrDataQ103H; 
+    // end
 end
 
 `GPC_MSFF(PcPlus4Q103H,      PcPlus4Q102H,      QClk)
@@ -304,6 +316,33 @@ end
 `GPC_MSFF(CtrlPcToRegQ103H,  CtrlPcToRegQ102H,  QClk)
 `GPC_MSFF(CtrlRegWrQ102H,    CtrlRegWrQ101H  ,  QClk) 
 `GPC_MSFF(CtrlRegWrQ103H,    CtrlRegWrQ102H  ,  QClk) 
+
+`GPC_MSFF       ( PcQ102H, PcQ101H,  QClk ) 
+`GPC_MSFF       ( PcPlus4Q102H, PcPlus4Q101H,  QClk ) 
+//**************************************************************Q102H**************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+
+always_comb begin : branch_calc
+    PcBranchQ102H = PcQ102H + B_ImmediateQ102H; // ALU will set if branch condition met			
+end
+
+
+////		PC Selector
+always_comb begin : set_next_pc	
+	//mux 4:1
+    unique casez ({ CtrlJalrQ101h , CtrlJalQ101H , BranchCondMetQ101H}) 
+        3'b001  : NextPcQnnnH = PcBranchQ102H;     // OP_BRANCH 			
+        3'b010  : NextPcQnnnH = J_ImmediateQ102H;  // OP_JAL
+        3'b100  : NextPcQnnnH = AluOutQ102H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
+        default : NextPcQnnnH = PcPlus4Q102H;
+    endcase
+end
+
+assign BrOrJmpQ102H = ( CtrlJalrQ101h || CtrlJalQ101H || BranchCondMetQ101H);	//102
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          ALU
@@ -366,6 +405,40 @@ always_comb begin : branch_comp
 end
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//          Control
+////////////////////////////////////////////////////////////////////////////////////////
+always_comb begin : decode_opcode
+    //Decode control bits
+    CtrlJalQ101H        =   (OpcodeQ101H == OP_JAL);
+    CtrlJalrQ101h       =   (OpcodeQ101H == OP_JALR);
+    CtrlBranchQ101H     =   (OpcodeQ101H == OP_BRANCH);
+    CtrlITypeImmQ101H   =   (OpcodeQ101H == OP_OPIMM) || (OpcodeQ101H == OP_LOAD) || (OpcodeQ101H == OP_JALR) ;
+    CtrlRegWrQ101H      = ~((OpcodeQ101H == OP_STORE) || (OpcodeQ101H == OP_BRANCH)) ;
+    CtrlLuiQ101H        =   (OpcodeQ101H == OP_LUI);
+    CtrlAuiPcQ101H      =   (OpcodeQ101H == OP_AUIPC);
+    CtrlMemToRegQ101H   =   (OpcodeQ101H == OP_LOAD);
+    CtrlMemRdQ101H      =   (OpcodeQ101H == OP_LOAD);
+    CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
+    CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
+
+    // ALU will perform the encoded fubct3 operation.
+    CtrlAluOpQ101H      = {1'b0,Funct3Q101H};
+    // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
+    if( (OpcodeQ101H == OP_OP) || ((OpcodeQ101H == OP_OPIMM) && (Funct3Q101H[1:0]==2'b01))) begin
+       CtrlAluOpQ101H[3] = Funct7Q101H[5];
+    end
+end
+
+
+
+//**************************************************************Q103H**************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Data Memory
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -380,7 +453,11 @@ assign MemByteEnQ101H   = (Funct3Q101H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
 `GPC_MSFF( MemByteEnQ102H,    MemByteEnQ101H  , QClk)
 `GPC_MSFF( MemWrDataWQ102H,   RegRdData1Q101H , QClk)
 assign     MemAdrsQ102H     = AluOutQ102H;
-
+//**************************************************************Q104H**************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
+//*********************************************************************************************************************//
 ////////////////////////////////////////////////////////////////////////////////////////
 //          DFD - Design for Debug
 ////////////////////////////////////////////////////////////////////////////////////////
