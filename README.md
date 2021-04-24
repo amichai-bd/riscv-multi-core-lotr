@@ -11,8 +11,8 @@ d_mem (Data Memory) - compiler Scratchpad + MMIO + MMIO CRs (Control Register)
 - *RING Controller*  
 Ring EP (EndPoint) to Mangae the core & ring RD/WR traffic.
 
-- *Integration Model*  
-Instantiating the Cores and Ring into a single IP design.
+- *LOTR: Integration Model, Lord-Of-The-Ring*  
+Instantiating the Cores and Ring into a single IP design.  
 
 - *Software stack for multi-thread processing*  
 Proof of concept for multi-thread applications for the multi-core design
@@ -21,8 +21,9 @@ Proof of concept for multi-thread applications for the multi-core design
 - RISCV Tool Chain: TODO  
 - Core - RTL Design: TODO  
 - Ring - RTL Deisgn: TODO  
+- Fabric (Integration Model) - RTL Deisgn: TODO  
 - Validation - SW Stack: TODO  
-- Proof Of Concept - SW Stack:TODO  
+- SW Stack:TODO  
 
 # 
 
