@@ -2,13 +2,13 @@
 An accelerator for multi-thread processing IP.  
 Based on a Ring architecture to share all memory regions between threads and cores.
 
-### The reposetory has 3 main projects:
+## The reposetory has 5 main projects:
 ### *GPC_4T: RISCV core RV32I/E.*  
 Writin in System verilog.  
 Main Blocks:
 1. Core - 4 HW thread. Compatible with RV32I/E.
 2. i_mem (Instruction Memory). 2KB of SRAM memory with dual access (core & Fabric).
-3. d_mem (Data Memory) - 2KB of SRAM memory with duel access (core & Fabric).  
+3. d_mem (Data Memory) - 2KB of SRAM memory with duel access (core & Fabric).    
 Devided to: compiler Scratchpad + MMIO_region + MMIO_CRs (Control Registers)
 
 ### *RC - RING Controller*  
@@ -40,7 +40,7 @@ Proof of concept for multi-thread applications for the multi-core design.
 https://docs.microsoft.com/en-us/windows/wsl/install-win10  
 Will allow you to install linux on you windows machine without linux virtual machine.  
 This wil help to install the riscv toolchain.  
-- RISCV Tool-Chain: 
+- RISCV Tool-Chain:  
 https://github.com/riscv/riscv-gnu-toolchain.  
 This will allow you to generate the machine code needed to load our instructiopn memory and simulate the RISCV multi core design.  
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
