@@ -27,7 +27,7 @@ Main Blocks:  
 2. RC - Ring EndPoint to arbitrate requests - interface with the other RC and the core.  
 The GPC&RC are always coupled and have a unique "ID".  
 In the fabric, we can link many RC to each other.  
-wich will enable the Many-core Ring Fabric Design.  
+which will enable the Many-core Ring Fabric Design.  
   
 ### *Software stack for multi-thread processing*  
 Written in C and compiled using the RISCV toolchain (rv32i/e).  
@@ -38,11 +38,11 @@ Proof of concept for multi-thread applications for the multi-core design.
 # Pointers To Get Started
 - WSL (Windows subsystem Linux):  
 https://docs.microsoft.com/en-us/windows/wsl/install-win10  
-Will allow you to install linux on you windows machine without linux virtual machine.  
-This wil help to install the riscv toolchain.  
+Will allow you to install Linux on your Windows machine without Linux virtual machine.  
+This will help to install the RISC-V toolchain.  
 - RISCV Tool-Chain:  
 https://github.com/riscv/riscv-gnu-toolchain.  
-This will allow you to generate the machine code needed to load our instructiopn memory and simulate the RISCV multi core design.  
+This will allow you to generate the machine code needed to load our instruction memory and simulate the RISCV multi-core design.  
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
 - Core - RTL Design:
 HAS (High-Level-Architecture-Specification):  
