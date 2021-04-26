@@ -2,6 +2,7 @@
 An accelerator for multi-thread processing IP.    
 Based on a Ring architecture to share all memory regions between threads and cores.
 
+*** 
 ## The reposetory has 5 main projects:
 ### *GPC_4T: RISCV core RV32I/E.*  
 Writin in System verilog.  
