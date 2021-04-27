@@ -35,7 +35,7 @@ Written in C and compiled using the RISCV toolchain (rv32i/e).
 Proof of concept for multi-thread applications for the multi-core design.  
 1. Design programs that can run on the 4 threaded core and share data between threads.  
 2. Design programs that can be run on many cores, utilize the threads in each core and share data between all cores.
-
+***
 # Pointers To Get Started
 - WSL (Windows subsystem Linux):  
 https://docs.microsoft.com/en-us/windows/wsl/install-win10  
