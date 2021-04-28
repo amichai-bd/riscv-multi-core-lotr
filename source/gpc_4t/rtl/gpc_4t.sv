@@ -27,13 +27,13 @@ module gpc_4t
     );
 
 logic [31:0] PcQ100H        ;
-logic [31:0] MemAdrsQ102H   ;
+logic [31:0] MemAdrsQ103H   ;
 logic [31:0] MemWrDataWQ102H;
-logic        CtrlMemWrQ102H ;
-logic        CtrlMemRdQ102H ;
-logic [3:0]  MemByteEnQ102H ;
+logic        CtrlMemWrQ103H ;
+logic        CtrlMemRdQ103H ;
+logic [3:0]  MemByteEnQ103H ;
 t_dfd_reg    DftSignlasQnnnH;
-logic [31:0] MemRdDataQ103H ;
+logic [31:0] MemRdDataQ104H ;
 t_cr         CRQnnnH        ;
 t_drct_out   drct_out       ;
 logic [31:0] InstFetchQ101H ;
@@ -46,12 +46,12 @@ core_4t core_4t (
     .PcQ100H         (PcQ100H)        ,  // output 
     .InstFetchQ101H  (InstFetchQ101H) ,  // input
     //Data Memory
-    .MemAdrsQ102H    (MemAdrsQ102H)   ,  // output 
+    .MemAdrsQ103H    (MemAdrsQ103H)   ,  // output 
     .MemWrDataWQ102H (MemWrDataWQ102H),  // output 
-    .CtrlMemWrQ102H  (CtrlMemWrQ102H) ,  // output 
-    .CtrlMemRdQ102H  (CtrlMemRdQ102H) ,  // output 
-    .MemByteEnQ102H  (MemByteEnQ102H) ,  // output 
-    .MemRdDataQ103H  (MemRdDataQ103H) ,  // input
+    .CtrlMemWrQ103H  (CtrlMemWrQ103H) ,  // output 
+    .CtrlMemRdQ103H  (CtrlMemRdQ103H) ,  // output 
+    .MemByteEnQ103H  (MemByteEnQ103H) ,  // output 
+    .MemRdDataQ104H  (MemRdDataQ104H) ,  // input
     //MMIO
     .DftSignlasQnnnH (DftSignlasQnnnH),  // output 
     .CRQnnnH         (CRQnnnH)           // input

@@ -30,7 +30,7 @@ module core_4t
     input  logic        RstQnnnH        ,
     //Instruction Memory
     output logic [31:0] PcQ100H         ,
-    input  logic [31:0] InstFetchQ101H, 		//the input from the i_mem. the instruction. already sampled in a @ff at the i_mem
+    input  logic [31:0] InstFetchQ101H  ,   //the input from the i_mem. the instruction. already sampled in a @ff at the i_mem
     //Data Memory
     output logic [31:0] MemAdrsQ103H    ,
     output logic [31:0] MemWrDataWQ102H ,
@@ -42,37 +42,37 @@ module core_4t
     input  t_cr         CRQnnnH,
     output t_dfd_reg    DftSignlasQnnnH
     );
-//	general signals
-logic 	RstQnn1H;
-logic 	DervRstQnn1H;
+//  general signals
+logic    RstQnn1H;
+logic    DervRstQnn1H;
 
 //  program counter
-logic [31:0] 		PcQ101H
-logic [31:0] 		PcQ102H
-logic [31:0] 		PcQ103H
-logic [31:0]        PcPlus4Q100H;
-logic [31:0]        PcPlus4Q101H;
-logic [31:0]        PcPlus4Q102H;
-logic [31:0]        PcPlus4Q103H;
-logic [31:0]        PcPlus4Q104H; 
-logic [31:0]        NextPcQ102H;
+logic [31:0]    PcQ101H;
+logic [31:0]    PcQ102H;
+logic [31:0]    PcQ103H;
+logic [31:0]    PcPlus4Q100H;
+logic [31:0]    PcPlus4Q101H;
+logic [31:0]    PcPlus4Q102H;
+logic [31:0]    PcPlus4Q103H;
+logic [31:0]    PcPlus4Q104H; 
+logic [31:0]    NextPcQ102H;
 
 // Threads
-logic [3:0]         EnPCQnnnH;
-logic               T0EnPcQnnnH;
-logic               T1EnPcQnnnH;
-logic               T2EnPcQnnnH;
-logic               T3EnPcQnnnH;
-logic [31:0]        T0PcQ100H;
-logic [31:0]        T1PcQ100H;
-logic [31:0]        T2PcQ100H;
-logic [31:0]        T3PcQ100H;
-logic [3:0]         NextThreadQ100H;
-logic [3:0]         ThreadQ100H;
-logic [3:0]         ThreadQ101H;
-logic [3:0]         ThreadQ102H;
-logic [3:0]         ThreadQ103H;
-logic [3:0]         ThreadQ104H;
+logic [3:0]     EnPCQnnnH;
+logic           T0EnPcQnnnH;
+logic           T1EnPcQnnnH;
+logic           T2EnPcQnnnH;
+logic           T3EnPcQnnnH;
+logic [31:0]    T0PcQ100H;
+logic [31:0]    T1PcQ100H;
+logic [31:0]    T2PcQ100H;
+logic [31:0]    T3PcQ100H;
+logic [3:0]     NextThreadQ100H;
+logic [3:0]     ThreadQ100H;
+logic [3:0]     ThreadQ101H;
+logic [3:0]     ThreadQ102H;
+logic [3:0]     ThreadQ103H;
+logic [3:0]     ThreadQ104H;
 
 
 
@@ -80,15 +80,24 @@ logic [3:0]         ThreadQ104H;
 logic [4:0]         RegRdPtr1Q101H;
 logic [4:0]         RegRdPtr2Q101H;
 logic [31:0]        RegRdData1Q101H;
+logic [31:0]        RegRdData1Q102H;
+logic [31:0]        RegRdData1Q103H;
 logic [31:0]        RegRdData2Q101H;
-logic [31:0]        RegRdData3Q101H;	//??
+logic [31:0]        RegRdData2Q102H;
+logic [31:0]        RegRdData2Q103H;
 logic [4:0]         RegWrPtrQ101H;
 logic [4:0]         RegWrPtrQ102H;
 logic [4:0]         RegWrPtrQ103H;
 logic [4:0]         RegWrPtrQ104H;
 logic [31:0]        RegWrDataQ104H;
-logic [3:0][15:0][31:0]  RegisterQnnnH;
-logic [3:0][15:0][31:0]  NextRegisterQnnnH;
+logic [15:0][31:0]  Register0QnnnH;
+logic [15:0][31:0]  Register1QnnnH;
+logic [15:0][31:0]  Register2QnnnH;
+logic [15:0][31:0]  Register3QnnnH;
+logic [15:0][31:0]  NextRegister0Q104H;
+logic [15:0][31:0]  NextRegister1Q104H;
+logic [15:0][31:0]  NextRegister2Q104H;
+logic [15:0][31:0]  NextRegister3Q104H;
 logic               CtrlRegWrQ102H;
 
 //  ALU
@@ -99,7 +108,7 @@ logic [31:0]        AluIn1Q102H;
 logic [31:0]        AluIn2Q102H;
 
 //  Immediate Formats
-logic [31:0]        InstructionQ101H;			//intenal logic to assign the input instruction or a NOP
+logic [31:0]        InstructionQ101H;   //intenal logic to assign the input instruction or a NOP
 logic [31:0]        I_ImmediateQ101H; 
 logic [31:0]        S_ImmediateQ101H; 
 logic [31:0]        B_ImmediateQ101H; 
@@ -113,9 +122,10 @@ logic [31:0]        J_ImmediateQ102H;
 logic [2:0]         Funct3Q101H;
 logic [6:0]         Funct7Q101H;
 logic [4:0]         ShamtQ101H;
-logic [2:0]         Funct3Q102H;
-logic [6:0]         Funct7Q102H;
 logic [4:0]         ShamtQ102H;
+logic [2:0]         Funct3Q102H;
+logic [2:0]         Funct3Q103H;
+logic [6:0]         Funct7Q102H;
 
 //  control signals
 logic [3:0]         CtrlAluOpQ101H    ;
@@ -135,7 +145,6 @@ logic               CtrlJalQ102H      ;
 logic               CtrlJalrQ102H     ;
 logic               CtrlBranchQ102H   ;
 logic               CtrlITypeImmQ102H ;
-logic               CtrlRegWrQ102H    ;
 logic               CtrlLuiQ102H      ;
 logic               CtrlAuiPcQ102H    ;
 logic               CtrlMemToRegQ102H ;
@@ -153,9 +162,11 @@ logic               CtrlPcToRegQ104H;
 
 logic [6:0]         OpcodeQ101H;
 
-logic [31:0]        PcBranchQ101H;
+logic [31:0]        PcBranchQ102H;
 logic               BranchCondMetQ102H;
 logic               CtrlRegWrQ103H;
+logic               CtrlRegWrQ104H;
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -164,15 +175,15 @@ logic               CtrlRegWrQ103H;
 
 
 // ========= Thread Logic ==============
-// 		Shift register to move the "valid" thread for each Cycle.
-//		As long as RstQnnnH is up, ThreadQ100H is 0001 (Thread 0)
-//		Due to the assign bits breakdown form , NextThreadQ100H gets the value 0010 from ThreadQ100H bits
-//		ThreadQ101H, ThreadQ102H and ThreadQ103H will get the values 1000 , 0100 ,0010 
-//		When RstQnnnH sets down the Shift register start moving the valid bit with only a single flip-flop that
-//		sets ThreadQ100H to NextThreadQ100H value (0010) in the next cycle and because of assign statments all other Threads
-//		are shifted as shows on the table
-//		The assign statments are equivalent to use `GPC_MSFF with much less resources
-// 		Great credit to Amichai Ben-David for the economical and efficient implementation
+//  Shift register to move the "valid" thread for each Cycle.
+//  As long as RstQnnnH is up, ThreadQ100H is 0001 (Thread 0)
+//  Due to the assign bits breakdown form , NextThreadQ100H gets the value 0010 from ThreadQ100H bits
+//  ThreadQ101H, ThreadQ102H and ThreadQ103H will get the values 1000 , 0100 ,0010 
+//  When RstQnnnH sets down the Shift register start moving the valid bit with only a single flip-flop that
+//  sets ThreadQ100H to NextThreadQ100H value (0010) in the next cycle and because of assign statments all other Threads
+//  are shifted as shows on the table
+//  The assign statments are equivalent to use `GPC_MSFF with much less resources
+//  Great credit to Amichai Ben-David for the economical and efficient implementation
 
 logic [3:0]	RstVal = 4'b0001;
 assign NextThreadQ100H = {ThreadQ100H[2:0], ThreadQ100H[3]};
@@ -202,44 +213,42 @@ assign ThreadQ104H = ThreadQ100H;
 //*********************************************************************************************************************//
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//          Instruction "Fetch" - Send Pc to Instruction Memory 
-//			4 Seperate Program Counters - one for each thread.
-//			The next PC for each thread calculated at Q102H pipe stage
-//			Each PC samples the value from Q102H and its enable signal toggle when 
-//			the thread he represents is currently running on Q102H
+//  Instruction "Fetch" - Send Pc to Instruction Memory 
+//  4 Seperate Program Counters - one for each thread.
+//  The next PC for each thread calculated at Q102H pipe stage
+//  Each PC samples the value from Q102H and its enable signal toggle when 
+//  the thread he represents is currently running on Q102H
 ////////////////////////////////////////////////////////////////////////////////////////   
-   
    
 assign EnPCQnnnH   = 4'b0001; //Enable Only Thread 0 FIXME - this is Temp for Enabling the PIPE for Single Thread.
 
-//		Enable bits for Thread's Pc - indicated from Q102H
+//  Enable bits for Thread's Pc - indicated from Q102H
 assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
 assign T1EnPcQ100H = EnPCQnnnH[1] && ThreadQ102H[1];
 assign T2EnPcQ100H = EnPCQnnnH[2] && ThreadQ102H[2];
 assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
   
   // The PCs
-`GPC_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQnnnH, RstQnnnH) 
-`GPC_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQnnnH, RstQnnnH) 
-`GPC_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQnnnH, RstQnnnH) 
-`GPC_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQnnnH, RstQnnnH) 
+`GPC_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, RstQnnnH) 
+`GPC_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, RstQnnnH) 
+`GPC_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, RstQnnnH) 
+`GPC_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H, RstQnnnH) 
 
-always_comb begin : next_thread's_pc_sel
-	//the PC+4 adder
-	PcPlus4Q100H  = PcQ100H + 32'd4;
-	//mux 4:1
+always_comb begin : next_threads_pc_sel
+  
+    //mux 4:1
     unique casez (ThreadQ100H) 
         4'b0001  : PcQ100H = T0PcQ100H; 
         4'b0010  : PcQ100H = T1PcQ100H; 
         4'b0100  : PcQ100H = T2PcQ100H; 
-        default  : PcQ100H = T3PcQ100H;
+        4'b1000  : PcQ100H = T3PcQ100H;
+        default  : PcQ100H = T0PcQ100H; //TODO - set an Assertion incaes we reach the default  case
     endcase
 end
 
-/// 	Q100H to Q101H Flip Flops. 
-///		Data from I_MEM is sampled inside I_MEM module ????????
-`GPC_MSFF       ( PcQ101H, PcQ100H,  QClk ) 
-`GPC_MSFF       ( PcPlus4Q101H, PcPlus4Q100H,  QClk ) 
+/// Q100H to Q101H Flip Flops. 
+/// Data from I_MEM is sampled inside I_MEM module ????????
+`GPC_MSFF   ( PcQ101H,    PcQ100H,    QClk ) 
 
 
 //**************************************************************Q101H**************************************************//
@@ -250,35 +259,35 @@ end
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//          Instruction "Decode" per Opcode Type - R/I/S/B/U/J Types
-// 			Here we break the InstructionQ101H into every possible Type 
-//			This pipe stage extract all data neccesary to complete command 
+//  Instruction "Decode" per Opcode Type - R/I/S/B/U/J Types
+//  Here we break the InstructionQ101H into every possible Type 
+//  This pipe stage extract all data neccesary to complete command 
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // Insert NOP - (back pressure, Wait for Read, ext..)
 // FIXME - currently Enable only Thread0; ->Insert NOP for any other Thread
 assign CtrlInsertNopQ101H = (ThreadQ101H != 4'b0001);      
 
-assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;		//internal logic for the instruction - the input or NOP
+assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;    //internal logic for the instruction - the input or NOP
 
 ////////////////////////////////////////
-//			Immediate Generator
+//  Immediate Generator
 ////////////////////////////////////////
-assign U_ImmediateQ101H = { InstructionQ101H[31:12] , 12'b0 } ; 
+assign U_ImmediateQ101H = { InstructionQ101H[31:12]    ,12'b0 } ; 
 assign I_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[24:20] }; 
 assign S_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[11:7]  }; 
 assign B_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[7]     , InstructionQ101H[30:25] , InstructionQ101H[11:8]  , 1'b0}; 
 assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12] , InstructionQ101H[20]    , InstructionQ101H[30:21] , 1'b0}; 
 ////////////////////////////////////////
-//			Instruction "BreakDown"
+//  Instruction "BreakDown"
 ////////////////////////////////////////
-assign RegRdPtr1Q101H   = InstructionQ101H[19:15];			// rs1 register for R/S/I/B Type
-assign RegRdPtr2Q101H   = InstructionQ101H[24:20];			// rs2 register for R/S/B Type
-assign RegWrPtrQ101H    = InstructionQ101H[11:7];			// rd register for R/I/U/J Type
-assign Funct3Q101H      = InstructionQ101H[14:12];			// function3 for R/S/I/B Type
-assign Funct7Q101H      = InstructionQ101H[31:25];			// function7 for R Type
-assign ShamtQ101H       = InstructionQ101H[24:20];			// number to logical shift 
-assign OpcodeQ101H      = InstructionQ101H[6:0];			// opcode for each possible Type  
+assign RegRdPtr1Q101H   = InstructionQ101H[19:15];  // rs1 register for R/S/I/B Type
+assign RegRdPtr2Q101H   = InstructionQ101H[24:20];  // rs2 register for R/S/B Type
+assign RegWrPtrQ101H    = InstructionQ101H[11:7];   // rd register for R/I/U/J Type
+assign Funct3Q101H      = InstructionQ101H[14:12];  // function3 for R/S/I/B Type
+assign Funct7Q101H      = InstructionQ101H[31:25];  // function7 for R Type
+assign ShamtQ101H       = InstructionQ101H[24:20];  // number to logical shift 
+assign OpcodeQ101H      = InstructionQ101H[6:0];    // opcode for each possible Type  
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -287,9 +296,8 @@ assign OpcodeQ101H      = InstructionQ101H[6:0];			// opcode for each possible T
 always_comb begin : decode_opcode
     //Decode control bits
     CtrlJalQ101H        =   (OpcodeQ101H == OP_JAL);
-	CtrlPcToRegQ101H    =   (OpcodeQ101H == OP_JAL);
+	CtrlPcToRegQ101H    =   (OpcodeQ101H == OP_JAL) || (OpcodeQ101H == OP_JALR);;
     CtrlJalrQ101H       =   (OpcodeQ101H == OP_JALR);
-	CtrlPcToRegQ101H    =   (OpcodeQ101H == OP_JALR); //??????????
     CtrlBranchQ101H     =   (OpcodeQ101H == OP_BRANCH);
     CtrlITypeImmQ101H   =   (OpcodeQ101H == OP_OPIMM) || (OpcodeQ101H == OP_LOAD) || (OpcodeQ101H == OP_JALR) ;
     CtrlRegWrQ101H      = ~((OpcodeQ101H == OP_STORE) || (OpcodeQ101H == OP_BRANCH)) ;
@@ -311,44 +319,21 @@ end
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//          									Registers
-//			The resister file RegisterQnnnH contains 4 register files (RegisterQnnnH[0] , RegisterQnnnH[1] ,etc)
-//			each contains 16 32-bit registers 
-//			all 4 registers's output is assign to a multiplexer that his selector
-//			is determine by the current thread running (ThreadQ101H)
+//  Registers
+//  The resister file RegisterQnnnH contains 4 register files (RegisterQnnnH[0] , RegisterQnnnH[1] ,etc)
+//  each contains 16 32-bit registers 
+//  all 4 registers's output is assign to a multiplexer that his selector
+//  is determine by the current thread running (ThreadQ101H)
+//  The NextRegister<#>Q104H value comes from Pipe Stage Q104H -> PcPlus4Q104H or MemRdDataQ104H or AluOutQ104H
 ////////////////////////////////////////////////////////////////////////////////////////
-
-always_comb begin : init_reg	
-    NextRegisterQnnnH            = RegisterQnnnH;   // defualt -> keep old value
-	//init for stack pointer
-    NextRegisterQnnnH[0][0]         = 32'b0;           // Register[0] always '0;
-	NextRegisterQnnnH[1][0]         = 32'b0;           // Register[0] always '0;
-    NextRegisterQnnnH[2][0]         = 32'b0;           // Register[0] always '0;
-    NextRegisterQnnnH[3][0]         = 32'b0;           // Register[0] always '0;
-
-	if (DervRstQnn1H) begin
-		NextRegisterQnnnH[0][2]		 = 32'hf00;		//sp
-		NextRegisterQnnnH[0][8] 	 = 32'hf00; 	//s0
-		NextRegisterQnnnH[1][2]		 = 32'hf00;		//sp
-		NextRegisterQnnnH[1][8] 	 = 32'hf00; 	//s0	
-		NextRegisterQnnnH[2][2]		 = 32'hf00;		//sp
-		NextRegisterQnnnH[2][8] 	 = 32'hf00; 	//s0	
-		NextRegisterQnnnH[3][2]		 = 32'hf00;		//sp
-		NextRegisterQnnnH[3][8] 	 = 32'hf00; 	//s0			
-	end
-
-
-end //always_comb
-`GPC_MSFF(RstQnn1H,RstQnnnH,QClk)
-assign DervRstQnn1H = (RstQnn1H && (!RstQnnnH));
 
 
 
 //========The 4 registers - one for each thread=========================
-`GPC_RST_MSFF(RegisterQnnnH[0], NextRegisterQnnnH[0], QClk, RstQnnnH) 
-`GPC_RST_MSFF(RegisterQnnnH[1], NextRegisterQnnnH[1], QClk, RstQnnnH) 
-`GPC_RST_MSFF(RegisterQnnnH[2], NextRegisterQnnnH[2], QClk, RstQnnnH) 
-`GPC_RST_MSFF(RegisterQnnnH[3], NextRegisterQnnnH[3], QClk, RstQnnnH) 
+`GPC_RST_MSFF(Register0QnnnH, NextRegister0Q104H, QClk, RstQnnnH) 
+`GPC_RST_MSFF(Register1QnnnH, NextRegister1Q104H, QClk, RstQnnnH) 
+`GPC_RST_MSFF(Register2QnnnH, NextRegister2Q104H, QClk, RstQnnnH) 
+`GPC_RST_MSFF(Register3QnnnH, NextRegister3Q104H, QClk, RstQnnnH) 
 
 //======================================================================
 
@@ -357,48 +342,48 @@ always_comb begin : read_register_file
     //write to register
     unique casez (ThreadQ101H) 
         4'b0001   : begin 
-					RegRdData1Q101H = RegisterQnnnH[0][RegRdPtr1Q101H];
-					RegRdData2Q101H = RegisterQnnnH[0][RegRdPtr2Q101H]; 
+            RegRdData1Q101H = Register0QnnnH[RegRdPtr1Q101H];
+            RegRdData2Q101H = Register0QnnnH[RegRdPtr2Q101H]; 
 		end
         4'b0010   : begin 
-					RegRdData1Q101H = RegisterQnnnH[1][RegRdPtr1Q101H]; 
-					RegRdData2Q101H = RegisterQnnnH[1][RegRdPtr2Q101H];
+            RegRdData1Q101H = Register1QnnnH[RegRdPtr1Q101H];
+            RegRdData2Q101H = Register1QnnnH[RegRdPtr2Q101H]; 
 		end
         4'b0100   : begin 
-					RegRdData1Q101H = RegisterQnnnH[2][RegRdPtr1Q101H]; 
-					RegRdData2Q101H = RegisterQnnnH[2][RegRdPtr2Q101H];
+            RegRdData1Q101H = Register2QnnnH[RegRdPtr1Q101H];
+            RegRdData2Q101H = Register2QnnnH[RegRdPtr2Q101H]; 
 		end
         default	  : begin
-					RegRdData1Q101H = RegisterQnnnH[4][RegRdPtr1Q101H]; 
-					RegRdData2Q101H = RegisterQnnnH[4][RegRdPtr2Q101H]; 
+            RegRdData1Q101H = Register3QnnnH[RegRdPtr1Q101H];
+            RegRdData2Q101H = Register3QnnnH[RegRdPtr2Q101H]; 
 		end
     endcase
 end
 
 
 
-`GPC_MSFF       ( PcQ102H, PcQ101H,  QClk ) 
-`GPC_MSFF       ( PcPlus4Q102H, PcPlus4Q101H,  QClk ) 
-`GPC_MSFF		( RegRdData1Q102H,   RegRdData1Q101H, QClk)
-`GPC_MSFF		( RegWrPtrQ102H,   RegWrPtrQ101H, QClk)
-`GPC_MSFF		( U_ImmediateQ102H,   U_ImmediateQ101H, QClk)
-`GPC_MSFF		( I_ImmediateQ102H,   I_ImmediateQ101H, QClk)
-`GPC_MSFF		( S_ImmediateQ102H,   S_ImmediateQ101H, QClk)
-`GPC_MSFF		( B_ImmediateQ102H,   B_ImmediateQ101H, QClk)
-`GPC_MSFF		( J_ImmediateQ102H,   J_ImmediateQ101H, QClk)
-`GPC_MSFF		( CtrlJalQ102H      ,   CtrlJalQ101H      , QClk)
-`GPC_MSFF		( CtrlJalrQ102H     ,   CtrlJalrQ101H     , QClk)
-`GPC_MSFF		( CtrlPcToRegQ102H     ,   CtrlPcToRegQ101H     , QClk)
-`GPC_MSFF		( CtrlBranchQ102H   ,   CtrlBranchQ101H   , QClk)
-`GPC_MSFF		( CtrlITypeImmQ102H ,   CtrlITypeImmQ101H , QClk)
-`GPC_MSFF		( CtrlRegWrQ102H    ,   CtrlRegWrQ101H    , QClk)
-`GPC_MSFF		( CtrlLuiQ102H      ,   CtrlLuiQ101H      , QClk)
-`GPC_MSFF		( CtrlAuiPcQ102H    ,   CtrlAuiPcQ101H    , QClk)
-`GPC_MSFF		( CtrlMemToRegQ102H ,   CtrlMemToRegQ101H , QClk)
-`GPC_MSFF		( CtrlMemRdQ102H    ,   CtrlMemRdQ101H    , QClk)
-`GPC_MSFF		( CtrlMemWrQ102H    ,   CtrlMemWrQ101H    , QClk)
-`GPC_MSFF		( CtrlStoreQ102H    ,   CtrlStoreQ101H    , QClk)
-`GPC_MSFF		( CtrlAluOpQ102H    ,   CtrlAluOpQ101H    , QClk)
+`GPC_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
+`GPC_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
+`GPC_MSFF   ( RegWrPtrQ102H     , RegWrPtrQ101H     , QClk)
+`GPC_MSFF   ( U_ImmediateQ102H  , U_ImmediateQ101H  , QClk)
+`GPC_MSFF   ( I_ImmediateQ102H  , I_ImmediateQ101H  , QClk)
+`GPC_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
+`GPC_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
+`GPC_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
+`GPC_MSFF   ( ShamtQ102H        , ShamtQ101H        , QClk) //"war - what is it good for? absolutly nothing!"
+`GPC_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
+`GPC_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
+`GPC_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
+`GPC_MSFF   ( CtrlBranchQ102H   , CtrlBranchQ101H   , QClk)
+`GPC_MSFF   ( CtrlITypeImmQ102H , CtrlITypeImmQ101H , QClk)
+`GPC_MSFF   ( CtrlRegWrQ102H    , CtrlRegWrQ101H    , QClk)
+`GPC_MSFF   ( CtrlLuiQ102H      , CtrlLuiQ101H      , QClk)
+`GPC_MSFF   ( CtrlAuiPcQ102H    , CtrlAuiPcQ101H    , QClk)
+`GPC_MSFF   ( CtrlMemToRegQ102H , CtrlMemToRegQ101H , QClk)
+`GPC_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
+`GPC_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
+`GPC_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
+`GPC_MSFF   ( CtrlAluOpQ102H    , CtrlAluOpQ101H    , QClk)
 
 
  
@@ -408,23 +393,23 @@ end
 //*********************************************************************************************************************//
 //*********************************************************************************************************************//
 ////////////////////////////////////////////////////////////////////////////////////////
-//          Instruction "Execute" 
-// 			Contains the ALU - Arithmatic Logical Unit that calculate arithmatic operations
-//			Also contains a Branch Comperator that determine if brach condition 
-//			and also branch prediction calculator that calculate where to jump
+//  Instruction "Execute" 
+//  Contains the ALU - Arithmatic Logical Unit that calculate arithmatic operations
+//  Also contains a Branch Comperator that determine if brach condition 
+//  and also branch prediction calculator that calculate where to jump
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
-always_comb begin : branch_calc
-    PcBranchQ102H = PcQ102H + B_ImmediateQ102H; // ALU will set if branch condition met			
+always_comb begin : next_pc_options_calc
+    PcBranchQ102H = PcQ102H + B_ImmediateQ102H; // ALU will set if branch condition met	
+    PcPlus4Q102H  = PcQ102H + 32'd4;    
 end
 
-//assign BrOrJmpQ102H = ( CtrlJalrQ102h || CtrlJalQ102H || BranchCondMetQ102H);	
 
-////		PC Selector
-always_comb begin : set_next_pc	
-	//mux 4:1
-    unique casez ({ CtrlJalrQ102h , CtrlJalQ102H , BranchCondMetQ102H}) 
-        3'b001  : NextPcQ102H = PcBranchQ102H;     // OP_BRANCH 			
+////    PC Selector
+always_comb begin : set_next_pc
+    //mux 4:1
+    unique casez ({ CtrlJalrQ102H , CtrlJalQ102H , BranchCondMetQ102H}) 
+        3'b001  : NextPcQ102H = PcBranchQ102H;     // OP_BRANCH
         3'b010  : NextPcQ102H = J_ImmediateQ102H;  // OP_JAL
         3'b100  : NextPcQ102H = AluOutQ102H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
         default : NextPcQ102H = PcPlus4Q102H;
@@ -469,8 +454,8 @@ always_comb begin : alu_logic
         4'b0010  : AluOutQ102H = {31'b0, $signed(AluIn1Q102H) < $signed(AluIn2Q102H)} ;//SLT
         4'b0011  : AluOutQ102H = {31'b0 , AluIn1Q102H < AluIn2Q102H}                  ;//SLTU
         //shift
-        4'b0001  : AluOutQ102H = AluIn1Q102H << ShamtQ101H                            ;//SLL
-        4'b0101  : AluOutQ102H = AluIn1Q102H >> ShamtQ101H                            ;//SRL
+        4'b0001  : AluOutQ102H = AluIn1Q102H << ShamtQ102H                            ;//SLL
+        4'b0101  : AluOutQ102H = AluIn1Q102H >> ShamtQ102H                            ;//SRL
         4'b1101  : AluOutQ102H = $signed(AluIn1Q102H) >>> ShamtQ101H                  ;//SRA
         //bit wise opirations
         4'b0100  : AluOutQ102H = AluIn1Q102H ^ AluIn2Q102H                            ;//XOR
@@ -483,10 +468,10 @@ end
 always_comb begin : branch_comp
     //for branch condition.
     unique casez ({CtrlBranchQ102H , Funct3Q102H})
-       4'b1_000 : BranchCondMetQ102H =  (AluIn1Q102H==AluIn1Q102H)                   ;// BEQ
-       4'b1_001 : BranchCondMetQ102H = ~(AluIn1Q102H==AluIn1Q102H)                   ;// BNE
-       4'b1_100 : BranchCondMetQ102H =  ($signed(AluIn1Q102H)<$signed(AluIn1Q102H))  ;// BLT
-       4'b1_101 : BranchCondMetQ102H = ~($signed(AluIn1Q102H)<$signed(AluIn1Q102H))  ;// BGE
+       4'b1_000 : BranchCondMetQ102H =  (AluIn1Q102H==AluIn2Q102H)                   ;// BEQ
+       4'b1_001 : BranchCondMetQ102H = ~(AluIn1Q102H==AluIn2Q102H)                   ;// BNE
+       4'b1_100 : BranchCondMetQ102H =  ($signed(AluIn1Q102H)<$signed(AluIn2Q102H))  ;// BLT
+       4'b1_101 : BranchCondMetQ102H = ~($signed(AluIn1Q102H)<$signed(AluIn2Q102H))  ;// BGE
        4'b1_110 : BranchCondMetQ102H =  (AluIn1Q102H<AluIn1Q102H)                    ;// BLTU
        4'b1_111 : BranchCondMetQ102H = ~(AluIn1Q102H<AluIn1Q102H)                    ;// BGEU
        default  : BranchCondMetQ102H = 1'b0                                          ;
@@ -494,16 +479,16 @@ always_comb begin : branch_comp
 end
 
 
-`GPC_MSFF       ( PcPlus4Q103H, PcPlus4Q102H,  QClk ) 
-`GPC_MSFF		( AluOutQ103H,     AluOutQ102H  , QClk)
-`GPC_MSFF       ( Funct3Q103H, Funct3Q102H,  QClk ) 
-`GPC_MSFF		( RegWrPtrQ103H,   RegWrPtrQ102H, QClk)
-`GPC_MSFF		( RegRdData1Q103H,   RegRdData1Q102H, QClk)
-`GPC_MSFF		( CtrlMemRdQ103H    ,   CtrlMemRdQ102H    , QClk)	// output to DMEM
-`GPC_MSFF		( CtrlMemWrQ103H    ,   CtrlMemWrQ102H    , QClk) 	//output to DMEM
-`GPC_MSFF		(CtrlMemToRegQ103H, CtrlMemToRegQ102H, QClk)
-`GPC_MSFF		(CtrlPcToRegQ103H,  CtrlPcToRegQ102H,  QClk)
-`GPC_MSFF		( CtrlRegWrQ103H    ,   CtrlRegWrQ102H    , QClk)
+`GPC_MSFF   ( PcPlus4Q103H      , PcPlus4Q102H      , QClk) 
+`GPC_MSFF   ( AluOutQ103H       , AluOutQ102H       , QClk)
+`GPC_MSFF   ( Funct3Q103H       , Funct3Q102H       , QClk) 
+`GPC_MSFF   ( RegWrPtrQ103H     , RegWrPtrQ102H     , QClk)
+`GPC_MSFF   ( RegRdData1Q103H   , RegRdData1Q102H   , QClk)
+`GPC_MSFF   ( CtrlMemRdQ103H    , CtrlMemRdQ102H    , QClk) // output to DMEM
+`GPC_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) //output to DMEM
+`GPC_MSFF   ( CtrlMemToRegQ103H , CtrlMemToRegQ102H , QClk)
+`GPC_MSFF   ( CtrlPcToRegQ103H  , CtrlPcToRegQ102H  , QClk)
+`GPC_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
 
 
 //**************************************************************Q103H**************************************************//
@@ -521,18 +506,18 @@ assign MemByteEnQ103H   = (Funct3Q103H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
                           (Funct3Q103H[1:0] == 2'b10 ) ? 4'b1111 : // LW/SW
                                                          4'b0000 ; // 2'b11 is an illegal Funct3 //FIXME - ADD assetion 
 // The value read from register assign to the output signal MemWrDataWQ103H that goes right into the D_MEM module
-assign 		MemWrDataWQ103H	= RegRdData1Q103H;
+assign  MemWrDataWQ103H = RegRdData1Q103H;
 // the address from ALU assign to the output signal MemAdrsQ103H that goes right into the D_MEM module
-assign     	MemAdrsQ103H = AluOutQ103H;
+assign  MemAdrsQ103H = AluOutQ103H;
 
 
-`GPC_MSFF       ( PcPlus4Q104H, PcPlus4Q103H,  QClk ) 
-`GPC_MSFF		( AluOutQ104H,     AluOutQ103H  , QClk)
-`GPC_MSFF		( RegWrPtrQ104H,   RegWrPtrQ103H, QClk)
-// `GPC_MSFF		( MemRdDataQ104H,     MemRdDataQ103H  , QClk) // input signal from D_MEM ????? relevant
-`GPC_MSFF		(CtrlMemToRegQ104H, CtrlMemToRegQ103H, QClk)
-`GPC_MSFF		(CtrlPcToRegQ104H,  CtrlPcToRegQ103H,  QClk)
-`GPC_MSFF		( CtrlRegWrQ104H    ,   CtrlRegWrQ103H    , QClk)
+`GPC_MSFF   ( PcPlus4Q104H      , PcPlus4Q103H      , QClk) 
+`GPC_MSFF   ( AluOutQ104H       , AluOutQ103H       , QClk)
+`GPC_MSFF   ( RegWrPtrQ104H     , RegWrPtrQ103H     , QClk)
+`GPC_MSFF   (CtrlMemToRegQ104H  , CtrlMemToRegQ103H , QClk)
+`GPC_MSFF   (CtrlPcToRegQ104H   , CtrlPcToRegQ103H  , QClk)
+`GPC_MSFF   ( CtrlRegWrQ104H    , CtrlRegWrQ103H    , QClk)
+//`GPC_MSFF   ( MemRdDataQ104H    , MemRdDataQ103H    , QClk) // input signal from D_MEM ????? relevant
 
 
 //**************************************************************Q104H**************************************************//
@@ -542,31 +527,76 @@ assign     	MemAdrsQ103H = AluOutQ103H;
 //*********************************************************************************************************************//
 
 
-//write to register file using the Q103H Data & Ptr
-always_comb begin : write_register_file
+always_comb begin : candidates_for_register_write_data
     unique casez ({CtrlMemToRegQ104H , CtrlPcToRegQ104H}) 
         2'b01   : RegWrDataQ104H = PcPlus4Q104H   ; //Data from PC - for JAL?
         2'b10   : RegWrDataQ104H = MemRdDataQ104H ; //Data from Memory
         default : RegWrDataQ104H = AluOutQ104H    ; //Data from ALU (Common case)
-    endcase
+    endcase	
+end // always_comb
+	
+//--------------------------------------------------------
+//FIXME - this logic is just a temporary until we fix the assembly to reset the SP correctly.
+`GPC_MSFF(RstQnn1H,RstQnnnH,QClk)
+assign DervRstQnn1H = (RstQnn1H && (!RstQnnnH));
+//--------------------------------------------------------
 
+always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
+    NextRegister0Q104H = Register0QnnnH; // defualt -> keep old value
+    NextRegister1Q104H = Register1QnnnH; // defualt -> keep old value	
+    NextRegister2Q104H = Register2QnnnH; // defualt -> keep old value
+    NextRegister3Q104H = Register3QnnnH; // defualt -> keep old value
+	
+	
     if ( CtrlRegWrQ104H ) begin
-		unique casez (ThreadQ104H) 
-			4'b0001   : NextRegisterQnnnH[0][RegWrPtrQ104H] = RegWrDataQ104H; 
-			4'b0010   : NextRegisterQnnnH[1][RegWrPtrQ104H] = RegWrDataQ104H; 
-			4'b0100   : NextRegisterQnnnH[2][RegWrPtrQ104H] = RegWrDataQ104H; 
-			default	  : NextRegisterQnnnH[3][RegWrPtrQ104H] = RegWrDataQ104H; 
-		endcase
-        //NextRegisterQnnnH[RegWrPtrQ104H] = RegWrDataQ104H;// If CtrlRegWrQ104H - Write to register file Only in the RegWrPtrQ104H location
+        unique casez (ThreadQ104H)
+            4'b0001 : NextRegister0Q104H[RegWrPtrQ104H] = RegWrDataQ104H;
+            4'b0010 : NextRegister1Q104H[RegWrPtrQ104H] = RegWrDataQ104H;
+            4'b0100 : NextRegister2Q104H[RegWrPtrQ104H] = RegWrDataQ104H;
+            4'b1000 : NextRegister3Q104H[RegWrPtrQ104H] = RegWrDataQ104H;
+            default : NextRegister0Q104H[RegWrPtrQ104H] = RegWrDataQ104H; //TODO - set an Assertion incaes we reach the default  case
+        endcase
     end //if
-end
+	
+	
+ //------------------------------------------------------------
+ //FIXME - this logic is just a temporary until we fix the assembly to reset the SP correctly.
+ //--------------------------------------------------------
+ //init for stack pointer
+    if (DervRstQnn1H) begin
+     NextRegister0Q104H[2] = 32'hf00;  //sp
+     NextRegister0Q104H[8] = 32'hf00;  //s0
+     NextRegister1Q104H[2] = 32'hf00;  //sp
+     NextRegister1Q104H[8] = 32'hf00;  //s0    
+     NextRegister2Q104H[2] = 32'hf00;  //sp
+     NextRegister2Q104H[8] = 32'hf00;  //s0    
+     NextRegister3Q104H[2] = 32'hf00;  //sp
+     NextRegister3Q104H[8] = 32'hf00;  //s0    
+    end
+ //------------------------------------------------------------
+ //Register[0] will always be tied to '0;
+    NextRegister0Q104H[0] = 32'b0;  
+    NextRegister1Q104H[0] = 32'b0;  
+    NextRegister2Q104H[0] = 32'b0;  
+    NextRegister3Q104H[0] = 32'b0;  
+end // always_comb
+
+//    if ( CtrlRegWrQ104H ) begin
+//		unique casez (ThreadQ104H) 
+//			4'b0001   : NextRegisterQnnnH[0][RegWrPtrQ104H] = RegWrDataQ104H; 
+//			4'b0010   : NextRegisterQnnnH[1][RegWrPtrQ104H] = RegWrDataQ104H; 
+//			4'b0100   : NextRegisterQnnnH[2][RegWrPtrQ104H] = RegWrDataQ104H; 
+//			default	  : NextRegisterQnnnH[3][RegWrPtrQ104H] = RegWrDataQ104H; 
+//		endcase
+//        //NextRegisterQnnnH[RegWrPtrQ104H] = RegWrDataQ104H;// If CtrlRegWrQ104H - Write to register file Only in the RegWrPtrQ104H location
+//    end //if
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          DFD - Design for Debug
 ////////////////////////////////////////////////////////////////////////////////////////
 //assign expose_reg.register  = RegRdData3Q101H; //read register acording to CRQnnnH.rd_ptr;
 //assign expose_reg.pc        = PcPlus4Q101H;  //expose the pc
-
 
 endmodule
 //this will solve the conflict
