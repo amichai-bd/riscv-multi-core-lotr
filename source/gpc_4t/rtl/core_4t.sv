@@ -3,8 +3,9 @@
 // Project          : gpc_4t
 //-----------------------------------------------------------------------------
 // File             : core_4t 
-// Original Author  : Amichai Ben-David
+// Original Author  : Saar Adi
 // Code Owner       : 
+// Adviser          : Amichai Ben-David
 // Created          : 2/2021
 //-----------------------------------------------------------------------------
 // Description :
@@ -121,7 +122,6 @@ logic [31:0]        U_ImmediateQ102H;
 logic [31:0]        J_ImmediateQ102H; 
 logic [2:0]         Funct3Q101H;
 logic [6:0]         Funct7Q101H;
-logic [4:0]         ShamtQ101H;
 logic [4:0]         ShamtQ102H;
 logic [2:0]         Funct3Q102H;
 logic [2:0]         Funct3Q103H;
@@ -206,21 +206,23 @@ assign ThreadQ104H = ThreadQ100H;
 
 
 
-//**************************************************************Q100H**************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//   _____  __     __   _____   _        ______          ____    __    ___     ___    _    _ 
+//  / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \   / _ \  | |  | |
+// | |       \ \_/ /  | |      | |      | |__          | |  | |  | | | | | | | | | | | |__| |
+// | |        \   /   | |      | |      |  __|         | |  | |  | | | | | | | | | | |  __  |
+// | |____     | |    | |____  | |____  | |____        | |__| |  | | | |_| | | |_| | | |  | |
+//  \_____|    |_|     \_____| |______| |______|        \___\_\  |_|  \___/   \___/  |_|  |_|
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
 //  Instruction "Fetch" - Send Pc to Instruction Memory 
 //  4 Seperate Program Counters - one for each thread.
 //  The next PC for each thread calculated at Q102H pipe stage
 //  Each PC samples the value from Q102H and its enable signal toggle when 
 //  the thread he represents is currently running on Q102H
-////////////////////////////////////////////////////////////////////////////////////////   
+//////////////////////////////////////////////////////////////////////////////////////////////////
    
-assign EnPCQnnnH   = 4'b0001; //Enable Only Thread 0 FIXME - this is Temp for Enabling the PIPE for Single Thread.
+assign EnPCQnnnH   = 4'b1111; //Enable all Threads FIXME - this is Temp for Enabling the PIPE - should come from the mmio_CR register
 
 //  Enable bits for Thread's Pc - indicated from Q102H
 assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
@@ -251,22 +253,22 @@ end
 `GPC_MSFF   ( PcQ101H,    PcQ100H,    QClk ) 
 
 
-//**************************************************************Q101H**************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-
-
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//   _____  __     __   _____   _        ______          ____    __    ___    __   _    _ 
+//  / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  /_ | | |  | |
+// | |       \ \_/ /  | |      | |      | |__          | |  | |  | | | | | |  | | | |__| |
+// | |        \   /   | |      | |      |  __|         | |  | |  | | | | | |  | | |  __  |
+// | |____     | |    | |____  | |____  | |____        | |__| |  | | | |_| |  | | | |  | |
+//  \_____|    |_|     \_____| |______| |______|        \___\_\  |_|  \___/   |_| |_|  |_|
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
 //  Instruction "Decode" per Opcode Type - R/I/S/B/U/J Types
 //  Here we break the InstructionQ101H into every possible Type 
 //  This pipe stage extract all data neccesary to complete command 
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Insert NOP - (back pressure, Wait for Read, ext..)
-// FIXME - currently Enable only Thread0; ->Insert NOP for any other Thread
-assign CtrlInsertNopQ101H = (ThreadQ101H != 4'b0001);      
+assign CtrlInsertNopQ101H = 1'b0;////Enable all Threads FIXME - this is Temp for Enabling the PIPE - should come from the mmio_CR register
 
 assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;    //internal logic for the instruction - the input or NOP
 
@@ -283,11 +285,10 @@ assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12]
 ////////////////////////////////////////
 assign RegRdPtr1Q101H   = InstructionQ101H[19:15];  // rs1 register for R/S/I/B Type
 assign RegRdPtr2Q101H   = InstructionQ101H[24:20];  // rs2 register for R/S/B Type
-assign RegWrPtrQ101H    = InstructionQ101H[11:7];   // rd register for R/I/U/J Type
-assign Funct3Q101H      = InstructionQ101H[14:12];  // function3 for R/S/I/B Type
-assign Funct7Q101H      = InstructionQ101H[31:25];  // function7 for R Type
-assign ShamtQ101H       = InstructionQ101H[24:20];  // number to logical shift 
-assign OpcodeQ101H      = InstructionQ101H[6:0];    // opcode for each possible Type  
+assign RegWrPtrQ101H    = InstructionQ101H[11:7];   // rd register  for R/I/U/J Type
+assign Funct3Q101H      = InstructionQ101H[14:12];  // function3    for R/S/I/B Type
+assign Funct7Q101H      = InstructionQ101H[31:25];  // function7    for R Type
+assign OpcodeQ101H      = InstructionQ101H[6:0];    // opcode       for each possible Type  
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +335,6 @@ end
 `GPC_RST_MSFF(Register1QnnnH, NextRegister1Q104H, QClk, RstQnnnH) 
 `GPC_RST_MSFF(Register2QnnnH, NextRegister2Q104H, QClk, RstQnnnH) 
 `GPC_RST_MSFF(Register3QnnnH, NextRegister3Q104H, QClk, RstQnnnH) 
-
 //======================================================================
 
 //Read from RegisterQnnnH 
@@ -370,7 +370,6 @@ end
 `GPC_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
 `GPC_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
 `GPC_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
-`GPC_MSFF   ( ShamtQ102H        , ShamtQ101H        , QClk) //"war - what is it good for? absolutly nothing!"
 `GPC_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
 `GPC_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
 `GPC_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
@@ -386,26 +385,29 @@ end
 `GPC_MSFF   ( CtrlAluOpQ102H    , CtrlAluOpQ101H    , QClk)
 
 
- 
-//**************************************************************Q102H**************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//    _____  __     __   _____   _        ______          ____    __    ___    ___    _    _ 
+//   / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  |__ \  | |  | |
+//  | |       \ \_/ /  | |      | |      | |__          | |  | |  | | | | | |    ) | | |__| |
+//  | |        \   /   | |      | |      |  __|         | |  | |  | | | | | |   / /  |  __  |
+//  | |____     | |    | |____  | |____  | |____        | |__| |  | | | |_| |  / /_  | |  | |
+//   \_____|    |_|     \_____| |______| |______|        \___\_\  |_|  \___/  |____| |_|  |_|
+//                                                                                           
+//////////////////////////////////////////////////////////////////////////////////////////////////
 //  Instruction "Execute" 
 //  Contains the ALU - Arithmatic Logical Unit that calculate arithmatic operations
 //  Also contains a Branch Comperator that determine if brach condition 
 //  and also branch prediction calculator that calculate where to jump
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
+////////////////////////////////////////////////////////////////////////////////////////
 always_comb begin : next_pc_options_calc
     PcBranchQ102H = PcQ102H + B_ImmediateQ102H; // ALU will set if branch condition met	
     PcPlus4Q102H  = PcQ102H + 32'd4;    
 end
-
-
+////////////////////////////////////////////////////////////////////////////////////////
 ////    PC Selector
+////////////////////////////////////////////////////////////////////////////////////////
 always_comb begin : set_next_pc
     //mux 4:1
     unique casez ({ CtrlJalrQ102H , CtrlJalQ102H , BranchCondMetQ102H}) 
@@ -415,7 +417,6 @@ always_comb begin : set_next_pc
         default : NextPcQ102H = PcPlus4Q102H;
     endcase
 end
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -446,6 +447,7 @@ always_comb begin : choose_alu_input
     endcase
 end //always_comb
 
+assign ShamtQ102H = AluIn2Q102H[4:0];
 always_comb begin : alu_logic
     unique casez (CtrlAluOpQ102H) 
         //use adder
@@ -456,7 +458,7 @@ always_comb begin : alu_logic
         //shift
         4'b0001  : AluOutQ102H = AluIn1Q102H << ShamtQ102H                            ;//SLL
         4'b0101  : AluOutQ102H = AluIn1Q102H >> ShamtQ102H                            ;//SRL
-        4'b1101  : AluOutQ102H = $signed(AluIn1Q102H) >>> ShamtQ101H                  ;//SRA
+        4'b1101  : AluOutQ102H = $signed(AluIn1Q102H) >>> ShamtQ102H                  ;//SRA
         //bit wise opirations
         4'b0100  : AluOutQ102H = AluIn1Q102H ^ AluIn2Q102H                            ;//XOR
         4'b0110  : AluOutQ102H = AluIn1Q102H | AluIn2Q102H                            ;//OR
@@ -491,11 +493,15 @@ end
 `GPC_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
 
 
-//**************************************************************Q103H**************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//   _____  __     __   _____   _        ______          ____    __    ___    ____    _    _ 
+//  / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  |___ \  | |  | |
+// | |       \ \_/ /  | |      | |      | |__          | |  | |  | | | | | |   __) | | |__| |
+// | |        \   /   | |      | |      |  __|         | |  | |  | | | | | |  |__ <  |  __  |
+// | |____     | |    | |____  | |____  | |____        | |__| |  | | | |_| |  ___) | | |  | |
+//  \_____|    |_|     \_____| |______| |______|        \___\_\  |_|  \___/  |____/  |_|  |_|
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Data Memory
@@ -520,12 +526,16 @@ assign  MemAdrsQ103H = AluOutQ103H;
 //`GPC_MSFF   ( MemRdDataQ104H    , MemRdDataQ103H    , QClk) // input signal from D_MEM ????? relevant
 
 
-//**************************************************************Q104H**************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-//*********************************************************************************************************************//
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//    _____  __     __   _____   _        ______          ____    __    ___    _  _     _    _ 
+//  / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  | || |   | |  | |
+// | |       \ \_/ /  | |      | |      | |__          | |  | |  | | | | | | | || |_  | |__| |
+// | |        \   /   | |      | |      |  __|         | |  | |  | | | | | | |__   _| |  __  |
+// | |____     | |    | |____  | |____  | |____        | |__| |  | | | |_| |    | |   | |  | |
+//  \_____|    |_|     \_____| |______| |______|        \___\_\  |_|  \___/     |_|   |_|  |_|
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+ 
 
 always_comb begin : candidates_for_register_write_data
     unique casez ({CtrlMemToRegQ104H , CtrlPcToRegQ104H}) 
@@ -580,17 +590,6 @@ always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
     NextRegister2Q104H[0] = 32'b0;  
     NextRegister3Q104H[0] = 32'b0;  
 end // always_comb
-
-//    if ( CtrlRegWrQ104H ) begin
-//		unique casez (ThreadQ104H) 
-//			4'b0001   : NextRegisterQnnnH[0][RegWrPtrQ104H] = RegWrDataQ104H; 
-//			4'b0010   : NextRegisterQnnnH[1][RegWrPtrQ104H] = RegWrDataQ104H; 
-//			4'b0100   : NextRegisterQnnnH[2][RegWrPtrQ104H] = RegWrDataQ104H; 
-//			default	  : NextRegisterQnnnH[3][RegWrPtrQ104H] = RegWrDataQ104H; 
-//		endcase
-//        //NextRegisterQnnnH[RegWrPtrQ104H] = RegWrDataQ104H;// If CtrlRegWrQ104H - Write to register file Only in the RegWrPtrQ104H location
-//    end //if
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          DFD - Design for Debug
