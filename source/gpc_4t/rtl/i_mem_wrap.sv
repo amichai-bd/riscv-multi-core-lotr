@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Title            : instruction memory wrap
-// Project          : gpc_4t
+// Project          : LOTR
 //-----------------------------------------------------------------------------
 // File             : i_mem_wrap.sv
 // Original Author  : Amichai Ben-David
@@ -11,7 +11,7 @@
 //------------------------------------------------------------------------------
 // Modification history :
 //------------------------------------------------------------------------------
-`include "gpc_4t_defines.sv"
+`include "lotr_defines.sv"
 //---------------------MEMORY------------------------
 //                start   size    end     # of words
 //  i memory  
@@ -55,7 +55,7 @@ i_mem i_mem(
     .q        (q)
     );
 `endif
-`GPC_MSFF(sample_range_rden_b, range_rden_b, clock)
+`LOTR_MSFF(sample_range_rden_b, range_rden_b, clock)
                         
 endmodule               
 
