@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Title            : core_rv32i 
-// Project          : gpc_4t
+// Project          : LOTR
 //-----------------------------------------------------------------------------
 // File             : i_mem.sv
 // Original Author  : Amichai Ben-David
@@ -11,7 +11,7 @@
 //------------------------------------------------------------------------------
 // Modification history :
 //------------------------------------------------------------------------------
-`include "gpc_4t_defines.sv"
+`include "lotr_defines.sv"
 
 module i_mem import gpc_4t_pkg::*;
                 (
@@ -41,7 +41,7 @@ end
 // the memory flipflops
 genvar i;
 generate for (i = 0; i<I_MEM_SIZE; i++) begin : i_mem
-    `GPC_MSFF(mem[i], next_mem[i], clock)
+    `LOTR_MSFF(mem[i], next_mem[i], clock)
 end endgenerate
 
 assign pre_q = {mem[address+3],
@@ -49,5 +49,5 @@ assign pre_q = {mem[address+3],
                 mem[address+1],
                 mem[address+0]};
 
-`GPC_MSFF(q, pre_q, clock)
+`LOTR_MSFF(q, pre_q, clock)
 endmodule

@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-`include "gpc_4t_defines.sv"
+`include "lotr_defines.sv"
 
 module gpc_4t_tb ();
     // clock and reset for tb

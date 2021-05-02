@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // Title            : data memory wrap
-// Project          : gpc_4t
+// Project          : LOTR
 //-----------------------------------------------------------------------------
 // File             : d_mem_wrap.sv
 // Original Author  : Amichai Ben-David
@@ -13,7 +13,7 @@
 // Modification history :
 //------------------------------------------------------------------------------
 
-`include "gpc_4t_defines.sv"
+`include "lotr_defines.sv"
 module d_mem_wrap import gpc_4t_pkg::*;  
                 (input   logic             clock,          
                  input   logic             rst,          
@@ -46,17 +46,6 @@ always_comb begin
     if (in_range_data) offset_address[11]=1'b0;
 end
 
-`ifdef ALTERA
-altera_sram_512x32_take3	altera_sram_512x32_data_mem (
-	.clock    (clock),
-	.address  (offset_address[10:2]),
-	.byteena  (byteena),
-	.data     (data),
-	.rden     (rden),
-	.wren     (wren),
-	.q        (data_q),
-	);
-`else
 d_mem d_mem (                                                             
     .clock    (clock),
     .address  (offset_address[31:0]),
@@ -66,7 +55,6 @@ d_mem d_mem (
     .wren     (wren),
     .q        (data_q)
     );
-`endif
 
 //=======================================================
 //================MMIO memory write======================
@@ -96,7 +84,7 @@ end
 //=======================================================
 //================MMIO memory flops======================
 //=======================================================
-`GPC_MSFF(mmio_mem, next_mmio_mem, clock) 
+`LOTR_MSFF(mmio_mem, next_mmio_mem, clock) 
 
 //=======================================================
 //================MMIO memory read======================
@@ -116,17 +104,17 @@ always_comb begin
     end
 end
 //sample the read (synchornic read)
-`GPC_EN_MSFF(mmio_q, mmio_data_core, clock, in_range_mmio_data && rden)
+`LOTR_EN_MSFF(mmio_q, mmio_data_core, clock, in_range_mmio_data && rden)
 
-`GPC_MSFF(sample_in_range_data      , in_range_data      && rden, clock)
-`GPC_MSFF(sample_in_range_mmio_data , in_range_mmio_data && rden, clock)
+`LOTR_MSFF(sample_in_range_data      , in_range_data      && rden, clock)
+`LOTR_MSFF(sample_in_range_mmio_data , in_range_mmio_data && rden, clock)
 
 //mux between the MMIO and the DATA
 always_comb begin
     q      =  data_q;
 
     cr       = mmio_mem.cr;
-    drct_out = mmio_mem.drct_out.out;
+    drct_out = '0; //mmio_mem.drct_out.out;
 end
 
 endmodule

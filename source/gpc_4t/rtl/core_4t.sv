@@ -23,7 +23,7 @@
 //
 //------------------------------------------------------------------------------
 
-`include "gpc_4t_defines.sv"
+`include "lotr_defines.sv"
 module core_4t 
     import gpc_4t_pkg::*;  
     (
@@ -34,14 +34,13 @@ module core_4t
     input  logic [31:0] InstFetchQ101H  ,   //the input from the i_mem. the instruction. already sampled in a @ff at the i_mem
     //Data Memory
     output logic [31:0] MemAdrsQ103H    ,
-    output logic [31:0] MemWrDataWQ102H ,
+    output logic [31:0] MemWrDataWQ103H ,
     output logic        CtrlMemWrQ103H  ,
     output logic        CtrlMemRdQ103H  ,
     output logic [3:0]  MemByteEnQ103H  ,
     input  logic [31:0] MemRdDataQ104H  ,
     //MMIO
-    input  t_cr         CRQnnnH,
-    output t_dfd_reg    DftSignlasQnnnH
+    input  t_cr         CRQnnnH
     );
 //  general signals
 logic    RstQnn1H;
@@ -182,15 +181,15 @@ logic               CtrlRegWrQ104H;
 //  When RstQnnnH sets down the Shift register start moving the valid bit with only a single flip-flop that
 //  sets ThreadQ100H to NextThreadQ100H value (0010) in the next cycle and because of assign statments all other Threads
 //  are shifted as shows on the table
-//  The assign statments are equivalent to use `GPC_MSFF with much less resources
+//  The assign statments are equivalent to use `LOTR_MSFF with much less resources
 //  Great credit to Amichai Ben-David for the economical and efficient implementation
 
 logic [3:0]	RstVal = 4'b0001;
 assign NextThreadQ100H = {ThreadQ100H[2:0], ThreadQ100H[3]};
-`GPC_RST_VAL_MSFF(ThreadQ100H, NextThreadQ100H, QClk, RstQnnnH, RstVal)
-assign ThreadQ101H = {ThreadQ100H[0] , ThreadQ100H[3:1]} ; //`GPC_MSFF(ThreadQ101H, ThreadQ100H, QClk)
-assign ThreadQ102H = {ThreadQ101H[0] , ThreadQ101H[3:1]} ; //`GPC_MSFF(ThreadQ102H, ThreadQ101H, QClk)
-assign ThreadQ103H = {ThreadQ102H[0] , ThreadQ102H[3:1]} ; //`GPC_MSFF(ThreadQ103H, ThreadQ102H, QClk) 
+`LOTR_RST_VAL_MSFF(ThreadQ100H, NextThreadQ100H, QClk, RstQnnnH, RstVal)
+assign ThreadQ101H = {ThreadQ100H[0] , ThreadQ100H[3:1]} ; //`LOTR_MSFF(ThreadQ101H, ThreadQ100H, QClk)
+assign ThreadQ102H = {ThreadQ101H[0] , ThreadQ101H[3:1]} ; //`LOTR_MSFF(ThreadQ102H, ThreadQ101H, QClk)
+assign ThreadQ103H = {ThreadQ102H[0] , ThreadQ102H[3:1]} ; //`LOTR_MSFF(ThreadQ103H, ThreadQ102H, QClk) 
 assign ThreadQ104H = ThreadQ100H;
 //    	-----------------------------------------
 //    	          |  Q100H  Q101H  Q102H  Q103H
@@ -231,10 +230,10 @@ assign T2EnPcQ100H = EnPCQnnnH[2] && ThreadQ102H[2];
 assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
   
   // The PCs
-`GPC_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, RstQnnnH) 
-`GPC_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, RstQnnnH) 
-`GPC_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, RstQnnnH) 
-`GPC_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H, RstQnnnH) 
+`LOTR_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, RstQnnnH) 
+`LOTR_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, RstQnnnH) 
+`LOTR_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, RstQnnnH) 
+`LOTR_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H, RstQnnnH) 
 
 always_comb begin : next_threads_pc_sel
   
@@ -250,7 +249,7 @@ end
 
 /// Q100H to Q101H Flip Flops. 
 /// Data from I_MEM is sampled inside I_MEM module ????????
-`GPC_MSFF   ( PcQ101H,    PcQ100H,    QClk ) 
+`LOTR_MSFF   ( PcQ101H,    PcQ100H,    QClk ) 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,10 +330,10 @@ end
 
 
 //========The 4 registers - one for each thread=========================
-`GPC_RST_MSFF(Register0QnnnH, NextRegister0Q104H, QClk, RstQnnnH) 
-`GPC_RST_MSFF(Register1QnnnH, NextRegister1Q104H, QClk, RstQnnnH) 
-`GPC_RST_MSFF(Register2QnnnH, NextRegister2Q104H, QClk, RstQnnnH) 
-`GPC_RST_MSFF(Register3QnnnH, NextRegister3Q104H, QClk, RstQnnnH) 
+`LOTR_RST_MSFF(Register0QnnnH, NextRegister0Q104H, QClk, RstQnnnH) 
+`LOTR_RST_MSFF(Register1QnnnH, NextRegister1Q104H, QClk, RstQnnnH) 
+`LOTR_RST_MSFF(Register2QnnnH, NextRegister2Q104H, QClk, RstQnnnH) 
+`LOTR_RST_MSFF(Register3QnnnH, NextRegister3Q104H, QClk, RstQnnnH) 
 //======================================================================
 
 //Read from RegisterQnnnH 
@@ -362,27 +361,28 @@ end
 
 
 
-`GPC_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
-`GPC_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
-`GPC_MSFF   ( RegWrPtrQ102H     , RegWrPtrQ101H     , QClk)
-`GPC_MSFF   ( U_ImmediateQ102H  , U_ImmediateQ101H  , QClk)
-`GPC_MSFF   ( I_ImmediateQ102H  , I_ImmediateQ101H  , QClk)
-`GPC_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
-`GPC_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
-`GPC_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
-`GPC_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
-`GPC_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
-`GPC_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
-`GPC_MSFF   ( CtrlBranchQ102H   , CtrlBranchQ101H   , QClk)
-`GPC_MSFF   ( CtrlITypeImmQ102H , CtrlITypeImmQ101H , QClk)
-`GPC_MSFF   ( CtrlRegWrQ102H    , CtrlRegWrQ101H    , QClk)
-`GPC_MSFF   ( CtrlLuiQ102H      , CtrlLuiQ101H      , QClk)
-`GPC_MSFF   ( CtrlAuiPcQ102H    , CtrlAuiPcQ101H    , QClk)
-`GPC_MSFF   ( CtrlMemToRegQ102H , CtrlMemToRegQ101H , QClk)
-`GPC_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
-`GPC_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
-`GPC_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
-`GPC_MSFF   ( CtrlAluOpQ102H    , CtrlAluOpQ101H    , QClk)
+`LOTR_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
+`LOTR_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
+`LOTR_MSFF   ( RegWrPtrQ102H     , RegWrPtrQ101H     , QClk)
+`LOTR_MSFF   ( U_ImmediateQ102H  , U_ImmediateQ101H  , QClk)
+`LOTR_MSFF   ( I_ImmediateQ102H  , I_ImmediateQ101H  , QClk)
+`LOTR_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
+`LOTR_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
+`LOTR_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
+`LOTR_MSFF   ( Funct3Q102H       , Funct3Q101H      , QClk) 
+`LOTR_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
+`LOTR_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
+`LOTR_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
+`LOTR_MSFF   ( CtrlBranchQ102H   , CtrlBranchQ101H   , QClk)
+`LOTR_MSFF   ( CtrlITypeImmQ102H , CtrlITypeImmQ101H , QClk)
+`LOTR_MSFF   ( CtrlRegWrQ102H    , CtrlRegWrQ101H    , QClk)
+`LOTR_MSFF   ( CtrlLuiQ102H      , CtrlLuiQ101H      , QClk)
+`LOTR_MSFF   ( CtrlAuiPcQ102H    , CtrlAuiPcQ101H    , QClk)
+`LOTR_MSFF   ( CtrlMemToRegQ102H , CtrlMemToRegQ101H , QClk)
+`LOTR_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
+`LOTR_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
+`LOTR_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
+`LOTR_MSFF   ( CtrlAluOpQ102H    , CtrlAluOpQ101H    , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,16 +481,16 @@ always_comb begin : branch_comp
 end
 
 
-`GPC_MSFF   ( PcPlus4Q103H      , PcPlus4Q102H      , QClk) 
-`GPC_MSFF   ( AluOutQ103H       , AluOutQ102H       , QClk)
-`GPC_MSFF   ( Funct3Q103H       , Funct3Q102H       , QClk) 
-`GPC_MSFF   ( RegWrPtrQ103H     , RegWrPtrQ102H     , QClk)
-`GPC_MSFF   ( RegRdData1Q103H   , RegRdData1Q102H   , QClk)
-`GPC_MSFF   ( CtrlMemRdQ103H    , CtrlMemRdQ102H    , QClk) // output to DMEM
-`GPC_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) //output to DMEM
-`GPC_MSFF   ( CtrlMemToRegQ103H , CtrlMemToRegQ102H , QClk)
-`GPC_MSFF   ( CtrlPcToRegQ103H  , CtrlPcToRegQ102H  , QClk)
-`GPC_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
+`LOTR_MSFF   ( PcPlus4Q103H      , PcPlus4Q102H      , QClk) 
+`LOTR_MSFF   ( AluOutQ103H       , AluOutQ102H       , QClk)
+`LOTR_MSFF   ( Funct3Q103H       , Funct3Q102H       , QClk) 
+`LOTR_MSFF   ( RegWrPtrQ103H     , RegWrPtrQ102H     , QClk)
+`LOTR_MSFF   ( RegRdData1Q103H   , RegRdData1Q102H   , QClk)
+`LOTR_MSFF   ( CtrlMemRdQ103H    , CtrlMemRdQ102H    , QClk) // output to DMEM
+`LOTR_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) //output to DMEM
+`LOTR_MSFF   ( CtrlMemToRegQ103H , CtrlMemToRegQ102H , QClk)
+`LOTR_MSFF   ( CtrlPcToRegQ103H  , CtrlPcToRegQ102H  , QClk)
+`LOTR_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -517,13 +517,13 @@ assign  MemWrDataWQ103H = RegRdData1Q103H;
 assign  MemAdrsQ103H = AluOutQ103H;
 
 
-`GPC_MSFF   ( PcPlus4Q104H      , PcPlus4Q103H      , QClk) 
-`GPC_MSFF   ( AluOutQ104H       , AluOutQ103H       , QClk)
-`GPC_MSFF   ( RegWrPtrQ104H     , RegWrPtrQ103H     , QClk)
-`GPC_MSFF   (CtrlMemToRegQ104H  , CtrlMemToRegQ103H , QClk)
-`GPC_MSFF   (CtrlPcToRegQ104H   , CtrlPcToRegQ103H  , QClk)
-`GPC_MSFF   ( CtrlRegWrQ104H    , CtrlRegWrQ103H    , QClk)
-//`GPC_MSFF   ( MemRdDataQ104H    , MemRdDataQ103H    , QClk) // input signal from D_MEM ????? relevant
+`LOTR_MSFF   ( PcPlus4Q104H      , PcPlus4Q103H      , QClk) 
+`LOTR_MSFF   ( AluOutQ104H       , AluOutQ103H       , QClk)
+`LOTR_MSFF   ( RegWrPtrQ104H     , RegWrPtrQ103H     , QClk)
+`LOTR_MSFF   (CtrlMemToRegQ104H  , CtrlMemToRegQ103H , QClk)
+`LOTR_MSFF   (CtrlPcToRegQ104H   , CtrlPcToRegQ103H  , QClk)
+`LOTR_MSFF   ( CtrlRegWrQ104H    , CtrlRegWrQ103H    , QClk)
+//`LOTR_MSFF   ( MemRdDataQ104H    , MemRdDataQ103H    , QClk) // input signal from D_MEM ????? relevant
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -547,7 +547,7 @@ end // always_comb
 	
 //--------------------------------------------------------
 //FIXME - this logic is just a temporary until we fix the assembly to reset the SP correctly.
-`GPC_MSFF(RstQnn1H,RstQnnnH,QClk)
+`LOTR_MSFF(RstQnn1H,RstQnnnH,QClk)
 assign DervRstQnn1H = (RstQnn1H && (!RstQnnnH));
 //--------------------------------------------------------
 

@@ -12,7 +12,7 @@
 // Modification history :
 //------------------------------------------------------------------------------
 
-`include "gpc_4t_defines.sv"
+`include "lotr_defines.sv"
 
 //---------------------------------------------------
 module d_mem import gpc_4t_pkg::*; 
@@ -44,7 +44,7 @@ end
 genvar i;
 generate // the memory flipflops
     for (i = 0; i<LOCAL_MEM_SIZE; i++) begin : data_mem_gen
-        `GPC_MSFF(mem[i], next_mem[i], clock)
+        `LOTR_MSFF(mem[i], next_mem[i], clock)
     end
 endgenerate
 assign pre_q = {mem[address+3],
@@ -52,7 +52,7 @@ assign pre_q = {mem[address+3],
                 mem[address+1],
                 mem[address+0]};
 
-`GPC_EN_MSFF(q, pre_q, clock, rden)
+`LOTR_EN_MSFF(q, pre_q, clock, rden)
 // =========================================================================
 //  MMIO_GENERAL      0xF00  0xA0   0xF9F    8  
 //  This is just for simulation signals. (wont effect logic or syntethis)
