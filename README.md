@@ -7,7 +7,7 @@ Based on a Ring architecture to share all memory regions between threads and cor
 
 *** 
 ## The reposetory has 4 main projects:
-### *GPC_4T: RISCV core RV32I/E.*  
+### *GPC_4T - RISCV core RV32I/E.*  
 Writin in System verilog.  
 Main Blocks:
 1. Core - 4 HW thread. Compatible with RV32I/E.
@@ -15,7 +15,7 @@ Main Blocks:
 3. d_mem (Data Memory) - 2KB of SRAM memory with duel access (core & Fabric).    
 Devided to: compiler Scratchpad + MMIO_region + MMIO_CRs (Control Registers)
 
-### *RC - RING Controller*  
+### *RC - Ring Controller*  
 Writing in SystemVerilog.  
 Ring EP (EndPoint) to Manage the cores & ring RD/WR traffic.
 Main logic:
@@ -60,7 +60,7 @@ https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--CORE----GPC_4T
 MAS (Micro-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS--CORE----GPC_4T  
 
-- Ring - RC - RTL Deisgn:   
+- Ring Controler - RC - RTL Deisgn:   
 HAS (High-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--RING_CTRL----RC  
 MAS (Micro-Level-Architecture-Specification):  
