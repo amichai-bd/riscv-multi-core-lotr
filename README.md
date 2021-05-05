@@ -56,19 +56,19 @@ C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog
 
 - Core - GPC_4T - RTL Design:
 HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--CORE----GPC_4T  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-CORE-GPC_4T  
 MAS (Micro-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS--CORE----GPC_4T  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-CORE-GPC_4T  
 
 - Ring Controler - RC - RTL Deisgn:   
 HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--RING_CTRL----RC  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-RING_CTRL-RC  
 MAS (Micro-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-RC-Ring-Controller  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-RING_CTRL-RC  
 
 - Fabric - LOTR - (Integration Model) - RTL Deisgn: 
 HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--FABRIC---LOTR  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-FABRIC-LOTR  
 MAS (Micro-Level-Architecture-Specification):  
 TODO
 
