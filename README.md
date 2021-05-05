@@ -1,6 +1,9 @@
-# riscv-multi-core
-An accelerator for multi-thread processing IP.    
+# riscv-multi-core-lotr
+An accelerator for multi-thread processing IP.   
+
+LOTR:  Lord-Of-The-Ring  
 Based on a Ring architecture to share all memory regions between threads and cores.
+![image](https://user-images.githubusercontent.com/81047407/117139027-6b3fe480-adb4-11eb-9e2f-6c64a921c99a.png)
 
 *** 
 ## The reposetory has 4 main projects:
@@ -35,7 +38,11 @@ Written in C and compiled using the RISCV toolchain (rv32i/e).
 Proof of concept for multi-thread applications for the multi-core design.  
 1. Design programs that can run on the 4 threaded core and share data between threads.  
 2. Design programs that can be run on many cores, utilize the threads in each core and share data between all cores.
+
+
 ***
+
+
 # Pointers To Get Started
 - WSL (Windows subsystem Linux):  
 https://docs.microsoft.com/en-us/windows/wsl/install-win10  
@@ -45,19 +52,21 @@ This will help to install the RISC-V toolchain.
 https://github.com/riscv/riscv-gnu-toolchain.  
 This will allow you to generate the machine code needed to load our instruction memory and simulate the RISCV multi-core design.  
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
-- Core - RTL Design:
+
+
+- Core - GPC_4T - RTL Design:
 HAS (High-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--CORE----GPC_4T  
 MAS (Micro-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS--CORE----GPC_4T  
 
-- Ring - RTL Deisgn:   
+- Ring - RC - RTL Deisgn:   
 HAS (High-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--RING_CTRL----RC  
 MAS (Micro-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-RC-Ring-Controller  
 
-- Fabric (Integration Model) - RTL Deisgn: 
+- Fabric - LOTR - (Integration Model) - RTL Deisgn: 
 HAS (High-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--FABRIC---LOTR  
 MAS (Micro-Level-Architecture-Specification):  
