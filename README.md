@@ -1,10 +1,13 @@
-# riscv-multi-core
-An accelerator for multi-thread processing IP.    
+# riscv-multi-core-lotr
+An accelerator for multi-thread processing IP.   
+
+LOTR:  Lord-Of-The-Ring  
 Based on a Ring architecture to share all memory regions between threads and cores.
+![image](https://user-images.githubusercontent.com/81047407/117139027-6b3fe480-adb4-11eb-9e2f-6c64a921c99a.png)
 
 *** 
 ## The reposetory has 4 main projects:
-### *GPC_4T: RISCV core RV32I/E.*  
+### *GPC_4T - RISCV core RV32I/E.*  
 Writin in System verilog.  
 Main Blocks:
 1. Core - 4 HW thread. Compatible with RV32I/E.
@@ -12,7 +15,7 @@ Main Blocks:
 3. d_mem (Data Memory) - 2KB of SRAM memory with duel access (core & Fabric).    
 Devided to: compiler Scratchpad + MMIO_region + MMIO_CRs (Control Registers)
 
-### *RC - RING Controller*  
+### *RC - Ring Controller*  
 Writing in SystemVerilog.  
 Ring EP (EndPoint) to Manage the cores & ring RD/WR traffic.
 Main logic:
@@ -35,7 +38,11 @@ Written in C and compiled using the RISCV toolchain (rv32i/e).
 Proof of concept for multi-thread applications for the multi-core design.  
 1. Design programs that can run on the 4 threaded core and share data between threads.  
 2. Design programs that can be run on many cores, utilize the threads in each core and share data between all cores.
+
+
 ***
+
+
 # Pointers To Get Started
 - WSL (Windows subsystem Linux):  
 https://docs.microsoft.com/en-us/windows/wsl/install-win10  
@@ -45,21 +52,23 @@ This will help to install the RISC-V toolchain.
 https://github.com/riscv/riscv-gnu-toolchain.  
 This will allow you to generate the machine code needed to load our instruction memory and simulate the RISCV multi-core design.  
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
-- Core - RTL Design:
-HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core/wiki/HAS--CORE--%7C-GPC_4T  
-MAS (Micro-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core/wiki/MAS--CORE--%7C--GPC_4T  
 
-- Ring - RTL Deisgn:   
-HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core/wiki/HAS--RING_CTRL-%7C--RC  
-MAS (Micro-Level-Architecture-Specification):  
-TODO  
 
-- Fabric (Integration Model) - RTL Deisgn: 
+- Core - GPC_4T - RTL Design:
 HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core/wiki/HAS--FABRIC-%7C-LOTR  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--CORE----GPC_4T  
+MAS (Micro-Level-Architecture-Specification):  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS--CORE----GPC_4T  
+
+- Ring Controler - RC - RTL Deisgn:   
+HAS (High-Level-Architecture-Specification):  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--RING_CTRL----RC  
+MAS (Micro-Level-Architecture-Specification):  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-RC-Ring-Controller  
+
+- Fabric - LOTR - (Integration Model) - RTL Deisgn: 
+HAS (High-Level-Architecture-Specification):  
+https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS--FABRIC---LOTR  
 MAS (Micro-Level-Architecture-Specification):  
 TODO
 

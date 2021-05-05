@@ -85,7 +85,6 @@ logic [31:0]        RegRdData1Q103H;
 logic [31:0]        RegRdData2Q101H;
 logic [31:0]        RegRdData2Q102H;
 logic [31:0]        RegRdData2Q103H;
-logic [4:0]         RegWrPtrQ101H;
 logic [4:0]         RegWrPtrQ102H;
 logic [4:0]         RegWrPtrQ103H;
 logic [4:0]         RegWrPtrQ104H;
@@ -109,18 +108,12 @@ logic [31:0]        AluIn2Q102H;
 
 //  Immediate Formats
 logic [31:0]        InstructionQ101H;   //intenal logic to assign the input instruction or a NOP
-logic [31:0]        I_ImmediateQ101H; 
-logic [31:0]        S_ImmediateQ101H; 
-logic [31:0]        B_ImmediateQ101H; 
-logic [31:0]        U_ImmediateQ101H; 
-logic [31:0]        J_ImmediateQ101H; 
+logic [31:0]        InstructionQ102H;
 logic [31:0]        I_ImmediateQ102H; 
 logic [31:0]        S_ImmediateQ102H; 
 logic [31:0]        B_ImmediateQ102H; 
 logic [31:0]        U_ImmediateQ102H; 
 logic [31:0]        J_ImmediateQ102H; 
-logic [2:0]         Funct3Q101H;
-logic [6:0]         Funct7Q101H;
 logic [4:0]         ShamtQ102H;
 logic [2:0]         Funct3Q102H;
 logic [2:0]         Funct3Q103H;
@@ -274,19 +267,19 @@ assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;    //intern
 ////////////////////////////////////////
 //  Immediate Generator
 ////////////////////////////////////////
-assign U_ImmediateQ101H = { InstructionQ101H[31:12]    ,12'b0 } ; 
-assign I_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[24:20] }; 
-assign S_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[11:7]  }; 
-assign B_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[7]     , InstructionQ101H[30:25] , InstructionQ101H[11:8]  , 1'b0}; 
-assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12] , InstructionQ101H[20]    , InstructionQ101H[30:21] , 1'b0}; 
+//assign U_ImmediateQ101H = { InstructionQ101H[31:12]    ,12'b0 } ; 
+//assign I_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[24:20] }; 
+//assign S_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[11:7]  }; 
+//assign B_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[7]     , InstructionQ101H[30:25] , InstructionQ101H[11:8]  , 1'b0}; 
+//assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12] , InstructionQ101H[20]    , InstructionQ101H[30:21] , 1'b0}; 
 ////////////////////////////////////////
 //  Instruction "BreakDown"
 ////////////////////////////////////////
+//assign RegWrPtrQ101H    = InstructionQ101H[11:7];   // rd register  for R/I/U/J Type
+//assign Funct3Q101H      = InstructionQ101H[14:12];  // function3    for R/S/I/B Type
+//assign Funct7Q101H      = InstructionQ101H[31:25];  // function7    for R Type
 assign RegRdPtr1Q101H   = InstructionQ101H[19:15];  // rs1 register for R/S/I/B Type
 assign RegRdPtr2Q101H   = InstructionQ101H[24:20];  // rs2 register for R/S/B Type
-assign RegWrPtrQ101H    = InstructionQ101H[11:7];   // rd register  for R/I/U/J Type
-assign Funct3Q101H      = InstructionQ101H[14:12];  // function3    for R/S/I/B Type
-assign Funct7Q101H      = InstructionQ101H[31:25];  // function7    for R Type
 assign OpcodeQ101H      = InstructionQ101H[6:0];    // opcode       for each possible Type  
 
 
@@ -361,15 +354,16 @@ end
 
 
 
+//`LOTR_MSFF   ( RegWrPtrQ102H     , RegWrPtrQ101H     , QClk)
+//`LOTR_MSFF   ( U_ImmediateQ102H  , U_ImmediateQ101H  , QClk)
+//`LOTR_MSFF   ( I_ImmediateQ102H  , I_ImmediateQ101H  , QClk)
+//`LOTR_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
+//`LOTR_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
+//`LOTR_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
+//`LOTR_MSFF   ( Funct3Q102H       , Funct3Q101H      , QClk) 
+`LOTR_MSFF   ( InstructionQ102H  , InstructionQ101H  , QClk)        //save flops. TODO more info
 `LOTR_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
 `LOTR_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
-`LOTR_MSFF   ( RegWrPtrQ102H     , RegWrPtrQ101H     , QClk)
-`LOTR_MSFF   ( U_ImmediateQ102H  , U_ImmediateQ101H  , QClk)
-`LOTR_MSFF   ( I_ImmediateQ102H  , I_ImmediateQ101H  , QClk)
-`LOTR_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
-`LOTR_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
-`LOTR_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
-`LOTR_MSFF   ( Funct3Q102H       , Funct3Q101H      , QClk) 
 `LOTR_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
 `LOTR_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
 `LOTR_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
@@ -398,6 +392,20 @@ end
 //  Contains the ALU - Arithmatic Logical Unit that calculate arithmatic operations
 //  Also contains a Branch Comperator that determine if brach condition 
 //  and also branch prediction calculator that calculate where to jump
+////////////////////////////////////////
+//  Immediate Generator
+////////////////////////////////////////
+assign U_ImmediateQ102H = { InstructionQ102H[31:12]    ,12'b0 } ; 
+assign I_ImmediateQ102H = { {20{InstructionQ102H[31]}} , InstructionQ102H[31:25] , InstructionQ102H[24:20] }; 
+assign S_ImmediateQ102H = { {20{InstructionQ102H[31]}} , InstructionQ102H[31:25] , InstructionQ102H[11:7]  }; 
+assign B_ImmediateQ102H = { {20{InstructionQ102H[31]}} , InstructionQ102H[7]     , InstructionQ102H[30:25] , InstructionQ102H[11:8]  , 1'b0}; 
+assign J_ImmediateQ102H = { {12{InstructionQ102H[31]}} , InstructionQ102H[19:12] , InstructionQ102H[20]    , InstructionQ102H[30:21] , 1'b0}; 
+////////////////////////////////////////
+//  Instruction "BreakDown"
+////////////////////////////////////////
+assign RegWrPtrQ102H    = InstructionQ102H[11:7];   // rd register  for R/I/U/J Type
+assign Funct3Q102H      = InstructionQ102H[14:12];  // function3    for R/S/I/B Type
+assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
 ////////////////////////////////////////////////////////////////////////////////////////
