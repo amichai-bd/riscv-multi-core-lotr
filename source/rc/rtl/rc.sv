@@ -99,8 +99,8 @@ logic [C2F_MSB:0]     F2C_SelWrQnnnH;
 //=========================================
 // Ring input Interface
 //=========================================
-`LOTR_MSFF( RingInputAddressQ501H   ,RingInputAddressQ500H, QClk )
-`LOTR_MSFF( RingInputDataQ501H      ,RingInputDataQ500H   , QClk )
+`LOTR_MSFF( RingInputAddressQ501H, RingInputAddressQ500H, QClk )
+`LOTR_MSFF( RingInputDataQ501H   , RingInputDataQ500H   , QClk )
 
 //==================================================================================
 //              The C2F Buffer - Ring 2 Fabric
@@ -228,7 +228,6 @@ end
 //The Sample before Ring Output 
 `LOTR_MSFF( RingOutputAddressQ502H, RingOutputAddressQ501H, QClk )
 `LOTR_MSFF( RingOutputDataQ502H   , RingOutputDataQ501H   , QClk )
-
 
 
 endmodule // module rc
