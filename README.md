@@ -53,19 +53,19 @@ This will allow you to generate the machine code needed to load our instruction 
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
 
 
-- Core - GPC_4T - RTL Design:
-HAS (High-Level-Architecture-Specification):  
+- Core - GPC_4T - RTL Design:    
+HAS (High-Level-Architecture-Specification):     
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-CORE-GPC_4T  
 MAS (Micro-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-CORE-GPC_4T  
 
-- Ring Controler - RC - RTL Deisgn:   
-HAS (High-Level-Architecture-Specification):  
+- Ring Controler - RC - RTL Deisgn:     
+HAS (High-Level-Architecture-Specification):      
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-RING_CTRL-RC  
 MAS (Micro-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-RING_CTRL-RC  
 
-- Fabric - LOTR - (Integration Model) - RTL Deisgn: 
+- Fabric - LOTR - (Integration Model) - RTL Deisgn:     
 HAS (High-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-FABRIC-LOTR  
 MAS (Micro-Level-Architecture-Specification):  
