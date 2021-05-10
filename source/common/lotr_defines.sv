@@ -12,15 +12,15 @@
 `ifndef lotr_defines
 `define lotr_defines
 
-`define  LOTR_MSFF(q,i,clk)              \
+`define  LOTR_MSFF(q,i,clk)             \
          always_ff @(posedge clk)       \
             q<=i;
 
-`define  LOTR_EN_MSFF(q,i,clk,en)        \
+`define  LOTR_EN_MSFF(q,i,clk,en)       \
          always_ff @(posedge clk)       \
             if(en) q<=i;
 
-`define  LOTR_RST_MSFF(q,i,clk,rst)      \
+`define  LOTR_RST_MSFF(q,i,clk,rst)     \
          always_ff @(posedge clk) begin \
             if (rst) q <='0;            \
             else     q <= i;            \
