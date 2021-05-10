@@ -25,20 +25,7 @@ reset_handler:
 _start:
   .global _start
 
-  /* clear BSS */
-  la x26, _bss_start
-  la x27, _bss_end
 
-  bge x26, x27, zero_loop_end
-
-zero_loop:
-  sw x0, 0(x26)
-  addi x26, x26, 4
-  ble x26, x27, zero_loop
-zero_loop_end:
-
-  /* Run global initialization functions */
-  call    __libc_init_array
 
 main_entry:
   /* jump to main program entry point (argc = argv = 0) */
