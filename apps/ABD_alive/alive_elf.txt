@@ -1,0 +1,229 @@
+
+alive.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00000000 <_fini-0x84>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	00000013          	nop
+  18:	00000013          	nop
+  1c:	00000013          	nop
+  20:	00000013          	nop
+  24:	00000013          	nop
+  28:	00000013          	nop
+  2c:	00000013          	nop
+  30:	00000013          	nop
+  34:	00000013          	nop
+  38:	00000013          	nop
+  3c:	00000013          	nop
+  40:	00000013          	nop
+  44:	00000013          	nop
+  48:	00000013          	nop
+  4c:	00000013          	nop
+  50:	00000013          	nop
+  54:	00000013          	nop
+  58:	00000013          	nop
+  5c:	00000013          	nop
+  60:	00000013          	nop
+  64:	00000013          	nop
+  68:	00000013          	nop
+  6c:	00000013          	nop
+  70:	00000013          	nop
+  74:	00000013          	nop
+  78:	00000013          	nop
+  7c:	00000013          	nop
+  80:	0640006f          	j	e4 <reset_handler>
+
+00000084 <_fini>:
+  84:	00008067          	ret
+
+Disassembly of section .text:
+
+00000088 <main>:
+  88:	fe010113          	addi	sp,sp,-32
+  8c:	00112e23          	sw	ra,28(sp)
+  90:	00812c23          	sw	s0,24(sp)
+  94:	02010413          	addi	s0,sp,32
+  98:	00500793          	li	a5,5
+  9c:	fef42623          	sw	a5,-20(s0)
+  a0:	00300793          	li	a5,3
+  a4:	fef42423          	sw	a5,-24(s0)
+  a8:	fe842583          	lw	a1,-24(s0)
+  ac:	fec42503          	lw	a0,-20(s0)
+  b0:	084000ef          	jal	ra,134 <__mulsi3>
+  b4:	00050793          	mv	a5,a0
+  b8:	fef42223          	sw	a5,-28(s0)
+  bc:	000017b7          	lui	a5,0x1
+  c0:	f0078793          	addi	a5,a5,-256 # f00 <_stack>
+  c4:	fe442703          	lw	a4,-28(s0)
+  c8:	00e7a023          	sw	a4,0(a5)
+  cc:	00000793          	li	a5,0
+  d0:	00078513          	mv	a0,a5
+  d4:	01c12083          	lw	ra,28(sp)
+  d8:	01812403          	lw	s0,24(sp)
+  dc:	02010113          	addi	sp,sp,32
+  e0:	00008067          	ret
+
+000000e4 <reset_handler>:
+  e4:	00000093          	li	ra,0
+  e8:	00008113          	mv	sp,ra
+  ec:	00008193          	mv	gp,ra
+  f0:	00008213          	mv	tp,ra
+  f4:	00008293          	mv	t0,ra
+  f8:	00008313          	mv	t1,ra
+  fc:	00008393          	mv	t2,ra
+ 100:	00008413          	mv	s0,ra
+ 104:	00008493          	mv	s1,ra
+ 108:	00008513          	mv	a0,ra
+ 10c:	00008593          	mv	a1,ra
+ 110:	00008613          	mv	a2,ra
+ 114:	00008693          	mv	a3,ra
+ 118:	00008713          	mv	a4,ra
+ 11c:	00008793          	mv	a5,ra
+ 120:	00001117          	auipc	sp,0x1
+ 124:	de010113          	addi	sp,sp,-544 # f00 <_stack>
+ 128:	00000513          	li	a0,0
+ 12c:	00000593          	li	a1,0
+ 130:	f59ff0ef          	jal	ra,88 <main>
+
+00000134 <__mulsi3>:
+ 134:	00050613          	mv	a2,a0
+ 138:	00000513          	li	a0,0
+ 13c:	0015f693          	andi	a3,a1,1
+ 140:	00068463          	beqz	a3,148 <__mulsi3+0x14>
+ 144:	00c50533          	add	a0,a0,a2
+ 148:	0015d593          	srli	a1,a1,0x1
+ 14c:	00161613          	slli	a2,a2,0x1
+ 150:	fe0596e3          	bnez	a1,13c <__mulsi3+0x8>
+ 154:	00008067          	ret
+
+00000158 <__CTOR_LIST__>:
+	...
+
+00000160 <__CTOR_END__>:
+	...
+Raw dump of debug contents of section .debug_line (loaded from alive.elf):
+
+  Offset:                      0x0
+  Length:                      142
+  DWARF Version:               3
+  Prologue Length:             72
+  Minimum Instruction Length:  1
+  Initial value of 'is_stmt':  1
+  Line Base:                   -5
+  Line Range:                  14
+  Opcode Base:                 13
+
+ Opcodes:
+  Opcode 1 has 0 args
+  Opcode 2 has 1 arg
+  Opcode 3 has 1 arg
+  Opcode 4 has 1 arg
+  Opcode 5 has 1 arg
+  Opcode 6 has 0 args
+  Opcode 7 has 0 args
+  Opcode 8 has 0 args
+  Opcode 9 has 1 arg
+  Opcode 10 has 0 args
+  Opcode 11 has 0 args
+  Opcode 12 has 1 arg
+
+ The Directory Table (offset 0x1b):
+  1	../../.././riscv-gcc/libgcc/config/riscv
+
+ The File Name Table (offset 0x45):
+  Entry	Dir	Time	Size	Name
+  1	1	0	0	muldi3.S
+
+ Line Number Statements:
+  [0x00000052]  Extended opcode 2: set Address to 0x134
+  [0x00000059]  Advance Line by 36 to 37
+  [0x0000005b]  Copy
+  [0x0000005c]  Advance Line by 1 to 38
+  [0x0000005e]  Advance PC by fixed size amount 4 to 0x138
+  [0x00000061]  Copy (view 1)
+  [0x00000062]  Advance Line by 2 to 40
+  [0x00000064]  Advance PC by fixed size amount 4 to 0x13c
+  [0x00000067]  Copy (view 2)
+  [0x00000068]  Advance Line by 1 to 41
+  [0x0000006a]  Advance PC by fixed size amount 4 to 0x140
+  [0x0000006d]  Copy (view 3)
+  [0x0000006e]  Advance Line by 1 to 42
+  [0x00000070]  Advance PC by fixed size amount 4 to 0x144
+  [0x00000073]  Copy (view 4)
+  [0x00000074]  Advance Line by 2 to 44
+  [0x00000076]  Advance PC by fixed size amount 4 to 0x148
+  [0x00000079]  Copy (view 5)
+  [0x0000007a]  Advance Line by 1 to 45
+  [0x0000007c]  Advance PC by fixed size amount 4 to 0x14c
+  [0x0000007f]  Copy (view 6)
+  [0x00000080]  Advance Line by 1 to 46
+  [0x00000082]  Advance PC by fixed size amount 4 to 0x150
+  [0x00000085]  Copy (view 7)
+  [0x00000086]  Advance Line by 1 to 47
+  [0x00000088]  Advance PC by fixed size amount 4 to 0x154
+  [0x0000008b]  Copy (view 8)
+  [0x0000008c]  Advance PC by fixed size amount 4 to 0x158
+  [0x0000008f]  Extended opcode 1: End of Sequence
+
+
+Contents of the .debug_info section (loaded from alive.elf):
+
+  Compilation Unit @ offset 0x0:
+   Length:        0x22 (32-bit)
+   Version:       2
+   Abbrev Offset: 0x0
+   Pointer Size:  4
+ <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
+    <c>   DW_AT_stmt_list   : 0x0
+    <10>   DW_AT_low_pc      : 0x134
+    <14>   DW_AT_high_pc     : 0x158
+    <18>   DW_AT_name        : (indirect string, offset: 0x0): ../../.././riscv-gcc/libgcc/config/riscv/muldi3.S
+    <1c>   DW_AT_comp_dir    : (indirect string, offset: 0x32): /home/amichaibd/projects/riscv/riscv-gnu-toolchain/build-gcc-newlib-stage2/riscv32-unknown-elf/libgcc
+    <20>   DW_AT_producer    : (indirect string, offset: 0x98): GNU AS 2.35
+    <24>   DW_AT_language    : 32769	(MIPS assembler)
+
+Contents of the .debug_abbrev section (loaded from alive.elf):
+
+  Number TAG (0x0)
+   1      DW_TAG_compile_unit    [no children]
+    DW_AT_stmt_list    DW_FORM_data4
+    DW_AT_low_pc       DW_FORM_addr
+    DW_AT_high_pc      DW_FORM_addr
+    DW_AT_name         DW_FORM_strp
+    DW_AT_comp_dir     DW_FORM_strp
+    DW_AT_producer     DW_FORM_strp
+    DW_AT_language     DW_FORM_data2
+    DW_AT value: 0     DW_FORM value: 0
+
+Contents of the .debug_aranges section (loaded from alive.elf):
+
+  Length:                   28
+  Version:                  2
+  Offset into .debug_info:  0x0
+  Pointer Size:             4
+  Segment Size:             0
+
+    Address    Length
+    00000134 00000024 
+    00000000 00000000 
+
+Contents of the .debug_str section (loaded from alive.elf):
+
+  0x00000000 2e2e2f2e 2e2f2e2e 2f2e2f72 69736376 ../../.././riscv
+  0x00000010 2d676363 2f6c6962 6763632f 636f6e66 -gcc/libgcc/conf
+  0x00000020 69672f72 69736376 2f6d756c 6469332e ig/riscv/muldi3.
+  0x00000030 53002f68 6f6d652f 616d6963 68616962 S./home/amichaib
+  0x00000040 642f7072 6f6a6563 74732f72 69736376 d/projects/riscv
+  0x00000050 2f726973 63762d67 6e752d74 6f6f6c63 /riscv-gnu-toolc
+  0x00000060 6861696e 2f627569 6c642d67 63632d6e hain/build-gcc-n
+  0x00000070 65776c69 622d7374 61676532 2f726973 ewlib-stage2/ris
+  0x00000080 63763332 2d756e6b 6e6f776e 2d656c66 cv32-unknown-elf
+  0x00000090 2f6c6962 67636300 474e5520 41532032 /libgcc.GNU AS 2
+  0x000000a0 2e333500                            .35.
+

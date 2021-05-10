@@ -120,7 +120,6 @@ logic [2:0]         Funct3Q103H;
 logic [6:0]         Funct7Q102H;
 
 //  control signals
-logic [3:0]         CtrlAluOpQ101H    ;
 logic               CtrlJalQ101H      ;
 logic               CtrlJalrQ101H     ;
 logic               CtrlBranchQ101H   ;
@@ -153,6 +152,7 @@ logic               CtrlPcToRegQ103H;
 logic               CtrlPcToRegQ104H;
 
 logic [6:0]         OpcodeQ101H;
+logic [6:0]         OpcodeQ102H;
 
 logic [31:0]        PcBranchQ102H;
 logic               BranchCondMetQ102H;
@@ -301,12 +301,7 @@ always_comb begin : decode_opcode
     CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
     CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
 
-    // ALU will perform the encoded fubct3 operation.
-    CtrlAluOpQ101H      = {1'b0,Funct3Q101H};
-    // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
-    if( (OpcodeQ101H == OP_OP) || ((OpcodeQ101H == OP_OPIMM) && (Funct3Q101H[1:0]==2'b01))) begin
-       CtrlAluOpQ101H[3] = Funct7Q101H[5];
-    end
+
 end
 
 
@@ -376,7 +371,7 @@ end
 `LOTR_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
 `LOTR_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
 `LOTR_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
-`LOTR_MSFF   ( CtrlAluOpQ102H    , CtrlAluOpQ101H    , QClk)
+`LOTR_MSFF   ( OpcodeQ102H    , OpcodeQ101H    , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,6 +401,14 @@ assign J_ImmediateQ102H = { {12{InstructionQ102H[31]}} , InstructionQ102H[19:12]
 assign RegWrPtrQ102H    = InstructionQ102H[11:7];   // rd register  for R/I/U/J Type
 assign Funct3Q102H      = InstructionQ102H[14:12];  // function3    for R/S/I/B Type
 assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
+always_comb begin
+// ALU will perform the encoded fubct3 operation.
+    CtrlAluOpQ102H      = {1'b0,Funct3Q102H};
+    // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
+    if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (OpcodeQ102H[1:0]==2'b01))) begin
+       CtrlAluOpQ102H[3] = Funct7Q102H[5];
+    end //if
+end //always_comb
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
 ////////////////////////////////////////////////////////////////////////////////////////
