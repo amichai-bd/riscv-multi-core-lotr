@@ -116,7 +116,6 @@ logic [2:0]         Funct3Q103H;
 logic [6:0]         Funct7Q102H;
 
 //  control signals
-logic [3:0]         CtrlAluOpQ101H    ;
 logic               CtrlJalQ101H      ;
 logic               CtrlJalrQ101H     ;
 logic               CtrlBranchQ101H   ;
@@ -370,7 +369,6 @@ end
 `LOTR_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
 `LOTR_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //    _____  __     __   _____   _        ______          ____    __    ___    ___    _    _ 
 //   / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  |__ \  | |  | |
@@ -398,6 +396,7 @@ assign J_ImmediateQ102H = { {12{InstructionQ102H[31]}} , InstructionQ102H[19:12]
 assign RegWrPtrQ102H    = InstructionQ102H[11:7];   // rd register  for R/I/U/J Type
 assign Funct3Q102H      = InstructionQ102H[14:12];  // function3    for R/S/I/B Type
 assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
+<<<<<<< HEAD
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //			ALU controller
