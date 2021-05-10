@@ -53,7 +53,8 @@ This will allow you to generate the machine code needed to load our instruction 
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
 
 
-- Core - GPC_4T - RTL Design:    
+- Core - GPC_4T - RTL Design:   
+RISCV Spec :https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf
 HAS (High-Level-Architecture-Specification):     
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-CORE-GPC_4T  
 MAS (Micro-Level-Architecture-Specification):  
