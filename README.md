@@ -54,9 +54,9 @@ C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog
 
 
 - Core - GPC_4T - RTL Design:   
-RISCV Spec :https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf
 HAS (High-Level-Architecture-Specification):     
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-CORE-GPC_4T  
+RISCV Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf   
+HW Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-CORE-GPC_4T  
 MAS (Micro-Level-Architecture-Specification):  
 https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-CORE-GPC_4T  
 
