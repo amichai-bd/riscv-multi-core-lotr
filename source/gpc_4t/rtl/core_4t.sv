@@ -42,9 +42,6 @@ module core_4t
     //MMIO
     input  t_cr         CRQnnnH
     );
-//  general signals
-logic    RstQnn1H;
-logic    DervRstQnn1H;
 
 //  program counter
 logic [31:0]    PcQ101H;
@@ -84,7 +81,6 @@ logic [31:0]        RegRdData1Q102H;
 logic [31:0]        RegRdData1Q103H;
 logic [31:0]        RegRdData2Q101H;
 logic [31:0]        RegRdData2Q102H;
-logic [31:0]        RegRdData2Q103H;
 logic [4:0]         RegWrPtrQ102H;
 logic [4:0]         RegWrPtrQ103H;
 logic [4:0]         RegWrPtrQ104H;
@@ -153,6 +149,7 @@ logic               CtrlPcToRegQ103H;
 logic               CtrlPcToRegQ104H;
 
 logic [6:0]         OpcodeQ101H;
+logic [6:0]         OpcodeQ102H;
 
 logic [31:0]        PcBranchQ102H;
 logic               BranchCondMetQ102H;
@@ -301,12 +298,6 @@ always_comb begin : decode_opcode
     CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
     CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
 
-    // ALU will perform the encoded fubct3 operation.
-    CtrlAluOpQ101H      = {1'b0,Funct3Q101H};
-    // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
-    if( (OpcodeQ101H == OP_OP) || ((OpcodeQ101H == OP_OPIMM) && (Funct3Q101H[1:0]==2'b01))) begin
-       CtrlAluOpQ101H[3] = Funct7Q101H[5];
-    end
 end
 
 
@@ -323,10 +314,10 @@ end
 
 
 //========The 4 registers - one for each thread=========================
-`LOTR_RST_MSFF(Register0QnnnH, NextRegister0Q104H, QClk, RstQnnnH) 
-`LOTR_RST_MSFF(Register1QnnnH, NextRegister1Q104H, QClk, RstQnnnH) 
-`LOTR_RST_MSFF(Register2QnnnH, NextRegister2Q104H, QClk, RstQnnnH) 
-`LOTR_RST_MSFF(Register3QnnnH, NextRegister3Q104H, QClk, RstQnnnH) 
+`LOTR_MSFF(Register0QnnnH, NextRegister0Q104H, QClk) 
+`LOTR_MSFF(Register1QnnnH, NextRegister1Q104H, QClk) 
+`LOTR_MSFF(Register2QnnnH, NextRegister2Q104H, QClk) 
+`LOTR_MSFF(Register3QnnnH, NextRegister3Q104H, QClk) 
 //======================================================================
 
 //Read from RegisterQnnnH 
@@ -361,9 +352,11 @@ end
 //`LOTR_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
 //`LOTR_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
 //`LOTR_MSFF   ( Funct3Q102H       , Funct3Q101H      , QClk) 
+`LOTR_MSFF   ( OpcodeQ102H       , OpcodeQ101H       , QClk) 
 `LOTR_MSFF   ( InstructionQ102H  , InstructionQ101H  , QClk)        //save flops. TODO more info
 `LOTR_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
 `LOTR_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
+`LOTR_MSFF   ( RegRdData2Q102H   , RegRdData2Q101H   , QClk)        //fix
 `LOTR_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
 `LOTR_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
 `LOTR_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
@@ -376,7 +369,6 @@ end
 `LOTR_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
 `LOTR_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
 `LOTR_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
-`LOTR_MSFF   ( CtrlAluOpQ102H    , CtrlAluOpQ101H    , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,6 +398,18 @@ assign J_ImmediateQ102H = { {12{InstructionQ102H[31]}} , InstructionQ102H[19:12]
 assign RegWrPtrQ102H    = InstructionQ102H[11:7];   // rd register  for R/I/U/J Type
 assign Funct3Q102H      = InstructionQ102H[14:12];  // function3    for R/S/I/B Type
 assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
+
+////////////////////////////////////////////////////////////////////////////////////////
+//			ALU controller
+////////////////////////////////////////////////////////////////////////////////////////
+// incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
+always_comb begin : alu_ctrl
+    // ALU will perform the encoded fubct3 operation.
+    CtrlAluOpQ102H  = {1'b0,Funct3Q102H};
+    if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (Funct3Q102H[1:0]==2'b01))) begin
+       CtrlAluOpQ102H[3] = Funct7Q102H[5];
+    end
+end   
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +424,7 @@ always_comb begin : set_next_pc
     //mux 4:1
     unique casez ({ CtrlJalrQ102H , CtrlJalQ102H , BranchCondMetQ102H}) 
         3'b001  : NextPcQ102H = PcBranchQ102H;     // OP_BRANCH
-        3'b010  : NextPcQ102H = J_ImmediateQ102H;  // OP_JAL
+        3'b010  : NextPcQ102H = J_ImmediateQ102H + PcQ102H;  // OP_JAL  \\fix
         3'b100  : NextPcQ102H = AluOutQ102H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
         default : NextPcQ102H = PcPlus4Q102H;
     endcase
@@ -556,7 +560,8 @@ end // always_comb
 //--------------------------------------------------------
 //FIXME - this logic is just a temporary until we fix the assembly to reset the SP correctly.
 `LOTR_MSFF(RstQnn1H,RstQnnnH,QClk)
-assign DervRstQnn1H = (RstQnn1H && (!RstQnnnH));
+`LOTR_MSFF(RstQnn2H,RstQnn1H,QClk)
+assign DervRstQnn1H = (RstQnn2H && (!RstQnnnH));
 //--------------------------------------------------------
 
 always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
@@ -582,14 +587,14 @@ always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
  //--------------------------------------------------------
  //init for stack pointer
     if (DervRstQnn1H) begin
-     NextRegister0Q104H[2] = 32'hf00;  //sp
-     NextRegister0Q104H[8] = 32'hf00;  //s0
-     NextRegister1Q104H[2] = 32'hf00;  //sp
-     NextRegister1Q104H[8] = 32'hf00;  //s0    
-     NextRegister2Q104H[2] = 32'hf00;  //sp
-     NextRegister2Q104H[8] = 32'hf00;  //s0    
-     NextRegister3Q104H[2] = 32'hf00;  //sp
-     NextRegister3Q104H[8] = 32'hf00;  //s0    
+     NextRegister0Q104H[2] = 32'b0;  //sp
+     NextRegister0Q104H[8] = 32'b0;  //s0
+     NextRegister1Q104H[2] = 32'b0;  //sp
+     NextRegister1Q104H[8] = 32'b0;  //s0    
+     NextRegister2Q104H[2] = 32'b0;  //sp
+     NextRegister2Q104H[8] = 32'b0;  //s0    
+     NextRegister3Q104H[8] = 32'b0;  //s0    
+     NextRegister3Q104H[2] = 32'b0;  //sp
     end
  //------------------------------------------------------------
  //Register[0] will always be tied to '0;
