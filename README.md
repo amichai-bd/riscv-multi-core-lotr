@@ -7,7 +7,7 @@ Based on a Ring architecture to share all memory regions between threads and cor
 *** 
 ## The reposetory has 4 main projects:
 ### *1) GPC_4T - RISCV core RV32I/E.*  
-Writin in System verilog.  
+Written  in System verilog.  
 Main Blocks:
 1. Core - 4 HW thread. Compatible with RV32I/E.
 2. i_mem (Instruction Memory). 2KB of SRAM memory with dual access (core & Fabric).
@@ -15,7 +15,7 @@ Main Blocks:
 Devided to: compiler Scratchpad + MMIO_region + MMIO_CRs (Control Registers)
 
 ### *2) RC - Ring Controller*  
-Writing in SystemVerilog.  
+Written  in SystemVerilog.  
 Ring EP (EndPoint) to Manage the cores & ring RD/WR traffic.
 Main logic:
 1. C2F buffer (Core2Fabric).
@@ -23,7 +23,7 @@ Main logic:
 3. Ring output Arbiter. (C2F,F2C,Ring input)
 
 ### *3) LOTR: Integration Model, Lord-Of-The-Ring*  
-Writing in SystemVerilog.  
+Written  in SystemVerilog.  
 Instantiating the Cores and Ring into a single Fabric IP design.  
 Main Blocks:  
 1. GPC_4T core with its own "local" 4k memory - interface with the RC (ring controller).  
@@ -36,7 +36,7 @@ which will enable the Many-core Ring Fabric Design.
 Written in C and compiled using the RISCV toolchain (rv32i/e).  
 Proof of concept for multi-thread applications for the multi-core design.  
 1. Design programs that can run on the 4 threaded core and share data between threads.  
-2. Design programs that can be run on many cores, utilize the threads in each core and share data between all cores.
+2. Design programs that can be run on many cores, utilize the threads in each core, and share data between all cores.
 
 
 ***
