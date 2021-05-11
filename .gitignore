@@ -1,1 +1,6 @@
+
+# modelsim generated files
 modelsim/work/*
+modelsim/*
+transcript
+!modelsim/README*
