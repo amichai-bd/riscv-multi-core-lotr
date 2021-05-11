@@ -1,0 +1,165 @@
+{{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv}} {0 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:27 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv 
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv(16): Cannot open `include file "lotr_defines.sv".
+-- Compiling module d_mem_wrap
+-- Importing package gpc_4t_pkg
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv(99): (vlog-2163) Macro `LOTR_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv(99): near "(": syntax error, unexpected '('.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv(107): near "unique": syntax error, unexpected "SystemVerilog keyword 'unique'".
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv(109): (vlog-13205) Syntax error found in the scope following 'OFFSET_MMIO_CSR'. Is there a missing '::'?
+End time: 23:26:27 on May 02,2021, Elapsed time: 0:00:00
+
+} {5.0 6.0 8.0 12.0} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common/lotr_defines.sv}} {1 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common/lotr_defines.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:24 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common/lotr_defines.sv 
+End time: 23:26:24 on May 02,2021, Elapsed time: 0:00:00
+
+} {} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv}} {0 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:27 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv 
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv(14): Cannot open `include file "lotr_defines.sv".
+-- Compiling module i_mem
+-- Importing package gpc_4t_pkg
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv(44): (vlog-2163) Macro `LOTR_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv(44): near "(": syntax error, unexpected '('.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv(52): (vlog-2163) Macro `LOTR_MSFF is undefined.
+End time: 23:26:27 on May 02,2021, Elapsed time: 0:00:00
+
+} {5.0 6.0 8.0 11.0} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module i_mem
+-- Importing package gpc_4t_pkg
+
+Top level modules:
+	i_mem
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv} {2 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module core_4t
+-- Importing package gpc_4t_pkg
+** Warning: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(43): (vlog-13314) Defaulting port 'CRQnnnH' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+
+Top level modules:
+	core_4t
+
+} {} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t.sv}} {0 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:27 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t.sv 
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t.sv(21): Cannot open `include file "lotr_defines.sv".
+-- Compiling module gpc_4t
+-- Importing package gpc_4t_pkg
+End time: 23:26:27 on May 02,2021, Elapsed time: 0:00:00
+
+} {5.0 6.0} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module d_mem
+-- Importing package gpc_4t_pkg
+
+Top level modules:
+	d_mem
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem_wrap.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module d_mem_wrap
+-- Importing package gpc_4t_pkg
+
+Top level modules:
+	d_mem_wrap
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common/lotr_defines.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common/lotr_defines.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/verif/test/gpc_4t_tb.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module gpc_4t_tb
+
+Top level modules:
+	gpc_4t_tb
+
+} {} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv}} {0 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:27 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv 
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv(14): Cannot open `include file "lotr_defines.sv".
+-- Compiling module i_mem_wrap
+-- Importing package gpc_4t_pkg
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv(58): (vlog-2163) Macro `LOTR_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv(58): near "(": syntax error, unexpected '('.
+End time: 23:26:28 on May 02,2021, Elapsed time: 0:00:01
+
+} {5.0 6.0 8.0 10.0} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/i_mem_wrap.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module i_mem_wrap
+-- Importing package gpc_4t_pkg
+
+Top level modules:
+	i_mem_wrap
+
+} {} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv}} {0 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:26 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv 
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(26): Cannot open `include file "lotr_defines.sv".
+-- Compiling module core_4t
+-- Importing package gpc_4t_pkg
+** Warning: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(43): (vlog-13314) Defaulting port 'CRQnnnH' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(190): (vlog-2163) Macro `LOTR_RST_VAL_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(190): near "(": syntax error, unexpected '('.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(234): (vlog-2163) Macro `LOTR_EN_RST_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(234): near "(": syntax error, unexpected '('.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(235): (vlog-2163) Macro `LOTR_EN_RST_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(236): (vlog-2163) Macro `LOTR_EN_RST_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(237): (vlog-2163) Macro `LOTR_EN_RST_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(253): (vlog-2163) Macro `LOTR_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(334): (vlog-2163) Macro `LOTR_RST_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(334): near "(": syntax error, unexpected '('.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(335): (vlog-2163) Macro `LOTR_RST_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(336): (vlog-2163) Macro `LOTR_RST_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(337): (vlog-2163) Macro `LOTR_RST_MSFF is undefined.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/core_4t.sv(346): (vlog-13205) Syntax error found in the scope following 'RegRdData2Q101H'. Is there a missing '::'?
+End time: 23:26:26 on May 02,2021, Elapsed time: 0:00:00
+
+} {5.0 6.0 9.0 23.0} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling module gpc_4t
+-- Importing package gpc_4t_pkg
+
+Top level modules:
+	gpc_4t
+
+} {} {}} {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t_param_pkg.sv} {1 {vlog -work work -sv {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl} {+incdir+C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/common} -stats=none {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t_param_pkg.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+-- Compiling package gpc_4t_pkg
+
+Top level modules:
+	--none--
+
+} {} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t_param_pkg.sv}} {1 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t_param_pkg.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:24 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/gpc_4t_param_pkg.sv 
+-- Compiling package gpc_4t_pkg
+
+Top level modules:
+	--none--
+End time: 23:26:24 on May 02,2021, Elapsed time: 0:00:00
+
+} {} {}} {{C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv}} {0 {vlog -work work -sv {C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.3 Compiler 2020.07 Jul 22 2020
+Start time: 23:26:26 on May 02,2021
+vlog -reportprogress 300 -work work -sv C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv 
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv(15): Cannot open `include file "lotr_defines.sv".
+-- Compiling module d_mem
+-- Importing package gpc_4t_pkg
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv(47): (vlog-2163) Macro `LOTR_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv(47): near "(": syntax error, unexpected '('.
+** Error: C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv(55): (vlog-2163) Macro `LOTR_EN_MSFF is undefined.
+** Error: (vlog-13069) C:/Users/amichaib/OneDrive - Intel Corporation/Desktop/RISC-V/technion/riscv-multi-core/source/gpc_4t/rtl/d_mem.sv(68): near "endmodule": syntax error, unexpected endmodule.
+End time: 23:26:26 on May 02,2021, Elapsed time: 0:00:00
+
+} {5.0 6.0 8.0 12.0} {}}

@@ -1,17 +1,17 @@
 // Includes
-+incdir+../source/common/
++incdir+$MODEL_ROOT/source/gpc_4t/rtl/includes/
 
 //PARAM PACAKGE
-../source/gpc_4t/rtl/gpc_4t_param_pkg.sv
+$MODEL_ROOT/source/gpc_4t/rtl/common/gpc_4t_param_pkg.sv
 
 //RTL
-../source/gpc_4t/rtl/gpc_4t.sv
-../source/gpc_4t/rtl/core_4t.sv
-../source/gpc_4t/rtl/d_mem.sv
-../source/gpc_4t/rtl/d_mem_wrap.sv
-../source/gpc_4t/rtl/i_mem.sv
-../source/gpc_4t/rtl/i_mem_wrap.sv
+$MODEL_ROOT/source/gpc_4t/rtl/gpc_4t.sv
+$MODEL_ROOT/source/gpc_4t/rtl/core_4t.sv
+$MODEL_ROOT/source/gpc_4t/rtl/d_mem.sv
+$MODEL_ROOT/source/gpc_4t/rtl/d_mem_wrap.sv
+$MODEL_ROOT/source/gpc_4t/rtl/i_mem.sv
+$MODEL_ROOT/source/gpc_4t/rtl/i_mem_wrap.sv
 
 //Simulation - Test Bench
-../verif/test/gpc_4t_tb.sv
+$MODEL_ROOT/verif/gpc_4t_tb.sv
 

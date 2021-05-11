@@ -44,6 +44,8 @@ module core_4t
     );
 //  general signals
 logic    RstQnn1H;
+logic    RstQnn2H;
+
 logic    DervRstQnn1H;
 
 //  program counter
@@ -120,6 +122,7 @@ logic [2:0]         Funct3Q103H;
 logic [6:0]         Funct7Q102H;
 
 //  control signals
+logic [3:0]         CtrlAluOpQ101H    ;
 logic               CtrlJalQ101H      ;
 logic               CtrlJalrQ101H     ;
 logic               CtrlBranchQ101H   ;
@@ -263,21 +266,6 @@ end
 assign CtrlInsertNopQ101H = 1'b0;////Enable all Threads FIXME - this is Temp for Enabling the PIPE - should come from the mmio_CR register
 
 assign InstructionQ101H = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;    //internal logic for the instruction - the input or NOP
-
-////////////////////////////////////////
-//  Immediate Generator
-////////////////////////////////////////
-//assign U_ImmediateQ101H = { InstructionQ101H[31:12]    ,12'b0 } ; 
-//assign I_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[24:20] }; 
-//assign S_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[31:25] , InstructionQ101H[11:7]  }; 
-//assign B_ImmediateQ101H = { {20{InstructionQ101H[31]}} , InstructionQ101H[7]     , InstructionQ101H[30:25] , InstructionQ101H[11:8]  , 1'b0}; 
-//assign J_ImmediateQ101H = { {12{InstructionQ101H[31]}} , InstructionQ101H[19:12] , InstructionQ101H[20]    , InstructionQ101H[30:21] , 1'b0}; 
-////////////////////////////////////////
-//  Instruction "BreakDown"
-////////////////////////////////////////
-//assign RegWrPtrQ101H    = InstructionQ101H[11:7];   // rd register  for R/I/U/J Type
-//assign Funct3Q101H      = InstructionQ101H[14:12];  // function3    for R/S/I/B Type
-//assign Funct7Q101H      = InstructionQ101H[31:25];  // function7    for R Type
 assign RegRdPtr1Q101H   = InstructionQ101H[19:15];  // rs1 register for R/S/I/B Type
 assign RegRdPtr2Q101H   = InstructionQ101H[24:20];  // rs2 register for R/S/B Type
 assign OpcodeQ101H      = InstructionQ101H[6:0];    // opcode       for each possible Type  
@@ -301,7 +289,6 @@ always_comb begin : decode_opcode
     CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
     CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
 
-
 end
 
 
@@ -318,10 +305,10 @@ end
 
 
 //========The 4 registers - one for each thread=========================
-`LOTR_RST_MSFF(Register0QnnnH, NextRegister0Q104H, QClk, RstQnnnH) 
-`LOTR_RST_MSFF(Register1QnnnH, NextRegister1Q104H, QClk, RstQnnnH) 
-`LOTR_RST_MSFF(Register2QnnnH, NextRegister2Q104H, QClk, RstQnnnH) 
-`LOTR_RST_MSFF(Register3QnnnH, NextRegister3Q104H, QClk, RstQnnnH) 
+`LOTR_MSFF(Register0QnnnH, NextRegister0Q104H, QClk) 
+`LOTR_MSFF(Register1QnnnH, NextRegister1Q104H, QClk) 
+`LOTR_MSFF(Register2QnnnH, NextRegister2Q104H, QClk) 
+`LOTR_MSFF(Register3QnnnH, NextRegister3Q104H, QClk) 
 //======================================================================
 
 //Read from RegisterQnnnH 
@@ -348,17 +335,11 @@ always_comb begin : read_register_file
 end
 
 
-
-//`LOTR_MSFF   ( RegWrPtrQ102H     , RegWrPtrQ101H     , QClk)
-//`LOTR_MSFF   ( U_ImmediateQ102H  , U_ImmediateQ101H  , QClk)
-//`LOTR_MSFF   ( I_ImmediateQ102H  , I_ImmediateQ101H  , QClk)
-//`LOTR_MSFF   ( S_ImmediateQ102H  , S_ImmediateQ101H  , QClk)
-//`LOTR_MSFF   ( B_ImmediateQ102H  , B_ImmediateQ101H  , QClk)
-//`LOTR_MSFF   ( J_ImmediateQ102H  , J_ImmediateQ101H  , QClk)
-//`LOTR_MSFF   ( Funct3Q102H       , Funct3Q101H      , QClk) 
+`LOTR_MSFF   ( OpcodeQ102H       , OpcodeQ101H       , QClk) 
 `LOTR_MSFF   ( InstructionQ102H  , InstructionQ101H  , QClk)        //save flops. TODO more info
 `LOTR_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
 `LOTR_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
+`LOTR_MSFF   ( RegRdData2Q102H   , RegRdData2Q101H   , QClk)        //fix
 `LOTR_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
 `LOTR_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
 `LOTR_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
@@ -371,7 +352,6 @@ end
 `LOTR_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
 `LOTR_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
 `LOTR_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
-`LOTR_MSFF   ( OpcodeQ102H    , OpcodeQ101H    , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,14 +381,18 @@ assign J_ImmediateQ102H = { {12{InstructionQ102H[31]}} , InstructionQ102H[19:12]
 assign RegWrPtrQ102H    = InstructionQ102H[11:7];   // rd register  for R/I/U/J Type
 assign Funct3Q102H      = InstructionQ102H[14:12];  // function3    for R/S/I/B Type
 assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
-always_comb begin
-// ALU will perform the encoded fubct3 operation.
-    CtrlAluOpQ102H      = {1'b0,Funct3Q102H};
-    // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
-    if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (OpcodeQ102H[1:0]==2'b01))) begin
+
+////////////////////////////////////////////////////////////////////////////////////////
+//			ALU controller
+////////////////////////////////////////////////////////////////////////////////////////
+// incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
+always_comb begin : alu_ctrl
+    // ALU will perform the encoded fubct3 operation.
+    CtrlAluOpQ102H  = {1'b0,Funct3Q102H};
+    if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (Funct3Q102H[1:0]==2'b01))) begin
        CtrlAluOpQ102H[3] = Funct7Q102H[5];
-    end //if
-end //always_comb
+    end
+end   
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +407,7 @@ always_comb begin : set_next_pc
     //mux 4:1
     unique casez ({ CtrlJalrQ102H , CtrlJalQ102H , BranchCondMetQ102H}) 
         3'b001  : NextPcQ102H = PcBranchQ102H;     // OP_BRANCH
-        3'b010  : NextPcQ102H = J_ImmediateQ102H;  // OP_JAL
+        3'b010  : NextPcQ102H = J_ImmediateQ102H + PcQ102H;  // OP_JAL
         3'b100  : NextPcQ102H = AluOutQ102H;       // OP_JALR ALU output I_ImmediateUQ101H + rs1
         default : NextPcQ102H = PcPlus4Q102H;
     endcase
@@ -557,10 +541,6 @@ always_comb begin : candidates_for_register_write_data
 end // always_comb
 	
 //--------------------------------------------------------
-//FIXME - this logic is just a temporary until we fix the assembly to reset the SP correctly.
-`LOTR_MSFF(RstQnn1H,RstQnnnH,QClk)
-assign DervRstQnn1H = (RstQnn1H && (!RstQnnnH));
-//--------------------------------------------------------
 
 always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
     NextRegister0Q104H = Register0QnnnH; // defualt -> keep old value
@@ -580,20 +560,6 @@ always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
     end //if
 	
 	
- //------------------------------------------------------------
- //FIXME - this logic is just a temporary until we fix the assembly to reset the SP correctly.
- //--------------------------------------------------------
- //init for stack pointer
-    if (DervRstQnn1H) begin
-     NextRegister0Q104H[2] = 32'hf00;  //sp
-     NextRegister0Q104H[8] = 32'hf00;  //s0
-     NextRegister1Q104H[2] = 32'hf00;  //sp
-     NextRegister1Q104H[8] = 32'hf00;  //s0    
-     NextRegister2Q104H[2] = 32'hf00;  //sp
-     NextRegister2Q104H[8] = 32'hf00;  //s0    
-     NextRegister3Q104H[2] = 32'hf00;  //sp
-     NextRegister3Q104H[8] = 32'hf00;  //s0    
-    end
  //------------------------------------------------------------
  //Register[0] will always be tied to '0;
     NextRegister0Q104H[0] = 32'b0;  

@@ -41,7 +41,6 @@ gpc_4t gpc_4t(
               .RstQnnnH  (rst)
              );
 initial begin 
-    #2000 $finish;
 end
 //====================================make logs====================================
 //integer f1;
