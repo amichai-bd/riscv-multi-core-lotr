@@ -389,6 +389,9 @@ assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
 always_comb begin : alu_ctrl
     // ALU will perform the encoded fubct3 operation.
     CtrlAluOpQ102H  = {1'b0,Funct3Q102H};
+    if (OpcodeQ102H == OP_STORE || OpcodeQ102H == OP_LOAD) begin 
+        CtrlAluOpQ102H[3] = 1'b1;
+    end
     if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (Funct3Q102H[1:0]==2'b01))) begin
        CtrlAluOpQ102H[3] = Funct7Q102H[5];
     end
@@ -447,6 +450,7 @@ always_comb begin : alu_logic
     unique casez (CtrlAluOpQ102H) 
         //use adder
         4'b0000  : AluOutQ102H = AluIn1Q102H +   AluIn2Q102H                          ;//ADD
+        4'b1010  : AluOutQ102H = AluIn1Q102H +   AluIn2Q102H                          ;//LW/SW
         4'b1000  : AluOutQ102H = AluIn1Q102H + (~AluIn2Q102H) + 1'b1                  ;//SUB
         4'b0010  : AluOutQ102H = {31'b0, $signed(AluIn1Q102H) < $signed(AluIn2Q102H)} ;//SLT
         4'b0011  : AluOutQ102H = {31'b0 , AluIn1Q102H < AluIn2Q102H}                  ;//SLTU
@@ -481,6 +485,7 @@ end
 `LOTR_MSFF   ( Funct3Q103H       , Funct3Q102H       , QClk) 
 `LOTR_MSFF   ( RegWrPtrQ103H     , RegWrPtrQ102H     , QClk)
 `LOTR_MSFF   ( RegRdData1Q103H   , RegRdData1Q102H   , QClk)
+`LOTR_MSFF   ( RegRdData2Q103H   , RegRdData2Q102H   , QClk)
 `LOTR_MSFF   ( CtrlMemRdQ103H    , CtrlMemRdQ102H    , QClk) // output to DMEM
 `LOTR_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) //output to DMEM
 `LOTR_MSFF   ( CtrlMemToRegQ103H , CtrlMemToRegQ102H , QClk)
@@ -507,7 +512,7 @@ assign MemByteEnQ103H   = (Funct3Q103H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
                           (Funct3Q103H[1:0] == 2'b10 ) ? 4'b1111 : // LW/SW
                                                          4'b0000 ; // 2'b11 is an illegal Funct3 //FIXME - ADD assetion 
 // The value read from register assign to the output signal MemWrDataWQ103H that goes right into the D_MEM module
-assign  MemWrDataWQ103H = RegRdData1Q103H;
+assign  MemWrDataWQ103H = RegRdData2Q103H;
 // the address from ALU assign to the output signal MemAdrsQ103H that goes right into the D_MEM module
 assign  MemAdrsQ103H = AluOutQ103H;
 
