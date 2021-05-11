@@ -40,7 +40,9 @@ gpc_4t gpc_4t(
               .QClk      (clk),
               .RstQnnnH  (rst)
              );
+
 initial begin 
+   #200 $finish;
 end
 //====================================make logs====================================
 //integer f1;
