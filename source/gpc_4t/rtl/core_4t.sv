@@ -388,13 +388,18 @@ assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
 // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
 always_comb begin : alu_ctrl
     // ALU will perform the encoded fubct3 operation.
-    CtrlAluOpQ102H  = {1'b0,Funct3Q102H};
-    if (OpcodeQ102H == OP_STORE || OpcodeQ102H == OP_LOAD) begin 
-        CtrlAluOpQ102H[3] = 1'b1;
-    end
-    if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (Funct3Q102H[1:0]==2'b01))) begin
-       CtrlAluOpQ102H[3] = Funct7Q102H[5];
-    end
+    if (OpcodeQ102H == OP_LUI) begin
+        CtrlAluOpQ102H == 4'b0000; end
+    else
+        begin
+            CtrlAluOpQ102H  = {1'b0,Funct3Q102H};
+            if (OpcodeQ102H == OP_STORE || OpcodeQ102H == OP_LOAD) begin 
+                CtrlAluOpQ102H[3] = 1'b1;
+            end
+            if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (Funct3Q102H[1:0]==2'b01))) begin
+               CtrlAluOpQ102H[3] = Funct7Q102H[5];
+            end
+        end
 end   
 ////////////////////////////////////////////////////////////////////////////////////////
 //			Branch Calculator for label jumps
