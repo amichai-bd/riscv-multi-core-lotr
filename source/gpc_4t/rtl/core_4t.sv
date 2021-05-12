@@ -388,7 +388,7 @@ assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
 // incase of  OP_OP || (OP_OPIMM && (funct3[1:0]==2'b01)) take funct7[5]
 always_comb begin : alu_ctrl
     // ALU will perform the encoded fubct3 operation.
-    if (OpcodeQ102H == OP_LUI) begin        //U-Type with no funct3
+    if (OpcodeQ102H == OP_LUI || OpcodeQ102H == OP_AUIPC ) begin        //U-Type with no funct3
         CtrlAluOpQ102H = 4'b0000; end
     else
         begin
