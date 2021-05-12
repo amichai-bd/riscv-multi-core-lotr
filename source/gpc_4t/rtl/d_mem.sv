@@ -28,7 +28,7 @@ module d_mem import gpc_4t_pkg::*;
 localparam LOCAL_MEM_SIZE             = SIZE_DATA+SIZE_STACK+SIZE_MMIO_GENERAL;
 localparam LOCAL_OFFSET_MMIO_GENERAL  = SIZE_DATA+SIZE_STACK;
 localparam LOCAL_OFFSET_STACK_POINTER = SIZE_DATA;
-localparam SP_SIZE = 288; //FIXME
+localparam SP_SIZE = 512; //FIXME
 logic [7:0] mem     [LOCAL_MEM_SIZE-1:0];
 logic [7:0] next_mem[LOCAL_MEM_SIZE-1:0];
 logic [31:0] pre_q;  
