@@ -1,7 +1,12 @@
 
 Compile & Link C file using toolchain : 
 ---------------------------------------
-Type : ./gpc_compile_link.sh -flag program
+Type : ./gpc_compile_link.sh -mod -flag program
+
+mod:
+1."-i" to use riscv32i compiler
+
+2."-e" to use riscv32e compiler
 
 flag :
 1."-l" to compile & link the C using the gpc linker.
@@ -10,7 +15,7 @@ flag :
 2."-n" to compile the C file with default linker.
 	create an S file only for c program, an elf file only for c program and sv file
 
-3."-s" to compile a S file using the gpc linker.
+3."-s" to compile an S file using the gpc linker.
 	create an elf file for the full linked program and sv file
 
 program :
