@@ -36,10 +36,10 @@ logic [31:0] pre_q;
 always_comb begin
     next_mem = mem;
     if(wren) begin
-        if(byteena[0]) next_mem[SP_SIZE+address+0]= data[7:0];
-        if(byteena[1]) next_mem[SP_SIZE+address+1]= data[15:8];
-        if(byteena[2]) next_mem[SP_SIZE+address+2]= data[23:16];
-        if(byteena[3]) next_mem[SP_SIZE+address+3]= data[31:24]; 
+        if(byteena[0]) next_mem[address+0]= data[7:0];
+        if(byteena[1]) next_mem[address+1]= data[15:8];
+        if(byteena[2]) next_mem[address+2]= data[23:16];
+        if(byteena[3]) next_mem[address+3]= data[31:24]; 
     end
 end 
 genvar i;
@@ -48,10 +48,10 @@ generate // the memory flipflops
         `LOTR_MSFF(mem[i], next_mem[i], clock)
     end
 endgenerate
-assign pre_q = {mem[SP_SIZE+address+3],
-                mem[SP_SIZE+address+2],
-                mem[SP_SIZE+address+1],
-                mem[SP_SIZE+address+0]};
+assign pre_q = {mem[address+3],
+                mem[address+2],
+                mem[address+1],
+                mem[address+0]};
 //`LOTR_EN_MSFF(q, pre_q, clock, rden) ??
 `LOTR_MSFF(q, pre_q, clock) //FIXME
 // =========================================================================
