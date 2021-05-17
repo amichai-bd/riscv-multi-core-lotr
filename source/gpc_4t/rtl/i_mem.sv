@@ -23,9 +23,8 @@ module i_mem import gpc_4t_pkg::*;
                 input  logic        wren   ,//core_wr_en ,
                 output logic [31:0] q       //instruction,
                 );
-localparam I_MEM_SIZE = 'h800;
-logic [7:0]  mem     [I_MEM_SIZE-1:0];
-logic [7:0]  next_mem[I_MEM_SIZE-1:0];
+logic [7:0]  mem     [SIZE_I_MEM-1:0];
+logic [7:0]  next_mem[SIZE_I_MEM-1:0];
 logic [31:0] pre_q;  
 
 always_comb begin : write_to_memory
@@ -39,10 +38,7 @@ always_comb begin : write_to_memory
 end 
 
 // the memory flipflops
-genvar i;
-generate for (i = 0; i<I_MEM_SIZE; i++) begin : i_mem
-    `LOTR_MSFF(mem[i], next_mem[i], clock)
-end endgenerate
+`LOTR_MSFF(mem, next_mem, clock)
 
 assign pre_q = {mem[address+3],
                 mem[address+2],

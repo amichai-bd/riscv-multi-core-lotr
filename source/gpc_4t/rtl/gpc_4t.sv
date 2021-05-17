@@ -22,28 +22,28 @@
 module gpc_4t 
     import gpc_4t_pkg::*;  
     (
-    input  logic                    QClk                ,
-    input  logic                    RstQnnnH            ,
+    input  logic          QClk                ,
+    input  logic          RstQnnnH            ,
     //Core To Fabric(C2F)
-    input  logic                    C2F_RspValidQ502H   ,  
-    input  logic [1:0]              C2F_RspOpcodeQ502H  ,  
-    input  logic [1:0]              C2F_RspThreadIDQ502H,  
-    input  logic [DATA_WIDTH-1:0]   C2F_RspDataQ502H    ,
-    input  logic                    C2F_RspStall        ,
-    output logic                    C2F_ReqValidQ500H   ,
-    output logic [1:0]              C2F_ReqOpcodeQ500H  ,
-    output logic [1:0]              C2F_ReqThreadIDQ500H,
-    output logic [ADDR_WIDTH-1:0]   C2F_ReqAddressQ500H ,
-    output logic [DATA_WIDTH-1:0]   C2F_ReqDataQ500H    ,
+    input  logic          C2F_RspValidQ502H   ,  
+    input  logic [1:0]    C2F_RspOpcodeQ502H  ,  
+    input  logic [1:0]    C2F_RspThreadIDQ502H,  
+    input  logic [31:0]   C2F_RspDataQ502H    ,
+    input  logic          C2F_RspStall        ,
+    output logic          C2F_ReqValidQ500H   ,
+    output logic [1:0]    C2F_ReqOpcodeQ500H  ,
+    output logic [1:0]    C2F_ReqThreadIDQ500H,
+    output logic [31:0]   C2F_ReqAddressQ500H ,
+    output logic [31:0]   C2F_ReqDataQ500H    ,
     //Fabric To Core(F2C)
-    input  logic                    F2C_ReqValidQ502H   ,
-    input  logic [1:0]              F2C_ReqOpcodeQ502H  ,
-    input  logic [ADDR_WIDTH-1:0]   F2C_ReqAddressQ502H ,
-    input  logic [DATA_WIDTH-1:0]   F2C_ReqDataQ502H    ,
-    output logic                    F2C_RspValidQ500H   ,
-    output logic [1:0]              F2C_RspOpcodeQ500H  ,
-    output logic [ADDR_WIDTH-1:0]   F2C_RspAddressQ500H ,
-    output logic [DATA_WIDTH-1:0]   F2C_RspDataQ500H
+    input  logic          F2C_ReqValidQ502H   ,
+    input  logic [1:0]    F2C_ReqOpcodeQ502H  ,
+    input  logic [31:0]   F2C_ReqAddressQ502H ,
+    input  logic [31:0]   F2C_ReqDataQ502H    ,
+    output logic          F2C_RspValidQ500H   ,
+    output logic [1:0]    F2C_RspOpcodeQ500H  ,
+    output logic [31:0]   F2C_RspAddressQ500H ,
+    output logic [31:0]   F2C_RspDataQ500H
     );
 
 logic [31:0] PcQ100H        ;
@@ -54,7 +54,6 @@ logic        CtrlMemRdQ103H ;
 logic [3:0]  MemByteEnQ103H ;
 logic [31:0] MemRdDataQ104H ;
 t_cr         CRQnnnH        ;
-t_drct_out   drct_out       ;
 logic [31:0] InstFetchQ101H ;
 
 
@@ -87,8 +86,7 @@ d_mem_wrap d_mem_wrap (
     .wren            (CtrlMemWrQ103H) ,  // input  TODO - wren    when writing to d_mem rden should be desabled     input should mux CORE vs MMIO
     .q               (MemRdDataQ104H) ,  // output TODO - data    output should rename to general d_mem output data 
     //other singlas
-    .cr              (CRQnnnH)        ,  // output 
-    .drct_out        (drct_out)          // output 
+    .cr              (CRQnnnH)           // output 
 );
 
 i_mem_wrap i_mem_wrap (
