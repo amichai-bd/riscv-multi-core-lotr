@@ -37,10 +37,27 @@ module gpc_4t_tb ();
 
 
 gpc_4t gpc_4t(
-              .QClk      (clk),
-              .dfasdfa   (   ),
-              .sfgsdf    ('0),
-              .RstQnnnH  (rst)
+              .QClk                 (clk)  ,
+              .RstQnnnH             (rst)  ,
+              .C2F_RspValidQ502H    ('0)   ,
+              .C2F_RspOpcodeQ502H   ('0)   ,
+              .C2F_RspThreadIDQ502H ('0)   ,
+              .C2F_RspDataQ502H     ('0)   ,
+              .C2F_RspStall         ('0)   ,
+              .C2F_ReqValidQ500H    (   )  ,
+              .C2F_ReqOpcodeQ500H   (   )  ,
+              .C2F_ReqThreadIDQ500H (   )  ,
+              .C2F_ReqAddressQ500H  (   )  ,
+              .C2F_ReqDataQ500H     (   )  ,
+              .F2C_ReqValidQ502H    ('0)   ,
+              .F2C_ReqOpcodeQ502H   ('0)   ,
+              .F2C_ReqAddressQ502H  ('0)   ,
+              .F2C_ReqDataQ502H     ('0)   ,
+              .F2C_RspValidQ500H    (   )  ,
+              .F2C_RspOpcodeQ500H   (   )  ,
+              .F2C_RspAddressQ500H  (   )  ,
+              .F2C_RspDataQ500H     (   )     
+              
              );
 
 initial begin 
@@ -128,5 +145,4 @@ end
 
 
 endmodule // tb_top
-
 

@@ -71,7 +71,8 @@ parameter LSB_DRCT_IN          = OFFSET_MMIO_DRCT_IN                       ;
 parameter MSB_DRCT_IN          = OFFSET_MMIO_DRCT_IN+SIZE_MMIO_DRCT_IN-1   ;
 parameter LSB_MMIO_MEM         = OFFSET_MMIO_CSR                           ;
 parameter MSB_MMIO_MEM         = OFFSET_MMIO_DRCT_IN + SIZE_MMIO_DRCT_IN-1 ;
-
+parameter ADDR_WIDTH           = 32                                        ;
+parameter DATA_WIDTH           = 32                                        ;
 
 typedef struct packed {
     logic       en_pc;
