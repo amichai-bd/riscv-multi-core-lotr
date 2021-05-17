@@ -1,0 +1,149 @@
+  .section .text
+
+.global _start
+_start:
+  /* set all registers to zero */
+  mv  x1, x0
+  mv  x2, x0
+  mv  x3, x0
+  mv  x4, x0
+  mv  x5, x0
+  mv  x6, x0
+  mv  x7, x0
+  mv  x8, x0
+  mv  x9, x0
+  mv x10, x0
+  mv x11, x0
+  mv x12, x0
+  mv x13, x0
+  mv x14, x0
+  mv x15, x0
+  mv x16, x0
+  mv x17, x0
+  mv x18, x0
+  mv x19, x0
+  mv x20, x0
+  mv x21, x0
+  mv x22, x0
+  mv x23, x0
+  mv x24, x0
+  mv x25, x0
+  mv x26, x0
+  mv x27, x0
+  mv x28, x0
+  mv x29, x0
+  mv x30, x0
+  mv x31, x0
+
+  /*
+  GP_BASE 0x800
+  GP_SIZE 0x100
+  DS_BASE 0x900
+  DS_SIZE 0x540 => 0x150
+  SS_BASE 0xe40
+  SS_SIZE 0x1c0 => 0x70
+  TOP 0x1000
+  */
+
+  // read WHOAMI and take only thread id
+read_tid:
+  li t1, 0x1000 // TODO: use proper consts and stuff for WHOAMI
+  lw t1, 0(t1)
+  andi t1, t1, 0x3
+
+  // gp initialization: base of D_MEM
+init_gp:
+  li gp, 0x800
+
+  // tp initialization: thread local storage
+init_tp:
+  li tp, 0x900
+  li t2, 0x150
+  // tid * (DS_SIZE/4)
+  mv a1, t1
+  mv a2, t2
+  call init_multiply
+  add tp, tp, a0
+
+  // sp initialization: thread stack
+init_sp:
+  li sp, 0xe40
+  li t2, 0x70
+  // tid * (SS_SIZE/4)
+  mv a1, t1
+  mv a2, t2
+  call init_multiply
+  addi a0, a0, 0x6c // first stack element offset SS_SIZE/4 - 4
+  add sp, sp, a0
+  mv fp, sp
+  sw x0, 0(sp)
+
+/* set arguments for setup and loop
+ * @param tid thread ID
+ * @param tls pointer to thread-local storage
+ * @param tls_size size of thread-local storage
+ * @param core_global pointer to core-global storage
+ * @param core_global_size size of core-global storage
+ * @param cr_space pointer to CR space
+ */
+
+user_setup:
+  mv a0, t1
+  mv a1, tp
+  li a2, 0x150
+  mv a3, gp
+  li a4, 0x70
+  li a5, 0x1000
+  call gpc_setup
+
+exec_loop:
+  mv a0, t1
+  mv a1, tp
+  li a2, 0x150
+  mv a3, gp
+  li a4, 0x70
+  li a5, 0x1000
+  call gpc_loop
+  j exec_loop
+
+/**
+ * multiplies a1 and a2 (unsigned) and stores result in a0
+ *
+ * NOTE: must not use memory or other registers!
+ * result will be in a0
+ */
+init_multiply:
+  li a0, 0
+  beq a2, x0, init_multiply_end
+init_multiply_loop:
+  add a0, a0, a1
+  addi a2, a2, -1
+  bne a2, x0, init_multiply_loop
+init_multiply_end:
+  ret 
+
+/* This section has to be down here, since we have to disable rvc for it  */
+/*
+  .section .vectors, "ax"
+  .option norvc;
+
+  // external interrupts are handled by the same callback
+  // until compiler supports IRQ routines
+  .org 0x00
+  .rept 32
+  nop                       // unused
+  .endr
+
+
+  // reset vector
+  .org 0x80
+  jal x0, reset_handler
+  
+  .global _init
+  .global _fini
+_init:
+_fini:
+  # These don't have to do anything since we use init_array/fini_array.
+  ret
+  
+*/
