@@ -1,3 +1,6 @@
+#ifndef __GPC_ENTRY_H_
+#define __GPC_ENTRY_H_
+
 #include "gpc_defs.h"
 
 /**
@@ -30,3 +33,4 @@ extern void gpc_loop(uint32_t tid,
     void *core_global, size_t core_global_size,
     void *cr_space);
 
+#endif
