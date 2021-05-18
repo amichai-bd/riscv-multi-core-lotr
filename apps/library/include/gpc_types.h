@@ -4,10 +4,13 @@
 #include "gpc_defs.h"
 
 /**
- * Defines the layout of core CR space
+ * Layout of core CR space
  **/
-typedef struct core_cr_s {
-    volatile uint32_t whoami;
+typedef struct gpc_core_cr_s {
+    uint32_t address_bits;
+    uint32_t my_thread_id;
+    uint32_t my_agent_id;
+    uint32_t supported_arch;
 } core_cr_t;
 
 #endif
