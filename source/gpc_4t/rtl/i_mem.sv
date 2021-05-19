@@ -15,13 +15,13 @@
 
 module i_mem import gpc_4t_pkg::*;
                 (
-                input  logic        clock  ,
+                input  logic               clock  ,
                 //core access
-                input  logic [31:0] address,//curr_pc    ,
-                input  logic [31:0] data   ,//core_wr_data ,
-                input  logic        rden   ,//core_rd_en   ,
-                input  logic        wren   ,//core_wr_en ,
-                output logic [31:0] q       //instruction,
+                input  logic [MSB_I_MEM:0] address,//curr_pc    ,
+                input  logic [31:0]        data   ,//core_wr_data ,
+                input  logic               rden   ,//core_rd_en   ,
+                input  logic               wren   ,//core_wr_en ,
+                output logic [31:0]        q       //instruction,
                 );
 logic [7:0]  mem     [SIZE_I_MEM-1:0];
 logic [7:0]  next_mem[SIZE_I_MEM-1:0];

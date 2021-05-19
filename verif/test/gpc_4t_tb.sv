@@ -61,7 +61,7 @@ gpc_4t gpc_4t(
              );
 
 initial begin 
-   #2000 $finish;
+   #4000 $finish;
 end
 //====================================make logs====================================
 integer f1;
