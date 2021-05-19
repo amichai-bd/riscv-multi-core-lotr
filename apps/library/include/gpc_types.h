@@ -2,6 +2,7 @@
 #define __GPC_TYPES_H_
 
 #include "gpc_defs.h"
+#include "gpc_basic_types.h"
 
 /**
  * Layout of core CR space

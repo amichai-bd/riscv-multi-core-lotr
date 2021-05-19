@@ -1,5 +1,6 @@
 #include "gpc_entry.h"
 #include "gpc_defs.h"
+#include "gpc_basic_types.h"
 
 void gpc_setup(uint32_t tid,
     void *tls, size_t tls_size,

@@ -1,7 +1,7 @@
 #ifndef __GPC_ENTRY_H_
 #define __GPC_ENTRY_H_
 
-#include "gpc_defs.h"
+#include "gpc_basic_types.h"
 
 /**
  * Setup entry point: executed once on load
