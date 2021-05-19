@@ -44,7 +44,7 @@ end
 
 d_mem d_mem (                                                             
     .clock    (clock),
-    .address  (address[MSB_D_MEM:LSB_D_MEM]),
+    .address  (address[MSB_D_MEM:0]),
     .byteena  (byteena),
     .data     (data),
     .rden     (rden),

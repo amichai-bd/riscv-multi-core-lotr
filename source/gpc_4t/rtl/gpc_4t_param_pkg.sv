@@ -29,19 +29,19 @@ parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 
 
 //---------------------MEMORY------------------------
 //                 start   size    # of words
-//  I_MEM          0x0     2KB     512
-//  D_MEM          0x800   2KB     512
+//  I_MEM          0x0     4KB     512
+//  D_MEM          0x800   4KB     512
 //  CR             0xC00   
 //---------------------------------------------------
 // Instruction Memory 2KB 
 parameter LSB_I_MEM        = 0 ;
 parameter MSB_I_MEM        = 11;
-parameter SIZE_I_MEM       = 2048;
+parameter SIZE_I_MEM       = 4096;
 
 // Data Memory 2KB 
 parameter LSB_D_MEM        = 0 ;
 parameter MSB_D_MEM        = 11;
-parameter SIZE_D_MEM       = 2048;
+parameter SIZE_D_MEM       = 4096;
 
 // CR Address Offsets
 parameter MSB_CR           = 7;
@@ -56,8 +56,8 @@ parameter MSB_REGION    = 15;
 
 // Encoded region
 parameter I_MEM_REGION  = 2'b00;
-parameter D_MEM_REGION  = 2'b00;
-parameter CR_REGION     = 2'b00;
+parameter D_MEM_REGION  = 2'b01;
+parameter CR_REGION     = 2'b11;
 
 // CORE ID
 // 8'b0000_0000 reserved - Always Hit Local Core Memory.

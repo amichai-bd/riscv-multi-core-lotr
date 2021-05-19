@@ -33,7 +33,7 @@ module i_mem_wrap import gpc_4t_pkg::*;
 
 i_mem i_mem(      
     .clock    (clock),
-    .address  (address[MSB_D_MEM:LSB_I_MEM]),
+    .address  (address[MSB_I_MEM:0]),
     .data     (data),
     .rden     (rden),
     .wren     (wren),

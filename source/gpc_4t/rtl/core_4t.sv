@@ -51,7 +51,6 @@ logic    DervRstQnn1H;
 //  program counter
 logic [31:0]    PcQ101H;
 logic [31:0]    PcQ102H;
-logic [31:0]    PcQ103H;
 logic [31:0]    PcPlus4Q100H;
 logic [31:0]    PcPlus4Q101H;
 logic [31:0]    PcPlus4Q102H;
@@ -61,10 +60,6 @@ logic [31:0]    NextPcQ102H;
 
 // Threads
 logic [3:0]     EnPCQnnnH;
-logic           T0EnPcQnnnH;
-logic           T1EnPcQnnnH;
-logic           T2EnPcQnnnH;
-logic           T3EnPcQnnnH;
 logic [31:0]    T0PcQ100H;
 logic [31:0]    T1PcQ100H;
 logic [31:0]    T2PcQ100H;
