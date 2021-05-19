@@ -28,31 +28,34 @@ parameter OP_SYSTEM    = 7'b1110011;
 parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 , 0
 
 //---------------------MEMORY------------------------
-//                 start   size    # of words
-//  I_MEM          0x0     4KB     512
-//  D_MEM          0x800   4KB     512
-//  CR             0xC00   
+//                 start        size    # of words
+//  I_MEM          0x00_0000    4KB     1024
+//  D_MEM          0x80_0000    4KB     1024
+//  CR             0xC0_0000 
 //---------------------------------------------------
+
+// agent_id [31:24] | region [23:22] | reserved[21:12] | offset [11:0]
+
 // Instruction Memory 2KB 
 parameter LSB_I_MEM        = 0 ;
 parameter MSB_I_MEM        = 11;
-parameter SIZE_I_MEM       = 4096;
+parameter SIZE_I_MEM       = 2**(MSB_I_MEM);
 
 // Data Memory 2KB 
 parameter LSB_D_MEM        = 0 ;
 parameter MSB_D_MEM        = 11;
-parameter SIZE_D_MEM       = 4096;
+parameter SIZE_D_MEM       = 2**(MSB_D_MEM);
 
 // CR Address Offsets
 parameter MSB_CR           = 7;
-parameter CR_EN_PC         = 8'b0000_0000;
-parameter CR_RST_PC        = 8'b0000_0100;
-parameter CR_CORE_ID       = 8'b0000_1000;
-parameter CR_THREAD_ID     = 8'b0000_1100;
+parameter CR_EN_PC         = 8'h0;
+parameter CR_RST_PC        = 8'h4;
+parameter CR_CORE_ID       = 8'h8;
+parameter CR_THREAD_ID     = 8'hC;
 
 // Region Bits
-parameter LSB_REGION    = 14;
-parameter MSB_REGION    = 15;
+parameter LSB_REGION    = 22;
+parameter MSB_REGION    = 23;
 
 // Encoded region
 parameter I_MEM_REGION  = 2'b00;
@@ -62,8 +65,8 @@ parameter CR_REGION     = 2'b11;
 // CORE ID
 // 8'b0000_0000 reserved - Always Hit Local Core Memory.
 // 8'b1111_1111 reserved - Always Hit Local Core Memory & Brodcast to other cores.
-parameter LSB_CORE_ID      = 16;
-parameter MSB_CORE_ID      = 23;
+parameter LSB_CORE_ID      = 24;
+parameter MSB_CORE_ID      = 31;
 
 
 typedef struct packed {

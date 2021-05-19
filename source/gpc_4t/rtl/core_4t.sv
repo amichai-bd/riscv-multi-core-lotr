@@ -43,16 +43,10 @@ module core_4t
     input  t_cr         CRQnnnH
     );
 //  general signals
-logic    RstQnn1H;
-logic    RstQnn2H;
-
-logic    DervRstQnn1H;
 
 //  program counter
 logic [31:0]    PcQ101H;
 logic [31:0]    PcQ102H;
-logic [31:0]    PcPlus4Q100H;
-logic [31:0]    PcPlus4Q101H;
 logic [31:0]    PcPlus4Q102H;
 logic [31:0]    PcPlus4Q103H;
 logic [31:0]    PcPlus4Q104H; 
@@ -141,7 +135,6 @@ logic               CtrlMemRdQ102H    ;
 logic               CtrlMemWrQ102H    ;
 logic               CtrlStoreQ102H    ;
 logic               CtrlInsertNopQ101H;
-logic               CtrlInsertNopQ102H;
 logic               CtrlMemToRegQ103H;
 logic               CtrlMemToRegQ104H;
 logic               CtrlPcToRegQ101H;
@@ -576,7 +569,6 @@ end // always_comb
 ////////////////////////////////////////////////////////////////////////////////////////
 //          DFD - Design for Debug
 ////////////////////////////////////////////////////////////////////////////////////////
-//assign expose_reg.pc        = PcPlus4Q101H;  //expose the pc
 
 endmodule
 //this will solve the conflict

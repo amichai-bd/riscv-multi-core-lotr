@@ -2,5 +2,6 @@
 # modelsim generated files
 modelsim/work/*
 modelsim/*
+target/*
 transcript
 !modelsim/README*
