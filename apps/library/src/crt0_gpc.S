@@ -1,7 +1,19 @@
-  .section .text
+#include "gpc_defs.h"
+
+// Base of CR space address (CR region at the right place, other bits zero)
+#define CR_SPACE_ADDR GPC_ADDR_REGION_CR << (32 - 2 - GPC_ADDR_AGENT_ID_BITS)
+
+.section .text
 
 .global _start
 _start:
+  /* clear pipeline */
+  nop
+  nop
+  nop
+  nop
+  nop
+
   /* set all registers to zero */
   mv  x1, x0
   mv  x2, x0
@@ -18,6 +30,7 @@ _start:
   mv x13, x0
   mv x14, x0
   mv x15, x0
+  // TODO: don't do that in rv32e (build/run time parameter?)
   mv x16, x0
   mv x17, x0
   mv x18, x0
@@ -45,11 +58,14 @@ _start:
   TOP 0x1000
   */
 
-  // read WHOAMI and take only thread id
+  li t1, CR_SPACE_ADDR
 read_tid:
-  li t1, 0x1000 // TODO: use proper consts and stuff for WHOAMI
-  lw t1, 0(t1)
-  andi t1, t1, 0x3
+  lw t2, 0(t1) // TODO: set proper offset for thread id
+
+read_mem_size:
+  // TODO: read number of address bits
+  // TODO: fix addresses to use D_MEM region
+  // TODO: calculate all offsets below based on base and size of D_MEM
 
   // gp initialization: base of D_MEM
 init_gp:
@@ -79,6 +95,7 @@ init_sp:
   sw x0, 0(sp)
 
 /* set arguments for setup and loop
+ *
  * @param tid thread ID
  * @param tls pointer to thread-local storage
  * @param tls_size size of thread-local storage
@@ -113,6 +130,7 @@ exec_loop:
  * result will be in a0
  */
 init_multiply:
+  // TODO: replace with more efficient algorithm?
   li a0, 0
   beq a2, x0, init_multiply_end
 init_multiply_loop:
@@ -121,29 +139,3 @@ init_multiply_loop:
   bne a2, x0, init_multiply_loop
 init_multiply_end:
   ret 
-
-/* This section has to be down here, since we have to disable rvc for it  */
-/*
-  .section .vectors, "ax"
-  .option norvc;
-
-  // external interrupts are handled by the same callback
-  // until compiler supports IRQ routines
-  .org 0x00
-  .rept 32
-  nop                       // unused
-  .endr
-
-
-  // reset vector
-  .org 0x80
-  jal x0, reset_handler
-  
-  .global _init
-  .global _fini
-_init:
-_fini:
-  # These don't have to do anything since we use init_array/fini_array.
-  ret
-  
-*/
