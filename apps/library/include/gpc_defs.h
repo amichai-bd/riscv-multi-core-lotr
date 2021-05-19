@@ -1,6 +1,20 @@
-#define NULL ((void *) 0)
+#ifndef __GPC_DEFS_H_
+#define __GPC_DEFS_H_
 
-typedef unsigned int uint32_t;
-_Static_assert(sizeof(uint32_t) == 4, "uint32_t not 32-bit");
+/** GPC core memory region types */
+#define GPC_ADDR_REGION_I_MEM (0x0U) /** Core instruction memory */
+#define GPC_ADDR_REGION_D_MEM (0x1U) /** Core data memory */
+#define GPC_ADDR_REGION_CR (0x3U) /** Core CR space */
 
-typedef uint32_t size_t;
+/** Default values for build-configurable knobs */
+
+// Hardware params
+
+/**
+ * Number of agent ID bits in GPC memory address
+ */
+#ifndef GPC_ADDR_AGENT_ID_BITS
+    #define GPC_ADDR_AGENT_ID_BITS (8U)
+#endif
+
+#endif

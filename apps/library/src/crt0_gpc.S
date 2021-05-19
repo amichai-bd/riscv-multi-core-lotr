@@ -1,7 +1,22 @@
-  .section .text
+#include "gpc_defs.h"
+
+// Base of CR space address (CR region at the right place, other bits zero)
+#define REGION_OFFSET (32 - 2 - GPC_ADDR_AGENT_ID_BITS)
+#define REGION_BASE(region) (region) << REGION_OFFSET
+#define CR_SPACE_ADDR REGION_BASE(GPC_ADDR_REGION_CR)
+#define D_MEM_ADDR REGION_BASE(GPC_ADDR_REGION_D_MEM)
+
+.section .text
 
 .global _start
 _start:
+  /* clear pipeline */
+  nop
+  nop
+  nop
+  nop
+  nop
+
   /* set all registers to zero */
   mv  x1, x0
   mv  x2, x0
@@ -18,6 +33,7 @@ _start:
   mv x13, x0
   mv x14, x0
   mv x15, x0
+  // TODO: don't do that in rv32e (build/run time parameter?)
   mv x16, x0
   mv x17, x0
   mv x18, x0
@@ -45,33 +61,39 @@ _start:
   TOP 0x1000
   */
 
-  // read WHOAMI and take only thread id
+  li t1, CR_SPACE_ADDR
+  li t2, D_MEM_ADDR
 read_tid:
-  li t1, 0x1000 // TODO: use proper consts and stuff for WHOAMI
-  lw t1, 0(t1)
-  andi t1, t1, 0x3
+  lw t3, 0(t1) // TODO: set proper offset for thread id
+
+read_mem_size:
+  lw t4, 0(t1) // TODO: set proper offset for address bits
+  li t5, 1
+  sll t4, t5, t4
+  // TODO: fix addresses to use D_MEM region
+  // TODO: calculate all offsets below based on base and size of D_MEM
 
   // gp initialization: base of D_MEM
 init_gp:
-  li gp, 0x800
+  mv gp, t2
 
   // tp initialization: thread local storage
 init_tp:
-  li tp, 0x900
-  li t2, 0x150
+  add tp, gp, 0x100
   // tid * (DS_SIZE/4)
-  mv a1, t1
-  mv a2, t2
+  li a1, 0x150
+  mv a2, t3
   call init_multiply
   add tp, tp, a0
 
   // sp initialization: thread stack
 init_sp:
-  li sp, 0xe40
-  li t2, 0x70
+  mv sp, t2
+  li t5, 0xe40
+  or sp, sp, t5
   // tid * (SS_SIZE/4)
-  mv a1, t1
-  mv a2, t2
+  li a1, 0x70
+  mv a2, t3
   call init_multiply
   addi a0, a0, 0x6c // first stack element offset SS_SIZE/4 - 4
   add sp, sp, a0
@@ -79,6 +101,7 @@ init_sp:
   sw x0, 0(sp)
 
 /* set arguments for setup and loop
+ *
  * @param tid thread ID
  * @param tls pointer to thread-local storage
  * @param tls_size size of thread-local storage
@@ -88,12 +111,12 @@ init_sp:
  */
 
 user_setup:
-  mv a0, t1
+  mv a0, t3
   mv a1, tp
   li a2, 0x150
   mv a3, gp
   li a4, 0x70
-  li a5, 0x1000
+  mv a5, t1
   call gpc_setup
 
 exec_loop:
@@ -102,7 +125,7 @@ exec_loop:
   li a2, 0x150
   mv a3, gp
   li a4, 0x70
-  li a5, 0x1000
+  mv a5, t1
   call gpc_loop
   j exec_loop
 
@@ -113,6 +136,7 @@ exec_loop:
  * result will be in a0
  */
 init_multiply:
+  // TODO: replace with more efficient algorithm?
   li a0, 0
   beq a2, x0, init_multiply_end
 init_multiply_loop:
@@ -121,29 +145,3 @@ init_multiply_loop:
   bne a2, x0, init_multiply_loop
 init_multiply_end:
   ret 
-
-/* This section has to be down here, since we have to disable rvc for it  */
-/*
-  .section .vectors, "ax"
-  .option norvc;
-
-  // external interrupts are handled by the same callback
-  // until compiler supports IRQ routines
-  .org 0x00
-  .rept 32
-  nop                       // unused
-  .endr
-
-
-  // reset vector
-  .org 0x80
-  jal x0, reset_handler
-  
-  .global _init
-  .global _fini
-_init:
-_fini:
-  # These don't have to do anything since we use init_array/fini_array.
-  ret
-  
-*/
