@@ -2,7 +2,17 @@ CC = riscv64-elf-gcc
 LD = riscv64-elf-ld
 AR = riscv64-elf-ar
 
-override CFLAGS := -Iinclude/ -ffreestanding -march=rv32i -mabi=ilp32 -nostdinc -nostartfiles -std=c11 $(CFLAGS)
+DEBUG_BUILD ?= 0
+
+BASE_CFLAGS := -Iinclude -ffreestanding -march=rv32i -mabi=ilp32 -nostdinc -nostartfiles -std=c11
+
+ifeq ($(DEBUG_BUILD), 0)
+    BASE_CFLAGS += -O3
+else
+    BASE_CFLAGS += -g -DDEBUG
+endif
+
+override CFLAGS := $(BASE_CFLAGS) $(CFLAGS)
 override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
 all: lib/libgpc.a lib/libgpc_entry.o bin/empty bin/prime_factoring
