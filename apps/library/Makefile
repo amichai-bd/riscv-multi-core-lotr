@@ -13,6 +13,9 @@ obj/entry_point.o: src/lib/entry_point.S
 obj/gpc_utils.o: src/lib/gpc_utils.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
+obj/gpc_core.o: src/lib/gpc_core.c
+	$(CC) $(CFLAGS) -c -o $@ $^
+
 obj/helper.o: src/helper.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
@@ -20,7 +23,7 @@ lib/libgpc_entry.o: obj/entry_point.o
 	#$(AR) -csr $@ $^
 	cp -f $^ $@
 
-lib/libgpc.a: obj/gpc_utils.o
+lib/libgpc.a: obj/gpc_utils.o obj/gpc_core.o
 	$(AR) -csr $@ $^
 
 obj/empty.o: src/apps/empty.c
