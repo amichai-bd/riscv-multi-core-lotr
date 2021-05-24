@@ -11,8 +11,8 @@ SECTIONS
 {
     .text : {
         . = ALIGN(4);
-        _stext = .;
-        *(.text)
+        *(.start);
+        *(.text);
     }  > instrram
 }
 

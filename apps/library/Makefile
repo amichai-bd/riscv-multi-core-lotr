@@ -6,22 +6,22 @@ CFLAGS += -Iinclude/ -ffreestanding -march=rv32i -mabi=ilp32 -nostdinc -nostartf
 LDFLAGS += -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv
 #LDFLAGS += -nostdlib -m elf32lriscv
 
-all: lib/liblotr.o bin/test
+all: bin/empty
 
-obj/crt0_gpc.o: src/crt0_gpc.S
+obj/entry_point.o: src/lib/entry_point.S
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 obj/helper.o: src/helper.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-lib/liblotr.o: obj/crt0_gpc.o
-	#$(AR) -csr $@ $^
+lib/liblotr.a: obj/entry_point.o
+	$(AR) -csr $@ $^
 	cp -f $^ $@
 
-obj/test.o: src/test.c
+obj/empty.o: src/apps/empty.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-bin/test: lib/liblotr.o obj/test.o
+bin/empty: lib/liblotr.a obj/empty.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
 clean:

@@ -6,7 +6,7 @@
 #define CR_SPACE_ADDR REGION_BASE(GPC_ADDR_REGION_CR)
 #define D_MEM_ADDR REGION_BASE(GPC_ADDR_REGION_D_MEM)
 
-.section .text
+.section .start
 
 .global _start
 _start:
