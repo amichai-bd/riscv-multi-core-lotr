@@ -2,9 +2,8 @@ CC = riscv64-elf-gcc
 LD = riscv64-elf-ld
 AR = riscv64-elf-ar
 
-CFLAGS += -Iinclude/ -ffreestanding -march=rv32i -mabi=ilp32 -nostdinc -nostartfiles -std=c11
-LDFLAGS += -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv
-#LDFLAGS += -nostdlib -m elf32lriscv
+override CFLAGS := -Iinclude/ -ffreestanding -march=rv32i -mabi=ilp32 -nostdinc -nostartfiles -std=c11 $(CFLAGS)
+override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
 all: bin/empty
 
