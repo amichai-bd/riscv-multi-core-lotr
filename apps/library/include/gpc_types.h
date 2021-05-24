@@ -10,9 +10,9 @@
 typedef struct gpc_addr_s {
     union {
         struct {
-            uint32_t offset: 32 - 2 - GPC_AGENT_ID_BITS;
+            uint32_t offset: 32 - 2 - GPC_ADDR_AGENT_ID_BITS;
             uint32_t region: 2;
-            uint32_t agent_id: GPC_AGENT_ID_BITS;
+            uint32_t agent_id: GPC_ADDR_AGENT_ID_BITS;
         };
         uint32_t raw;
     };
@@ -27,6 +27,6 @@ typedef struct gpc_core_cr_s {
     uint32_t my_thread_id;
     uint32_t my_agent_id;
     uint32_t supported_arch;
-} core_cr_t;
+} gpc_core_cr_t;
 
 #endif
