@@ -30,21 +30,21 @@ parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 
 //---------------------MEMORY------------------------
 //                 start        size    # of words
 //  I_MEM          0x00_0000    4KB     1024
-//  D_MEM          0x80_0000    4KB     1024
+//  D_MEM          0x40_0000    4KB     1024
 //  CR             0xC0_0000 
 //---------------------------------------------------
 
 // agent_id [31:24] | region [23:22] | reserved[21:12] | offset [11:0]
 
-// Instruction Memory 2KB 
+// Instruction Memory 4KB 
 parameter LSB_I_MEM        = 0 ;
 parameter MSB_I_MEM        = 11;
-parameter SIZE_I_MEM       = 2**(MSB_I_MEM);
+parameter SIZE_I_MEM       = 2**(MSB_I_MEM + 1);
 
-// Data Memory 2KB 
+// Data Memory 4KB 
 parameter LSB_D_MEM        = 0 ;
 parameter MSB_D_MEM        = 11;
-parameter SIZE_D_MEM       = 2**(MSB_D_MEM);
+parameter SIZE_D_MEM       = 2**(MSB_D_MEM + 1);
 
 // CR Address Offsets
 parameter MSB_CR           = 7;

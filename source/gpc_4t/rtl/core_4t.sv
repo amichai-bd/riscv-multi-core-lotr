@@ -149,6 +149,10 @@ logic [31:0]        PcBranchQ102H;
 logic               BranchCondMetQ102H;
 logic               CtrlRegWrQ103H;
 logic               CtrlRegWrQ104H;
+logic               AssertBadMemR_W; 
+logic               AssertIllegalRegister; 
+logic               AssertBadMemAccessReg;
+logic               AssertBadMemAccessCore;
 
 
 
@@ -567,8 +571,18 @@ always_comb begin : write_register_file         //ADLV : Ask ABD about this comb
 end // always_comb
 
 ////////////////////////////////////////////////////////////////////////////////////////
-//          DFD - Design for Debug
+//          assertions
 ////////////////////////////////////////////////////////////////////////////////////////
+assign core_id_strap = 8'b0; //DIXME
+
+always_comb begin : assertion
+AssertBadMemR_W = CtrlMemRdQ103H && CtrlMemWrQ103H;
+AssertBadMemAccessReg = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && (MemAdrsQ103H[MSB_REGION:LSB_REGION] != D_MEM_REGION));
+AssertBadMemAccessCore = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && MemAdrsQ103H[MSB_CORE_ID:LSB_CORE_ID] != core_id_strap);
+AssertIllegalRegister = (CtrlRegWrQ104H && (RegWrPtrQ104H > 16 ));
+end
+
+
 
 endmodule
 //this will solve the conflict

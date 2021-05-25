@@ -35,15 +35,17 @@ logic [31:0] mmio_data_core;
 logic [31:0] data_q;
 
 logic [7:0] core_id_strap     ;
-logic       match_local_core  ;
-logic       match_d_mem_region;
+logic       match_local_coreQ103H  ;
+logic       match_local_coreQ104H  ;
+logic       match_d_mem_regionQ103H;
+logic       match_d_mem_regionQ104H;
 logic       match_cr_region   ;
 
 assign core_id_strap = 8'b01; //FIXME - strap from outside
 
 always_comb begin
-    match_local_core  = (address[MSB_CORE_ID:LSB_CORE_ID] == 8'b0 || address[MSB_CORE_ID:LSB_CORE_ID] == core_id_strap);
-    match_d_mem_region = (address[MSB_REGION:LSB_REGION] == D_MEM_REGION);
+    match_local_coreQ103H  = (address[MSB_CORE_ID:LSB_CORE_ID] == 8'b0 || address[MSB_CORE_ID:LSB_CORE_ID] == core_id_strap);
+    match_d_mem_regionQ103H = (address[MSB_REGION:LSB_REGION] == D_MEM_REGION);
     match_cr_region    = (address[MSB_REGION:LSB_REGION] == CR_REGION);
 end
 
@@ -56,8 +58,8 @@ d_mem d_mem (
     .address  (address[MSB_D_MEM:0]),
     .byteena  (byteena),
     .data     (data),
-    .rden     (rden && match_d_mem_region && match_local_core),
-    .wren     (wren && match_d_mem_region && match_local_core),
+    .rden     (rden && match_d_mem_regionQ103H && match_local_coreQ103H),
+    .wren     (wren && match_d_mem_regionQ103H && match_local_coreQ103H),
     .q        (data_q)
     );
 
@@ -72,7 +74,7 @@ always_comb begin
     end
 
 
-    if(wren && match_cr_region) begin
+    if(wren && match_cr_region && match_local_coreQ103H) begin
         unique case (address[MSB_CR:0])
            CR_EN_PC     : next_mmio_mem.cr.en_pc   = data[0] ;
            CR_RST_PC    : next_mmio_mem.cr.rst_pc  = data[0] ;
@@ -104,11 +106,13 @@ end
 
 //sample the read (synchornic read)
 `LOTR_EN_MSFF(mmio_q, mmio_data_core, clock, match_cr_region)
+`LOTR_MSFF(match_d_mem_regionQ104H , match_d_mem_regionQ103H ,clock)
+`LOTR_MSFF(match_local_coreQ104H , match_local_coreQ103H ,clock)
 
 //mux between the CR and the DATA
 always_comb begin
     q        = match_cr_region      ? mmio_q :
-               match_d_mem_region   ? data_q :
+               match_d_mem_regionQ104H   ? data_q :
                                       32'b0  ;
     cr       = mmio_mem.cr;
 end
