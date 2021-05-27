@@ -73,19 +73,6 @@ read_mem_size:
   // TODO: fix addresses to use D_MEM region
   // TODO: calculate all offsets below based on base and size of D_MEM
 
-  // gp initialization: base of D_MEM
-init_gp:
-  mv gp, t2
-
-  // tp initialization: thread local storage
-init_tp:
-  add tp, gp, 0x100
-  // tid * (DS_SIZE/4)
-  li a1, 0x150
-  mv a2, t3
-  call init_multiply
-  add tp, tp, a0
-
   // sp initialization: thread stack
 init_sp:
   mv sp, t2
@@ -100,35 +87,55 @@ init_sp:
   mv fp, sp
   sw x0, 0(sp)
 
-/* set arguments for setup and loop
- *
- * @param tid thread ID
- * @param tls pointer to thread-local storage
- * @param tls_size size of thread-local storage
- * @param core_global pointer to core-global storage
- * @param core_global_size size of core-global storage
- * @param cr_space pointer to CR space
- */
+  // gp initialization: base of D_MEM
+init_gp:
+  mv gp, t2
 
-user_setup:
+  // tp initialization: thread local storage
+init_tp:
+  add tp, gp, 0x100
+  // tid * (DS_SIZE/4)
+  li a1, 0x150
+  mv a2, t3
+  call init_multiply
+  add tp, tp, a0
+
+  li t5, GPC_CORE_BOOTSTRAP_THREAD_ID
+  beq t3, t5, bootstrap_thread
+non_bootstrap_thread:
+  # TODO: wait/poll until bootstrap thread is done
+  ebreak
+  j global_setup_done
+bootstrap_thread:
+  mv a0, gp
+  li a1, 0x100
+  mv a2, t1
+  call gpc_global_setup
+  ebreak
+  # TODO: wake up other threads
+global_setup_done:
+
+local_setup:
   mv a0, t3
   mv a1, tp
   li a2, 0x150
   mv a3, gp
-  li a4, 0x70
+  li a4, 0x100
   mv a5, t1
-  call gpc_setup
+  call gpc_local_setup
 
 exec_loop:
   mv a0, t1
   mv a1, tp
   li a2, 0x150
   mv a3, gp
-  li a4, 0x70
+  li a4, 0x100
   mv a5, t1
   call gpc_loop
   j exec_loop
 
+  // must not reach here
+  ebreak
 /**
  * multiplies a1 and a2 (unsigned) and stores result in a0
  *
