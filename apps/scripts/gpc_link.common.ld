@@ -3,7 +3,7 @@ __DYNAMIC  =  0;
 
 MEMORY
 {
-    instrram    : ORIGIN = 0x00000000, LENGTH = 0x0800
+    instrram    : ORIGIN = 0x00000000, LENGTH = 0x1000
     dataram     : ORIGIN = 0x00400800, LENGTH = 0x0600
     stack       : ORIGIN = 0x00400E00, LENGTH = 0x0100
 }
