@@ -28,6 +28,14 @@ typedef struct local_s {
     uint32_t step; // step size
 } local_t;
 
+// TODO: use a more efficient implementation
+static inline uint32_t mod(uint32_t a, uint32_t b) {
+    while(a > b) {
+        a -= b;
+    }
+    return a;
+}
+
 void gpc_global_setup(
     void *core_global, size_t core_global_size,
     volatile void *cr_space) {
@@ -88,7 +96,7 @@ static void worker_loop(uint32_t tid, global_t *g, local_t *l) {
         return;
     }
     // TODO: implement modulus
-    if(g->n % l->current != 0) {
+    if(mod(g->n, l->current) != 0) {
         g->state[tid] |= 3; // no need to go further - set as done and composite
     }
 
