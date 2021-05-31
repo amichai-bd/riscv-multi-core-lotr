@@ -1,6 +1,7 @@
 CC = riscv64-elf-gcc
 LD = riscv64-elf-ld
 AR = riscv64-elf-ar
+OBJDUMP = riscv64-elf-objdump
 
 DEBUG_BUILD ?= 0
 
@@ -44,9 +45,11 @@ obj/prime_factoring.o: src/apps/prime_factoring.c
 
 bin/empty: lib/libgpc_entry.o obj/empty.o
 	$(LD) $(LDFLAGS) -Llib $^ -lgpc -o $@
+	$(OBJDUMP) -gd $@ > $@.txt
 
 bin/prime_factoring: lib/libgpc_entry.o obj/prime_factoring.o
 	$(LD) $(LDFLAGS) -Llib $^ -lgpc -o $@
+	$(OBJDUMP) -gd $@ > $@.txt
 
 clean:
 	rm -f bin/* lib/* obj/*
