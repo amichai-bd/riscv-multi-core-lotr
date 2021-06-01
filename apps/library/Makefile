@@ -5,7 +5,18 @@ OBJDUMP = riscv64-elf-objdump
 
 DEBUG_BUILD ?= 0
 
-BASE_CFLAGS := -Iinclude -ffreestanding -march=rv32i -mabi=ilp32 -nostdinc -nostartfiles -std=c11
+ifeq ($(DEBUG_BUILD), 0)
+    CONFIG = release
+else
+    CONFIG = debug
+endif
+
+ARCH := rv32i
+ABI := ilp32
+
+PREFIX := $(CONFIG)/$(ARCH)/$(ABI)
+
+BASE_CFLAGS := -Iinclude -ffreestanding -march=$(ARCH) -mabi=$(ABI) -nostdinc -nostartfiles -std=c11
 
 ifeq ($(DEBUG_BUILD), 0)
     BASE_CFLAGS += -O3
@@ -16,40 +27,53 @@ endif
 override CFLAGS := $(BASE_CFLAGS) $(CFLAGS)
 override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
-all: lib/libgpc.a lib/libgpc_entry.o bin/empty bin/prime_factoring
+all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.o out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
 
-obj/entry_point.o: src/lib/entry_point.S
+obj/$(PREFIX)/entry_point.o: src/lib/entry_point.S
+	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/gpc_utils.o: src/lib/gpc_utils.c
+obj/$(PREFIX)/gpc_utils.o: src/lib/gpc_utils.c
+	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/gpc_core.o: src/lib/gpc_core.c
+obj/$(PREFIX)/gpc_core.o: src/lib/gpc_core.c
+	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/helper.o: src/helper.c
+obj/$(PREFIX)/helper.o: src/helper.c
+	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-lib/libgpc_entry.o: obj/entry_point.o
+out/$(PREFIX)/lib/libgpc_entry.o: obj/$(PREFIX)/entry_point.o
+	@mkdir -p `dirname $@`
 	#$(AR) -csr $@ $^
 	cp -f $^ $@
 
-lib/libgpc.a: obj/gpc_utils.o obj/gpc_core.o
+out/$(PREFIX)/lib/libgpc.a: obj/$(PREFIX)/gpc_utils.o obj/$(PREFIX)/gpc_core.o
+	@mkdir -p `dirname $@`
 	$(AR) -csr $@ $^
 
-obj/empty.o: src/apps/empty.c
+obj/$(PREFIX)/empty.o: src/apps/empty.c
+	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/prime_factoring.o: src/apps/prime_factoring.c
+obj/$(PREFIX)/prime_factoring.o: src/apps/prime_factoring.c
+	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-bin/empty: lib/libgpc_entry.o obj/empty.o
-	$(LD) $(LDFLAGS) -Llib $^ -lgpc -o $@
+out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.o obj/$(PREFIX)/empty.o
+	@mkdir -p `dirname $@`
+	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
 
-bin/prime_factoring: lib/libgpc_entry.o obj/prime_factoring.o
-	$(LD) $(LDFLAGS) -Llib $^ -lgpc -o $@
+out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.o obj/$(PREFIX)/prime_factoring.o
+	@mkdir -p `dirname $@`
+	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
 
 clean:
-	rm -f bin/* lib/* obj/*
+	rm -rf out/$(PREFIX)/* obj/$(PREFIX)/*
+
+cleanall:
+	rm -rf out/* obj/*
