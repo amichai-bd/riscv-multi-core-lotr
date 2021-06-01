@@ -14,6 +14,11 @@ endif
 ARCH := rv32i
 ABI := ilp32
 
+ifeq ($(RV32E), 1)
+    ARCH := $(ARCH:i=e)
+    ABI := $(ABI)e
+endif
+
 PREFIX := $(CONFIG)/$(ARCH)/$(ABI)
 
 BASE_CFLAGS := -Iinclude -ffreestanding -march=$(ARCH) -mabi=$(ABI) -nostdinc -nostartfiles -std=c11
@@ -24,7 +29,13 @@ else
     BASE_CFLAGS += -g -DDEBUG
 endif
 
-override CFLAGS := $(BASE_CFLAGS) $(CFLAGS)
+DEFINES :=
+
+ifeq ($(RV32E), 1)
+    DEFINES += -DUSE_RV32E=1
+endif
+
+override CFLAGS := $(BASE_CFLAGS) $(DEFINES) $(CFLAGS)
 override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
 all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.o out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring

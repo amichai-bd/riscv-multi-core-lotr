@@ -34,7 +34,7 @@ _start:
   mv x13, x0
   mv x14, x0
   mv x15, x0
-  // TODO: don't do that in rv32e (build/run time parameter?)
+#if !defined(USE_RV32E) || !USE_RV32E
   mv x16, x0
   mv x17, x0
   mv x18, x0
@@ -51,6 +51,7 @@ _start:
   mv x29, x0
   mv x30, x0
   mv x31, x0
+#endif
 
   /*
   GP_BASE 0x800
