@@ -40,15 +40,15 @@ override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLA
 
 all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.o out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
 
-obj/$(PREFIX)/entry_point.o: src/lib/entry_point.S
+obj/$(PREFIX)/entry_point.o: src/entry_point.S
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/gpc_utils.o: src/lib/gpc_utils.c
+obj/$(PREFIX)/gpc_utils.o: src/gpc_utils.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/gpc_core.o: src/lib/gpc_core.c
+obj/$(PREFIX)/gpc_core.o: src/gpc_core.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
@@ -65,11 +65,11 @@ out/$(PREFIX)/lib/libgpc.a: obj/$(PREFIX)/gpc_utils.o obj/$(PREFIX)/gpc_core.o
 	@mkdir -p `dirname $@`
 	$(AR) -csr $@ $^
 
-obj/$(PREFIX)/empty.o: src/apps/empty.c
+obj/$(PREFIX)/empty.o: examples/empty.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/prime_factoring.o: src/apps/prime_factoring.c
+obj/$(PREFIX)/prime_factoring.o: examples/prime_factoring.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
