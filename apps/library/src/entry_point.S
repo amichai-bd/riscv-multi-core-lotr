@@ -1,168 +1,138 @@
 #include "gpc_defs.h"
+#include "gpc_memory_layout.h"
 #include "gpc_cr.h"
-
-// Base of CR space address (CR region at the right place, other bits zero)
-#define REGION_OFFSET (32 - 2 - GPC_ADDR_AGENT_ID_BITS)
-#define REGION_BASE(region) (region) << REGION_OFFSET
-#define CR_SPACE_ADDR REGION_BASE(GPC_ADDR_REGION_CR)
-#define D_MEM_ADDR REGION_BASE(GPC_ADDR_REGION_D_MEM)
+#include "gpc_params.h"
 
 .section .start
 
 .global _start
 _start:
-  /* clear pipeline */
-  nop
-  nop
-  nop
-  nop
-  nop
+    /* clear pipeline */
+    nop
+    nop
+    nop
+    nop
+    nop
 
-  /* set all registers to zero */
-  mv  x1, x0
-  mv  x2, x0
-  mv  x3, x0
-  mv  x4, x0
-  mv  x5, x0
-  mv  x6, x0
-  mv  x7, x0
-  mv  x8, x0
-  mv  x9, x0
-  mv x10, x0
-  mv x11, x0
-  mv x12, x0
-  mv x13, x0
-  mv x14, x0
-  mv x15, x0
+    /* set all registers to zero */
+    mv  x1, x0
+    mv  x2, x0
+    mv  x3, x0
+    mv  x4, x0
+    mv  x5, x0
+    mv  x6, x0
+    mv  x7, x0
+    mv  x8, x0
+    mv  x9, x0
+    mv x10, x0
+    mv x11, x0
+    mv x12, x0
+    mv x13, x0
+    mv x14, x0
+    mv x15, x0
 #if !defined(USE_RV32E) || !USE_RV32E
-  mv x16, x0
-  mv x17, x0
-  mv x18, x0
-  mv x19, x0
-  mv x20, x0
-  mv x21, x0
-  mv x22, x0
-  mv x23, x0
-  mv x24, x0
-  mv x25, x0
-  mv x26, x0
-  mv x27, x0
-  mv x28, x0
-  mv x29, x0
-  mv x30, x0
-  mv x31, x0
+    mv x16, x0
+    mv x17, x0
+    mv x18, x0
+    mv x19, x0
+    mv x20, x0
+    mv x21, x0
+    mv x22, x0
+    mv x23, x0
+    mv x24, x0
+    mv x25, x0
+    mv x26, x0
+    mv x27, x0
+    mv x28, x0
+    mv x29, x0
+    mv x30, x0
+    mv x31, x0
 #endif
 
-  /*
-  GP_BASE 0x800
-  GP_SIZE 0x100
-  DS_BASE 0x900
-  DS_SIZE 0x540 => 0x150
-  SS_BASE 0xe40
-  SS_SIZE 0x1c0 => 0x70
-  TOP 0x1000
-  */
+read_tid:
+      li t0, GPC_MEM_CR_BASE
+      lw t0, GPC_CR_MY_THREAD_ID(t0)
 
-read_crs:
-  li t0, CR_SPACE_ADDR
-  lw t1, GPC_CR_MY_THREAD_ID(t0)
-  lw t0, GPC_CR_ADDRESS_BITS(t0)
+init_stack:
+      li a1, GPC_MEM_STACK_SIZE
+      mv a2, t0
+      call init_multiply
+      addi sp, a0, GPC_MEM_STACK_SIZE - 4
+      mv fp, sp
 
-calc_mem_size:
-  li t2, 1
-  sll t0, t2, t0
+init_gpc_params:
+      li a1, PARAMS_SIZE
+      mv a2, t0
+      call init_multiply
+      li a3, GPC_MEM_GLOBAL_DATA_BASE
+      add a3, a3, a0
+      // From this point a3 must be GPC params base
+      
+      // Thread ID (read earlier to t0)
+      sw t0, PARAMS_OFFSET_TID(a3)
 
-  // from this point the following must not be modified:
-  // t0 - size of D_MEM
-  // t1 - my tid
+      // Global data base: need to add GPC params region size
+      li t1, GPC_MEM_GLOBAL_DATA_BASE + GPC_MEM_GPC_PARAMS_SIZE * GPC_CORE_N_THREADS
+      sw t1, PARAMS_OFFSET_GLOBAL_DATA(a3)
 
-  // memory layout, bottom to top (fractions relative to D_MEM size):
-  // global data (1/8 == 16/128)
-  // local data (21/128 per thread => 84/128 total)
-  // stack (7/128 per thread => 28/128 total)
+      // Global data size: need to subtract GPC params region size
+      li t1, GPC_MEM_GLOBAL_DATA_SIZE - GPC_MEM_GPC_PARAMS_SIZE * GPC_CORE_N_THREADS
+      sw t1, PARAMS_OFFSET_GLOBAL_DATA_SIZE(a3)
+      
+      // Local data base: base + tid*size
+      li a1, GPC_MEM_LOCAL_DATA_SIZE
+      mv a2, t0
+      call init_multiply
+      li t1, GPC_MEM_LOCAL_DATA_BASE
+      add t1, t1, a0
+      sw t1, PARAMS_OFFSET_LOCAL_DATA(a3)
 
-init_sp:
-  // stack base offset:
-  // D_MEM_SIZE/128 * (100+7*tid) - 4
-  li a1, 7
-  mv a2, t1
-  call init_multiply
-  mv t2, a0 // save result on the side, we'll save it in stack soon
-  addi a2, a0, 100
-  srli a1, t0, 7
-  call init_multiply
-  addi a0, a0, -4
-  li sp, D_MEM_ADDR
-  or sp, sp, a0
-  mv fp, sp
+      // Local data size: constant
+      li t1, GPC_MEM_LOCAL_DATA_SIZE
+      sw t1, PARAMS_OFFSET_LOCAL_DATA_SIZE(a3)
 
-calculate_sizes:
-  // saved sizes:
-  // sp+0 - STACK_SIZE
-  // sp+4 - LOCAL_SIZE
-  // sp+8 - GLOBAL_SIZE
-  addi sp, sp, -12
-  sw t2, 0(sp)
-  srli a1, t0, 7
-  li a2, 21
-  call init_multiply
-  sw a0, 4(sp)
-  srli t2, t0, 3
-  sw t2, 8(sp)
+      // Reserved: zero everything
+      li t1, PARAMS_OFFSET_RESERVED_START
+      li t2, PARAMS_SIZE
+reserved_init_loop:
+      add a0, a3, t1
+      sw zero, 0(a0)
+      addi t1, t1, 4
+      blt t1, t2, reserved_init_loop
 
 init_gp:
-  // global data: base of D_MEM
-  li gp, D_MEM_ADDR
+      lw gp, PARAMS_OFFSET_GLOBAL_DATA(a3)
 
 init_tp:
-  // local data offset:
-  // D_MEM_SIZE / 128 * (16 + tid*21)
-  li a1, 21
-  mv a2, t1
-  call init_multiply
-  addi a2, a0, 16
-  srli a1, t0, 7
-  call init_multiply
-  li tp, D_MEM_ADDR
-  or tp, tp, a0
+      lw tp, PARAMS_OFFSET_LOCAL_DATA(a3)
 
 is_bootstrap_thread:
-  li t2, GPC_CORE_BOOTSTRAP_THREAD_ID
-  beq t1, t2, bootstrap_thread
+    li t2, GPC_CORE_BOOTSTRAP_THREAD_ID
+    beq t0, t2, bootstrap_thread
 non_bootstrap_thread:
-  # TODO: wait/poll until bootstrap thread is done
-  ebreak
-  j global_setup_done
+    # TODO: wait/poll until bootstrap thread is done
+    ebreak
+    j global_setup_done
 bootstrap_thread:
-  mv a0, gp
-  lw a1, 8(sp)
-  li a2, CR_SPACE_ADDR
-  call gpc_global_setup
-  ebreak
-  # TODO: wake up other threads
+    mv a0, a3
+    call gpc_global_setup
+    ebreak
+    # TODO: wake up other threads
 global_setup_done:
 
 local_setup:
-  mv a0, t1
-  mv a1, tp
-  lw a2, 4(sp)
-  mv a3, gp
-  lw a4, 8(sp)
-  li a5, CR_SPACE_ADDR
-  call gpc_local_setup
+    mv a0, a3
+    call gpc_local_setup
 
 exec_loop:
-  mv a0, t1
-  mv a1, tp
-  lw a2, 4(sp)
-  mv a3, gp
-  lw a4, 8(sp)
-  li a5, CR_SPACE_ADDR
-  call gpc_loop
-  j exec_loop
+    mv a0, a3
+    call gpc_loop
+    j exec_loop
 
-  // must not reach here
-  ebreak
+unreachable:
+    // Must not reach here
+    ebreak
+
 /**
  * multiplies a1 and a2 (unsigned) and stores result in a0
  *
@@ -170,12 +140,12 @@ exec_loop:
  * result will be in a0
  */
 init_multiply:
-  // TODO: replace with more efficient algorithm?
-  li a0, 0
-  beq a2, x0, init_multiply_end
+    // TODO: replace with more efficient algorithm?
+    li a0, 0
+    beq a2, x0, init_multiply_end
 init_multiply_loop:
-  add a0, a0, a1
-  addi a2, a2, -1
-  bne a2, x0, init_multiply_loop
+    add a0, a0, a1
+    addi a2, a2, -1
+    bne a2, x0, init_multiply_loop
 init_multiply_end:
-  ret
+    ret

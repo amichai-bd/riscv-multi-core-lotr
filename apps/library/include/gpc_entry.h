@@ -2,6 +2,7 @@
 #define __GPC_ENTRY_H_
 
 #include "gpc_basic_types.h"
+#include "gpc_types.h"
 
 /**
  * Global setup entry point
@@ -12,9 +13,7 @@
  * @param core_global_size size of core-global storage
  * @param cr_space pointer to CR space
  */
-extern void gpc_global_setup(
-    void *core_global, size_t core_global_size,
-    volatile void *cr_space);
+extern void gpc_global_setup(const gpc_params_t *gpc_params);
 
 /**
  * Local setup entry point
@@ -28,10 +27,7 @@ extern void gpc_global_setup(
  * @param core_global_size size of core-global storage
  * @param cr_space pointer to CR space
  */
-extern void gpc_local_setup(uint32_t tid,
-    void *tls, size_t tls_size,
-    void *core_global, size_t core_global_size,
-    volatile void *cr_space);
+extern void gpc_local_setup(const gpc_params_t *gpc_params);
 
 /**
  * Loop entry point: executed in an infinite loop after setup
@@ -43,9 +39,6 @@ extern void gpc_local_setup(uint32_t tid,
  * @param core_global_size size of core-global storage
  * @param cr_space pointer to CR space
  */
-extern void gpc_loop(uint32_t tid,
-    void *tls, size_t tls_size,
-    void *core_global, size_t core_global_size,
-    volatile void *cr_space);
+extern void gpc_loop(const gpc_params_t *gpc_params);
 
 #endif
