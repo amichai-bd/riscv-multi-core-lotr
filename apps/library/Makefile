@@ -29,36 +29,36 @@ else
     BASE_CFLAGS += -g -DDEBUG
 endif
 
-DEFINES :=
+BASE_DEFINES :=
 
 ifeq ($(RV32E), 1)
-    DEFINES += -DUSE_RV32E=1
+    LIB_DEFINES += -DUSE_RV32E=1
 endif
 
 override CFLAGS := $(BASE_CFLAGS) $(DEFINES) $(CFLAGS)
 override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
-all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.o out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
+LIB_INCLUDES := -Isrc/include
+
+LIB_CFLAGS := $(CFLAGS) $(LIB_INCLUDES) $(LIB_DEFINES)
+
+all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
 
 obj/$(PREFIX)/entry_point.o: src/entry_point.S
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(LIB_CFLAGS) -c -o $@ $^
 
 obj/$(PREFIX)/gpc_utils.o: src/gpc_utils.c
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(LIB_CFLAGS) -c -o $@ $^
 
 obj/$(PREFIX)/gpc_core.o: src/gpc_core.c
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(LIB_CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/helper.o: src/helper.c
+out/$(PREFIX)/lib/libgpc_entry.a: obj/$(PREFIX)/entry_point.o
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
-
-out/$(PREFIX)/lib/libgpc_entry.o: obj/$(PREFIX)/entry_point.o
-	@mkdir -p `dirname $@`
-	#$(AR) -csr $@ $^
+	$(AR) -csr $@ $^
 	cp -f $^ $@
 
 out/$(PREFIX)/lib/libgpc.a: obj/$(PREFIX)/gpc_utils.o obj/$(PREFIX)/gpc_core.o
@@ -73,12 +73,12 @@ obj/$(PREFIX)/prime_factoring.o: examples/prime_factoring.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.o obj/$(PREFIX)/empty.o
+out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/empty.o
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
 
-out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.o obj/$(PREFIX)/prime_factoring.o
+out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/prime_factoring.o
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
