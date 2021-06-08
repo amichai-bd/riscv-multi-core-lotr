@@ -31,8 +31,8 @@ module gpc_4t_tb ();
 
 
     initial begin: backdoor_set_i_mem
-            $readmemh("../apps/alive/branch_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-            $readmemh("../apps/alive/branch_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
+            $readmemh("../apps/scripts/factorial_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
+            $readmemh("../apps/scripts/factorial_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
     end: backdoor_set_i_mem
 
 
@@ -61,7 +61,7 @@ gpc_4t gpc_4t(
              );
 
 initial begin 
-   #3000 $finish;
+   #10000 $finish;
 end
 //====================================make logs====================================
 integer f1;

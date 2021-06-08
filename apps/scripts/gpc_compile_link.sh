@@ -8,14 +8,14 @@ if [ "$1" == "-help" ];then
     cat ./README.txt
     exit 1
 fi
-str=riscv/install/rv32i/bin/
-mod=i
+str=riscv/install/rv32e/bin/
+mod=e
 if [ "$1" == "-e" ];then
     str=riscv_e/install/rv32e/bin/
     mod=e
 fi
 
-GNU_DIR=/home/adlv/projects/$str
+GNU_DIR=/home/saar/projects/$str
 if [ "$#" == "3" ];then
     #create assembly file from c file
     if [ "$2" == "-l" ]||[ "$2" == "-n" ];then

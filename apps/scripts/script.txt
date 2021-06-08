@@ -1,6 +1,6 @@
 GNU_DIR=/home/saar/projects/riscv/install/rv32i/bin/
 mod=i
-$GNU_DIR/riscv32-unknown-elf-gcc -S -ffreestanding -march=rv32$mod $3.c -o $3_rv32$mod.c.s;
+$GNU_DIR/riscv32-unknown-elf-gcc -S -ffreestanding -march=rv32$mod Binary_Search.c -o Binary_Search_rv32$mod.c.s;
 $GNU_DIR/riscv32-unknown-elf-gcc  -O3  -march=rv32$mod -T./gpc_link.common.ld -nostartfiles -D__riscv__ $3_rv32$mod.c.s ./crt0_gpc.S -o $3_rv32$mod.elf
 $GNU_DIR/riscv32-unknown-elf-objdump -gd $3_rv32$mod.elf > $3_rv32$mod_elf.txt
 $GNU_DIR/riscv32-unknown-elf-objcopy --srec-len 1 --output-target=verilog $3_rv32$mod.elf $3_inst_mem_rv32$mod.sv 
