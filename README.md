@@ -72,7 +72,7 @@ https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-FABRIC-LOTR
 MAS (Micro-Level-Architecture-Specification):  
 TODO
 
-- SW Stack: TODO  
+- SW Stack: TODO - FIXME  
 
 - Validation: TODO
 
