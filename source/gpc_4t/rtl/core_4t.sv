@@ -38,9 +38,11 @@ module core_4t
     output logic        CtrlMemWrQ103H  ,
     output logic        CtrlMemRdQ103H  ,
     output logic [3:0]  MemByteEnQ103H  ,
+    output logic [3:0]  ThreadQ103H     ,
+    output logic [31:0] PcQ103H         ,
     input  logic [31:0] MemRdDataQ104H  ,
     //MMIO
-    input  t_cr         CRQnnnH
+    input  t_core_cr         CRQnnnH
     );
 //  general signals
 
@@ -62,7 +64,6 @@ logic [3:0]     NextThreadQ100H;
 logic [3:0]     ThreadQ100H;
 logic [3:0]     ThreadQ101H;
 logic [3:0]     ThreadQ102H;
-logic [3:0]     ThreadQ103H;
 logic [3:0]     ThreadQ104H;
 
 
@@ -210,6 +211,11 @@ assign ThreadQ104H = ThreadQ100H;
 //////////////////////////////////////////////////////////////////////////////////////////////////
    
 assign EnPCQnnnH   = 4'b1111; //Enable all Threads FIXME - this is Temp for Enabling the PIPE - should come from the mmio_CR register
+//enable after:
+//assign EnPCQnnnH[0] = CRQnnnH.en_pc_0;
+//assign EnPCQnnnH[1] = CRQnnnH.en_pc_1;
+//assign EnPCQnnnH[2] = CRQnnnH.en_pc_2;
+//assign EnPCQnnnH[3] = CRQnnnH.en_pc_3;
 
 //  Enable bits for Thread's Pc - indicated from Q102H
 assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
@@ -488,6 +494,7 @@ end
 `LOTR_MSFF   ( CtrlMemToRegQ103H , CtrlMemToRegQ102H , QClk)
 `LOTR_MSFF   ( CtrlPcToRegQ103H  , CtrlPcToRegQ102H  , QClk)
 `LOTR_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
+`LOTR_MSFF   ( PcQ103H           , NextPcQ102H       , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
