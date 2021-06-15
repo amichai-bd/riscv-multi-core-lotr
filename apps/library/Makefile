@@ -1,4 +1,5 @@
 CC = riscv64-elf-gcc
+CPP = riscv64-elf-cpp
 LD = riscv64-elf-ld
 AR = riscv64-elf-ar
 OBJDUMP = riscv64-elf-objdump
@@ -36,13 +37,21 @@ ifeq ($(RV32E), 1)
 endif
 
 override CFLAGS := $(BASE_CFLAGS) $(DEFINES) $(CFLAGS)
-override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
+override LDFLAGS := -Tout/$(PREFIX)/lib/libgpc_link.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
 LIB_INCLUDES := -Isrc/include
 
 LIB_CFLAGS := $(CFLAGS) $(LIB_INCLUDES) $(LIB_DEFINES)
 
-all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
+CPPFLAGS = -P
+
+all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring out/$(PREFIX)/lib/libgpc_link.lds
+
+libgpc: out/$(PREFIX)/lib/libgpc_link.lds out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a
+
+out/$(PREFIX)/lib/libgpc_link.lds: build/gpc_link.common.lds
+	mkdir -p `basename $@`
+	$(CPP) $(CFLAGS) $(CPPFLAGS) $^ -o $@
 
 obj/$(PREFIX)/entry_point.o: src/entry_point.S
 	@mkdir -p `dirname $@`
@@ -78,10 +87,14 @@ out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/empty.o
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
 
+out/$(PREFIX)/bin/empty: .EXTRA_PREREQS = libgpc
+
 out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/prime_factoring.o
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
+
+out/$(PREFIX)/bin/prime_factoring: .EXTRA_PREREQS = libgpc
 
 clean:
 	rm -rf out/$(PREFIX)/* obj/$(PREFIX)/*

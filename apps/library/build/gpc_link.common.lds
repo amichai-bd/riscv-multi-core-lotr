@@ -1,10 +1,12 @@
+#include "gpc_memory_layout.h"
+
 SEARCH_DIR(.)
 __DYNAMIC  =  0;
 
 MEMORY
 {
-    instrram    : ORIGIN = 0x00000000, LENGTH = 0x0800
-    dataram     : ORIGIN = 0x00000800, LENGTH = 0x0800
+    i_mem    : ORIGIN = GPC_MEM_I_MEM_BASE, LENGTH = GPC_MEM_I_MEM_SIZE
+    d_mem     : ORIGIN = GPC_MEM_D_MEM_BASE, LENGTH = GPC_MEM_D_MEM_SIZE
 }
 
 SECTIONS
@@ -13,6 +15,13 @@ SECTIONS
         . = ALIGN(4);
         *(.start);
         *(.text);
-    }  > instrram
+    }  > i_mem
+
+    .data : {
+        . = ALIGN(4);
+        . = GPC_MEM_GLOBAL_DATA_BASE - GPC_MEM_D_MEM_BASE;
+        . += GPC_MEM_GPC_PARAMS_SIZE * GPC_CORE_N_THREADS;
+        *(.rodata);
+    } > d_mem
 }
 
