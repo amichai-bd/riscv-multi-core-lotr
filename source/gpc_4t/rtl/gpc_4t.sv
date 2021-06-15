@@ -52,8 +52,10 @@ logic [31:0] MemWrDataWQ103H;
 logic        CtrlMemWrQ103H ;
 logic        CtrlMemRdQ103H ;
 logic [3:0]  MemByteEnQ103H ;
+logic [3:0]  ThreadQ103H    ;
+logic [31:0] PcQ103H        ;
 logic [31:0] MemRdDataQ104H ;
-t_cr         CRQnnnH        ;
+t_core_cr         CRQnnnH        ;
 logic [31:0] InstFetchQ101H ;
 
 
@@ -70,6 +72,8 @@ core_4t core_4t (
     .CtrlMemWrQ103H  (CtrlMemWrQ103H) ,  // output 
     .CtrlMemRdQ103H  (CtrlMemRdQ103H) ,  // output 
     .MemByteEnQ103H  (MemByteEnQ103H) ,  // output 
+    .ThreadQ103H     (ThreadQ103H)    ,  // output   
+    .PcQ103H         (PcQ103H)        , //
     .MemRdDataQ104H  (MemRdDataQ104H) ,  // input
     //MMIO
     .CRQnnnH         (CRQnnnH)           // input
@@ -80,13 +84,15 @@ d_mem_wrap d_mem_wrap (
     .rst             (RstQnnnH)       ,  // input    
     //req rd/wr interace
     .address         (MemAdrsQ103H)   ,  // input  TODO - address input should mux CORE vs MMIO
-    .byteena         (MemByteEnQ103H) ,  
+    .byteena         (MemByteEnQ103H) ,
+    .ThreadQ103H     (ThreadQ103H)    ,  // input     
+    .PcQ103H         (PcQ103H)        ,    
     .data            (MemWrDataWQ103H),  // input  TODO - wr_data input should mux CORE vs MMIO
     .rden            (CtrlMemRdQ103H) ,  // input  TODO - rden    when reading from d_mem wren should be desabled   input should mux CORE vs MMIO    
     .wren            (CtrlMemWrQ103H) ,  // input  TODO - wren    when writing to d_mem rden should be desabled     input should mux CORE vs MMIO
     .q               (MemRdDataQ104H) ,  // output TODO - data    output should rename to general d_mem output data 
     //other singlas
-    .cr              (CRQnnnH)           // output 
+    .core_cr              (CRQnnnH)           // output 
 );
 
 i_mem_wrap i_mem_wrap (

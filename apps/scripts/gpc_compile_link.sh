@@ -8,14 +8,14 @@ if [ "$1" == "-help" ];then
     cat ./README.txt
     exit 1
 fi
-str=riscv/install/rv32e/bin/
-mod=e
+str=riscv/install/rv32i/bin/
+mod=i
 if [ "$1" == "-e" ];then
     str=riscv_e/install/rv32e/bin/
     mod=e
 fi
 
-GNU_DIR=/home/saar/projects/$str
+GNU_DIR=/home/adlv/projects/$str
 if [ "$#" == "3" ];then
     #create assembly file from c file
     if [ "$2" == "-l" ]||[ "$2" == "-n" ];then
@@ -35,14 +35,14 @@ if [ "$#" == "3" ];then
     #creates the instruction file 
     $GNU_DIR/riscv32-unknown-elf-objcopy --srec-len 1 --output-target=verilog $3_rv32$mod.elf $3_inst_mem_rv32$mod.sv 
 
-    if [ ! -d "../alive/$3" ];then
-        mkdir ../alive/$3
+    if [ ! -d "../tests_files/$3" ];then
+        mkdir ../tests_files/$3
     fi
-    mv $3_rv32$mod.c.s ../alive/$3
-    mv $3_rv32$mod.elf ../alive/$3
-    mv $3_rv32$mod_elf.txt ../alive/$3
-    cp $3_inst_mem_rv32$mod.sv ../alive
-    mv $3_inst_mem_rv32$mod.sv ../alive/$3
+    mv $3_rv32$mod.c.s ../tests_files/$3
+    mv $3_rv32$mod.elf ../tests_files/$3
+    mv $3_rv32$mod_elf.txt ../tests_files/$3
+    cp $3_inst_mem_rv32$mod.sv ../../verif/test_mem
+    mv $3_inst_mem_rv32$mod.sv ../tests_files/$3
     exit 1
 fi
 if [ "$#" == "1" ];then
@@ -56,14 +56,27 @@ if [ "$#" == "1" ];then
     #creates the instruction file 
     $GNU_DIR/riscv32-unknown-elf-objcopy --srec-len 1 --output-target=verilog $1_rv32$mod.elf $1_inst_mem_rv32$mod.sv 
 
-    if [ ! -d "../alive/$1" ];then
-        mkdir ../alive/$1
+    if [ ! -d "../tests_files/$1" ];then
+        mkdir ../tests_files/$1
     fi
-    mv $1_rv32$mod.c.s ../alive/$1
-    mv $1_rv32$mod.elf ../alive/$1
-    mv $1_rv32$mod_elf.txt ../alive/$1
-    cp $1_inst_mem_rv32$mod.sv ../alive
-    mv $1_inst_mem_rv32$mod.sv ../alive/$1
+    if [ ! -d "../../verif/Tests/$1" ];then
+        mkdir ../../verif/Tests/$1
+    fi
+    cp $1.c ../tests_files/$1
+    cp $1.c ../../verif/Tests/$1
+   
+    cp $1_rv32$mod.c.s ../../verif/Tests/$1
+    mv $1_rv32$mod.c.s ../tests_files/$1
+    
+    cp $1_rv32$mod.elf ../../verif/Tests/$1
+    mv $1_rv32$mod.elf ../tests_files/$1
+    
+    cp $1_rv32$mod_elf.txt ../../verif/Tests/$1
+    mv $1_rv32$mod_elf.txt ../tests_files/$1
+    
+    cp $1_inst_mem_rv32$mod.sv ../../verif/Tests/$1
+    mv $1_inst_mem_rv32$mod.sv ../tests_files/$1
+    
     exit 1
 fi
 
