@@ -43,14 +43,14 @@ LIB_INCLUDES := -Isrc/include
 
 LIB_CFLAGS := $(CFLAGS) $(LIB_INCLUDES) $(LIB_DEFINES)
 
-CPPFLAGS = -P
+override CPPFLAGS := -P $(CPPFLAGS)
 
-all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring out/$(PREFIX)/lib/libgpc_link.lds
+all: libgpc out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
 
 libgpc: out/$(PREFIX)/lib/libgpc_link.lds out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a
 
 out/$(PREFIX)/lib/libgpc_link.lds: build/gpc_link.common.lds
-	mkdir -p `basename $@`
+	mkdir -p `dirname $@`
 	$(CPP) $(CFLAGS) $(CPPFLAGS) $^ -o $@
 
 obj/$(PREFIX)/entry_point.o: src/entry_point.S
