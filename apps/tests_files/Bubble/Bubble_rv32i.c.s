@@ -98,70 +98,55 @@ bubbleSort:
 	.globl	main
 	.type	main, @function
 main:
-	addi	sp,sp,-48
-	sw	ra,44(sp)
-	sw	s0,40(sp)
-	addi	s0,sp,48
+	addi	sp,sp,-64
+	sw	ra,60(sp)
+	sw	s0,56(sp)
+	addi	s0,sp,64
 	li	a5,6
-	sw	a5,-48(s0)
+	sw	a5,-52(s0)
 	li	a5,1
-	sw	a5,-44(s0)
-	sw	zero,-40(s0)
+	sw	a5,-48(s0)
+	sw	zero,-44(s0)
 	li	a5,3
-	sw	a5,-36(s0)
+	sw	a5,-40(s0)
 	li	a5,5
-	sw	a5,-32(s0)
+	sw	a5,-36(s0)
 	li	a5,9
-	sw	a5,-28(s0)
+	sw	a5,-32(s0)
 	li	a5,50
-	sw	a5,-24(s0)
+	sw	a5,-28(s0)
 	li	a5,2
-	sw	a5,-20(s0)
-	addi	a5,s0,-48
+	sw	a5,-24(s0)
+	addi	a5,s0,-52
 	li	a1,8
 	mv	a0,a5
 	call	bubbleSort
+	sw	zero,-20(s0)
+	j	.L9
+.L10:
+	lw	a5,-20(s0)
+	slli	a4,a5,2
 	li	a5,4198400
 	addi	a5,a5,-256
-	lw	a4,-48(s0)
-	sw	a4,0(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	lw	a4,-44(s0)
-	sw	a4,4(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	lw	a4,-40(s0)
-	sw	a4,8(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	lw	a4,-36(s0)
-	sw	a4,12(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	lw	a4,-32(s0)
-	sw	a4,16(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	lw	a4,-28(s0)
-	sw	a4,20(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	lw	a4,-24(s0)
-	sw	a4,24(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
+	add	a4,a4,a5
+	lw	a5,-20(s0)
+	slli	a5,a5,2
+	addi	a3,s0,-16
+	add	a5,a3,a5
+	lw	a5,-36(a5)
+	sw	a5,0(a4)
+	lw	a5,-20(s0)
+	addi	a5,a5,1
+	sw	a5,-20(s0)
+.L9:
 	lw	a4,-20(s0)
-	sw	a4,28(a5)
-	li	a5,4198400
-	addi	a5,a5,-256
-	li	a4,1
-	sw	a4,252(a5)
+	li	a5,7
+	ble	a4,a5,.L10
 	li	a5,0
 	mv	a0,a5
-	lw	ra,44(sp)
-	lw	s0,40(sp)
-	addi	sp,sp,48
+	lw	ra,60(sp)
+	lw	s0,56(sp)
+	addi	sp,sp,64
 	jr	ra
 	.size	main, .-main
 	.ident	"GCC: (GNU) 10.2.0"

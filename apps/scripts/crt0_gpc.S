@@ -17,8 +17,26 @@ reset_handler:
   mv x13, x1
   mv x14, x1
   mv x15, x1
+//  mv x16, x1
+//  mv x17, x1
+//  mv x18, x1
+//  mv x19, x1
+//  mv x20, x1
+//  mv x21, x1
+//  mv x22, x1
+//  mv x23, x1
+//  mv x24, x1
+//  mv x25, x1
+//  mv x26, x1
+//  mv x27, x1
+//  mv x28, x1
+//  mv x29, x1
+//  mv x30, x1
+//  mv x31, x1
 
   /* stack initilization */
+  //li   x5,12582924
+  //lw   x2, 0(x5)
   la   x2, _stack_start
 
 
@@ -29,8 +47,6 @@ _start:
 
 main_entry:
   /* jump to main program entry point (argc = argv = 0) */
-  addi x10, x0, 0
-  addi x11, x0, 0
   jal x1, main
 
 
@@ -38,17 +54,14 @@ main_entry:
 
   .section .vectors, "ax"
   .option norvc;
-
-  // external interrupts are handled by the same callback
-  // until compiler supports IRQ routines
   .org 0x00
-  .rept 32
+  .rept 5
   nop                       // unused
   .endr
 
 
   // reset vector
-  .org 0x80
+  .org 0x14
   jal x0, reset_handler
   
   .global _init

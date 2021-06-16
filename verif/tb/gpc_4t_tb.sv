@@ -30,10 +30,14 @@ module gpc_4t_tb ();
         #40 rst = 1'b0;
     end: reset_gen
 
+    `define TEST_DEFINE
+    //+define+TEST_DEFINE="Matrix_Mul"
+
 
     initial begin: test_seq
-            $readmemh("../../verif/test_mem/test_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-            $readmemh("../../verif/test_mem/test_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
+            $display(`TEST_DEFINE);
+            $readmemh("../verif/Tests/Matrix_Mul/Matrix_Mul_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
+            $readmemh("../verif/Tests/Matrix_Mul/Matrix_Mul_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
             //gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4] = 0;
             //while (gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4]==0)  
             //    #4000
@@ -46,11 +50,13 @@ module gpc_4t_tb ();
             //while (gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-1]==0) begin 
             // //wait until sequence is done.   
             //end
-            #80000 
+            #200000 
             $fclose(f1);  
             $fclose(f2);  
             $fclose(f3);  
-            $fclose(f4);  
+            $fclose(f4);
+            $fclose(f5);
+            $fclose(f6);    
             $finish;
             
     end: test_seq
@@ -88,6 +94,7 @@ integer f2;
 integer f3;
 integer f4;
 integer f5;
+integer f6;
 initial begin
     $timeformat(-9, 1, " ", 6);
     f1 = $fopen("../target/trk_write_registers.log","w");
@@ -95,7 +102,8 @@ initial begin
     f3 = $fopen("../target/trk_brach_op.log","w");
     f4 = $fopen("../target/trk_alu.log","w");
     f5 = $fopen("../target/trk_error.log","w");
-
+    f6 = $fopen("../target/trk_shared_space.log","w");
+    
          $fwrite(f1,"-------------------------------------------------\n");
          $fwrite(f1,"Time\t| Thread | Register Num\t| Wr Data\t|\n");
          $fwrite(f1,"-------------------------------------------------\n");
@@ -226,7 +234,7 @@ end
 
 //tracker on write to registers
 always @(posedge clk) begin : write_to_registers
-    if (CtrlRegWrQ104H && RegWrPtrQ104H!=0 ) begin 
+    if (CtrlRegWrQ104H && RegWrPtrQ104H!=0) begin 
         $fwrite(f1,"%t\t|\t%2h \t|\tx%02d \t\t|%8h \t| \n", $realtime,threadnum, RegWrPtrQ104H , gpc_4t_tb.gpc_4t.core_4t.RegWrDataQ104H);
         end
 end
@@ -245,15 +253,34 @@ always @(posedge clk) begin : brnch_print
     end
 end
 
+//tracker to shared space
+always @(posedge clk) begin : write_to_shrd
+    if (CtrlMemWrQ104H && MemAdrsQ104H >= 0'h400f00 && MemAdrsQ104H < 0'h400fff ) begin 
+        $fwrite(f6,"%t\t| %8h\t| WRITE\t\t| %d\t| \n", $realtime,MemAdrsQ104H , MemWrDataWQ104H);
+        end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
 //asserssions//
 always_comb begin
 if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessReg)begin
     $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Region on time %t\nThe Address: %8h",$realtime ,MemAdrsQ104H);
-    $finish;
+    //$finish;
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessCore)begin
     $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Core region on time %t\nThe Address: %8h",$realtime ,MemAdrsQ104H);
-    $finish;
+    //$finish;
     end
 if ( gpc_4t_tb.gpc_4t.core_4t.AssertBadMemR_W)begin
     $fwrite(f5, "ERROR : AssertBadMemR_W - RD && WR to memory indication same cycle on time %t\n",$realtime);
@@ -261,6 +288,11 @@ if ( gpc_4t_tb.gpc_4t.core_4t.AssertBadMemR_W)begin
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalRegister) begin
     $fwrite(f5, "ERROR : AssertIllegalRegister - Illegal register .above 16 on time %t\n",$realtime);
+    //$finish;
+    end
+if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalPC) begin
+    $fwrite(f5, "ERROR : AssertIllegalPC",$realtime);
+    $display("ERROR: Failed assertion");
     $finish;
     end
 if(AssertIllegalOpCode) begin

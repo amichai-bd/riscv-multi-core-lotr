@@ -112,9 +112,9 @@ typedef struct packed { //RO
     logic [31:0] pc;
     logic [1:0]  thread;
     logic [7:0]  core;
-    logic [15:0] stk_ofst;
-    logic [15:0] tls_ofst;
-    logic [15:0] shrd_ofst;
+    logic [31:0] stk_ofst;
+    logic [31:0] tls_ofst;
+    logic [31:0] shrd_ofst;
     logic [7:0]  i_mem_msb;
     logic [7:0]  d_mem_msb;
     logic [7:0]  sts_0;
@@ -154,17 +154,17 @@ typedef struct packed { //RW
 } t_core_cr;
 
 typedef struct packed { //RW
-    logic [15:0] stk_ofst_0;
-    logic [15:0] stk_ofst_1;
-    logic [15:0] stk_ofst_2;
-    logic [15:0] stk_ofst_3; 
-    logic [15:0] tls_ofst_0;
-    logic [15:0] tls_ofst_1;
-    logic [15:0] tls_ofst_2;
-    logic [15:0] tls_ofst_3;    
+    logic [31:0] stk_ofst_0;
+    logic [31:0] stk_ofst_1;
+    logic [31:0] stk_ofst_2;
+    logic [31:0] stk_ofst_3; 
+    logic [31:0] tls_ofst_0;
+    logic [31:0] tls_ofst_1;
+    logic [31:0] tls_ofst_2;
+    logic [31:0] tls_ofst_3;    
 } t_cr_ofst;
 
-typedef struct packed { //RW
+typedef struct packed { 
     logic en_pc;
     logic rst_pc;
     logic en_pc_0;

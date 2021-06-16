@@ -1,3 +1,19 @@
+/*Bubble.c
+Sort 8 integer-size array using bubbleSort algorithm
+test owner: Adi Levy
+Created : 06/06/2021
+*/
+// 4KB of D_MEM
+// 0x400800 - 0x400fff - Shared
+//
+// 0x400600 - 0x400800 - Thread 3
+// 0x400400 - 0x400600 - Thread 2
+// 0x400200 - 0x400400 - Thread 1
+// 0x400000 - 0x400200 - Thread 0
+
+// REGION == 2'b01;
+
+
 void swap(int *xp, int *yp)
 {
     int temp = *xp;
@@ -15,10 +31,9 @@ void bubbleSort(int arr[], int n)
                 swap(&arr[j], &arr[j+1]);
 }
  
-#define MMIO_GENERAL  (*(volatile int (*)[64])(0x00400F00))//
-
+#define MMIO_GENERAL  ((volatile int *) (0x00400f00))
 int main() {
-    int x;
+    int i;
     int arr[8];
     arr[0]=6;
     arr[1]=1;
@@ -29,15 +44,8 @@ int main() {
     arr[6]=50;
     arr[7]=2;
     bubbleSort(arr, 8);
-    //to track single register in logs:
-    MMIO_GENERAL[0]=arr[0];
-    MMIO_GENERAL[1]=arr[1];
-    MMIO_GENERAL[2]=arr[2];
-    MMIO_GENERAL[3]=arr[3];
-    MMIO_GENERAL[4]=arr[4];
-    MMIO_GENERAL[5]=arr[5];
-    MMIO_GENERAL[6]=arr[6];
-    MMIO_GENERAL[7]=arr[7];
-    MMIO_GENERAL[63]=1;
+    for(i=0;i<8;i++){
+        MMIO_GENERAL[i]=arr[i];   
+    }
     return 0;
 }

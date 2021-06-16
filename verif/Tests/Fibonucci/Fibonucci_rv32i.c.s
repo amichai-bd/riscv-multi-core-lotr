@@ -54,11 +54,12 @@ main:
 	addi	s0,sp,32
 	li	a0,6
 	call	fib
-	sw	a0,-20(s0)
+	mv	a5,a0
+	sw	a5,-20(s0)
 	li	a5,4198400
-	addi	a5,a5,-256
+	addi	a5,a5,-8
 	lw	a4,-20(s0)
-	sw	a4,248(a5)
+	sw	a4,0(a5)
 	li	a5,0
 	mv	a0,a5
 	lw	ra,28(sp)

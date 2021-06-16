@@ -32,8 +32,8 @@ module gpc_4t_tb ();
 
 
     initial begin: test_seq
-            $readmemh("../verif/Tests/Bubble/Bubble_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-            $readmemh("../verif/Tests/Bubble/Bubble_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
+            $readmemh("../verif/Tests/Fibonucci/Fibonucci_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
+            $readmemh("../verif/Tests/Fibonucci/Fibonucci_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
             //gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4] = 0;
             //while (gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4]==0)  
             //    #4000
@@ -284,6 +284,11 @@ if ( gpc_4t_tb.gpc_4t.core_4t.AssertBadMemR_W)begin
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalRegister) begin
     $fwrite(f5, "ERROR : AssertIllegalRegister - Illegal register .above 16 on time %t\n",$realtime);
+    $finish;
+    end
+if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalPC) begin
+    $fwrite(f5, "ERROR : AssertIllegalPC",$realtime);
+    $display("ERROR: Failed assertion");
     $finish;
     end
 if(AssertIllegalOpCode) begin

@@ -150,10 +150,7 @@ logic [31:0]        PcBranchQ102H;
 logic               BranchCondMetQ102H;
 logic               CtrlRegWrQ103H;
 logic               CtrlRegWrQ104H;
-logic               AssertBadMemR_W; 
-logic               AssertIllegalRegister; 
-logic               AssertBadMemAccessReg;
-logic               AssertBadMemAccessCore;
+
 
 
 
@@ -581,12 +578,17 @@ end // always_comb
 //          assertions
 ////////////////////////////////////////////////////////////////////////////////////////
 assign core_id_strap = 8'b0; //DIXME
-
+logic               AssertBadMemR_W; 
+logic               AssertIllegalRegister; 
+logic               AssertBadMemAccessReg;
+logic               AssertBadMemAccessCore;
+logic               AssertIllegalPC;
 always_comb begin : assertion
 AssertBadMemR_W = CtrlMemRdQ103H && CtrlMemWrQ103H;
 AssertBadMemAccessReg = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && (MemAdrsQ103H[MSB_REGION:LSB_REGION] != D_MEM_REGION));
 AssertBadMemAccessCore = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && MemAdrsQ103H[MSB_CORE_ID:LSB_CORE_ID] != core_id_strap);
 AssertIllegalRegister = (CtrlRegWrQ104H && (RegWrPtrQ104H > 16 ));
+AssertIllegalPC = (PcQ100H > 32'hfff);
 end
 
 
