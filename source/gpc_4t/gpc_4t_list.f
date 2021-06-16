@@ -13,5 +13,5 @@
 ../source/gpc_4t/rtl/i_mem_wrap.sv
 
 //Simulation - Test Bench
-../verif/gpc_4t_tb.sv
+../verif/tb/gpc_4t_tb.sv
 

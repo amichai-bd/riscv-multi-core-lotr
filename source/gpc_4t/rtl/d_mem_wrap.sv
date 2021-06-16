@@ -38,8 +38,8 @@ logic [31:0] cr_q;
 logic [31:0] cr_data_core;
 logic [31:0] data_q;
 logic [1:0] ThreadIDQ103H;
-logic [15:0] StkOffsetQ103H;
-logic [15:0] TlsOffsetQ103H;
+logic [31:0] StkOffsetQ103H;
+logic [31:0] TlsOffsetQ103H;
 logic [4:0] DfdThreadQ103H;
 logic [7:0] core_id_strap     ;
 logic       MatchLocalCoreQ103H  ;
@@ -153,14 +153,14 @@ end
 `LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_2  , data[4:0] ,  clock  ,  cr_en.dfd_id_2     , rst  ,  1'b1)
 `LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_3  , data[4:0] ,  clock  ,  cr_en.dfd_id_3     , rst  ,  1'b1)
 
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_0, data[15:0] ,  clock  ,  cr_en.stk_ofst_0   , rst  ,  32'h400200)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_1, data[15:0] ,  clock  ,  cr_en.stk_ofst_1   , rst  ,  32'h400400)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_2, data[15:0] ,  clock  ,  cr_en.stk_ofst_2   , rst  ,  32'h400600)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_3, data[15:0] ,  clock  ,  cr_en.stk_ofst_3   , rst  ,  32'h400800)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_0, data[15:0] ,  clock  ,  cr_en.tls_ofst_0   , rst  ,  32'h400200)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_1, data[15:0] ,  clock  ,  cr_en.tls_ofst_1   , rst  ,  32'h400400)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_2, data[15:0] ,  clock  ,  cr_en.tls_ofst_2   , rst  ,  32'h400600)
-`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_3, data[15:0] ,  clock  ,  cr_en.tls_ofst_3   , rst  ,  32'h400800)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_0, data[31:0] ,  clock  ,  cr_en.stk_ofst_0   , rst  ,  32'h400200)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_1, data[31:0] ,  clock  ,  cr_en.stk_ofst_1   , rst  ,  32'h400400)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_2, data[31:0] ,  clock  ,  cr_en.stk_ofst_2   , rst  ,  32'h400600)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_3, data[31:0] ,  clock  ,  cr_en.stk_ofst_3   , rst  ,  32'h400800)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_0, data[31:0] ,  clock  ,  cr_en.tls_ofst_0   , rst  ,  32'h400200)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_1, data[31:0] ,  clock  ,  cr_en.tls_ofst_1   , rst  ,  32'h400400)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_2, data[31:0] ,  clock  ,  cr_en.tls_ofst_2   , rst  ,  32'h400600)
+`LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_3, data[31:0] ,  clock  ,  cr_en.tls_ofst_3   , rst  ,  32'h400800)
 
 
 `LOTR_EN_RST_MSFF       (cr_ro.pc           , PcQ103H ,  clock  ,  cr_en.pc         , rst )
@@ -224,7 +224,7 @@ always_comb begin
              //CR_RST_PC    : cr_data_core  = {31'b0,cr_mem.cr.rst_pc};
              CR_THREAD_ID_Q103H           : cr_data_core  = cr_ro.thread; 
              CR_CORE_ID                 : cr_data_core  = {23'b0,core_id_strap}; //FIXME - add strap CORE_ID from top level
-             CR_STACK_BASE_OFFSET       : cr_data_core  = cr_ro.stk_ofst ;
+             CR_STACK_BASE_OFFSET       : cr_data_core  = StkOffsetQ103H ;
              CR_TLS_BASE_OFFSET         : cr_data_core  = cr_ro.tls_ofst ;
              CR_SHARED_BASE_OFFSET      : cr_data_core  = cr_ro.shrd_ofst;
              CR_I_MEM_MSB               : cr_data_core  = cr_ro.i_mem_msb;

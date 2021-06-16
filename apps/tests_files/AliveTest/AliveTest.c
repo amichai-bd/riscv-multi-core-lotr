@@ -1,14 +1,14 @@
 // 4KB of D_MEM
-// 2048 - 4096 - Shared
+// 0x400800 - 0x400fff - Shared
 //
-// 1536 -    2048 - Thread 1
-// 1024 -    1536 - Thread 1
-// 512  -    1024 - Thread 1
-// 0    -    512  - Thread 0
+// 0x400600 - 0x400800 - Thread 3
+// 0x400400 - 0x400600 - Thread 2
+// 0x400200 - 0x400400 - Thread 1
+// 0x400000 - 0x400200 - Thread 0
 
 // REGION == 2'b01;
 
-#define D_MEM_SHARED (*(volatile int (*)[64])(0x00401000))
+#define D_MEM_SHARED ((volatile int *) (0x00400f00))
 
 //////////Register-Immediate Instructions///////////
 void ADDI(int a){

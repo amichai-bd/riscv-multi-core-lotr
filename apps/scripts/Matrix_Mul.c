@@ -1,3 +1,18 @@
+/*Matrix_Mul.c
+Calculate 3x3 matrix multiply
+test owner: Adi Levy
+Created : 06/06/2021
+*/
+// 4KB of D_MEM
+// 0x400800 - 0x400fff - Shared
+//
+// 0x400600 - 0x400800 - Thread 3
+// 0x400400 - 0x400600 - Thread 2
+// 0x400200 - 0x400400 - Thread 1
+// 0x400000 - 0x400200 - Thread 0
+
+// REGION == 2'b01;
+
 void multiply(int mat1[][3], int mat2[][3], int res[][3])
 {
     int i, j, k;
@@ -9,10 +24,11 @@ void multiply(int mat1[][3], int mat2[][3], int res[][3])
         }
     }
 }
- #define MMIO_GENERAL  (*(volatile int (*)[64])(0x00400F00))//
- 
+#define MMIO_GENERAL  ((volatile int *) (0x00400f00)) 
 int main()
 {
+    int i,j;
+    int k=0;
     int mat1[3][3];              
     mat1[0][0] = 1;
     mat1[0][1] = 2;
@@ -35,16 +51,9 @@ int main()
     mat2[2][2] = 1;
     int res[3][3]; // To store result
     multiply(mat1, mat2, res);
-    MMIO_GENERAL[0] = res[0][0];
-    MMIO_GENERAL[1] = res[0][1];
-    MMIO_GENERAL[2] = res[0][2];
-    MMIO_GENERAL[3] = res[1][0];
-    MMIO_GENERAL[4] = res[1][1];
-    MMIO_GENERAL[5] = res[1][2];
-    MMIO_GENERAL[6] = res[2][0];
-    MMIO_GENERAL[7] = res[2][1];
-    MMIO_GENERAL[8] = res[2][2];
-    MMIO_GENERAL[63] = 255;
- 
+     for(i=0;i<3;i++)
+        for(j=0;j<3;j++)
+        MMIO_GENERAL[k++]=res[i][j];         
+
     return 0;
 }

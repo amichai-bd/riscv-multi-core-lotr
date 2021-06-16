@@ -4,8 +4,8 @@ __DYNAMIC  =  0;
 MEMORY
 {
     instrram    : ORIGIN = 0x00000000, LENGTH = 0x1000
-    dataram     : ORIGIN = 0x00400800, LENGTH = 0x0600
-    stack       : ORIGIN = 0x00400E00, LENGTH = 0x0100
+    dataram     : ORIGIN = 0x00400800, LENGTH = 0x1000
+    stack       : ORIGIN = 0x00400000, LENGTH = 0x0200
 }
 
 /* Stack information variables */
@@ -29,16 +29,6 @@ SECTIONS
         _stext = .;
         *(.text)
         _etext  =  .;
-        __CTOR_LIST__ = .;
-        LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
-        *(.ctors)
-        LONG(0)
-        __CTOR_END__ = .;
-        __DTOR_LIST__ = .;
-        LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
-        *(.dtors)
-        LONG(0)
-        __DTOR_END__ = .;
         *(.lit)
         *(.shdata)
         _endtext = .;
