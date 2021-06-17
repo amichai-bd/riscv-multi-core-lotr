@@ -1,8 +1,9 @@
-CC = riscv64-elf-gcc
-CPP = riscv64-elf-cpp
-LD = riscv64-elf-ld
-AR = riscv64-elf-ar
-OBJDUMP = riscv64-elf-objdump
+TOOLCHAIN_PREFIX = riscv64-elf
+CC = ${TOOLCHAIN_PREFIX}-gcc
+CPP = ${TOOLCHAIN_PREFIX}-cpp
+LD = ${TOOLCHAIN_PREFIX}-ld
+AR = ${TOOLCHAIN_PREFIX}-ar
+OBJDUMP = ${TOOLCHAIN_PREFIX}-objdump
 
 DEBUG_BUILD ?= 0
 
