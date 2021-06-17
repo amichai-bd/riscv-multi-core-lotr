@@ -4,6 +4,7 @@ CPP = ${TOOLCHAIN_PREFIX}-cpp
 LD = ${TOOLCHAIN_PREFIX}-ld
 AR = ${TOOLCHAIN_PREFIX}-ar
 OBJDUMP = ${TOOLCHAIN_PREFIX}-objdump
+OBJCOPY = ${TOOLCHAIN_PREFIX}-objcopy
 
 DEBUG_BUILD ?= 0
 
@@ -87,6 +88,7 @@ out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/empty.o
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
+	$(OBJCOPY)  --srec-len 1 --output-target=verilog $@ $@.sv
 
 out/$(PREFIX)/bin/empty: .EXTRA_PREREQS = libgpc
 
@@ -94,6 +96,7 @@ out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
+	$(OBJCOPY)  --srec-len 1 --output-target=verilog $@ $@.sv
 
 out/$(PREFIX)/bin/prime_factoring: .EXTRA_PREREQS = libgpc
 
