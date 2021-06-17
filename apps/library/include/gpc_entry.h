@@ -9,9 +9,7 @@
  *
  * Invoked by a single thread on reset. Other threads are asleep
  *
- * @param core_global pointer to core-global storage
- * @param core_global_size size of core-global storage
- * @param cr_space pointer to CR space
+ * @param gpc_params GPC parameters
  */
 extern void gpc_global_setup(const gpc_params_t *gpc_params);
 
@@ -20,24 +18,14 @@ extern void gpc_global_setup(const gpc_params_t *gpc_params);
  *
  * Executed once per thread after global setup
  *
- * @param tid thread ID
- * @param tls pointer to thread-local storage
- * @param tls_size size of thread-local storage
- * @param core_global pointer to core-global storage
- * @param core_global_size size of core-global storage
- * @param cr_space pointer to CR space
+ * @param gpc_params GPC parameters
  */
 extern void gpc_local_setup(const gpc_params_t *gpc_params);
 
 /**
  * Loop entry point: executed in an infinite loop after setup
  *
- * @param tid thread ID
- * @param tls pointer to thread-local storage
- * @param tls_size size of thread-local storage
- * @param core_global pointer to core-global storage
- * @param core_global_size size of core-global storage
- * @param cr_space pointer to CR space
+ * @param gpc_params GPC parameters
  */
 extern void gpc_loop(const gpc_params_t *gpc_params);
 
