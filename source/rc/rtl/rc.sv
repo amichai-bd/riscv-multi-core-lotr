@@ -531,6 +531,7 @@ always_comb begin : set_the_select_next_ring_output_logic
 end //always_comb
 
 
+
 always_comb begin : select_next_ring_output
     //mux 4:1
     unique casez (SelRingOutQ501H)
