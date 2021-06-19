@@ -53,6 +53,14 @@
 		end \
 	end
 
+`define  ONE_HOT_TO_ENC(number , one_hot_vec )\
+	always_comb begin\
+		number = '0 ;\
+		for (int i = 0 ; i <$bits(one_hot_vec) ;i++) begin\
+			if (one_hot_vec[i])\
+				number = i ;\
+		end\
+	end
 
 
 `endif // lotr_defines

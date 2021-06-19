@@ -6,6 +6,41 @@ module rc_tb ();
 	// clock and reset for tb
 	logic  clk_tb;
 	logic  rst_tb;
+	logic  [7:0]  coreID_tb  		          ; 
+
+	logic         RingInputValidQ500H_tb     ; 
+	logic  [1:0]  RingInputOpcodeQ500H_tb      ; 
+	logic  [31:0] RingInputAddressQ500H_tb     ; 
+	logic  [31:0] RingInputDataQ500H_tb        ; 
+	
+	logic         RingOutputValidQ502H_tb      ; 
+	logic  [1:0]  RingOutputOpcodeQ502H_tb     ; 
+	logic  [31:0] RingOutputAddressQ502H_tb    ; 
+	logic  [31:0] RingOutputDataQ502H_tb       ; 
+	
+	logic         C2F_ReqValidQ500H_tb         ; 
+	logic  [1:0]  C2F_ReqOpcodeQ500H_tb        ; 
+	logic  [1:0]  C2F_ReqThreadIDQ500H_tb      ; 
+	logic  [31:0] C2F_ReqAddressQ500H_tb       ; 
+	logic  [31:0] C2F_ReqDataQ500H_tb          ; 	
+	
+	
+	logic         C2F_RspValidQ502H_tb         ; 
+	logic [1:0]   C2F_RspThreadIDQ502H_tb      ; 
+	logic [31:0]  C2F_RspDataQ502H_tb          ; 
+	logic         C2F_RspStall_tb              ; 
+	
+	logic         F2C_RspValidQ500H_tb         ; 
+	logic  [1:0]  F2C_RspOpcodeQ500H_tb        ;  // Fixme -  not sure neccesety - the core recieve only read responses
+	logic  [31:0] F2C_RspAddressQ500H_tb       ; 
+	logic  [31:0] F2C_RspDataQ500H_tb          ; 
+	
+	logic         F2C_ReqValidQ502H_tb         ; 
+	logic  [1:0]  F2C_ReqOpcodeQ502H_tb        ; 
+	logic  [31:0] F2C_ReqAddressQ502H_tb       ; 
+	logic  [31:0] F2C_ReqDataQ502H_tb 		   ; 
+	
+	
 
 	// clock generation
 	initial begin: clock_gen
@@ -21,49 +56,61 @@ module rc_tb ();
 		#40 rst_tb = 1'b0;
 	end: reset_gen
 	
-	logic         RingInputValidQ500H_tb     = '0 ; 
-	logic  [1:0]  RingInputOpcodeQ500H_tb    = '0 ; 
-	logic  [31:0] RingInputAddressQ500H_tb   = '0 ; 
-	logic  [31:0] RingInputDataQ500H_tb      = '0 ; 
 	
-	logic         RingOutputValidQ502H_tb    = '0 ; 
-	logic  [1:0]  RingOutputOpcodeQ502H_tb   = '0 ; 
-	logic  [31:0] RingOutputAddressQ502H_tb  = '0 ; 
-	logic  [31:0] RingOutputDataQ502H_tb     = '0 ; 
 	
-	logic         C2F_ReqValidQ500H_tb       = '0 ; 
-	logic  [1:0]  C2F_ReqOpcodeQ500H_tb      = '0 ; 
-	logic  [1:0]  C2F_ReqThreadIDQ500H_tb    = '0 ; 
-	logic  [31:0] C2F_ReqAddressQ500H_tb     = '0 ; 
-	logic  [31:0] C2F_ReqDataQ500H_tb        = '0 ; 	
 	
-	logic  [7:0]  coreID_tb  		         = 8'b0000_0010 ; 
 	
-	logic         C2F_RspValidQ502H_tb       = '0 ; 
-	logic [1:0]   C2F_RspThreadIDQ502H_tb    = '0 ; 
-	logic [31:0]  C2F_RspDataQ502H_tb        = '0 ; 
-	logic         C2F_RspStall_tb            = '0 ; 
+	initial begin: first_insertion
+		coreID_tb  		         = 8'b0000_0010 ; 
+
+	    RingInputValidQ500H_tb     = '0 ; 
+		RingInputOpcodeQ500H_tb    = '0 ; 
+		RingInputAddressQ500H_tb   = '0 ; 
+		RingInputDataQ500H_tb      = '0 ; 
 	
-	logic         F2C_RspValidQ500H_tb       = '0 ; 
-	logic  [1:0]  F2C_RspOpcodeQ500H_tb      = '0 ;  // Fixme -  not sure neccesety - the core recieve only read responses
-	logic  [31:0] F2C_RspAddressQ500H_tb     = '0 ; 
-	logic  [31:0] F2C_RspDataQ500H_tb        = '0 ; 
+		RingOutputValidQ502H_tb    = '0 ; 
+		RingOutputOpcodeQ502H_tb   = '0 ; 
+		RingOutputAddressQ502H_tb  = '0 ; 
+		RingOutputDataQ502H_tb     = '0 ; 
 	
-	logic         F2C_ReqValidQ502H_tb       = '0 ; 
-	logic  [1:0]  F2C_ReqOpcodeQ502H_tb      = '0 ; 
-	logic  [31:0] F2C_ReqAddressQ502H_tb     = '0 ; 
-	logic  [31:0] F2C_ReqDataQ502H_tb 		 = '0 ; 
+		C2F_ReqValidQ500H_tb       = '0 ; 
+		C2F_ReqOpcodeQ500H_tb      = '0 ; 
+		C2F_ReqThreadIDQ500H_tb    = '0 ; 
+		C2F_ReqAddressQ500H_tb     = '0 ; 
+		C2F_ReqDataQ500H_tb        = '0 ; 	
 	
+		C2F_RspValidQ502H_tb       = '0 ; 
+		C2F_RspThreadIDQ502H_tb    = '0 ; 
+		C2F_RspDataQ502H_tb        = '0 ; 
+		C2F_RspStall_tb            = '0 ; 
+	
+		F2C_RspValidQ500H_tb       = '0 ; 
+		F2C_RspOpcodeQ500H_tb      = '0 ;  // Fixme -  not sure neccesety - the core recieve only read responses
+		F2C_RspAddressQ500H_tb     = '0 ; 
+		F2C_RspDataQ500H_tb        = '0 ; 
+	
+		F2C_ReqValidQ502H_tb       = '0 ; 
+		F2C_ReqOpcodeQ502H_tb      = '0 ; 
+		F2C_ReqAddressQ502H_tb     = '0 ; 
+		F2C_ReqDataQ502H_tb 		 = '0 ; 
+	end: first_insertion
+
 	initial begin: wr_req_in_ring_input
 		#95
 		RingInputValidQ500H_tb     = 1'b1 ; 
 		RingInputOpcodeQ500H_tb    = 2'b10 ; //write
 		RingInputAddressQ500H_tb   = 32'h0200_0001 ; 
 		RingInputDataQ500H_tb      = 32'h0200_0001 ; 
+		#10
+		RingInputValidQ500H_tb     = 1'b0 ; 
+		RingInputOpcodeQ500H_tb    = 2'b00 ; //write
+		RingInputAddressQ500H_tb   = 32'h0000_0000 ; 
+		RingInputDataQ500H_tb      = 32'h0000_0000 ; 
+		
 	end: wr_req_in_ring_input
-	
+	/*
 	initial begin: rd_req_from_the_core
-		#105
+		#200
 		C2F_ReqValidQ500H_tb       = 1'b1 ; 
 		C2F_ReqOpcodeQ500H_tb      = 2'b00 ; //read
 		C2F_ReqThreadIDQ500H_tb    = 2'b01 ; 
@@ -78,10 +125,11 @@ module rc_tb ();
 		RingInputAddressQ500H_tb   = 32'h1100_0001 ; 
 		RingInputDataQ500H_tb      = 32'h0000_1111 ; 
 	end: forward_req
-
+	*/
 rc i_rc(	  
 			  .QClk  		(clk_tb)         ,
 			  .RstQnnnH  	(rst_tb)         ,
+			  .coreID       		  (coreID_tb) ,
 			  .RingInputValidQ500H    (RingInputValidQ500H_tb) ,
 			  .RingInputOpcodeQ500H   (RingInputOpcodeQ500H_tb) ,
 			  .RingInputAddressQ500H  (RingInputAddressQ500H_tb) ,
@@ -95,7 +143,6 @@ rc i_rc(
 			  .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H_tb) ,
 			  .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H_tb) ,
 			  .C2F_ReqDataQ500H       (C2F_ReqDataQ500H_tb) ,
-			  .coreID       (coreID_tb) ,
 
 			  .C2F_RspValidQ502H      () ,// out
 			  .C2F_RspThreadIDQ502H   () ,//out
@@ -316,3 +363,4 @@ end
 
 */
 endmodule // tb_top
+
