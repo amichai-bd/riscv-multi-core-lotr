@@ -41,4 +41,9 @@
 #define GPC_CR_THREAD2_DFD_REG_DATA        0x178
 #define GPC_CR_THREAD3_DFD_REG_DATA        0x17c
 
+#define GPC_CR_SCRATCHPAD0                 0x200
+#define GPC_CR_SCRATCHPAD1                 0x204
+#define GPC_CR_SCRATCHPAD2                 0x208
+#define GPC_CR_SCRATCHPAD3                 0x20c
+
 #endif
