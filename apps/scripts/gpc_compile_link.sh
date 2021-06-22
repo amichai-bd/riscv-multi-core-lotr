@@ -8,6 +8,8 @@ if [ "$1" == "-help" ];then
     cat ./README.txt
     exit 1
 fi
+temp=`find /home/ -name 'riscv32-unknown-elf-gcc'`
+GNU_DIR_NAME=`echo $temp |cut -d/ -f 3`
 str=riscv/install/rv32i/bin/
 mod=i
 if [ "$1" == "-e" ];then
@@ -15,7 +17,7 @@ if [ "$1" == "-e" ];then
     mod=e
 fi
 
-GNU_DIR=/home/adlv/projects/$str
+GNU_DIR=/home/${GNU_DIR_NAME}/projects/$str
 if [ "$#" == "3" ];then
     #create assembly file from c file
     if [ "$2" == "-l" ]||[ "$2" == "-n" ];then
@@ -61,6 +63,9 @@ if [ "$#" == "1" ];then
     fi
     if [ ! -d "../../verif/Tests/$1" ];then
         mkdir ../../verif/Tests/$1
+    fi
+    if [ ! -d "../../target/$1" ];then
+        mkdir ../../target/$1
     fi
     cp $1.c ../tests_files/$1
     cp $1.c ../../verif/Tests/$1
