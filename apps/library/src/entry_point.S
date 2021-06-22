@@ -57,7 +57,7 @@ init_stack:
       li a1, GPC_MEM_STACK_SIZE
       mv a2, t0
       call init_multiply
-      addi sp, a0, GPC_MEM_STACK_SIZE - 4
+      addi sp, a0, GPC_MEM_STACK_SIZE
       mv fp, sp
 
 init_gpc_params:
