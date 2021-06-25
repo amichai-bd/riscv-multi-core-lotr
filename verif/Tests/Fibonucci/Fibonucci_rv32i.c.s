@@ -52,7 +52,7 @@ main:
 	sw	ra,28(sp)
 	sw	s0,24(sp)
 	addi	s0,sp,32
-	li	a0,6
+	li	a0,9
 	call	fib
 	mv	a5,a0
 	sw	a5,-20(s0)

@@ -1,0 +1,114 @@
+
+Binary_Search_rv32i.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00000000 <_stack_start-0x400200>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	1340006f          	j	148 <reset_handler>
+
+Disassembly of section .text:
+
+00000018 <main>:
+  18:	fb010113          	addi	sp,sp,-80
+  1c:	04812623          	sw	s0,76(sp)
+  20:	05010413          	addi	s0,sp,80
+  24:	00100793          	li	a5,1
+  28:	faf42e23          	sw	a5,-68(s0)
+  2c:	00500793          	li	a5,5
+  30:	fcf42023          	sw	a5,-64(s0)
+  34:	00700793          	li	a5,7
+  38:	fcf42223          	sw	a5,-60(s0)
+  3c:	00300793          	li	a5,3
+  40:	fcf42423          	sw	a5,-56(s0)
+  44:	00500793          	li	a5,5
+  48:	fcf42623          	sw	a5,-52(s0)
+  4c:	00900793          	li	a5,9
+  50:	fcf42823          	sw	a5,-48(s0)
+  54:	03200793          	li	a5,50
+  58:	fcf42a23          	sw	a5,-44(s0)
+  5c:	00200793          	li	a5,2
+  60:	fcf42c23          	sw	a5,-40(s0)
+  64:	00900793          	li	a5,9
+  68:	fef42023          	sw	a5,-32(s0)
+  6c:	fe042623          	sw	zero,-20(s0)
+  70:	00200793          	li	a5,2
+  74:	fef42423          	sw	a5,-24(s0)
+  78:	fe042223          	sw	zero,-28(s0)
+  7c:	004017b7          	lui	a5,0x401
+  80:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x700>
+  84:	0007a023          	sw	zero,0(a5)
+  88:	0980006f          	j	120 <_min_stack+0x20>
+  8c:	fe842703          	lw	a4,-24(s0)
+  90:	fec42783          	lw	a5,-20(s0)
+  94:	40f707b3          	sub	a5,a4,a5
+  98:	01f7d713          	srli	a4,a5,0x1f
+  9c:	00f707b3          	add	a5,a4,a5
+  a0:	4017d793          	srai	a5,a5,0x1
+  a4:	00078713          	mv	a4,a5
+  a8:	fec42783          	lw	a5,-20(s0)
+  ac:	00e787b3          	add	a5,a5,a4
+  b0:	fcf42e23          	sw	a5,-36(s0)
+  b4:	fdc42783          	lw	a5,-36(s0)
+  b8:	00279793          	slli	a5,a5,0x2
+  bc:	ff040713          	addi	a4,s0,-16
+  c0:	00f707b3          	add	a5,a4,a5
+  c4:	fcc7a783          	lw	a5,-52(a5)
+  c8:	fe042703          	lw	a4,-32(s0)
+  cc:	00f71e63          	bne	a4,a5,e8 <main+0xd0>
+  d0:	00100793          	li	a5,1
+  d4:	fef42223          	sw	a5,-28(s0)
+  d8:	004017b7          	lui	a5,0x401
+  dc:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x700>
+  e0:	00100713          	li	a4,1
+  e4:	00e7a023          	sw	a4,0(a5)
+  e8:	fdc42783          	lw	a5,-36(s0)
+  ec:	00279793          	slli	a5,a5,0x2
+  f0:	ff040713          	addi	a4,s0,-16
+  f4:	00f707b3          	add	a5,a4,a5
+  f8:	fcc7a783          	lw	a5,-52(a5)
+  fc:	fe042703          	lw	a4,-32(s0)
+ 100:	00e7da63          	bge	a5,a4,114 <_min_stack+0x14>
+ 104:	fdc42783          	lw	a5,-36(s0)
+ 108:	00178793          	addi	a5,a5,1
+ 10c:	fef42623          	sw	a5,-20(s0)
+ 110:	0100006f          	j	120 <_min_stack+0x20>
+ 114:	fdc42783          	lw	a5,-36(s0)
+ 118:	fff78793          	addi	a5,a5,-1
+ 11c:	fef42423          	sw	a5,-24(s0)
+ 120:	fec42703          	lw	a4,-20(s0)
+ 124:	fe842783          	lw	a5,-24(s0)
+ 128:	00e7c663          	blt	a5,a4,134 <_min_stack+0x34>
+ 12c:	fe442783          	lw	a5,-28(s0)
+ 130:	f4078ee3          	beqz	a5,8c <main+0x74>
+ 134:	00000013          	nop
+ 138:	00078513          	mv	a0,a5
+ 13c:	04c12403          	lw	s0,76(sp)
+ 140:	05010113          	addi	sp,sp,80
+ 144:	00008067          	ret
+
+00000148 <reset_handler>:
+ 148:	00000093          	li	ra,0
+ 14c:	00008113          	mv	sp,ra
+ 150:	00008193          	mv	gp,ra
+ 154:	00008213          	mv	tp,ra
+ 158:	00008293          	mv	t0,ra
+ 15c:	00008313          	mv	t1,ra
+ 160:	00008393          	mv	t2,ra
+ 164:	00008413          	mv	s0,ra
+ 168:	00008493          	mv	s1,ra
+ 16c:	00008513          	mv	a0,ra
+ 170:	00008593          	mv	a1,ra
+ 174:	00008613          	mv	a2,ra
+ 178:	00008693          	mv	a3,ra
+ 17c:	00008713          	mv	a4,ra
+ 180:	00008793          	mv	a5,ra
+ 184:	00c002b7          	lui	t0,0xc00
+ 188:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+ 18c:	0002a103          	lw	sp,0(t0)
+ 190:	e89ff0ef          	jal	ra,18 <main>

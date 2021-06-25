@@ -134,7 +134,7 @@ SRLI:
 	addi	s0,sp,32
 	sw	a0,-20(s0)
  #APP
-# 37 "AliveTest.c" 1
+# 42 "AliveTest.c" 1
 	lui a5,0x41;addi a5,a5,-512;lw a4,-20(s0);srli a4,a4,0xc;sw	a4,24(a5)
 # 0 "" 2
  #NO_APP
@@ -336,7 +336,7 @@ SRL:
 	sw	a0,-20(s0)
 	sw	a1,-24(s0)
  #APP
-# 85 "AliveTest.c" 1
+# 90 "AliveTest.c" 1
 	lui a5,0x41;addi a5,a5,-512;lw  a4,-24(s0);lw  a3,-20(s0);srl a4,a3,a4;sw  a4,60(a5);
 # 0 "" 2
  #NO_APP
