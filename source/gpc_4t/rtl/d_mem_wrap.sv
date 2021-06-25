@@ -47,6 +47,7 @@ logic       MatchLocalCoreQ104H  ;
 logic       MatchD_MemRegionQ103H;
 logic       MatchD_MemRegionQ104H;
 logic       match_cr_region   ;
+logic       match_cr_regionQ104H   ;
 
 assign core_id_strap = 8'b01; //FIXME - strap from outside
 
@@ -222,7 +223,7 @@ always_comb begin
         unique case (address[MSB_CR:0])
              //CR_EN_PC     : cr_data_core  = {31'b0,cr_mem.cr.en_pc} ;
              //CR_RST_PC    : cr_data_core  = {31'b0,cr_mem.cr.rst_pc};
-             CR_THREAD_ID_Q103H           : cr_data_core  = cr_ro.thread; 
+             CR_THREAD_ID_Q103H           : cr_data_core  = ThreadIDQ103H; 
              CR_CORE_ID                 : cr_data_core  = {23'b0,core_id_strap}; //FIXME - add strap CORE_ID from top level
              CR_STACK_BASE_OFFSET       : cr_data_core  = StkOffsetQ103H ;
              CR_TLS_BASE_OFFSET         : cr_data_core  = cr_ro.tls_ofst ;
@@ -252,13 +253,15 @@ always_comb begin
 end
 
 //sample the read (synchornic read)
-`LOTR_EN_MSFF(cr_q, cr_data_core, clock, match_cr_region)
+`LOTR_MSFF(cr_q, cr_data_core, clock)
+//`LOTR_EN_MSFF(cr_q, cr_data_core, clock, match_cr_region) ????????
+`LOTR_MSFF(match_cr_regionQ104H , match_cr_region ,clock)
 `LOTR_MSFF(MatchD_MemRegionQ104H , MatchD_MemRegionQ103H ,clock)
 `LOTR_MSFF(MatchLocalCoreQ104H , MatchLocalCoreQ103H ,clock)
 
 //mux between the CR and the DATA
 always_comb begin
-    q        = match_cr_region           ? cr_q :
+    q        = match_cr_regionQ104H    ? cr_q :
                MatchD_MemRegionQ104H   ? data_q :
                                             32'b0  ;
     

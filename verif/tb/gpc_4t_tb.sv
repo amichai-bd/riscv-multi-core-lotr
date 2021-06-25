@@ -8,14 +8,6 @@ module gpc_4t_tb ();
     logic                   clk;
     logic                   rst;
     
-    // allow vcd dump
-    //initial begin
-    //    if ($test$plusargs("vcd")) begin
-    //        $dumpfile("gpc_4t_tb.vcd");
-    //        $dumpvars(0, gpc_4t_tb);
-    //    end
-    //end
-
     // clock generation
     initial begin: clock_gen
         forever begin
@@ -30,26 +22,11 @@ module gpc_4t_tb ();
         #40 rst = 1'b0;
     end: reset_gen
 
-    `define TEST_DEFINE
-    //+define+TEST_DEFINE="Matrix_Mul"
-
 
     initial begin: test_seq
-            $display(`TEST_DEFINE);
-            $readmemh("../verif/Tests/Matrix_Mul/Matrix_Mul_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-            $readmemh("../verif/Tests/Matrix_Mul/Matrix_Mul_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
-            //gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4] = 0;
-            //while (gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4]==0)  
-            //    #4000
-           //  //wait until sequence is done. 
-           
-            //gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-4] = 0;
-           // gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-1] = 0;
-            //$readmemh("../apps/alive/test_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-            //$readmemh("../apps/alive/test_inst_mem_rv32i.sv", gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
-            //while (gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[SIZE_D_MEM-1]==0) begin 
-            // //wait until sequence is done.   
-            //end
+            $display(hpath);
+            $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
+            $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
             #200000 
             $fclose(f1);  
             $fclose(f2);  
@@ -97,12 +74,13 @@ integer f5;
 integer f6;
 initial begin
     $timeformat(-9, 1, " ", 6);
-    f1 = $fopen("../target/trk_write_registers.log","w");
-    f2 = $fopen("../target/trk_d_mem_access.log","w");
-    f3 = $fopen("../target/trk_brach_op.log","w");
-    f4 = $fopen("../target/trk_alu.log","w");
-    f5 = $fopen("../target/trk_error.log","w");
-    f6 = $fopen("../target/trk_shared_space.log","w");
+    //logPath = {"../target/",hpath,"/trk_write_registers.log"};
+    f1 = $fopen({"../target/",hpath,"/trk_write_registers.log"},"w");
+    f2 = $fopen({"../target/",hpath,"/trk_d_mem_access.log"},"w");
+    f3 = $fopen({"../target/",hpath,"/trk_brach_op.log"},"w");
+    f4 = $fopen({"../target/",hpath,"/trk_alu.log"},"w");
+    f5 = $fopen({"../target/",hpath,"/trk_error.log"},"w");
+    f6 = $fopen({"../target/",hpath,"/trk_shared_space.log"},"w");
     
          $fwrite(f1,"-------------------------------------------------\n");
          $fwrite(f1,"Time\t| Thread | Register Num\t| Wr Data\t|\n");
@@ -255,7 +233,7 @@ end
 
 //tracker to shared space
 always @(posedge clk) begin : write_to_shrd
-    if (CtrlMemWrQ104H && MemAdrsQ104H >= 0'h400f00 && MemAdrsQ104H < 0'h400fff ) begin 
+    if (CtrlMemWrQ104H && MemAdrsQ104H >= 32'h400f00 && MemAdrsQ104H < 32'h400fff ) begin 
         $fwrite(f6,"%t\t| %8h\t| WRITE\t\t| %d\t| \n", $realtime,MemAdrsQ104H , MemWrDataWQ104H);
         end
 end
@@ -292,7 +270,7 @@ if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalRegister) begin
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalPC) begin
     $fwrite(f5, "ERROR : AssertIllegalPC",$realtime);
-    $display("ERROR: Failed assertion");
+    //$display("ERROR: Failed assertion");
     $finish;
     end
 if(AssertIllegalOpCode) begin

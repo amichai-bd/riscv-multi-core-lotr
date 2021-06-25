@@ -35,19 +35,14 @@ reset_handler:
 //  mv x31, x1
 
   /* stack initilization */
-  //li   x5,12582924
-  //lw   x2, 0(x5)
-  la   x2, _stack_start
+  li   x5,12582924
+  lw   x2, 0(x5)
+  jal x1, main
 
 
 _start:
   .global _start
 
-
-
-main_entry:
-  /* jump to main program entry point (argc = argv = 0) */
-  jal x1, main
 
 
 /* This section has to be down here, since we have to disable rvc for it  */
@@ -56,7 +51,7 @@ main_entry:
   .option norvc;
   .org 0x00
   .rept 5
-  nop                       // unused
+  nop                       
   .endr
 
 
@@ -64,11 +59,5 @@ main_entry:
   .org 0x14
   jal x0, reset_handler
   
-  .global _init
-  .global _fini
-_init:
-_fini:
-  # These don't have to do anything since we use init_array/fini_array.
-  ret
-  
+
 

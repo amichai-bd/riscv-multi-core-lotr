@@ -1,4 +1,4 @@
-/*Fibbonucci.c
+/*Fibonucci.c
 Calculate the n'th number of the Fibbonucci series
 test owner: Adi Levy
 Created : 06/06/2021
@@ -25,7 +25,7 @@ int fib(unsigned n)
 #define MMIO_GENERAL  ((volatile int *) (0x00400f00))
 
 int main() {
-    unsigned x = fib(6);
+    unsigned x = fib(9);
     MMIO_GENERAL[62] = x;
     return 0;
 }
