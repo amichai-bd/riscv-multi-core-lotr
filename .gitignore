@@ -5,3 +5,4 @@ modelsim/*
 target/*
 transcript
 !modelsim/README*
+!target/README*

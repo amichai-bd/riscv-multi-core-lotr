@@ -36,10 +36,8 @@ static inline uint32_t mod(uint32_t a, uint32_t b) {
     return a;
 }
 
-void gpc_global_setup(
-    void *core_global, size_t core_global_size,
-    volatile void *cr_space) {
-    global_t *g = (global_t *) core_global;
+void gpc_global_setup(const gpc_params_t *gpc_params) {
+    global_t *g = (global_t *) gpc_params->global_data;
     gpc_memset(g, sizeof(*g), 0);
     // TODO: an ugly hack to pass input. real world code will need a better mechanism
     // input was generated in a fair dice roll. guaranteed to be random
@@ -56,20 +54,17 @@ static void worker_local_setup(uint32_t tid, global_t *g, local_t *l) {
     l->step = GPC_CORE_N_THREADS - 1;
 }
 
-void gpc_local_setup(uint32_t tid,
-    void *tls, size_t tls_size,
-    void *core_global, size_t core_global_size,
-    volatile void *cr_space) {
-    global_t *g = (global_t *) core_global;
-    local_t *l = (local_t *) tls;
+void gpc_local_setup(const gpc_params_t *gpc_params) {
+    global_t *g = (global_t *) gpc_params->global_data;
+    local_t *l = (local_t *) gpc_params->local_data;
 
     gpc_memset(l, sizeof(*l), 0);
 
-    if(tid == MANAGER_TID) {
+    if(gpc_params->tid == MANAGER_TID) {
         manager_local_setup(g, l);
     }
     else {
-        worker_local_setup(tid, g, l);
+        worker_local_setup(gpc_params->tid, g, l);
     }
 }
 
@@ -107,15 +102,12 @@ static void worker_loop(uint32_t tid, global_t *g, local_t *l) {
     }
 }
 
-void gpc_loop(uint32_t tid,
-    void *tls, size_t tls_size,
-    void *core_global, size_t core_global_size,
-    volatile void *cr_space) {
-    global_t *g = (global_t *) core_global;
-    local_t *l = (local_t *) tls;
-    if(tid == MANAGER_TID) {
+void gpc_loop(const gpc_params_t *gpc_params) {
+    global_t *g = (global_t *) gpc_params->global_data;
+    local_t *l = (local_t *) gpc_params->local_data;
+    if(gpc_params->tid == MANAGER_TID) {
         manager_loop(g, l);
     } else {
-        worker_loop(tid, g, l);
+        worker_loop(gpc_params->tid, g, l);
     }
 }

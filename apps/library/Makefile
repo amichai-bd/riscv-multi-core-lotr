@@ -1,7 +1,10 @@
-CC = riscv64-elf-gcc
-LD = riscv64-elf-ld
-AR = riscv64-elf-ar
-OBJDUMP = riscv64-elf-objdump
+TOOLCHAIN_PREFIX = riscv64-elf
+CC = ${TOOLCHAIN_PREFIX}-gcc
+CPP = ${TOOLCHAIN_PREFIX}-cpp
+LD = ${TOOLCHAIN_PREFIX}-ld
+AR = ${TOOLCHAIN_PREFIX}-ar
+OBJDUMP = ${TOOLCHAIN_PREFIX}-objdump
+OBJCOPY = ${TOOLCHAIN_PREFIX}-objcopy
 
 DEBUG_BUILD ?= 0
 
@@ -29,59 +32,73 @@ else
     BASE_CFLAGS += -g -DDEBUG
 endif
 
-DEFINES :=
+BASE_DEFINES :=
 
 ifeq ($(RV32E), 1)
-    DEFINES += -DUSE_RV32E=1
+    LIB_DEFINES += -DUSE_RV32E=1
 endif
 
 override CFLAGS := $(BASE_CFLAGS) $(DEFINES) $(CFLAGS)
-override LDFLAGS := -Tbuild/gpc_link.common.lds -nostdlib -m elf32lriscv $(LDFLAGS)
+override LDFLAGS := -Tout/$(PREFIX)/lib/libgpc_link.lds -nostdlib -m elf32lriscv $(LDFLAGS)
 
-all: out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.o out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
+LIB_INCLUDES := -Isrc/include
 
-obj/$(PREFIX)/entry_point.o: src/lib/entry_point.S
+LIB_CFLAGS := $(CFLAGS) $(LIB_INCLUDES) $(LIB_DEFINES)
+
+override CPPFLAGS := -P $(CPPFLAGS)
+
+all: libgpc out/$(PREFIX)/bin/empty out/$(PREFIX)/bin/prime_factoring
+
+libgpc: out/$(PREFIX)/lib/libgpc_link.lds out/$(PREFIX)/lib/libgpc.a out/$(PREFIX)/lib/libgpc_entry.a
+
+out/$(PREFIX)/lib/libgpc_link.lds: build/gpc_link.common.lds
+	mkdir -p `dirname $@`
+	$(CPP) $(CFLAGS) $(CPPFLAGS) $^ -o $@
+
+obj/$(PREFIX)/entry_point.o: src/entry_point.S
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(LIB_CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/gpc_utils.o: src/lib/gpc_utils.c
+obj/$(PREFIX)/gpc_utils.o: src/gpc_utils.c
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(LIB_CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/gpc_core.o: src/lib/gpc_core.c
+obj/$(PREFIX)/gpc_core.o: src/gpc_core.c
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(LIB_CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/helper.o: src/helper.c
+out/$(PREFIX)/lib/libgpc_entry.a: obj/$(PREFIX)/entry_point.o
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c -o $@ $^
-
-out/$(PREFIX)/lib/libgpc_entry.o: obj/$(PREFIX)/entry_point.o
-	@mkdir -p `dirname $@`
-	#$(AR) -csr $@ $^
+	$(AR) -csr $@ $^
 	cp -f $^ $@
 
 out/$(PREFIX)/lib/libgpc.a: obj/$(PREFIX)/gpc_utils.o obj/$(PREFIX)/gpc_core.o
 	@mkdir -p `dirname $@`
 	$(AR) -csr $@ $^
 
-obj/$(PREFIX)/empty.o: src/apps/empty.c
+obj/$(PREFIX)/empty.o: examples/empty.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-obj/$(PREFIX)/prime_factoring.o: src/apps/prime_factoring.c
+obj/$(PREFIX)/prime_factoring.o: examples/prime_factoring.c
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.o obj/$(PREFIX)/empty.o
+out/$(PREFIX)/bin/empty: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/empty.o
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
+	$(OBJCOPY)  --srec-len 1 --output-target=verilog $@ $@.sv
 
-out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.o obj/$(PREFIX)/prime_factoring.o
+out/$(PREFIX)/bin/empty: .EXTRA_PREREQS = libgpc
+
+out/$(PREFIX)/bin/prime_factoring: out/$(PREFIX)/lib/libgpc_entry.a obj/$(PREFIX)/prime_factoring.o
 	@mkdir -p `dirname $@`
 	$(LD) $(LDFLAGS) -Lout/$(PREFIX)/lib $^ -lgpc -o $@
 	$(OBJDUMP) -gd $@ > $@.txt
+	$(OBJCOPY)  --srec-len 1 --output-target=verilog $@ $@.sv
+
+out/$(PREFIX)/bin/prime_factoring: .EXTRA_PREREQS = libgpc
 
 clean:
 	rm -rf out/$(PREFIX)/* obj/$(PREFIX)/*
