@@ -22,7 +22,10 @@ module gpc_4t_tb ();
         #40 rst = 1'b0;
     end: reset_gen
 
-
+    `define TEST_DEFINE(x) `"x`"
+    `define HPATH 
+    string hpath = `TEST_DEFINE(`HPATH);
+    
     initial begin: test_seq
             $display(hpath);
             $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
