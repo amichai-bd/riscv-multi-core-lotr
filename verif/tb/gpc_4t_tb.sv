@@ -3,8 +3,58 @@
 `include "lotr_defines.sv"
 
 module gpc_4t_tb ();
+
+import gpc_4t_pkg::*; 
+parameter REG_NUM = 15;
+
+  // sv task that initiate ending routine :
+  // 1.snapshot of data memory to text file
+  // 2.snapshot of shared data memory to text file
+  // 3.snapshot of registers to text file    
+  // 4.fclose on all open files    
+  // 5.exit test with message   
+    task end_tb;
+        input string msg;
+        integer out1,out2,t0,t1,t2,t3,i,j,l;
+        out1=$fopen({"../target/",hpath,"/d_mem_snapshot.log"},"w");
+        out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");  
+        t0=$fopen({"../target/",hpath,"/thread0_reg_snapshot.log"},"w");  
+        t1=$fopen({"../target/",hpath,"/thread1_reg_snapshot.log"},"w");  
+        t2=$fopen({"../target/",hpath,"/thread2_reg_snapshot.log"},"w");  
+        t3=$fopen({"../target/",hpath,"/thread3_reg_snapshot.log"},"w");          
+        for (i = SIZE_D_MEM; i >= 0; i = i-1) begin  
+            $fwrite(out1,"%8b ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
+        end
+        for (j = SIZE_D_MEM; j >= SIZE_SHRD_MEM; j = j-1) begin  
+            $fwrite(out2,"%8b ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[j]);
+        end
+
+        for (l = REG_NUM ; l >= 0; l = l-1) begin  
+            $fwrite(t0,"Reg x%1d :%8h \n",l,gpc_4t_tb.gpc_4t.core_4t.Register0QnnnH[l]);
+            $fwrite(t1,"Reg x%1d :%8h \n",l,gpc_4t_tb.gpc_4t.core_4t.Register1QnnnH[l]);
+            $fwrite(t2,"Reg x%1d :%8h \n",l,gpc_4t_tb.gpc_4t.core_4t.Register2QnnnH[l]);
+            $fwrite(t3,"Reg x%1d :%8h \n",l,gpc_4t_tb.gpc_4t.core_4t.Register3QnnnH[l]);            
+        end
+
+        $fclose(f1);
+        $fclose(f2);  
+        $fclose(f3);  
+        $fclose(f4);
+        $fclose(f5);
+        $fclose(f6); 
+        $fclose(out1);
+        $fclose(out2);
+        $fclose(t0);        
+        $fclose(t1);
+        $fclose(t2);  
+        $fclose(t3);          
+        $display({"Test : ",hpath,msg});        
+        $finish;
+        
+    endtask
+    
     // clock and reset for tb
-    import gpc_4t_pkg::*; 
+
     logic                   clk;
     logic                   rst;
     
@@ -18,27 +68,22 @@ module gpc_4t_tb ();
 
     // reset generation
     initial begin: reset_gen
-            rst = 1'b1;
-        #40 rst = 1'b0;
-    end: reset_gen
-
-    `define TEST_DEFINE(x) `"x`"
-    `define HPATH 
-    string hpath = `TEST_DEFINE(`HPATH);
+                rst = 1'b1;
+            #40 rst = 1'b0;
+        end: reset_gen
     
-    initial begin: test_seq
-            $display(hpath);
-            $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-            $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
-            #200000 
-            $fclose(f1);  
-            $fclose(f2);  
-            $fclose(f3);  
-            $fclose(f4);
-            $fclose(f5);
-            $fclose(f6);    
-            $finish;
-            
+        `define TEST_DEFINE(x) `"x`"
+        `define HPATH 
+        string hpath = `TEST_DEFINE(`HPATH);
+        integer out,i;
+        logic [7:0] outp;
+        initial begin: test_seq
+                $display(hpath);
+                $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
+                $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
+                #120000         
+                end_tb(" Finished Successfully");
+         
     end: test_seq
     
 
@@ -75,9 +120,9 @@ integer f3;
 integer f4;
 integer f5;
 integer f6;
+
 initial begin
     $timeformat(-9, 1, " ", 6);
-    //logPath = {"../target/",hpath,"/trk_write_registers.log"};
     f1 = $fopen({"../target/",hpath,"/trk_write_registers.log"},"w");
     f2 = $fopen({"../target/",hpath,"/trk_d_mem_access.log"},"w");
     f3 = $fopen({"../target/",hpath,"/trk_brach_op.log"},"w");
@@ -86,50 +131,23 @@ initial begin
     f6 = $fopen({"../target/",hpath,"/trk_shared_space.log"},"w");
     
          $fwrite(f1,"-------------------------------------------------\n");
-         $fwrite(f1,"Time\t| Thread | Register Num\t| Wr Data\t|\n");
+         $fwrite(f1,"Time\t| Thread| PC \t |Register Num\t| Wr Data\t|\n");
          $fwrite(f1,"-------------------------------------------------\n");
-         $fwrite(f2,"---------------------------------------------\n");
-         $fwrite(f2,"Time\t| Address\t| Read/Write| data\t\t|\n");
-         $fwrite(f2,"---------------------------------------------\n");
+         $fwrite(f2,"-----------------------------------------------------\n");
+         $fwrite(f2,"Time\t|     PC   \t | Address\t| Read/Write| data\t\t|\n");
+         $fwrite(f2,"-----------------------------------------------------\n");
          $fwrite(f3,"---------------------------------------------------------\n");
-         $fwrite(f3,"Time\t| Branch Op\t| AluIn1\t| AluIn2\t| BranchCond|\n");
+         $fwrite(f3,"Time\t|     PC   \t | Branch Op\t| AluIn1\t| AluIn2\t| BranchCond|\n");
          $fwrite(f3,"---------------------------------------------------------\n");
          $fwrite(f4,"---------------------------------------------------------\n");
-         $fwrite(f4,"Time\t| Alu Op\t| AluIn1\t| AluIn2\t| AluOut\t|\n");
-         $fwrite(f4,"---------------------------------------------------------\n");         
-//    #2000
-//    for(int i =0; i<100; i++) begin
-//    #500
-//        $fwrite(f1,"---------------------------------------------\n");
-//        $fwrite(f1,"Time\t| inst\t| CMD\t| data\t| register\t|\n");
-//        $fwrite(f1,"---------------------------------------------\n");
-//        $fwrite(f3,"---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-//        $fwrite(f3,"  0 |  1\t|  2\t|  3\t|  4\t|  5\t|  6\t|  7\t|  8\t|  9\t|  10\t|  11\t|  12\t|  13\t|  14\t|  15\t|  16\t|  17\t|  18\t|  19\t|\n");
-//        $fwrite(f3,"---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-//    end
-
+         $fwrite(f4,"Time\t|\tPC \t  | Alu Op\t\t| AluIn1\t| AluIn2\t| AluOut\t|\n");
+         $fwrite(f4,"---------------------------------------------------------\n");    
+         $fwrite(f6,"---------------------------------------------------------\n");
+         $fwrite(f6,"Time\t\t|\t PC \t | Address\t| Read/Write|\t data\t|\n");
+         $fwrite(f6,"---------------------------------------------------------\n");         
 
 end
 
-//$timeformat params:
-//$timeformat(-9, 1, " ", 6);
-//1) Scaling factor (-9 for nanoseconds, -12 for picoseconds)
-//2) Number of digits to the right of the decimal point
-//3) A string to print after the time value
-//4) Minimum field width
-
-//always @(posedge clk) begin : 
-//    //if(gpc_4t.core.ctl_reg_wr) begin : register_write_log
-//    //    $fwrite(f1,"%t\t| %0h  \t| WRITE\t|  %0h \t|   %0h   \t|\n", $realtime, gpc_4t.inst_memory.address_1, gpc_4t.core.reg_wr_data, gpc_4t.core.reg_wr_ptr );
-//    //end
-//    
-//    //if(gpc_4t.core.ctl_reg_wr) begin
-//    //    for(int i=0; i<32; i++) begin
-//    //        $fwrite(f3,"  %0h\t ", gpc_4t.core.registers.register[i]);
-//    //    end
-//    //    $fwrite(f3,"|\n") ;
-//    //end
-//end 
 logic        CtrlMemRdQ104H     ;
 logic        CtrlMemWrQ104H     ;
 logic        CtrlRegWrQ104H     ;
@@ -139,15 +157,17 @@ logic        BranchCondMetQ102H ;
 logic        BranchCondMetQ103H ;
 logic [6:0]  ALU_OPQ102H        ;
 logic [6:0]  ALU_OPQ103H        ;
-logic [31:0] AluIn1Q102H        ;
-logic [31:0] AluIn2Q102H        ;
-logic [31:0] AluOutQ102H        ;
+logic [31:0] AluIn1Q103H        ;
+logic [31:0] AluIn2Q103H        ;
+logic [31:0] AluOutQ103H        ;
 logic [3:0]  RegWrPtrQ104H      ;
 logic [3:0]  Funct3Q103H        ;
 logic [31:0] MemAdrsQ104H       ;
 logic [31:0] MemWrDataWQ104H    ;
+logic [31:0] PcQ103H            ;
+logic [31:0] PcQ104H            ;
 logic [1:0]  threadnum          ;
-logic r;
+
 
 `LOTR_MSFF(CtrlMemRdQ104H   , gpc_4t_tb.gpc_4t.CtrlMemRdQ103H  , clk)
 `LOTR_MSFF(CtrlMemWrQ104H   , gpc_4t_tb.gpc_4t.CtrlMemWrQ103H  , clk)
@@ -159,11 +179,13 @@ logic r;
 `LOTR_MSFF(CtrlBranchQ103H  , CtrlBranchQ102H , clk)
 `LOTR_MSFF(CtrlBranchQ103H  , CtrlBranchQ102H , clk)
 `LOTR_MSFF(BranchCondMetQ103H  , gpc_4t_tb.gpc_4t.core_4t.BranchCondMetQ102H , clk)
-`LOTR_MSFF(AluIn1Q102H  , gpc_4t_tb.gpc_4t.core_4t.AluIn1Q102H , clk)
-`LOTR_MSFF(AluIn2Q102H  , gpc_4t_tb.gpc_4t.core_4t.AluIn2Q102H , clk)
-`LOTR_MSFF(AluOutQ102H  , gpc_4t_tb.gpc_4t.core_4t.AluOutQ102H , clk)
+`LOTR_MSFF(AluIn1Q103H  , gpc_4t_tb.gpc_4t.core_4t.AluIn1Q102H , clk)
+`LOTR_MSFF(AluIn2Q103H  , gpc_4t_tb.gpc_4t.core_4t.AluIn2Q102H , clk)
+`LOTR_MSFF(AluOutQ103H  , gpc_4t_tb.gpc_4t.core_4t.AluOutQ102H , clk)
 `LOTR_MSFF(CtrlRegWrQ104H  , gpc_4t_tb.gpc_4t.core_4t.CtrlRegWrQ103H , clk)
 `LOTR_MSFF(RegWrPtrQ104H  , gpc_4t_tb.gpc_4t.core_4t.RegWrPtrQ103H , clk)
+`LOTR_MSFF(PcQ103H  , gpc_4t_tb.gpc_4t.core_4t.PcQ102H , clk)
+`LOTR_MSFF(PcQ104H  , PcQ103H , clk)
 
 string OPCODE ,BrnchOP;
 assign CtrlBranchQ102H = gpc_4t_tb.gpc_4t.core_4t.CtrlBranchQ102H;
@@ -206,38 +228,38 @@ end
 //tracker on memory transactions
 always @(posedge clk) begin : memory_access_print
     if (CtrlMemRdQ104H) begin 
-        $fwrite(f2,"%t\t| %8h\t| READ\t\t| %8h\t| \n", $realtime, MemAdrsQ104H , gpc_4t_tb.gpc_4t.MemRdDataQ104H);
+        $fwrite(f2,"%t\t| %8h\t| %8h\t| READ\t\t| %8h\t| \n", $realtime,PcQ104H, MemAdrsQ104H , gpc_4t_tb.gpc_4t.MemRdDataQ104H);
         end
     if (CtrlMemWrQ104H) begin 
-        $fwrite(f2,"%t\t| %8h\t| WRITE\t\t| %8h\t| \n", $realtime,MemAdrsQ104H , MemWrDataWQ104H);
+        $fwrite(f2,"%t\t| %8h\t| %8h\t| WRITE\t\t| %8h\t| \n", $realtime,PcQ104H, MemAdrsQ104H , MemWrDataWQ104H);
         end
 end
 
 //tracker on write to registers
 always @(posedge clk) begin : write_to_registers
     if (CtrlRegWrQ104H && RegWrPtrQ104H!=0) begin 
-        $fwrite(f1,"%t\t|\t%2h \t|\tx%02d \t\t|%8h \t| \n", $realtime,threadnum, RegWrPtrQ104H , gpc_4t_tb.gpc_4t.core_4t.RegWrDataQ104H);
+        $fwrite(f1,"%t\t|\t%2h \t|%8h|\tx%1d \t\t|%8h \t| \n", $realtime,threadnum, PcQ104H, RegWrPtrQ104H , gpc_4t_tb.gpc_4t.core_4t.RegWrDataQ104H);
         end
 end
 
 //tracker on ALU operations
 always @(posedge clk) begin : alu_print
     if(OPCODE!="NO       " ) begin
-        $fwrite(f4,"%t\t|%s \t|%8h \t|%8h \t|%8h \t| \n", $realtime,OPCODE, AluIn1Q102H , AluIn2Q102H,AluOutQ102H);
+        $fwrite(f4,"%t\t| %8h |%s \t|%8h \t|%8h \t|%8h \t| \n", $realtime,PcQ103H,OPCODE, AluIn1Q103H , AluIn2Q103H,AluOutQ103H);
     end
 end
 
 //tracker on branch comperator
 always @(posedge clk) begin : brnch_print
     if(CtrlBranchQ103H) begin
-        $fwrite(f3,"%t\t|%s \t\t|%8h \t|%8h \t|%8h \t| \n", $realtime,BrnchOP, AluIn1Q102H , AluIn2Q102H,BranchCondMetQ103H);
+        $fwrite(f3,"%t\t| %8h |%s \t\t|%8h \t|%8h \t|%8h \t| \n", $realtime,PcQ103H,BrnchOP, AluIn1Q103H , AluIn2Q103H,BranchCondMetQ103H);
     end
 end
 
 //tracker to shared space
 always @(posedge clk) begin : write_to_shrd
-    if (CtrlMemWrQ104H && MemAdrsQ104H >= 32'h400f00 && MemAdrsQ104H < 32'h400fff ) begin 
-        $fwrite(f6,"%t\t| %8h\t| WRITE\t\t| %d\t| \n", $realtime,MemAdrsQ104H , MemWrDataWQ104H);
+    if (CtrlMemWrQ104H && MemAdrsQ104H > 32'h400800 && MemAdrsQ104H < 32'h400fff ) begin 
+        $fwrite(f6,"%t\t| %8h\t| %8h\t| WRITE\t\t| %8h\t| \n", $realtime,PcQ104H,MemAdrsQ104H , MemWrDataWQ104H);
         end
 end
 
@@ -255,6 +277,8 @@ end
 
 //asserssions//
 always_comb begin
+
+
 if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessReg)begin
     $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Region on time %t\nThe Address: %8h",$realtime ,MemAdrsQ104H);
     //$finish;
@@ -265,7 +289,7 @@ if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessCore)begin
     end
 if ( gpc_4t_tb.gpc_4t.core_4t.AssertBadMemR_W)begin
     $fwrite(f5, "ERROR : AssertBadMemR_W - RD && WR to memory indication same cycle on time %t\n",$realtime);
-    $finish;
+    end_tb(" Finished with R\W Error");
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalRegister) begin
     $fwrite(f5, "ERROR : AssertIllegalRegister - Illegal register .above 16 on time %t\n",$realtime);
@@ -273,8 +297,7 @@ if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalRegister) begin
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalPC) begin
     $fwrite(f5, "ERROR : AssertIllegalPC",$realtime);
-    //$display("ERROR: Failed assertion");
-    $finish;
+    end_tb(" Finished with PC overflow");
     end
 if(AssertIllegalOpCode) begin
     $fwrite(f5, "ERROR : AssertIllegalOpCode - Illegal OpCode : %7b on time %t\n" ,ALU_OPQ103H,$realtime);
@@ -282,14 +305,6 @@ if(AssertIllegalOpCode) begin
     end
 end
     
-    //illegal register
-    //illegal opcode
-    //func3+7
-    
-//if ( gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccess) begin
-//    $display( "ERROR : AssertBadMemAccess - RD && WR to memory indication same cycle")
-//    $finish;
-//end
 
 
 

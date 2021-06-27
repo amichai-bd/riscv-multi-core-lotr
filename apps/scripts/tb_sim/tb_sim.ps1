@@ -1,4 +1,4 @@
-Push-Location ../../modelsim/
+Push-Location ../../../modelsim/
 
 $files = Get-ChildItem ..\verif\Tests\
 if ($args[0] -eq "All"){

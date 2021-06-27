@@ -45,6 +45,7 @@ parameter SIZE_I_MEM       = 2**(MSB_I_MEM + 1);
 parameter LSB_D_MEM        = 0 ;
 parameter MSB_D_MEM        = 11;
 parameter SIZE_D_MEM       = 2**(MSB_D_MEM + 1);
+parameter SIZE_SHRD_MEM    = 2**(MSB_D_MEM );
 
 // CR Address Offsets
 parameter MSB_CR           = 7;

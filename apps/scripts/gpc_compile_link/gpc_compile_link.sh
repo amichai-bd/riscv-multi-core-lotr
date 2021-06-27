@@ -9,8 +9,8 @@ if [ "$1" == "-help" ];then
     exit 1
 fi
 
-if [[ "$1" == *".c"* ]];then
-    echo "Please enter without .c extantion"
+if [[ "$1" == *"."* ]];then
+    echo "Please enter .c program without without extantion"
     exit 1
 fi
 
@@ -32,23 +32,23 @@ if [ "$#" == "1" ];then
     echo "Gpc Linker with RV32i"
     $GNU_DIR/riscv32-unknown-elf-gcc  -O3  -march=rv32$mod -T./gpc_link.common.ld -nostartfiles -D__riscv__ $1_rv32$mod.c.s ./crt0_gpc.S -o $1_rv32$mod.elf
     #creates readable elf file
-    $GNU_DIR/riscv32-unknown-elf-objdump -gd $1_rv32$mod.elf > $1_rv32$mod_elf.txt
+    $GNU_DIR/riscv32-unknown-elf-objdump -gd $1_rv32$mod.elf > $1_rv32${mod}_elf_txt.txt
     #creates the instruction file 
     $GNU_DIR/riscv32-unknown-elf-objcopy --srec-len 1 --output-target=verilog $1_rv32$mod.elf $1_inst_mem_rv32$mod.sv 
 
-    if [ ! -d "../../verif/Tests/$1" ];then
-        mkdir ../../verif/Tests/$1
+    if [ ! -d "../../../verif/Tests/$1" ];then
+        mkdir ../../../verif/Tests/$1
     fi
 
-    cp $1.c ../../verif/Tests/$1
+    cp $1.c ../../../verif/Tests/$1
    
-    mv $1_rv32$mod.c.s ../../verif/Tests/$1
+    mv $1_rv32$mod.c.s ../../../verif/Tests/$1
     
-    mv $1_rv32$mod.elf ../../verif/Tests/$1
+    mv $1_rv32$mod.elf ../../../verif/Tests/$1
     
-    mv $1_rv32$mod_elf.txt ../../verif/Tests/$1
+    mv $1_rv32${mod}_elf_txt.txt ../../../verif/Tests/$1
 
-    mv $1_inst_mem_rv32$mod.sv ../../verif/Tests/$1
+    mv $1_inst_mem_rv32$mod.sv ../../../verif/Tests/$1
     
     exit 1
 fi
