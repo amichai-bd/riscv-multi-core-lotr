@@ -91,7 +91,7 @@ parameter REG_NUM = 15;
 gpc_4t gpc_4t(
               .QClk                 (clk)  ,
               .RstQnnnH             (rst)  ,
-              .CoreID               (8'01) ,
+              .CoreID               (8'b01) ,
               .C2F_RspValidQ502H    ('0)   ,
               .C2F_RspOpcodeQ502H   ('0)   ,
               .C2F_RspThreadIDQ502H ('0)   ,
