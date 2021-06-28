@@ -24,6 +24,7 @@ module gpc_4t
     (
     input  logic          QClk                ,
     input  logic          RstQnnnH            ,
+    input  logic [7:0]    CoreID              ,
     //Core To Fabric(C2F)
     input  logic          C2F_RspValidQ502H   ,  
     input  logic [1:0]    C2F_RspOpcodeQ502H  ,  

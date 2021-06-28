@@ -10,17 +10,17 @@ Based on a Ring architecture to share all memory regions between threads and cor
 Written  in System verilog.  
 Main Blocks:
 1. Core - 4 HW thread. Compatible with RV32I/E.
-2. i_mem (Instruction Memory). 2KB of SRAM memory with dual access (core & Fabric).
-3. d_mem (Data Memory) - 2KB of SRAM memory with duel access (core & Fabric).    
-Devided to: compiler Scratchpad + MMIO_region + MMIO_CRs (Control Registers)
+2. I_MEM (Instruction Memory). 4KB of SRAM memory with dual access (core & Fabric).
+3. D_MEM (Data Memory) - 4KB of SRAM memory with duel access (core & Fabric).    
+Devided to: Cmpiler Scratchpad + Shared MEM Space + CR Space (Control Registers)
 
 ### *2) RC - Ring Controller*  
 Written  in SystemVerilog.  
 Ring EP (EndPoint) to Manage the cores & ring RD/WR traffic.
 Main logic:
-1. C2F buffer (Core2Fabric).
-2. F2C buffer (Fabric2Core).
-3. Ring output Arbiter. (C2F,F2C,Ring input)
+1. A2F buffer (Agent2Fabric).
+2. F2A buffer (Fabric2Agent).
+3. Ring output Arbiter. (A2F,F2A,Ring input)
 
 ### *3) LOTR: Integration Model, Lord-Of-The-Ring*  
 Written  in SystemVerilog.  
@@ -52,6 +52,9 @@ https://github.com/riscv/riscv-gnu-toolchain.
 This will allow you to generate the machine code needed to load our instruction memory and simulate the RISCV multi-core design.  
 C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
 
+- Compilation and Simulation:  
+Using Modelsim - https://fpgasoftware.intel.com/
+
 
 - Core - GPC_4T - RTL Design:   
 HAS (High-Level-Architecture-Specification):     
@@ -72,7 +75,7 @@ https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-FABRIC-LOTR
 MAS (Micro-Level-Architecture-Specification):  
 TODO
 
-- SW Stack: TODO - FIXME  
+- SW Stack: TODO  
 
 - Validation: TODO
 
