@@ -81,14 +81,14 @@ logic [4:0]         RegWrPtrQ102H;
 logic [4:0]         RegWrPtrQ103H;
 logic [4:0]         RegWrPtrQ104H;
 logic [31:0]        RegWrDataQ104H;
-logic [15:0][31:0]  Register0QnnnH;
-logic [15:0][31:0]  Register1QnnnH;
-logic [15:0][31:0]  Register2QnnnH;
-logic [15:0][31:0]  Register3QnnnH;
-logic [15:0][31:0]  NextRegister0Q104H;
-logic [15:0][31:0]  NextRegister1Q104H;
-logic [15:0][31:0]  NextRegister2Q104H;
-logic [15:0][31:0]  NextRegister3Q104H;
+logic [31:0][31:0]  Register0QnnnH;
+logic [31:0][31:0]  Register1QnnnH;
+logic [31:0][31:0]  Register2QnnnH;
+logic [31:0][31:0]  Register3QnnnH;
+logic [31:0][31:0]  NextRegister0Q104H;
+logic [31:0][31:0]  NextRegister1Q104H;
+logic [31:0][31:0]  NextRegister2Q104H;
+logic [31:0][31:0]  NextRegister3Q104H;
 logic               CtrlRegWrQ102H;
 
 //  ALU
