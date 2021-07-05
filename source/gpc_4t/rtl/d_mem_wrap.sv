@@ -48,7 +48,10 @@ logic       MatchD_MemRegionQ103H;
 logic       MatchD_MemRegionQ104H;
 logic       match_cr_region   ;
 logic       match_cr_regionQ104H   ;
-
+logic [31:0] scratch_pad_0;
+logic [31:0] scratch_pad_1;
+logic [31:0] scratch_pad_2;
+logic [31:0] scratch_pad_3;
 assign core_id_strap = 8'b01; //FIXME - strap from outside
 
 always_comb begin
@@ -101,6 +104,10 @@ always_comb begin
            CR_THREAD1_TLS_BASE_OFFSET       : cr_en.tls_ofst_1 = 1'b1 ;
            CR_THREAD2_TLS_BASE_OFFSET       : cr_en.tls_ofst_2 = 1'b1 ;
            CR_THREAD3_TLS_BASE_OFFSET       : cr_en.tls_ofst_3 = 1'b1 ;   
+           CR_THREAD0_TLS_BASE_OFFSET       : cr_en.scratch_pad_0 = 1'b1 ;
+           CR_THREAD1_TLS_BASE_OFFSET       : cr_en.scratch_pad_1 = 1'b1 ;
+           CR_THREAD2_TLS_BASE_OFFSET       : cr_en.scratch_pad_2 = 1'b1 ;
+           CR_THREAD3_TLS_BASE_OFFSET       : cr_en.scratch_pad_3 = 1'b1 ;   
            default      : /*do nothing*/                     ;
         endcase
     end //if (wren)
@@ -149,10 +156,10 @@ end
 `LOTR_EN_RST_VAL_MSFF   (core_cr.en_pc_1   , data[0] ,  clock  ,  cr_en.en_pc_1      , rst  ,  1'b1)
 `LOTR_EN_RST_VAL_MSFF   (core_cr.en_pc_2   , data[0] ,  clock  ,  cr_en.en_pc_2      , rst  ,  1'b1)
 `LOTR_EN_RST_VAL_MSFF   (core_cr.en_pc_3   , data[0] ,  clock  ,  cr_en.en_pc_3      , rst  ,  1'b1)
-`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_0  , data[4:0] ,  clock  ,  cr_en.dfd_id_0     , rst  ,  1'b1)
-`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_1  , data[4:0] ,  clock  ,  cr_en.dfd_id_1     , rst  ,  1'b1)
-`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_2  , data[4:0] ,  clock  ,  cr_en.dfd_id_2     , rst  ,  1'b1)
-`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_3  , data[4:0] ,  clock  ,  cr_en.dfd_id_3     , rst  ,  1'b1)
+`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_0  , data[4:0] ,  clock  ,  cr_en.dfd_id_0     , rst  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_1  , data[4:0] ,  clock  ,  cr_en.dfd_id_1     , rst  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_2  , data[4:0] ,  clock  ,  cr_en.dfd_id_2     , rst  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF   (core_cr.dfd_id_3  , data[4:0] ,  clock  ,  cr_en.dfd_id_3     , rst  ,  5'b0)
 
 `LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_0, data[31:0] ,  clock  ,  cr_en.stk_ofst_0   , rst  ,  32'h400200)
 `LOTR_EN_RST_VAL_MSFF   (cr_ofst.stk_ofst_1, data[31:0] ,  clock  ,  cr_en.stk_ofst_1   , rst  ,  32'h400400)
@@ -163,27 +170,31 @@ end
 `LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_2, data[31:0] ,  clock  ,  cr_en.tls_ofst_2   , rst  ,  32'h400600)
 `LOTR_EN_RST_VAL_MSFF   (cr_ofst.tls_ofst_3, data[31:0] ,  clock  ,  cr_en.tls_ofst_3   , rst  ,  32'h400800)
 
+`LOTR_EN_RST_MSFF   (scratch_pad_0, data[31:0] ,  clock  ,  cr_en.scratch_pad_0   , rst )
+`LOTR_EN_RST_MSFF   (scratch_pad_1, data[31:0] ,  clock  ,  cr_en.scratch_pad_1   , rst )
+`LOTR_EN_RST_MSFF   (scratch_pad_2, data[31:0] ,  clock  ,  cr_en.scratch_pad_2   , rst )
+`LOTR_EN_RST_MSFF   (scratch_pad_3, data[31:0] ,  clock  ,  cr_en.scratch_pad_3   , rst )
 
-`LOTR_EN_RST_MSFF       (cr_ro.pc           , PcQ103H ,  clock  ,  cr_en.pc         , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.thread       , ThreadIDQ103H ,  clock  ,  cr_en.thread     , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.core         , 32'b0 ,  clock  ,  cr_en.core       , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.pc           , PcQ103H ,         clock  ,  cr_en.pc         , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.thread       , ThreadIDQ103H ,   clock  ,  cr_en.thread     , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.core         , 32'b0 ,           clock  ,  cr_en.core       , rst )
 `LOTR_EN_RST_MSFF       (cr_ro.stk_ofst     , StkOffsetQ103H ,  clock  ,  cr_en.stk_ofst   , rst )
 `LOTR_EN_RST_MSFF       (cr_ro.tls_ofst     , TlsOffsetQ103H ,  clock  ,  cr_en.tls_ofst   , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.shrd_ofst    , 32'h400f00 ,  clock  ,  cr_en.shrd_ofst  , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.i_mem_msb    , MSB_I_MEM ,  clock  ,  cr_en.i_mem_msb  , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.d_mem_msb    , MSB_D_MEM ,  clock  ,  cr_en.d_mem_msb  , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.sts_0        , 32'b0 ,  clock  ,  cr_en.sts_0      , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.sts_1        , 32'b0 ,  clock  ,  cr_en.sts_1      , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.sts_2        , 32'b0 ,  clock  ,  cr_en.sts_2      , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.sts_3        , 32'b0 ,  clock  ,  cr_en.sts_3      , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.expt_0       , 32'b0 ,  clock  ,  cr_en.expt_0     , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.expt_1       , 32'b0 ,  clock  ,  cr_en.expt_1     , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.expt_2       , 32'b0 ,  clock  ,  cr_en.expt_2     , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.expt_3       , 32'b0 ,  clock  ,  cr_en.expt_3     , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.pc_0         , PcQ103H ,  clock  ,  cr_en.pc_0       , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.pc_1         , PcQ103H ,  clock  ,  cr_en.pc_1       , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.pc_2         , PcQ103H ,  clock  ,  cr_en.pc_2       , rst )
-`LOTR_EN_RST_MSFF       (cr_ro.pc_3         , PcQ103H ,  clock  ,  cr_en.pc_3       , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.shrd_ofst    , 32'h400f00 ,      clock  ,  cr_en.shrd_ofst  , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.i_mem_msb    , MSB_I_MEM ,       clock  ,  cr_en.i_mem_msb  , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.d_mem_msb    , MSB_D_MEM ,       clock  ,  cr_en.d_mem_msb  , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.sts_0        , 32'b0 ,           clock  ,  cr_en.sts_0      , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.sts_1        , 32'b0 ,           clock  ,  cr_en.sts_1      , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.sts_2        , 32'b0 ,           clock  ,  cr_en.sts_2      , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.sts_3        , 32'b0 ,           clock  ,  cr_en.sts_3      , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.expt_0       , 32'b0 ,           clock  ,  cr_en.expt_0     , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.expt_1       , 32'b0 ,           clock  ,  cr_en.expt_1     , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.expt_2       , 32'b0 ,           clock  ,  cr_en.expt_2     , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.expt_3       , 32'b0 ,           clock  ,  cr_en.expt_3     , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.pc_0         , PcQ103H ,         clock  ,  cr_en.pc_0       , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.pc_1         , PcQ103H ,         clock  ,  cr_en.pc_1       , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.pc_2         , PcQ103H ,         clock  ,  cr_en.pc_2       , rst )
+`LOTR_EN_RST_MSFF       (cr_ro.pc_3         , PcQ103H ,         clock  ,  cr_en.pc_3       , rst )
 `LOTR_EN_RST_MSFF       (cr_ro.dfd_data_0   , DfdThreadQ103H ,  clock  ,  cr_en.dfd_data_0 , rst )
 `LOTR_EN_RST_MSFF       (cr_ro.dfd_data_1   , DfdThreadQ103H ,  clock  ,  cr_en.dfd_data_1 , rst )
 `LOTR_EN_RST_MSFF       (cr_ro.dfd_data_2   , DfdThreadQ103H ,  clock  ,  cr_en.dfd_data_2 , rst )
@@ -246,6 +257,10 @@ always_comb begin
              CR_THREAD1_DFD_REG_DATA    : cr_data_core  = cr_ro.dfd_data_1;
              CR_THREAD2_DFD_REG_DATA    : cr_data_core  = cr_ro.dfd_data_2;
              CR_THREAD3_DFD_REG_DATA    : cr_data_core  = cr_ro.dfd_data_3;
+             CR_THREAD0_DFD_REG_DATA    : cr_data_core  = scratch_pad_0;
+             CR_THREAD1_DFD_REG_DATA    : cr_data_core  = scratch_pad_1;
+             CR_THREAD2_DFD_REG_DATA    : cr_data_core  = scratch_pad_2;
+             CR_THREAD3_DFD_REG_DATA    : cr_data_core  = scratch_pad_3;
              
             default       : cr_data_core  = 32'b0                      ;
         endcase
