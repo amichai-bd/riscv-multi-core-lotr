@@ -473,8 +473,8 @@ always_comb begin : branch_comp
        4'b1_001 : BranchCondMetQ102H = ~(AluIn1Q102H==AluIn2Q102H)                   ;// BNE
        4'b1_100 : BranchCondMetQ102H =  ($signed(AluIn1Q102H)<$signed(AluIn2Q102H))  ;// BLT
        4'b1_101 : BranchCondMetQ102H = ~($signed(AluIn1Q102H)<$signed(AluIn2Q102H))  ;// BGE
-       4'b1_110 : BranchCondMetQ102H =  (AluIn1Q102H<AluIn1Q102H)                    ;// BLTU
-       4'b1_111 : BranchCondMetQ102H = ~(AluIn1Q102H<AluIn1Q102H)                    ;// BGEU
+       4'b1_110 : BranchCondMetQ102H =  (AluIn1Q102H<AluIn2Q102H)                    ;// BLTU
+       4'b1_111 : BranchCondMetQ102H = ~(AluIn1Q102H<AluIn2Q102H)                    ;// BGEU
        default  : BranchCondMetQ102H = 1'b0                                          ;
     endcase
 end
