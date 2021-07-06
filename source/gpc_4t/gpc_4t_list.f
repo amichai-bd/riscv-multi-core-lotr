@@ -1,5 +1,6 @@
 // Includes
 +incdir+../source/common/
++incdir+../verif/tb/
 
 //PARAM PACAKGE
 ../source/gpc_4t/rtl/gpc_4t_param_pkg.sv
