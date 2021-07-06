@@ -34,7 +34,7 @@ module core_4t
     input  logic [31:0] InstFetchQ101H  ,   //the input from the i_mem. the instruction. already sampled in a @ff at the i_mem
     //Data Memory
     output logic [31:0] MemAdrsQ103H    ,
-    output logic [31:0] MemWrDataWQ103H ,
+    output logic [31:0] MemWrDataQ103H ,
     output logic        CtrlMemWrQ103H  ,
     output logic        CtrlMemRdQ103H  ,
     output logic [3:0]  MemByteEnQ103H  ,
@@ -512,8 +512,8 @@ assign MemByteEnQ103H   = (Funct3Q103H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
                           (Funct3Q103H[1:0] == 2'b01 ) ? 4'b0011 : // LH/SH
                           (Funct3Q103H[1:0] == 2'b10 ) ? 4'b1111 : // LW/SW
                                                          4'b0000 ; // 2'b11 is an illegal Funct3 //FIXME - ADD assetion 
-// The value read from register assign to the output signal MemWrDataWQ103H that goes right into the D_MEM module
-assign  MemWrDataWQ103H = RegRdData2Q103H;
+// The value read from register assign to the output signal MemWrDataQ103H that goes right into the D_MEM module
+assign  MemWrDataQ103H = RegRdData2Q103H;
 // the address from ALU assign to the output signal MemAdrsQ103H that goes right into the D_MEM module
 assign  MemAdrsQ103H = AluOutQ103H;
 
@@ -585,9 +585,9 @@ logic               AssertBadMemAccessCore;
 logic               AssertIllegalPC;
 always_comb begin : assertion
 AssertBadMemR_W = CtrlMemRdQ103H && CtrlMemWrQ103H;
-AssertBadMemAccessReg = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && (MemAdrsQ103H[MSB_REGION:LSB_REGION] != D_MEM_REGION));
-AssertBadMemAccessCore = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && MemAdrsQ103H[MSB_CORE_ID:LSB_CORE_ID] != core_id_strap);
-AssertIllegalRegister = (CtrlRegWrQ104H && (RegWrPtrQ104H > 16 ));
+AssertBadMemAccessReg  = 1'b0;// ((CtrlMemRdQ103H || CtrlMemWrQ103H) && (MemAdrsQ103H[MSB_REGION:LSB_REGION]   != D_MEM_REGION)); //FIXME - this is not a assertion in the commen case
+AssertBadMemAccessCore = ((CtrlMemRdQ103H || CtrlMemWrQ103H) && (MemAdrsQ103H[MSB_CORE_ID:LSB_CORE_ID] != core_id_strap));
+AssertIllegalRegister  = 1'b0;//(CtrlRegWrQ104H && (RegWrPtrQ104H > 16 )); //currently using the RV32I with 32 registers
 AssertIllegalPC = (PcQ100H > 32'hfff);
 end
 

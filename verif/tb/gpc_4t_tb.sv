@@ -81,7 +81,7 @@ parameter REG_NUM = 15;
                 $display(hpath);
                 $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
                 $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
-                #120000         
+                #200000         
                 end_tb(" Finished Successfully");
          
     end: test_seq
@@ -170,23 +170,23 @@ logic [31:0] PcQ104H            ;
 logic [1:0]  threadnum          ;
 
 
-`LOTR_MSFF(CtrlMemRdQ104H   , gpc_4t_tb.gpc_4t.CtrlMemRdQ103H  , clk)
-`LOTR_MSFF(CtrlMemWrQ104H   , gpc_4t_tb.gpc_4t.CtrlMemWrQ103H  , clk)
-`LOTR_MSFF(MemAdrsQ104H     , gpc_4t_tb.gpc_4t.MemAdrsQ103H    , clk)
-`LOTR_MSFF(MemWrDataWQ104H  , gpc_4t_tb.gpc_4t.MemWrDataWQ103H , clk)
-`LOTR_MSFF(ALU_OPQ102H  , gpc_4t_tb.gpc_4t.core_4t.OpcodeQ101H , clk)
-`LOTR_MSFF(ALU_OPQ103H  , ALU_OPQ102H , clk)
-`LOTR_MSFF(Funct3Q103H  , gpc_4t_tb.gpc_4t.core_4t.Funct3Q102H , clk)
-`LOTR_MSFF(CtrlBranchQ103H  , CtrlBranchQ102H , clk)
-`LOTR_MSFF(CtrlBranchQ103H  , CtrlBranchQ102H , clk)
-`LOTR_MSFF(BranchCondMetQ103H  , gpc_4t_tb.gpc_4t.core_4t.BranchCondMetQ102H , clk)
-`LOTR_MSFF(AluIn1Q103H  , gpc_4t_tb.gpc_4t.core_4t.AluIn1Q102H , clk)
-`LOTR_MSFF(AluIn2Q103H  , gpc_4t_tb.gpc_4t.core_4t.AluIn2Q102H , clk)
-`LOTR_MSFF(AluOutQ103H  , gpc_4t_tb.gpc_4t.core_4t.AluOutQ102H , clk)
-`LOTR_MSFF(CtrlRegWrQ104H  , gpc_4t_tb.gpc_4t.core_4t.CtrlRegWrQ103H , clk)
-`LOTR_MSFF(RegWrPtrQ104H  , gpc_4t_tb.gpc_4t.core_4t.RegWrPtrQ103H , clk)
-`LOTR_MSFF(PcQ103H  , gpc_4t_tb.gpc_4t.core_4t.PcQ102H , clk)
-`LOTR_MSFF(PcQ104H  , PcQ103H , clk)
+`LOTR_MSFF(CtrlMemRdQ104H      , gpc_4t_tb.gpc_4t.CtrlMemRdQ103H              , clk)
+`LOTR_MSFF(CtrlMemWrQ104H      , gpc_4t_tb.gpc_4t.CtrlMemWrQ103H              , clk)
+`LOTR_MSFF(MemAdrsQ104H        , gpc_4t_tb.gpc_4t.MemAdrsQ103H                , clk)
+`LOTR_MSFF(MemWrDataWQ104H     , gpc_4t_tb.gpc_4t.MemWrDataQ103H              , clk)
+`LOTR_MSFF(ALU_OPQ102H         , gpc_4t_tb.gpc_4t.core_4t.OpcodeQ101H         , clk)
+`LOTR_MSFF(ALU_OPQ103H         , ALU_OPQ102H                                  , clk)
+`LOTR_MSFF(Funct3Q103H         , gpc_4t_tb.gpc_4t.core_4t.Funct3Q102H         , clk)
+`LOTR_MSFF(CtrlBranchQ103H     , CtrlBranchQ102H                              , clk)
+`LOTR_MSFF(CtrlBranchQ103H     , CtrlBranchQ102H                              , clk)
+`LOTR_MSFF(BranchCondMetQ103H  , gpc_4t_tb.gpc_4t.core_4t.BranchCondMetQ102H  , clk)
+`LOTR_MSFF(AluIn1Q103H         , gpc_4t_tb.gpc_4t.core_4t.AluIn1Q102H         , clk)
+`LOTR_MSFF(AluIn2Q103H         , gpc_4t_tb.gpc_4t.core_4t.AluIn2Q102H         , clk)
+`LOTR_MSFF(AluOutQ103H         , gpc_4t_tb.gpc_4t.core_4t.AluOutQ102H         , clk)
+`LOTR_MSFF(CtrlRegWrQ104H      , gpc_4t_tb.gpc_4t.core_4t.CtrlRegWrQ103H      , clk)
+`LOTR_MSFF(RegWrPtrQ104H       , gpc_4t_tb.gpc_4t.core_4t.RegWrPtrQ103H       , clk)
+`LOTR_MSFF(PcQ103H             , gpc_4t_tb.gpc_4t.core_4t.PcQ102H             , clk)
+`LOTR_MSFF(PcQ104H             , PcQ103H                                      , clk)
 
 string OPCODE ,BrnchOP;
 assign CtrlBranchQ102H = gpc_4t_tb.gpc_4t.core_4t.CtrlBranchQ102H;
@@ -281,11 +281,11 @@ always_comb begin
 
 
 if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessReg)begin
-    $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Region on time %t\nThe Address: %8h",$realtime ,MemAdrsQ104H);
+    $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Region on time %t The Address: %8h\n",$realtime ,MemAdrsQ104H);
     //$finish;
     end
 if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessCore)begin
-    $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Core region on time %t\nThe Address: %8h",$realtime ,MemAdrsQ104H);
+    $fwrite(f5,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Core region on time %t The Address: %8h\n",$realtime ,MemAdrsQ104H);
     //$finish;
     end
 if ( gpc_4t_tb.gpc_4t.core_4t.AssertBadMemR_W)begin
