@@ -47,7 +47,7 @@ parameter MSB_D_MEM        = 11;
 parameter SIZE_D_MEM       = 2**(MSB_D_MEM + 1);
 parameter SIZE_SHRD_MEM    = 2**(MSB_D_MEM );
 
-parameter MSB_CR                      = 7;
+parameter MSB_CR                      = 11;
 // CR Address Offsets
 parameter CR_WHO_AM_I                 = 12'h0  ;
 parameter CR_THREAD_ID                = 12'h4  ;
