@@ -1,113 +1,122 @@
 `timescale 1ns/1ps
 
-`include "/users/eptzsh/Project/LOTR/riscv-multi-core-lotr/source/rc/rtl/design/lotr_defines.sv"
+module rc_tb() ;
+import rc_pkg::*;  
+// clock and reset for tb
+logic         clk_tb                       ;
+logic         rst_tb                       ;
+logic  [7:0]  CoreID_tb  		           ;
 
-module rc_tb ();
-	// clock and reset for tb
-	logic  clk_tb;
-	logic  rst_tb;
-	logic  [7:0]  coreID_tb  		          ; 
+logic         RingInputValidQ500H_tb       ;
+t_opcode      RingInputOpcodeQ500H_tb      ; 
+logic  [31:0] RingInputAddressQ500H_tb     ; 
+logic  [31:0] RingInputDataQ500H_tb        ; 
 
-	logic         RingInputValidQ500H_tb     ; 
-	logic  [1:0]  RingInputOpcodeQ500H_tb      ; 
-	logic  [31:0] RingInputAddressQ500H_tb     ; 
-	logic  [31:0] RingInputDataQ500H_tb        ; 
-	
-	logic         RingOutputValidQ502H_tb      ; 
-	logic  [1:0]  RingOutputOpcodeQ502H_tb     ; 
-	logic  [31:0] RingOutputAddressQ502H_tb    ; 
-	logic  [31:0] RingOutputDataQ502H_tb       ; 
-	
-	logic         C2F_ReqValidQ500H_tb         ; 
-	logic  [1:0]  C2F_ReqOpcodeQ500H_tb        ; 
-	logic  [1:0]  C2F_ReqThreadIDQ500H_tb      ; 
-	logic  [31:0] C2F_ReqAddressQ500H_tb       ; 
-	logic  [31:0] C2F_ReqDataQ500H_tb          ; 	
-	
-	
-	logic         C2F_RspValidQ502H_tb         ; 
-	logic [1:0]   C2F_RspThreadIDQ502H_tb      ; 
-	logic [31:0]  C2F_RspDataQ502H_tb          ; 
-	logic         C2F_RspStall_tb              ; 
-	
-	logic         F2C_RspValidQ500H_tb         ; 
-	logic  [1:0]  F2C_RspOpcodeQ500H_tb        ;  // Fixme -  not sure neccesety - the core recieve only read responses
-	logic  [31:0] F2C_RspAddressQ500H_tb       ; 
-	logic  [31:0] F2C_RspDataQ500H_tb          ; 
-	
-	logic         F2C_ReqValidQ502H_tb         ; 
-	logic  [1:0]  F2C_ReqOpcodeQ502H_tb        ; 
-	logic  [31:0] F2C_ReqAddressQ502H_tb       ; 
-	logic  [31:0] F2C_ReqDataQ502H_tb 		   ; 
-	
-	
+logic         RingOutputValidQ502H_tb      ; 
+t_opcode      RingOutputOpcodeQ502H_tb     ; 
+logic  [31:0] RingOutputAddressQ502H_tb    ; 
+logic  [31:0] RingOutputDataQ502H_tb       ; 
 
-	// clock generation
-	initial begin: clock_gen
-		forever begin
-			#5 clk_tb = 1'b0;
-			#5 clk_tb = 1'b1;
-		end
-	end: clock_gen
+logic         C2F_ReqValidQ500H_tb         ; 
+t_opcode      C2F_ReqOpcodeQ500H_tb        ; 
+logic  [1:0]  C2F_ReqThreadIDQ500H_tb      ; 
+logic  [31:0] C2F_ReqAddressQ500H_tb       ; 
+logic  [31:0] C2F_ReqDataQ500H_tb          ; 	
 
-	// reset generation
-	initial begin: reset_gen
-		rst_tb = 1'b1;
-		#40 rst_tb = 1'b0;
-	end: reset_gen
-	
-	
-	
-	
-	
-	initial begin: first_insertion
-		coreID_tb  		         = 8'b0000_0010 ; 
 
-	    RingInputValidQ500H_tb     = '0 ; 
-		RingInputOpcodeQ500H_tb    = '0 ; 
-		RingInputAddressQ500H_tb   = '0 ; 
-		RingInputDataQ500H_tb      = '0 ; 
-	
-		RingOutputValidQ502H_tb    = '0 ; 
-		RingOutputOpcodeQ502H_tb   = '0 ; 
-		RingOutputAddressQ502H_tb  = '0 ; 
-		RingOutputDataQ502H_tb     = '0 ; 
-	
-		C2F_ReqValidQ500H_tb       = '0 ; 
-		C2F_ReqOpcodeQ500H_tb      = '0 ; 
-		C2F_ReqThreadIDQ500H_tb    = '0 ; 
-		C2F_ReqAddressQ500H_tb     = '0 ; 
-		C2F_ReqDataQ500H_tb        = '0 ; 	
-	
-		C2F_RspValidQ502H_tb       = '0 ; 
-		C2F_RspThreadIDQ502H_tb    = '0 ; 
-		C2F_RspDataQ502H_tb        = '0 ; 
-		C2F_RspStall_tb            = '0 ; 
-	
-		F2C_RspValidQ500H_tb       = '0 ; 
-		F2C_RspOpcodeQ500H_tb      = '0 ;  // Fixme -  not sure neccesety - the core recieve only read responses
-		F2C_RspAddressQ500H_tb     = '0 ; 
-		F2C_RspDataQ500H_tb        = '0 ; 
-	
-		F2C_ReqValidQ502H_tb       = '0 ; 
-		F2C_ReqOpcodeQ502H_tb      = '0 ; 
-		F2C_ReqAddressQ502H_tb     = '0 ; 
-		F2C_ReqDataQ502H_tb 		 = '0 ; 
-	end: first_insertion
+logic         C2F_RspValidQ502H_tb         ; 
+logic [1:0]   C2F_RspThreadIDQ502H_tb      ; 
+logic [31:0]  C2F_RspDataQ502H_tb          ; 
+logic         C2F_RspStall_tb              ; 
 
-	initial begin: wr_req_in_ring_input
+logic         F2C_RspValidQ500H_tb         ; 
+t_opcode      F2C_RspOpcodeQ500H_tb        ;  // Fixme -  not sure neccesety - the core recieve only read responses
+logic  [31:0] F2C_RspAddressQ500H_tb       ; 
+logic  [31:0] F2C_RspDataQ500H_tb          ; 
+
+logic         F2C_ReqValidQ502H_tb         ; 
+t_opcode      F2C_ReqOpcodeQ502H_tb        ; 
+logic  [31:0] F2C_ReqAddressQ502H_tb       ; 
+logic  [31:0] F2C_ReqDataQ502H_tb 		   ; 
+
+
+// clock generation
+initial begin: clock_gen
+	forever begin
+		#5 clk_tb = 1'b0;
+		#5 clk_tb = 1'b1;
+	end
+end: clock_gen
+
+// reset generation
+initial begin: reset_gen
+	rst_tb = 1'b1;
+	#40 rst_tb = 1'b0;
+end: reset_gen
+
+
+initial begin: first_insertion
+	CoreID_tb  		           = 8'b0000_0010 ; 
+
+    RingInputValidQ500H_tb     = '0 ; 
+	RingInputOpcodeQ500H_tb    = RD ; 
+	RingInputAddressQ500H_tb   = '0 ; 
+	RingInputDataQ500H_tb      = '0 ; 
+
+	C2F_ReqValidQ500H_tb       = '0 ; 
+	C2F_ReqOpcodeQ500H_tb      = RD ; 
+	C2F_ReqThreadIDQ500H_tb    = '0 ; 
+	C2F_ReqAddressQ500H_tb     = '0 ; 
+	C2F_ReqDataQ500H_tb        = '0 ; 	
+
+	F2C_RspValidQ500H_tb       = '0 ; 
+	F2C_RspOpcodeQ500H_tb      = RD ;  // Fixme -  not sure neccesety - the core recieve only read responses
+	F2C_RspAddressQ500H_tb     = '0 ; 
+	F2C_RspDataQ500H_tb        = '0 ; 
+
+end: first_insertion
+
+initial begin: main_testing
+// valid and invalid write request from ring input
 		#95
-		RingInputValidQ500H_tb     = 1'b1 ; 
-		RingInputOpcodeQ500H_tb    = 2'b10 ; //write
+// [1]  write_req_1(500)
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
 		RingInputAddressQ500H_tb   = 32'h0200_0001 ; 
 		RingInputDataQ500H_tb      = 32'h0200_0001 ; 
 		#10
-		RingInputValidQ500H_tb     = 1'b0 ; 
-		RingInputOpcodeQ500H_tb    = 2'b00 ; //write
+// expected : write_req_1 will get inserted to one of F2C entries (501) 
+//            this request will be candidate from F2C to core 
+// [2]  write_req_2 (500)             
+		RingInputValidQ500H_tb     = 1'b0  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
 		RingInputAddressQ500H_tb   = 32'h0000_0000 ; 
-		RingInputDataQ500H_tb      = 32'h0000_0000 ; 
-		
-	end: wr_req_in_ring_input
+		RingInputDataQ500H_tb      = 32'h0000_0000 ;
+		#10                 
+// expected : write_req_1 will disptached to the core(502) .
+//            write_req_2 will get sampled (move to 501)
+
+// [3]   valid write_broadcast_1 (500)          
+        RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write_bcasr
+		RingInputAddressQ500H_tb   = 32'h1100_0001 ; 
+	    RingInputDataQ500H_tb      = 32'h1100_0001 ; 
+        #10
+// expected : write_req_2 (actually a NOP) will get chosen by RingMuxOut (move to 502)
+//            valid write_broadcast_1 will get inserted to one of F2C entries (501)       
+
+// write_broadcast_1 will disptached to the core(502) 
+// write_broadcast_1 will get chosen by RingMuxOut (move to 502)
+
+// dummy - recieveing NOPS
+       	RingInputValidQ500H_tb     = 1'b0  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
+		RingInputAddressQ500H_tb   = 32'h0000_0000 ; 
+		RingInputDataQ500H_tb      = 32'h0000_0000 ;
+     //   #100
+
+// [4]   valid read_1 (500) - read request from the Fabric
+	end //initial 
 	/*
 	initial begin: rd_req_from_the_core
 		#200
@@ -127,37 +136,37 @@ module rc_tb ();
 	end: forward_req
 	*/
 rc i_rc(	  
-			  .QClk  		(clk_tb)         ,
-			  .RstQnnnH  	(rst_tb)         ,
-			  .coreID       		  (coreID_tb) ,
-			  .RingInputValidQ500H    (RingInputValidQ500H_tb) ,
-			  .RingInputOpcodeQ500H   (RingInputOpcodeQ500H_tb) ,
-			  .RingInputAddressQ500H  (RingInputAddressQ500H_tb) ,
-			  .RingInputDataQ500H     (RingInputDataQ500H_tb) ,
-			  .RingOutputValidQ502H   () , // out
-			  .RingOutputOpcodeQ502H  () ,// out
-			  .RingOutputAddressQ502H () , // out 
-			  .RingOutputDataQ502H    () ,// out
-			  .C2F_ReqValidQ500H      (C2F_ReqValidQ500H_tb) ,
-			  .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H_tb) ,
-			  .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H_tb) ,
-			  .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H_tb) ,
-			  .C2F_ReqDataQ500H       (C2F_ReqDataQ500H_tb) ,
+			  .QClk  	              (clk_tb)                    ,
+			  .RstQnnnH               (rst_tb)                    ,
+			  .CoreID       		  (CoreID_tb)                 ,
+			  .RingInputValidQ500H    (RingInputValidQ500H_tb)    ,
+			  .RingInputOpcodeQ500H   (RingInputOpcodeQ500H_tb)   ,
+			  .RingInputAddressQ500H  (RingInputAddressQ500H_tb)  ,
+			  .RingInputDataQ500H     (RingInputDataQ500H_tb)     ,
+			  .RingOutputValidQ502H   (RingOutputValidQ502H_tb )  , // out
+			  .RingOutputOpcodeQ502H  (RingOutputOpcodeQ502H_tb)  , // out
+			  .RingOutputAddressQ502H (RingOutputAddressQ502H_tb) , // out 
+			  .RingOutputDataQ502H    (RingOutputDataQ502H_tb)    , // out
+			  .C2F_ReqValidQ500H      (C2F_ReqValidQ500H_tb)      ,
+			  .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H_tb)     ,
+			  .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H_tb)   ,
+			  .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H_tb)    ,
+			  .C2F_ReqDataQ500H       (C2F_ReqDataQ500H_tb)       ,
 
-			  .C2F_RspValidQ502H      () ,// out
-			  .C2F_RspThreadIDQ502H   () ,//out
-			  .C2F_RspDataQ502H       () ,//out
-			  .C2F_RspStall           () ,	//out		  
+			  .C2F_RspValidQ502H      (C2F_RspValidQ502H_tb)      , // out
+			  .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H_tb)   , // out
+			  .C2F_RspDataQ502H       (C2F_RspDataQ502H_tb)       , // out
+			  .C2F_RspStall           (C2F_RspStall_tb)           ,	// out		  
 			  
-			  .F2C_RspValidQ500H      (F2C_RspValidQ500H_tb) ,
-			  .F2C_RspOpcodeQ500H     (F2C_RspOpcodeQ500H_tb) , 
-			  .F2C_RspAddressQ500H    (F2C_RspAddressQ500H_tb) ,
-			  .F2C_RspDataQ500H       (F2C_RspDataQ500H_tb) ,
+			  .F2C_RspValidQ500H      (F2C_RspValidQ500H_tb)      ,
+			  .F2C_RspOpcodeQ500H     (F2C_RspOpcodeQ500H_tb)     , 
+			  .F2C_RspAddressQ500H    (F2C_RspAddressQ500H_tb)    ,
+			  .F2C_RspDataQ500H       (F2C_RspDataQ500H_tb)       ,
 			  
-			  .F2C_ReqValidQ502H      () ,//out
-			  .F2C_ReqOpcodeQ502H     () ,//out
-			  .F2C_ReqAddressQ502H    () ,//out
-			  .F2C_ReqDataQ502H  	  () //out
+			  .F2C_ReqValidQ502H      (F2C_ReqValidQ502H_tb)      , // out
+			  .F2C_ReqOpcodeQ502H     (F2C_ReqOpcodeQ502H_tb)     , // out
+			  .F2C_ReqAddressQ502H    (F2C_ReqAddressQ502H_tb)    , // out
+			  .F2C_ReqDataQ502H  	  (F2C_ReqDataQ502H_tb)         // out
 			 );
 
 initial begin 
