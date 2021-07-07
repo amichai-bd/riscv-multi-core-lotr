@@ -50,7 +50,7 @@ logic [6:0]  ALU_OPQ103H        ;
 logic [31:0] AluIn1Q103H        ;
 logic [31:0] AluIn2Q103H        ;
 logic [31:0] AluOutQ103H        ;
-logic [3:0]  RegWrPtrQ104H      ;
+logic [4:0]  RegWrPtrQ104H      ;
 logic [3:0]  Funct3Q103H        ;
 logic [31:0] MemAdrsQ104H       ;
 logic [31:0] MemWrDataWQ104H    ;
