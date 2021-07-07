@@ -1,4 +1,4 @@
-`include "/users/eptzsh/Project/LOTR/riscv-multi-core-lotr/source/rc/rtl/design/lotr_defines.sv"
+`include "lotr_defines.sv"
 
 module mro 
 #( 
@@ -13,20 +13,9 @@ module mro
       input  logic [MRO_MSB:0] Mask0, // mask 0 for read response
       input  logic [MRO_MSB:0] Mask1, // mask 1 for all other commands  
       output logic [MRO_MSB:0] Oldest0,
-	    output logic [MRO_MSB:0] Oldest1
+	  output logic [MRO_MSB:0] Oldest1
       ) ; 
-
-localparam MRO_SIZE = MRO_MSB + 1           ; 
-localparam ENC_MRO_MSB = $clog2(MRO_SIZE)-1 ; 
-
-logic [MRO_MSB:0][MRO_MSB:0] HistoryMatrix     ;
-logic [MRO_MSB:0][MRO_MSB:0] NextHistoryMatrix ;
-logic [MRO_MSB:0][MRO_MSB:0] EnShiftCol        ;
-logic [MRO_MSB:0][MRO_MSB:0] RstRow            ;
-logic [MRO_MSB:0]            validCol          ; 
-
 // initialize the matrix reset signals by setting each cell to its row-deallocate signal . 
-=======
 localparam MRO_SIZE = MRO_MSB + 1 ; 
 localparam ENC_MRO_MSB = $clog2(MRO_SIZE)-1 ; 
 
@@ -34,7 +23,7 @@ logic [MRO_MSB:0][MRO_MSB:0] HistoryMatrix ;
 logic [MRO_MSB:0][MRO_MSB:0] NextHistoryMatrix ;
 logic [MRO_MSB:0][MRO_MSB:0] EnShiftCol ;
 logic [MRO_MSB:0][MRO_MSB:0] RstRow ;
-logic [MRO_MSB:0] validCol ; 
+logic [MRO_MSB:0]            validCol ; 
 
 
 always_comb begin : rst_row

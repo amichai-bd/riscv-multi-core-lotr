@@ -16,8 +16,11 @@
 //
 //------------------------------------------------------------------------------
 //`timescale 1ns/1ps  
+`include "lotr_defines.sv"
+
 module rc
-(
+    import rc_pkg::*;  
+    (
     //General Interface
     input   logic         QClk                   ,
     input   logic         RstQnnnH               ,
@@ -26,18 +29,18 @@ module rc
     
     //Ring ---> RC
     input   logic         RingInputValidQ500H    ,
-    input   logic  [1:0]  RingInputOpcodeQ500H   ,
+    input   t_opcode      RingInputOpcodeQ500H   ,
     input   logic  [31:0] RingInputAddressQ500H  ,
     input   logic  [31:0] RingInputDataQ500H     ,
     //RC   ---> Ring
     output  logic         RingOutputValidQ502H   ,
-    output  logic  [1:0]  RingOutputOpcodeQ502H  ,
+    output  t_opcode      RingOutputOpcodeQ502H  ,
     output  logic  [31:0] RingOutputAddressQ502H ,
     output  logic  [31:0] RingOutputDataQ502H    ,
     
     //Core Req/Rsp <---> RC
     input   logic         C2F_ReqValidQ500H      ,
-    input   logic  [1:0]  C2F_ReqOpcodeQ500H     ,
+    input   t_opcode      C2F_ReqOpcodeQ500H     ,
     input   logic  [1:0]  C2F_ReqThreadIDQ500H   ,
     input   logic  [31:0] C2F_ReqAddressQ500H    ,
     input   logic  [31:0] C2F_ReqDataQ500H       ,
@@ -49,94 +52,70 @@ module rc
     
     //RC   Req/Rsp <---> Core
     input   logic         F2C_RspValidQ500H      ,
-    input   logic  [1:0]  F2C_RspOpcodeQ500H     , // Fixme -  not sure neccesery - the core recieve on;y read responses
+    input   t_opcode      F2C_RspOpcodeQ500H     , // Fixme -  not sure neccesery - the core recieve on;y read responses
     input   logic  [31:0] F2C_RspAddressQ500H    ,
     input   logic  [31:0] F2C_RspDataQ500H       ,
     
     output  logic         F2C_ReqValidQ502H      ,
-    output  logic  [1:0]  F2C_ReqOpcodeQ502H     ,
+    output  t_opcode      F2C_ReqOpcodeQ502H     ,
     output  logic  [31:0] F2C_ReqAddressQ502H    ,
     output  logic  [31:0] F2C_ReqDataQ502H 
 );
-
-//=========================================
-//============    enum    =================
-//=========================================
-// t_states : FREE '000' , WRITE '001' , READ '010' , READ_PRGRS '011' , READ_RDY '100'
-//          WRITE_BCAST '101' , WRITE_BCAST_PRGRS '110'
-// t_pcodes : Command type - RD=00 , RD_RSP=01 ,WR=10 , WR_BCAST=11
-// t_winner  : which signal to drive to the ring output - NOP=0 , RingInput=1 ,F2CResponse=2 , C2FRequest=3
-typedef enum logic [1:0] {RD=2'b00 , RD_RSP= 2'b01 ,WR=2'b10 , WR_BCAST=2'b11 } t_opcode ;
-typedef enum logic [2:0] {FREE=3'b000 ,WRITE=3'b001 ,READ=3'b010 ,READ_PRGRS=3'b011 ,READ_RDY=3'b100,WRITE_BCAST =3'b101,WRITE_BCAST_PRGRS =3'b110 ,ERROR=3'b111} t_state; 
-typedef enum logic [1:0] {NOP=0 , RingInput=1 ,F2CResponse=2 , C2FRequest=3 } t_winner ;
-
-
-//=========================================
-//=========    Parameters    ==============
-//=========================================
-parameter C2F_ENTRIESNUM = 4                      ; 
-parameter C2F_MSB = C2F_ENTRIESNUM -1             ;
-parameter C2F_ENC_MSB = $clog2(C2F_ENTRIESNUM)-1  ; 
-
-parameter F2C_ENTRIESNUM = 4                      ; 
-parameter F2C_MSB = F2C_ENTRIESNUM -1             ;
-parameter F2C_ENC_MSB = $clog2(F2C_ENTRIESNUM)-1  ;
-
-
 
 //=========================================
 //=====    Data Path Signals    ===========
 //=========================================
 // Ring Interface
 logic                   RingInputValidQ501H     ;
+logic                   PreRingInputValidQ501H  ;
 t_opcode                RingInputOpcodeQ501H    ; 
-logic [31:0]            RingInputAddressQ501H   ;
-logic [31:0]            RingInputDataQ501H      ;
+logic   [31:0]          RingInputAddressQ501H   ;
+logic   [31:0]          RingInputDataQ501H      ;
 
 logic                   RingOutputValidQ501H    ;
 t_opcode                RingOutputOpcodeQ501H   ;
-logic [31:0]            RingOutputAddressQ501H  ;
-logic [31:0]            RingOutputDataQ501H     ;
+logic   [31:0]          RingOutputAddressQ501H  ;
+logic   [31:0]          RingOutputDataQ501H     ;
 
 
-logic [C2F_MSB:0]       C2F_BufferValidQnnnH    ;
-logic [C2F_MSB:0][1:0]  C2F_BufferOpcodeQnnnH   ;
-logic [C2F_MSB:0][1:0]  C2F_BufferThreadIDQnnnH ;
-logic [C2F_MSB:0][31:0] C2F_BufferAddressQnnnH  ;
-logic [C2F_MSB:0][31:0] C2F_BufferDataQnnnH     ;
-logic [C2F_MSB:0][2:0]  C2F_BufferStateQnnnH    ;
+logic   [C2F_MSB:0]       C2F_BufferValidQnnnH    ;
+t_opcode[C2F_MSB:0]       C2F_BufferOpcodeQnnnH   ;
+logic   [C2F_MSB:0][1:0]  C2F_BufferThreadIDQnnnH ;
+logic   [C2F_MSB:0][31:0] C2F_BufferAddressQnnnH  ;
+logic   [C2F_MSB:0][31:0] C2F_BufferDataQnnnH     ;
+t_state [C2F_MSB:0]       C2F_BufferStateQnnnH    ;
 
-logic [C2F_MSB:0]       C2F_NextBufferValidQnnnH     ;
-logic [C2F_MSB:0][1:0]  C2F_NextBufferOpcodeQnnnH    ;
-logic [C2F_MSB:0][1:0]  C2F_NextBufferThreadIDQnnnH  ;
-logic [C2F_MSB:0][31:0] C2F_NextBufferAddressQnnnH   ;
-logic [C2F_MSB:0][31:0] C2F_NextBufferDataQnnnH      ;
-logic [C2F_MSB:0][2:0]  C2F_NextBufferStateQnnnH     ;
+logic   [C2F_MSB:0]       C2F_NextBufferValidQnnnH     ;
+t_opcode[1:0]             C2F_NextBufferOpcodeQnnnH    ;
+logic   [C2F_MSB:0][1:0]  C2F_NextBufferThreadIDQnnnH  ;
+logic   [C2F_MSB:0][31:0] C2F_NextBufferAddressQnnnH   ;
+logic   [C2F_MSB:0][31:0] C2F_NextBufferDataQnnnH      ;
+t_state [C2F_MSB:0]       C2F_NextBufferStateQnnnH     ;
 
 
-logic                   C2F_ReqValidQ501H       ;
-t_opcode                C2F_ReqOpcodeQ501H      ;
-logic [31:0]            C2F_ReqAddressQ501H     ;
-logic [31:0]            C2F_ReqDataQ501H        ;
+logic                     C2F_ReqValidQ501H       ;
+t_opcode                  C2F_ReqOpcodeQ501H      ;
+logic [31:0]              C2F_ReqAddressQ501H     ;
+logic [31:0]              C2F_ReqDataQ501H        ;
 
 
 // F2C BUFFER
-logic [F2C_MSB:0]       F2C_BufferValidQnnnH    ;
-logic [F2C_MSB:0][1:0]  F2C_BufferOpcodeQnnnH   ;
-logic [F2C_MSB:0][31:0] F2C_BufferAddressQnnnH  ;
-logic [F2C_MSB:0][31:0] F2C_BufferDataQnnnH     ;
-logic [F2C_MSB:0][2:0]  F2C_BufferStateQnnnH    ;
+logic   [F2C_MSB:0]       F2C_BufferValidQnnnH    ;
+t_opcode[F2C_MSB:0]       F2C_BufferOpcodeQnnnH   ;
+logic   [F2C_MSB:0][31:0] F2C_BufferAddressQnnnH  ;
+logic   [F2C_MSB:0][31:0] F2C_BufferDataQnnnH     ;
+logic   [F2C_MSB:0][2:0]  F2C_BufferStateQnnnH    ;
 
-logic [F2C_MSB:0]       F2C_NextBufferValidQnnnH    ;
-logic [F2C_MSB:0][1:0]  F2C_NextBufferOpcodeQnnnH   ;
-logic [F2C_MSB:0][31:0] F2C_NextBufferAddressQnnnH  ;
-logic [F2C_MSB:0][31:0] F2C_NextBufferDataQnnnH     ;
-logic [F2C_MSB:0][2:0]  F2C_NextBufferStateQnnnH    ;
+logic   [F2C_MSB:0]       F2C_NextBufferValidQnnnH    ;
+t_opcode[F2C_MSB:0]       F2C_NextBufferOpcodeQnnnH   ;
+logic   [F2C_MSB:0][31:0] F2C_NextBufferAddressQnnnH  ;
+logic   [F2C_MSB:0][31:0] F2C_NextBufferDataQnnnH     ;
+logic   [F2C_MSB:0][2:0]  F2C_NextBufferStateQnnnH    ;
 
-logic                   F2C_RspValidQ501H     ;
-t_opcode                F2C_RspOpcodeQ501H    ;
-logic [31:0]            F2C_RspAddressQ501H   ;
-logic [31:0]            F2C_RspDataQ501H      ;
+logic                     F2C_RspValidQ501H     ;
+t_opcode                  F2C_RspOpcodeQ501H    ;
+logic   [31:0]            F2C_RspAddressQ501H   ;
+logic   [31:0]            F2C_RspDataQ501H      ;
 
 
 //=========================================
@@ -145,7 +124,7 @@ logic [31:0]            F2C_RspDataQ501H      ;
 // === General ===
 t_winner              SelRingOutQ501H       ;
 logic                 F2C_AddressMatchQ500H ; 
-
+t_state               state ; 
 
 // === C2F ===
 logic [C2F_ENC_MSB:0] C2F_SelRdRingQ501H    ;
@@ -163,8 +142,35 @@ logic [F2C_MSB:0]     F2C_EnCoreWrQ500H     ;
 logic [F2C_MSB:0]     F2C_EnWrQnnnH         ;
 logic [F2C_MSB:0]     F2C_SelWrQnnnH        ;
 
-
-
+// ==== init C2F MRO ==========
+logic [C2F_MSB:0] C2F_DeallocMroQnnnH ;
+logic [C2F_MSB:0] C2F_Mask0MroQnnnH   ;
+logic [C2F_MSB:0] C2F_Mask1MroQnnnH   ;
+logic [C2F_MSB:0] C2F_DecodedSelRdCoreQ502H;
+logic [C2F_MSB:0] C2F_DecodedSelRdRingQ501H;
+// === FIXME description
+logic [F2C_MSB:0] F2C_FirstFreeEntryQ500H          ; 
+logic [F2C_MSB:0] F2C_FreeEntriesQ500H             ; 
+logic [F2C_MSB:0] F2C_IsValidReqQ500H              ; 
+logic [F2C_MSB:0] F2C_ReadResponseMatchesQ500H     ; 
+logic [F2C_MSB:0] F2C_FirstReadResponseMatcesQ500H ; 
+// ==== init F2C MRO ==========
+logic [F2C_MSB:0] F2C_DeallocMroQnnnH ;
+logic [F2C_MSB:0] F2C_Mask0MroQnnnH   ;
+logic [F2C_MSB:0] F2C_Mask1MroQnnnH   ;
+logic [F2C_MSB:0] F2C_DecodedSelRdRingQ501H;
+logic [F2C_MSB:0] F2C_DecodedSelRdCoreQ502H;
+// === FIXME description
+logic[1:0]        VentilationCounterQnnnH    ;
+logic[1:0]        NextVentilationCounterQnnnH;
+logic             EnVentilationQnnnH         ;
+logic             RstVentilationQnnnH        ;
+// === FIXME description
+logic [C2F_MSB:0] C2F_FirstFreeEntryQ500H                     ; 
+logic [C2F_MSB:0] C2F_FreeEntriesQ500H                        ; 
+logic [C2F_MSB:0] C2F_ReadResponseMatchesQ501H                ; 
+logic [C2F_MSB:0] C2F_FirstReadResponseMatchesQ501H           ; 
+logic [C2F_MSB:0] C2F_IsValidReqQ500H                         ;
 //======================================================================================
 //=========================     Module Content      ====================================
 //======================================================================================
@@ -176,10 +182,10 @@ logic [F2C_MSB:0]     F2C_SelWrQnnnH        ;
 // Ring input Interface
 //=========================================
 
-`LOTR_MSFF( RingInputValidQ501H   , RingInputValidQ500H  , QClk )
-`LOTR_MSFF( RingInputOpcodeQ501H ,  RingInputOpcodeQ500H , QClk )
-`LOTR_MSFF( RingInputAddressQ501H,  RingInputAddressQ500H, QClk )
-`LOTR_MSFF( RingInputDataQ501H   ,  RingInputDataQ500H   , QClk )
+`LOTR_MSFF( PreRingInputValidQ501H ,  RingInputValidQ500H  , QClk )
+`LOTR_MSFF( RingInputOpcodeQ501H   ,  RingInputOpcodeQ500H , QClk )
+`LOTR_MSFF( RingInputAddressQ501H  ,  RingInputAddressQ500H, QClk )
+`LOTR_MSFF( RingInputDataQ501H     ,  RingInputDataQ500H   , QClk )
 
 //==================================================================================
 //              The C2F Buffer - Core 2 Fabric
@@ -191,11 +197,6 @@ logic [F2C_MSB:0]     F2C_SelWrQnnnH        ;
 // the next buffers(data,adress, thredid ...)
 //==================================================================================
 
-logic [C2F_MSB:0] C2F_FirstFreeEntryQ500H                     ; 
-logic [C2F_MSB:0] C2F_FreeEntriesQ500H                        ; 
-logic [C2F_MSB:0] C2F_ReadResponseMatchesQ501H                ; 
-logic [C2F_MSB:0] C2F_FirstReadResponseMatchesQ501H           ; 
-logic [C2F_MSB:0] C2F_IsValidReqQ500H                         ;
 
 always_comb begin : find_free_candidate
     for (int i=0 ; i< C2F_ENTRIESNUM ; i++) begin 
@@ -228,20 +229,18 @@ end
 assign C2F_EnCoreWrQ500H = C2F_FirstFreeEntryQ500H & C2F_IsValidReqQ500H ;
 assign C2F_EnRingWrQ501H = C2F_FirstReadResponseMatchesQ501H  ; 
 
-t_state state ; 
 always_comb begin : next_c2f_buffer_per_buffer_entry
-    C2F_EnWrQnnnH   = C2F_EnCoreWrQ500H | C2F_EnRingWrQ501H;
-    C2F_SelWrQnnnH  = C2F_EnCoreWrQ500H;
-    C2F_NextBufferStateQnnnH = C2F_BufferStateQnnnH ; // default value for state machine 
+    C2F_EnWrQnnnH           = C2F_EnCoreWrQ500H | C2F_EnRingWrQ501H;
+    C2F_SelWrQnnnH          = C2F_EnCoreWrQ500H;
+    C2F_NextBufferStateQnnnH= C2F_BufferStateQnnnH ; // default value for state machine 
+    RingInputValidQ501H     = PreRingInputValidQ501H;
     for(int i =0; i < C2F_ENTRIESNUM; i++) begin
 
-        C2F_NextBufferValidQnnnH[i]    = C2F_SelWrQnnnH[i] ? C2F_ReqValidQ500H    : RingInputValidQ501H ;
         C2F_NextBufferOpcodeQnnnH[i]   = C2F_SelWrQnnnH[i] ? C2F_ReqOpcodeQ500H   : RingInputOpcodeQ501H ;
         C2F_NextBufferThreadIDQnnnH[i] = C2F_SelWrQnnnH[i] ? C2F_ReqThreadIDQ500H : C2F_BufferThreadIDQnnnH[i] ;
         C2F_NextBufferAddressQnnnH[i]  = C2F_SelWrQnnnH[i] ? C2F_ReqAddressQ500H  : RingInputAddressQ501H ;
         C2F_NextBufferDataQnnnH[i]     = C2F_SelWrQnnnH[i] ? C2F_ReqDataQ500H     : RingInputDataQ501H   ;
         state = C2F_BufferStateQnnnH[i]; 
-        
         case(state)
             //Slot is FREE
             FREE : 
@@ -284,43 +283,35 @@ always_comb begin : next_c2f_buffer_per_buffer_entry
                         RingInputValidQ501H = 1'b0;
                     end //if
         endcase
+        C2F_NextBufferValidQnnnH[i]    = C2F_SelWrQnnnH[i] ? C2F_ReqValidQ500H    : RingInputValidQ501H ;
     end //for C2F_BUFFER_SIZE
 end //always_comb
 
 // ==== C2F Buffer =================
 genvar C2F_ENTRY;
 generate for ( C2F_ENTRY =0 ; C2F_ENTRY < C2F_ENTRIESNUM ; C2F_ENTRY++) begin : the_c2f_buffer_array
-    `LOTR_EN_RST_MSFF( C2F_BufferValidQnnnH[C2F_ENTRY]   , C2F_NextBufferValidQnnnH[C2F_ENTRY]   ,QClk, C2F_EnWrQnnnH[C2F_ENTRY],RstQnnnH)
-    `LOTR_EN_MSFF    ( C2F_BufferOpcodeQnnnH[C2F_ENTRY]  , C2F_NextBufferOpcodeQnnnH[C2F_ENTRY]  ,QClk, C2F_EnWrQnnnH[C2F_ENTRY])
-    `LOTR_EN_MSFF    ( C2F_BufferThreadIDQnnnH[C2F_ENTRY], C2F_NextBufferThreadIDQnnnH[C2F_ENTRY],QClk, C2F_EnWrQnnnH[C2F_ENTRY])
-    `LOTR_EN_MSFF    ( C2F_BufferAddressQnnnH[C2F_ENTRY] , C2F_NextBufferAddressQnnnH[C2F_ENTRY] ,QClk, C2F_EnWrQnnnH[C2F_ENTRY])
-    `LOTR_EN_MSFF    ( C2F_BufferDataQnnnH   [C2F_ENTRY] , C2F_NextBufferDataQnnnH   [C2F_ENTRY] ,QClk, C2F_EnWrQnnnH[C2F_ENTRY])
-    `LOTR_EN_MSFF    ( C2F_BufferStateQnnnH  [C2F_ENTRY] , C2F_NextBufferStateQnnnH  [C2F_ENTRY] ,QClk, C2F_EnWrQnnnH[C2F_ENTRY])
-
-    
+    `LOTR_EN_RST_MSFF( C2F_BufferValidQnnnH   [C2F_ENTRY], C2F_NextBufferValidQnnnH   [C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY], RstQnnnH)
+    `LOTR_EN_MSFF    ( C2F_BufferOpcodeQnnnH  [C2F_ENTRY], C2F_NextBufferOpcodeQnnnH  [C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY])
+    `LOTR_EN_MSFF    ( C2F_BufferThreadIDQnnnH[C2F_ENTRY], C2F_NextBufferThreadIDQnnnH[C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY])
+    `LOTR_EN_MSFF    ( C2F_BufferAddressQnnnH [C2F_ENTRY], C2F_NextBufferAddressQnnnH [C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY])
+    `LOTR_EN_MSFF    ( C2F_BufferDataQnnnH    [C2F_ENTRY], C2F_NextBufferDataQnnnH    [C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY])
+    `LOTR_EN_MSFF    ( C2F_BufferStateQnnnH   [C2F_ENTRY], C2F_NextBufferStateQnnnH   [C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY])
 end endgenerate // for , generate
 
 
 // ==== init C2F MRO ==========
-
-logic [C2F_MSB:0] C2F_DeallocMroQnnnH ;
-logic [C2F_MSB:0] C2F_Mask0MroQnnnH   ;
-logic [C2F_MSB:0] C2F_Mask1MroQnnnH   ;
-
 always_comb begin : create_mro_input
     for (int i =0 ; i <C2F_ENTRIESNUM ; i++ ) begin
         C2F_DeallocMroQnnnH[i] = (C2F_NextBufferStateQnnnH[i] == FREE);
-        C2F_Mask0MroQnnnH[i] = (C2F_BufferStateQnnnH[i] == READ_RDY); 
-        C2F_Mask1MroQnnnH[i] = (C2F_BufferStateQnnnH[i] == READ )||(C2F_BufferStateQnnnH[i] == WRITE )||(C2F_BufferStateQnnnH[i] == WRITE_BCAST );
+        C2F_Mask0MroQnnnH[i]   = (C2F_BufferStateQnnnH[i]     == READ_RDY); 
+        C2F_Mask1MroQnnnH[i]   = (C2F_BufferStateQnnnH[i]     == READ )      ||
+                                 (C2F_BufferStateQnnnH[i]     == WRITE)      ||
+                                 (C2F_BufferStateQnnnH[i]     == WRITE_BCAST );
     end //for 
 end //always_comb create_mro_input
 
-mro
-#( 
-   .MRO_MSB(C2F_ENTRIESNUM) )
-
-mro_C2F
-(
+mro #(.MRO_MSB(C2F_MSB) )
+mro_C2F (
      .Clk(QClk),
      .Rst(RstQnnnH),
      .EnAlloc(|(C2F_EnCoreWrQ500H)),
@@ -328,22 +319,22 @@ mro_C2F
      .Dealloc(C2F_DeallocMroQnnnH),
      .Mask0(C2F_Mask0MroQnnnH), // mask 0 for read response
      .Mask1(C2F_Mask1MroQnnnH), // mask 1 for all other commands  
-     .Oldest0(C2F_SelRdCoreQ502H),
-     .Oldest1(C2F_SelRdRingQ501H)
+     .Oldest0(C2F_DecodedSelRdCoreQ502H),
+     .Oldest1(C2F_DecodedSelRdRingQ501H)
       ) ; 
-
+`ONE_HOT_TO_ENC(C2F_SelRdCoreQ502H , C2F_DecodedSelRdCoreQ502H)
+`ONE_HOT_TO_ENC(C2F_SelRdRingQ501H , C2F_DecodedSelRdRingQ501H)
 
 always_comb begin : select_C2F_from_buffer
     // C2F_buferr -> Ring (Requist)
-    C2F_ReqValidQ501H   = C2F_BufferValidQnnnH[C2F_SelRdRingQ501H]  ;
-    C2F_ReqOpcodeQ501H  = C2F_BufferOpcodeQnnnH[C2F_SelRdRingQ501H] ;
+    C2F_ReqValidQ501H   = C2F_BufferValidQnnnH  [C2F_SelRdRingQ501H];
+    C2F_ReqOpcodeQ501H  = C2F_BufferOpcodeQnnnH [C2F_SelRdRingQ501H];
     C2F_ReqAddressQ501H = C2F_BufferAddressQnnnH[C2F_SelRdRingQ501H]; // NOTE: The 501 Cycle is due to the origin of the Request (CoreReqQ500H)
     C2F_ReqDataQ501H    = C2F_BufferDataQnnnH   [C2F_SelRdRingQ501H];
     // C2F_buffer -> Core (Response)
     // C2F_RspAddressQ502H = C2F_BufferAddressQnnnH[C2F_SelRdCoreQ502H]; // Note: The 502 Cycle is due to the origin of the Response (RingInputQ500H->RingInputQ501H)
-    C2F_RspDataQ502H    = C2F_BufferDataQnnnH[C2F_SelRdCoreQ502H]      ;
-    C2F_RspThreadIDQ502H =  C2F_BufferThreadIDQnnnH[C2F_SelRdCoreQ502H];
-    
+    C2F_RspDataQ502H    = C2F_BufferDataQnnnH    [C2F_SelRdCoreQ502H]      ;
+    C2F_RspThreadIDQ502H= C2F_BufferThreadIDQnnnH[C2F_SelRdCoreQ502H];
 end //always_comb
     // C2F_buferr -> Ring (Requist)
     
@@ -359,13 +350,6 @@ end //always_comb
 //  TODO - add discription of this block
 //
 //==================================================================================
-
-logic [F2C_MSB:0] F2C_FirstFreeEntryQ500H          ; 
-logic [F2C_MSB:0] F2C_FreeEntriesQ500H             ; 
-logic [F2C_MSB:0] F2C_IsValidReqQ500H              ; 
-logic [F2C_MSB:0] F2C_ReadResponseMatchesQ500H     ; 
-logic [F2C_MSB:0] F2C_FirstReadResponseMatcesQ500H ; 
-
 always_comb begin : find_free_candidate_F2C
     for (int i=0 ; i< F2C_ENTRIESNUM ; i++) begin 
             F2C_FreeEntriesQ500H[i] = F2C_BufferStateQnnnH[i] == FREE ;  
@@ -376,21 +360,16 @@ end // always_comb
 
 always_comb begin : find_read_response_match_F2C
     for (int i=0 ; i < F2C_ENTRIESNUM ; i++ ) begin
-        if ((F2C_RspAddressQ500H == F2C_BufferAddressQnnnH[i]) && (F2C_BufferStateQnnnH[i] == READ_PRGRS))
-            F2C_ReadResponseMatchesQ500H[i] = 1'b1 ;  
-        else
-            F2C_ReadResponseMatchesQ500H[i] = 1'b0 ;  
+            F2C_ReadResponseMatchesQ500H[i] = ((F2C_RspAddressQ500H == F2C_BufferAddressQnnnH[i]) && (F2C_BufferStateQnnnH[i] == READ_PRGRS)) ;  
     end
 end
 // in case read respones matches to entrey, we want one enntry to alloc
 `FIND_FIRST(F2C_FirstReadResponseMatcesQ500H ,F2C_ReadResponseMatchesQ500H)
 
 always_comb begin : check_if_request_from_the_ring_to_the_RC
-    if (RingInputValidQ501H && RingInputOpcodeQ501H != RD_RSP &&
-       (RingInputAddressQ501H[31:24] == CoreID || RingInputOpcodeQ501H == WR_BCAST  ))
-        F2C_IsValidReqQ500H = '1  ;     
-    else 
-        F2C_IsValidReqQ500H = '0  ;
+    F2C_IsValidReqQ500H =((RingInputValidQ501H)                  && 
+                          (RingInputOpcodeQ501H != RD_RSP)       &&
+                          (RingInputAddressQ501H[31:24] == CoreID || RingInputOpcodeQ501H == WR_BCAST)) ;     
 end
 
 assign F2C_EnCoreWrQ500H = F2C_FirstReadResponseMatcesQ500H    ;
@@ -443,9 +422,9 @@ end //always_comb
 // ==== F2C Buffer =================
 genvar F2C_ENTRY;
 generate for ( F2C_ENTRY =0 ; F2C_ENTRY < F2C_ENTRIESNUM ; F2C_ENTRY++) begin : the_f2c_buffer_array
-    `LOTR_EN_RST_MSFF( F2C_BufferValidQnnnH[F2C_ENTRY]  , F2C_NextBufferValidQnnnH[F2C_ENTRY]  , QClk, F2C_EnWrQnnnH[F2C_ENTRY],RstQnnnH)
-    `LOTR_EN_MSFF    ( F2C_BufferOpcodeQnnnH[F2C_ENTRY] , F2C_NextBufferOpcodeQnnnH[F2C_ENTRY] , QClk, F2C_EnWrQnnnH[F2C_ENTRY])
-    `LOTR_EN_MSFF    ( F2C_BufferStateQnnnH[F2C_ENTRY]  , F2C_NextBufferStateQnnnH[F2C_ENTRY]  , QClk, F2C_EnWrQnnnH[F2C_ENTRY])
+    `LOTR_EN_RST_MSFF( F2C_BufferValidQnnnH  [F2C_ENTRY], F2C_NextBufferValidQnnnH  [F2C_ENTRY], QClk, F2C_EnWrQnnnH[F2C_ENTRY], RstQnnnH)
+    `LOTR_EN_MSFF    ( F2C_BufferOpcodeQnnnH [F2C_ENTRY], F2C_NextBufferOpcodeQnnnH [F2C_ENTRY], QClk, F2C_EnWrQnnnH[F2C_ENTRY])
+    `LOTR_EN_MSFF    ( F2C_BufferStateQnnnH  [F2C_ENTRY], F2C_NextBufferStateQnnnH  [F2C_ENTRY], QClk, F2C_EnWrQnnnH[F2C_ENTRY])
     `LOTR_EN_MSFF    ( F2C_BufferAddressQnnnH[F2C_ENTRY], F2C_NextBufferAddressQnnnH[F2C_ENTRY], QClk, F2C_EnWrQnnnH[F2C_ENTRY])
     `LOTR_EN_MSFF    ( F2C_BufferDataQnnnH   [F2C_ENTRY], F2C_NextBufferDataQnnnH   [F2C_ENTRY], QClk, F2C_EnWrQnnnH[F2C_ENTRY])
 end endgenerate // for , generate
@@ -453,33 +432,34 @@ end endgenerate // for , generate
 
 
 // ==== init F2C MRO ==========
-logic [F2C_MSB:0] F2C_DeallocMroQnnnH ;
-logic [F2C_MSB:0] F2C_Mask0MroQnnnH   ;
-logic [F2C_MSB:0] F2C_Mask1MroQnnnH   ;
 
 always_comb begin : create_mro_input_f2c
     for (int i =0 ; i <F2C_ENTRIESNUM ; i++ ) begin
         F2C_DeallocMroQnnnH[i] = (F2C_NextBufferStateQnnnH[i] == FREE);
-        F2C_Mask0MroQnnnH[i] = (F2C_BufferStateQnnnH[i] == READ_RDY); 
-        F2C_Mask1MroQnnnH[i] = (F2C_BufferStateQnnnH[i] == READ )||(C2F_BufferStateQnnnH[i] == WRITE )||(C2F_BufferStateQnnnH[i] == WRITE_BCAST );
+        F2C_Mask0MroQnnnH[i]   = (F2C_BufferStateQnnnH[i]     == READ_RDY); 
+        F2C_Mask1MroQnnnH[i]   = (F2C_BufferStateQnnnH[i]     == READ)      ||
+                                 (C2F_BufferStateQnnnH[i]     == WRITE)     ||
+                                 (C2F_BufferStateQnnnH[i]     == WRITE_BCAST);
     end //for 
 end //always_comb create_mro_input_f2c
-
 mro 
 #( 
-   .MRO_MSB(F2C_ENTRIESNUM) )
+   .MRO_MSB(F2C_MSB) )
 mro_F2C
 (
      .Clk(QClk),
      .Rst(RstQnnnH),
-     .EnAlloc(|(F2C_EnRingWrQ501H)),
+     .EnAlloc((|F2C_EnRingWrQ501H)), //Review this
      .NextAlloc(F2C_EnRingWrQ501H),
      .Dealloc(F2C_DeallocMroQnnnH),
      .Mask0(F2C_Mask0MroQnnnH), // mask 0 for read response
      .Mask1(F2C_Mask1MroQnnnH), // mask 1 for all other commands  
-     .Oldest0(F2C_SelRdRingQ501H),
-     .Oldest1(F2C_SelRdCoreQ502H)
+     .Oldest0(F2C_DecodedSelRdRingQ501H),
+     .Oldest1(F2C_DecodedSelRdCoreQ502H)
       ) ; 
+
+`ONE_HOT_TO_ENC(F2C_SelRdRingQ501H , F2C_DecodedSelRdRingQ501H )
+`ONE_HOT_TO_ENC(F2C_SelRdCoreQ502H , F2C_DecodedSelRdCoreQ502H )
 
 always_comb begin : select_f2c_from_buffer
     // F2C_buferr -> Ring (Response)
@@ -505,22 +485,19 @@ end //always_comb
 //  C2F_Req / F2C_Rsp / RingInput
 //==================================================================================
 
-logic[1:0] VentilationCounterQnnnH     = 2'b00 ;
-logic[1:0] NextVentilationCounterQnnnH = 2'b00 ;
-logic      EnVentilationQnnnH                  ;
-logic      RstVentilationQnnnH                 ;
-
 always_comb begin : ventilation_counter_asserting
     NextVentilationCounterQnnnH = VentilationCounterQnnnH + 2'b01 ; 
     EnVentilationQnnnH  = (SelRingOutQ501H == C2FRequest ) ; 
-    RstVentilationQnnnH = (SelRingOutQ501H == NOP || ((SelRingOutQ501H == RingInput) && !RingInputValidQ501H )) ;
+    RstVentilationQnnnH =( (SelRingOutQ501H == NOP )                              || 
+                          ((SelRingOutQ501H == RingInput) && (!RingInputValidQ501H))) ;
 end //always_comb
 
-`LOTR_EN_RST_MSFF(VentilationCounterQnnnH , NextVentilationCounterQnnnH , QClk, EnVentilationQnnnH, RstVentilationQnnnH)
+`LOTR_EN_RST_MSFF(VentilationCounterQnnnH , NextVentilationCounterQnnnH , QClk, EnVentilationQnnnH, (RstVentilationQnnnH || RstQnnnH))
 
 
 
 
+//FIXME - this logic should be re-writtin in a more readable way.
 always_comb begin : set_the_select_next_ring_output_logic
     if (VentilationCounterQnnnH ==  2'b11 ) begin
         SelRingOutQ501H = NOP ;  
@@ -545,7 +522,7 @@ always_comb begin : select_next_ring_output
     unique casez (SelRingOutQ501H)
         NOP   : begin // Insert Invalid Cycle
             RingOutputValidQ501H    = 1'b0; // FIXME - think and change the code to consider the valid bit 
-            RingOutputOpcodeQ501H   = 2'b0;
+            RingOutputOpcodeQ501H   = RD; //RD == 2'b0
             RingOutputAddressQ501H  = 32'b0;
             RingOutputDataQ501H     = 32'b0;
         end
