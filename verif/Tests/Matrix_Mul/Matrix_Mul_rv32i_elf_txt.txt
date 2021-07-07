@@ -1,0 +1,363 @@
+
+Matrix_Mul_rv32i.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00000000 <_stack_start-0x400200>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	3080006f          	j	31c <reset_handler>
+
+Disassembly of section .text:
+
+00000018 <multiply>:
+  18:	fd010113          	addi	sp,sp,-48
+  1c:	02112623          	sw	ra,44(sp)
+  20:	02812423          	sw	s0,40(sp)
+  24:	02912223          	sw	s1,36(sp)
+  28:	03010413          	addi	s0,sp,48
+  2c:	fca42e23          	sw	a0,-36(s0)
+  30:	fcb42c23          	sw	a1,-40(s0)
+  34:	fcc42a23          	sw	a2,-44(s0)
+  38:	fe042623          	sw	zero,-20(s0)
+  3c:	1580006f          	j	194 <_min_stack+0x94>
+  40:	fe042423          	sw	zero,-24(s0)
+  44:	1380006f          	j	17c <_min_stack+0x7c>
+  48:	fec42703          	lw	a4,-20(s0)
+  4c:	00070793          	mv	a5,a4
+  50:	00179793          	slli	a5,a5,0x1
+  54:	00e787b3          	add	a5,a5,a4
+  58:	00279793          	slli	a5,a5,0x2
+  5c:	00078713          	mv	a4,a5
+  60:	fd442783          	lw	a5,-44(s0)
+  64:	00e78733          	add	a4,a5,a4
+  68:	fe842783          	lw	a5,-24(s0)
+  6c:	00279793          	slli	a5,a5,0x2
+  70:	00f707b3          	add	a5,a4,a5
+  74:	0007a023          	sw	zero,0(a5)
+  78:	fe042223          	sw	zero,-28(s0)
+  7c:	0e80006f          	j	164 <_min_stack+0x64>
+  80:	fec42703          	lw	a4,-20(s0)
+  84:	00070793          	mv	a5,a4
+  88:	00179793          	slli	a5,a5,0x1
+  8c:	00e787b3          	add	a5,a5,a4
+  90:	00279793          	slli	a5,a5,0x2
+  94:	00078713          	mv	a4,a5
+  98:	fd442783          	lw	a5,-44(s0)
+  9c:	00e78733          	add	a4,a5,a4
+  a0:	fe842783          	lw	a5,-24(s0)
+  a4:	00279793          	slli	a5,a5,0x2
+  a8:	00f707b3          	add	a5,a4,a5
+  ac:	0007a483          	lw	s1,0(a5)
+  b0:	fec42703          	lw	a4,-20(s0)
+  b4:	00070793          	mv	a5,a4
+  b8:	00179793          	slli	a5,a5,0x1
+  bc:	00e787b3          	add	a5,a5,a4
+  c0:	00279793          	slli	a5,a5,0x2
+  c4:	00078713          	mv	a4,a5
+  c8:	fdc42783          	lw	a5,-36(s0)
+  cc:	00e78733          	add	a4,a5,a4
+  d0:	fe442783          	lw	a5,-28(s0)
+  d4:	00279793          	slli	a5,a5,0x2
+  d8:	00f707b3          	add	a5,a4,a5
+  dc:	0007a683          	lw	a3,0(a5)
+  e0:	fe442703          	lw	a4,-28(s0)
+  e4:	00070793          	mv	a5,a4
+  e8:	00179793          	slli	a5,a5,0x1
+  ec:	00e787b3          	add	a5,a5,a4
+  f0:	00279793          	slli	a5,a5,0x2
+  f4:	00078713          	mv	a4,a5
+  f8:	fd842783          	lw	a5,-40(s0)
+  fc:	00e78733          	add	a4,a5,a4
+ 100:	fe842783          	lw	a5,-24(s0)
+ 104:	00279793          	slli	a5,a5,0x2
+ 108:	00f707b3          	add	a5,a4,a5
+ 10c:	0007a783          	lw	a5,0(a5)
+ 110:	00078593          	mv	a1,a5
+ 114:	00068513          	mv	a0,a3
+ 118:	250000ef          	jal	ra,368 <__mulsi3>
+ 11c:	00050793          	mv	a5,a0
+ 120:	00078613          	mv	a2,a5
+ 124:	fec42703          	lw	a4,-20(s0)
+ 128:	00070793          	mv	a5,a4
+ 12c:	00179793          	slli	a5,a5,0x1
+ 130:	00e787b3          	add	a5,a5,a4
+ 134:	00279793          	slli	a5,a5,0x2
+ 138:	00078713          	mv	a4,a5
+ 13c:	fd442783          	lw	a5,-44(s0)
+ 140:	00e786b3          	add	a3,a5,a4
+ 144:	00c48733          	add	a4,s1,a2
+ 148:	fe842783          	lw	a5,-24(s0)
+ 14c:	00279793          	slli	a5,a5,0x2
+ 150:	00f687b3          	add	a5,a3,a5
+ 154:	00e7a023          	sw	a4,0(a5)
+ 158:	fe442783          	lw	a5,-28(s0)
+ 15c:	00178793          	addi	a5,a5,1
+ 160:	fef42223          	sw	a5,-28(s0)
+ 164:	fe442703          	lw	a4,-28(s0)
+ 168:	00200793          	li	a5,2
+ 16c:	f0e7dae3          	bge	a5,a4,80 <multiply+0x68>
+ 170:	fe842783          	lw	a5,-24(s0)
+ 174:	00178793          	addi	a5,a5,1
+ 178:	fef42423          	sw	a5,-24(s0)
+ 17c:	fe842703          	lw	a4,-24(s0)
+ 180:	00200793          	li	a5,2
+ 184:	ece7d2e3          	bge	a5,a4,48 <multiply+0x30>
+ 188:	fec42783          	lw	a5,-20(s0)
+ 18c:	00178793          	addi	a5,a5,1
+ 190:	fef42623          	sw	a5,-20(s0)
+ 194:	fec42703          	lw	a4,-20(s0)
+ 198:	00200793          	li	a5,2
+ 19c:	eae7d2e3          	bge	a5,a4,40 <multiply+0x28>
+ 1a0:	00000013          	nop
+ 1a4:	00000013          	nop
+ 1a8:	02c12083          	lw	ra,44(sp)
+ 1ac:	02812403          	lw	s0,40(sp)
+ 1b0:	02412483          	lw	s1,36(sp)
+ 1b4:	03010113          	addi	sp,sp,48
+ 1b8:	00008067          	ret
+
+000001bc <main>:
+ 1bc:	f7010113          	addi	sp,sp,-144
+ 1c0:	08112623          	sw	ra,140(sp)
+ 1c4:	08812423          	sw	s0,136(sp)
+ 1c8:	09010413          	addi	s0,sp,144
+ 1cc:	fe042223          	sw	zero,-28(s0)
+ 1d0:	00100793          	li	a5,1
+ 1d4:	fcf42023          	sw	a5,-64(s0)
+ 1d8:	00200793          	li	a5,2
+ 1dc:	fcf42223          	sw	a5,-60(s0)
+ 1e0:	00300793          	li	a5,3
+ 1e4:	fcf42423          	sw	a5,-56(s0)
+ 1e8:	00400793          	li	a5,4
+ 1ec:	fcf42623          	sw	a5,-52(s0)
+ 1f0:	00500793          	li	a5,5
+ 1f4:	fcf42823          	sw	a5,-48(s0)
+ 1f8:	00600793          	li	a5,6
+ 1fc:	fcf42a23          	sw	a5,-44(s0)
+ 200:	00700793          	li	a5,7
+ 204:	fcf42c23          	sw	a5,-40(s0)
+ 208:	00800793          	li	a5,8
+ 20c:	fcf42e23          	sw	a5,-36(s0)
+ 210:	00900793          	li	a5,9
+ 214:	fef42023          	sw	a5,-32(s0)
+ 218:	00900793          	li	a5,9
+ 21c:	f8f42e23          	sw	a5,-100(s0)
+ 220:	00800793          	li	a5,8
+ 224:	faf42023          	sw	a5,-96(s0)
+ 228:	00700793          	li	a5,7
+ 22c:	faf42223          	sw	a5,-92(s0)
+ 230:	00600793          	li	a5,6
+ 234:	faf42423          	sw	a5,-88(s0)
+ 238:	00500793          	li	a5,5
+ 23c:	faf42623          	sw	a5,-84(s0)
+ 240:	00400793          	li	a5,4
+ 244:	faf42823          	sw	a5,-80(s0)
+ 248:	00300793          	li	a5,3
+ 24c:	faf42a23          	sw	a5,-76(s0)
+ 250:	00200793          	li	a5,2
+ 254:	faf42c23          	sw	a5,-72(s0)
+ 258:	00100793          	li	a5,1
+ 25c:	faf42e23          	sw	a5,-68(s0)
+ 260:	f7840693          	addi	a3,s0,-136
+ 264:	f9c40713          	addi	a4,s0,-100
+ 268:	fc040793          	addi	a5,s0,-64
+ 26c:	00068613          	mv	a2,a3
+ 270:	00070593          	mv	a1,a4
+ 274:	00078513          	mv	a0,a5
+ 278:	da1ff0ef          	jal	ra,18 <multiply>
+ 27c:	fe042623          	sw	zero,-20(s0)
+ 280:	0780006f          	j	2f8 <_stack_len+0xf8>
+ 284:	fe042423          	sw	zero,-24(s0)
+ 288:	0580006f          	j	2e0 <_stack_len+0xe0>
+ 28c:	fe442783          	lw	a5,-28(s0)
+ 290:	00178713          	addi	a4,a5,1
+ 294:	fee42223          	sw	a4,-28(s0)
+ 298:	00279713          	slli	a4,a5,0x2
+ 29c:	004017b7          	lui	a5,0x401
+ 2a0:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x700>
+ 2a4:	00f706b3          	add	a3,a4,a5
+ 2a8:	fec42703          	lw	a4,-20(s0)
+ 2ac:	00070793          	mv	a5,a4
+ 2b0:	00179793          	slli	a5,a5,0x1
+ 2b4:	00e787b3          	add	a5,a5,a4
+ 2b8:	fe842703          	lw	a4,-24(s0)
+ 2bc:	00e787b3          	add	a5,a5,a4
+ 2c0:	00279793          	slli	a5,a5,0x2
+ 2c4:	ff040713          	addi	a4,s0,-16
+ 2c8:	00f707b3          	add	a5,a4,a5
+ 2cc:	f887a783          	lw	a5,-120(a5)
+ 2d0:	00f6a023          	sw	a5,0(a3)
+ 2d4:	fe842783          	lw	a5,-24(s0)
+ 2d8:	00178793          	addi	a5,a5,1
+ 2dc:	fef42423          	sw	a5,-24(s0)
+ 2e0:	fe842703          	lw	a4,-24(s0)
+ 2e4:	00200793          	li	a5,2
+ 2e8:	fae7d2e3          	bge	a5,a4,28c <_stack_len+0x8c>
+ 2ec:	fec42783          	lw	a5,-20(s0)
+ 2f0:	00178793          	addi	a5,a5,1
+ 2f4:	fef42623          	sw	a5,-20(s0)
+ 2f8:	fec42703          	lw	a4,-20(s0)
+ 2fc:	00200793          	li	a5,2
+ 300:	f8e7d2e3          	bge	a5,a4,284 <_stack_len+0x84>
+ 304:	00000793          	li	a5,0
+ 308:	00078513          	mv	a0,a5
+ 30c:	08c12083          	lw	ra,140(sp)
+ 310:	08812403          	lw	s0,136(sp)
+ 314:	09010113          	addi	sp,sp,144
+ 318:	00008067          	ret
+
+0000031c <reset_handler>:
+ 31c:	00000093          	li	ra,0
+ 320:	00008113          	mv	sp,ra
+ 324:	00008193          	mv	gp,ra
+ 328:	00008213          	mv	tp,ra
+ 32c:	00008293          	mv	t0,ra
+ 330:	00008313          	mv	t1,ra
+ 334:	00008393          	mv	t2,ra
+ 338:	00008413          	mv	s0,ra
+ 33c:	00008493          	mv	s1,ra
+ 340:	00008513          	mv	a0,ra
+ 344:	00008593          	mv	a1,ra
+ 348:	00008613          	mv	a2,ra
+ 34c:	00008693          	mv	a3,ra
+ 350:	00008713          	mv	a4,ra
+ 354:	00008793          	mv	a5,ra
+ 358:	00c002b7          	lui	t0,0xc00
+ 35c:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+ 360:	0002a103          	lw	sp,0(t0)
+ 364:	e59ff0ef          	jal	ra,1bc <main>
+
+00000368 <__mulsi3>:
+ 368:	00050613          	mv	a2,a0
+ 36c:	00000513          	li	a0,0
+ 370:	0015f693          	andi	a3,a1,1
+ 374:	00068463          	beqz	a3,37c <__mulsi3+0x14>
+ 378:	00c50533          	add	a0,a0,a2
+ 37c:	0015d593          	srli	a1,a1,0x1
+ 380:	00161613          	slli	a2,a2,0x1
+ 384:	fe0596e3          	bnez	a1,370 <__mulsi3+0x8>
+ 388:	00008067          	ret
+Raw dump of debug contents of section .debug_line (loaded from Matrix_Mul_rv32i.elf):
+
+  Offset:                      0x0
+  Length:                      142
+  DWARF Version:               3
+  Prologue Length:             72
+  Minimum Instruction Length:  1
+  Initial value of 'is_stmt':  1
+  Line Base:                   -5
+  Line Range:                  14
+  Opcode Base:                 13
+
+ Opcodes:
+  Opcode 1 has 0 args
+  Opcode 2 has 1 arg
+  Opcode 3 has 1 arg
+  Opcode 4 has 1 arg
+  Opcode 5 has 1 arg
+  Opcode 6 has 0 args
+  Opcode 7 has 0 args
+  Opcode 8 has 0 args
+  Opcode 9 has 1 arg
+  Opcode 10 has 0 args
+  Opcode 11 has 0 args
+  Opcode 12 has 1 arg
+
+ The Directory Table (offset 0x1b):
+  1	../../.././riscv-gcc/libgcc/config/riscv
+
+ The File Name Table (offset 0x45):
+  Entry	Dir	Time	Size	Name
+  1	1	0	0	muldi3.S
+
+ Line Number Statements:
+  [0x00000052]  Extended opcode 2: set Address to 0x368
+  [0x00000059]  Advance Line by 36 to 37
+  [0x0000005b]  Copy
+  [0x0000005c]  Advance Line by 1 to 38
+  [0x0000005e]  Advance PC by fixed size amount 4 to 0x36c
+  [0x00000061]  Copy (view 1)
+  [0x00000062]  Advance Line by 2 to 40
+  [0x00000064]  Advance PC by fixed size amount 4 to 0x370
+  [0x00000067]  Copy (view 2)
+  [0x00000068]  Advance Line by 1 to 41
+  [0x0000006a]  Advance PC by fixed size amount 4 to 0x374
+  [0x0000006d]  Copy (view 3)
+  [0x0000006e]  Advance Line by 1 to 42
+  [0x00000070]  Advance PC by fixed size amount 4 to 0x378
+  [0x00000073]  Copy (view 4)
+  [0x00000074]  Advance Line by 2 to 44
+  [0x00000076]  Advance PC by fixed size amount 4 to 0x37c
+  [0x00000079]  Copy (view 5)
+  [0x0000007a]  Advance Line by 1 to 45
+  [0x0000007c]  Advance PC by fixed size amount 4 to 0x380
+  [0x0000007f]  Copy (view 6)
+  [0x00000080]  Advance Line by 1 to 46
+  [0x00000082]  Advance PC by fixed size amount 4 to 0x384
+  [0x00000085]  Copy (view 7)
+  [0x00000086]  Advance Line by 1 to 47
+  [0x00000088]  Advance PC by fixed size amount 4 to 0x388
+  [0x0000008b]  Copy (view 8)
+  [0x0000008c]  Advance PC by fixed size amount 4 to 0x38c
+  [0x0000008f]  Extended opcode 1: End of Sequence
+
+
+Contents of the .debug_info section (loaded from Matrix_Mul_rv32i.elf):
+
+  Compilation Unit @ offset 0x0:
+   Length:        0x22 (32-bit)
+   Version:       2
+   Abbrev Offset: 0x0
+   Pointer Size:  4
+ <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
+    <c>   DW_AT_stmt_list   : 0x0
+    <10>   DW_AT_low_pc      : 0x368
+    <14>   DW_AT_high_pc     : 0x38c
+    <18>   DW_AT_name        : (indirect string, offset: 0x0): ../../.././riscv-gcc/libgcc/config/riscv/muldi3.S
+    <1c>   DW_AT_comp_dir    : (indirect string, offset: 0x32): /home/adlv/projects/riscv/riscv-gnu-toolchain/build-gcc-newlib-stage2/riscv32-unknown-elf/libgcc
+    <20>   DW_AT_producer    : (indirect string, offset: 0x93): GNU AS 2.35
+    <24>   DW_AT_language    : 32769	(MIPS assembler)
+
+Contents of the .debug_abbrev section (loaded from Matrix_Mul_rv32i.elf):
+
+  Number TAG (0x0)
+   1      DW_TAG_compile_unit    [no children]
+    DW_AT_stmt_list    DW_FORM_data4
+    DW_AT_low_pc       DW_FORM_addr
+    DW_AT_high_pc      DW_FORM_addr
+    DW_AT_name         DW_FORM_strp
+    DW_AT_comp_dir     DW_FORM_strp
+    DW_AT_producer     DW_FORM_strp
+    DW_AT_language     DW_FORM_data2
+    DW_AT value: 0     DW_FORM value: 0
+
+Contents of the .debug_aranges section (loaded from Matrix_Mul_rv32i.elf):
+
+  Length:                   28
+  Version:                  2
+  Offset into .debug_info:  0x0
+  Pointer Size:             4
+  Segment Size:             0
+
+    Address    Length
+    00000368 00000024 
+    00000000 00000000 
+
+Contents of the .debug_str section (loaded from Matrix_Mul_rv32i.elf):
+
+  0x00000000 2e2e2f2e 2e2f2e2e 2f2e2f72 69736376 ../../.././riscv
+  0x00000010 2d676363 2f6c6962 6763632f 636f6e66 -gcc/libgcc/conf
+  0x00000020 69672f72 69736376 2f6d756c 6469332e ig/riscv/muldi3.
+  0x00000030 53002f68 6f6d652f 61646c76 2f70726f S./home/adlv/pro
+  0x00000040 6a656374 732f7269 7363762f 72697363 jects/riscv/risc
+  0x00000050 762d676e 752d746f 6f6c6368 61696e2f v-gnu-toolchain/
+  0x00000060 6275696c 642d6763 632d6e65 776c6962 build-gcc-newlib
+  0x00000070 2d737461 6765322f 72697363 7633322d -stage2/riscv32-
+  0x00000080 756e6b6e 6f776e2d 656c662f 6c696267 unknown-elf/libg
+  0x00000090 63630047 4e552041 5320322e 333500   cc.GNU AS 2.35.
+

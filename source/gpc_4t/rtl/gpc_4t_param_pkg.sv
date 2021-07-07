@@ -45,52 +45,59 @@ parameter SIZE_I_MEM       = 2**(MSB_I_MEM + 1);
 parameter LSB_D_MEM        = 0 ;
 parameter MSB_D_MEM        = 11;
 parameter SIZE_D_MEM       = 2**(MSB_D_MEM + 1);
+parameter SIZE_SHRD_MEM    = 2**(MSB_D_MEM );
 
+parameter MSB_CR                      = 11;
 // CR Address Offsets
-parameter MSB_CR           = 7;
-parameter CR_THREAD_ID_Q103H     = 8'h4              ;
-parameter CR_CORE_ID       = 8'h8              ;
-parameter CR_STACK_BASE_OFFSET = 8'hc          ;
-parameter CR_TLS_BASE_OFFSET =8'h10            ;
-parameter CR_SHARED_BASE_OFFSET = 8'h14        ;
-parameter CR_I_MEM_MSB = 8'h18                 ;
-parameter CR_D_MEM_MSB = 8'h20                 ;
-parameter CR_THREAD0_STATUS = 12'h110           ;
-parameter CR_THREAD1_STATUS = 12'h114           ;
-parameter CR_THREAD2_STATUS = 12'h118           ;
-parameter CR_THREAD3_STATUS = 12'h11c           ;
-parameter CR_THREAD0_EXCEPTION_CODE = 12'h120   ;
-parameter CR_THREAD1_EXCEPTION_CODE = 12'h124   ;
-parameter CR_THREAD2_EXCEPTION_CODE = 12'h128   ;
-parameter CR_THREAD3_EXCEPTION_CODE = 12'h12c   ;
-parameter CR_THREAD0_PC = 12'h130               ;
-parameter CR_THREAD1_PC = 12'h134               ;
-parameter CR_THREAD2_PC = 12'h138               ;
-parameter CR_THREAD3_PC = 12'h13c               ;
-parameter CR_THREAD0_PC_RST = 12'h140           ;
-parameter CR_THREAD1_PC_RST = 12'h144           ;
-parameter CR_THREAD2_PC_RST = 12'h148           ;
-parameter CR_THREAD3_PC_RST = 12'h14c           ;
-parameter CR_THREAD0_PC_EN = 12'h150            ;
-parameter CR_THREAD1_PC_EN = 12'h154            ;
-parameter CR_THREAD2_PC_EN = 12'h158            ;
-parameter CR_THREAD3_PC_EN = 12'h15c            ;
-parameter CR_THREAD0_DFD_REG_ID =12'h160        ;
-parameter CR_THREAD1_DFD_REG_ID =12'h164        ;
-parameter CR_THREAD2_DFD_REG_ID =12'h168        ;
-parameter CR_THREAD3_DFD_REG_ID =12'h16c        ;
-parameter CR_THREAD0_DFD_REG_DATA = 12'h170     ;
-parameter CR_THREAD1_DFD_REG_DATA = 12'h174     ;
-parameter CR_THREAD2_DFD_REG_DATA = 12'h178     ;
-parameter CR_THREAD3_DFD_REG_DATA = 12'h17c     ;
-parameter CR_THREAD0_STACK_BASE_OFFSET = 12'h180;
-parameter CR_THREAD1_STACK_BASE_OFFSET = 12'h184;
-parameter CR_THREAD2_STACK_BASE_OFFSET = 12'h188;
-parameter CR_THREAD3_STACK_BASE_OFFSET = 12'h18c;
-parameter CR_THREAD0_TLS_BASE_OFFSET = 12'h190  ;
-parameter CR_THREAD1_TLS_BASE_OFFSET = 12'h194  ;
-parameter CR_THREAD2_TLS_BASE_OFFSET = 12'h198  ;
-parameter CR_THREAD3_TLS_BASE_OFFSET = 12'h19c  ;
+parameter CR_WHO_AM_I                 = 12'h0  ;
+parameter CR_THREAD_ID                = 12'h4  ;
+parameter CR_CORE_ID                  = 12'h8  ;
+parameter CR_STACK_BASE_OFFSET        = 12'hc  ;
+parameter CR_TLS_BASE_OFFSET          = 12'h10 ;
+parameter CR_SHARED_BASE_OFFSET       = 12'h14 ;
+parameter CR_I_MEM_MSB                = 12'h18 ;
+parameter CR_D_MEM_MSB                = 12'h20 ;
+parameter CR_SUPPORTED_ARCH           = 12'h24 ;
+parameter CR_THREAD0_STATUS           = 12'h110;
+parameter CR_THREAD1_STATUS           = 12'h114;
+parameter CR_THREAD2_STATUS           = 12'h118;
+parameter CR_THREAD3_STATUS           = 12'h11c;
+parameter CR_THREAD0_EXCEPTION_CODE   = 12'h120;
+parameter CR_THREAD1_EXCEPTION_CODE   = 12'h124;
+parameter CR_THREAD2_EXCEPTION_CODE   = 12'h128;
+parameter CR_THREAD3_EXCEPTION_CODE   = 12'h12c;
+parameter CR_THREAD0_PC               = 12'h130;
+parameter CR_THREAD1_PC               = 12'h134;
+parameter CR_THREAD2_PC               = 12'h138;
+parameter CR_THREAD3_PC               = 12'h13c;
+parameter CR_THREAD0_PC_RST           = 12'h140;
+parameter CR_THREAD1_PC_RST           = 12'h144;
+parameter CR_THREAD2_PC_RST           = 12'h148;
+parameter CR_THREAD3_PC_RST           = 12'h14c;
+parameter CR_THREAD0_PC_EN            = 12'h150;
+parameter CR_THREAD1_PC_EN            = 12'h154;
+parameter CR_THREAD2_PC_EN            = 12'h158;
+parameter CR_THREAD3_PC_EN            = 12'h15c;
+parameter CR_THREAD0_DFD_REG_ID       = 12'h160;
+parameter CR_THREAD1_DFD_REG_ID       = 12'h164;
+parameter CR_THREAD2_DFD_REG_ID       = 12'h168;
+parameter CR_THREAD3_DFD_REG_ID       = 12'h16c;
+parameter CR_THREAD0_DFD_REG_DATA     = 12'h170;
+parameter CR_THREAD1_DFD_REG_DATA     = 12'h174;
+parameter CR_THREAD2_DFD_REG_DATA     = 12'h178;
+parameter CR_THREAD3_DFD_REG_DATA     = 12'h17c;
+parameter CR_THREAD0_STACK_BASE_OFFSET= 12'h180;
+parameter CR_THREAD1_STACK_BASE_OFFSET= 12'h184;
+parameter CR_THREAD2_STACK_BASE_OFFSET= 12'h188;
+parameter CR_THREAD3_STACK_BASE_OFFSET= 12'h18c;
+parameter CR_THREAD0_TLS_BASE_OFFSET  = 12'h190;
+parameter CR_THREAD1_TLS_BASE_OFFSET  = 12'h194;
+parameter CR_THREAD2_TLS_BASE_OFFSET  = 12'h198;
+parameter CR_THREAD3_TLS_BASE_OFFSET  = 12'h19c;
+parameter CR_SCRATCHPAD0              = 12'h200;
+parameter CR_SCRATCHPAD1              = 12'h204;
+parameter CR_SCRATCHPAD2              = 12'h208;
+parameter CR_SCRATCHPAD3              = 12'h20C;
 
 // Region Bits
 parameter LSB_REGION    = 22;
@@ -108,13 +115,12 @@ parameter LSB_CORE_ID      = 24;
 parameter MSB_CORE_ID      = 31;
 
 
-typedef struct packed { //RO
-    logic [31:0] pc;
+typedef struct packed { // RO\V
+    logic [9:0]  who_am_i;
     logic [1:0]  thread;
     logic [7:0]  core;
     logic [31:0] stk_ofst;
     logic [31:0] tls_ofst;
-    logic [31:0] shrd_ofst;
     logic [7:0]  i_mem_msb;
     logic [7:0]  d_mem_msb;
     logic [7:0]  sts_0;
@@ -129,31 +135,14 @@ typedef struct packed { //RO
     logic [31:0] pc_1;
     logic [31:0] pc_2;
     logic [31:0] pc_3;
-    logic [31:0] dfd_data_0;
-    logic [31:0] dfd_data_1;
-    logic [31:0] dfd_data_2;
-    logic [31:0] dfd_data_3;
         
 } t_cr_ro;
 
 typedef struct packed { //RW
-    logic en_pc;
-    logic rst_pc;
-    logic en_pc_0;
-    logic en_pc_1;
-    logic en_pc_2;
-    logic en_pc_3;
-    logic rst_pc_0;
-    logic rst_pc_1;
-    logic rst_pc_2;
-    logic rst_pc_3;
     logic [4:0]  dfd_id_0;
     logic [4:0]  dfd_id_1;
     logic [4:0]  dfd_id_2;
     logic [4:0]  dfd_id_3;  
-} t_core_cr;
-
-typedef struct packed { //RW
     logic [31:0] stk_ofst_0;
     logic [31:0] stk_ofst_1;
     logic [31:0] stk_ofst_2;
@@ -162,11 +151,22 @@ typedef struct packed { //RW
     logic [31:0] tls_ofst_1;
     logic [31:0] tls_ofst_2;
     logic [31:0] tls_ofst_3;    
-} t_cr_ofst;
+    logic [31:0] shrd_ofst;
+} t_cr_rw;
+
+typedef struct packed { //RW
+    logic        en_pc_0;
+    logic        en_pc_1;
+    logic        en_pc_2;
+    logic        en_pc_3;
+    logic        rst_pc_0;
+    logic        rst_pc_1;
+    logic        rst_pc_2;
+    logic        rst_pc_3;
+} t_core_cr;
 
 typedef struct packed { 
-    logic en_pc;
-    logic rst_pc;
+    logic who_am_i;
     logic en_pc_0;
     logic en_pc_1;
     logic en_pc_2;
@@ -187,7 +187,6 @@ typedef struct packed {
     logic tls_ofst_1;
     logic tls_ofst_2;
     logic tls_ofst_3; 
-    logic pc;
     logic thread;
     logic core;
     logic stk_ofst;
@@ -211,8 +210,10 @@ typedef struct packed {
     logic dfd_data_1;
     logic dfd_data_2;
     logic dfd_data_3;
-
-    
+    logic scratch_pad_0;
+    logic scratch_pad_1;
+    logic scratch_pad_2;
+    logic scratch_pad_3;
 } t_cr_en;
 
 

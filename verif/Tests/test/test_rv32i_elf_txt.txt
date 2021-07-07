@@ -1,0 +1,54 @@
+
+test_rv32i.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00000000 <_stack_start-0x400200>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	0440006f          	j	58 <reset_handler>
+
+Disassembly of section .text:
+
+00000018 <main>:
+  18:	fe010113          	addi	sp,sp,-32
+  1c:	00812e23          	sw	s0,28(sp)
+  20:	02010413          	addi	s0,sp,32
+  24:	00500793          	li	a5,5
+  28:	fef42623          	sw	a5,-20(s0)
+  2c:	00400793          	li	a5,4
+  30:	fef42423          	sw	a5,-24(s0)
+  34:	fec42703          	lw	a4,-20(s0)
+  38:	fe842783          	lw	a5,-24(s0)
+  3c:	00f707b3          	add	a5,a4,a5
+  40:	fef42223          	sw	a5,-28(s0)
+  44:	00000013          	nop
+  48:	00078513          	mv	a0,a5
+  4c:	01c12403          	lw	s0,28(sp)
+  50:	02010113          	addi	sp,sp,32
+  54:	00008067          	ret
+
+00000058 <reset_handler>:
+  58:	00000093          	li	ra,0
+  5c:	00008113          	mv	sp,ra
+  60:	00008193          	mv	gp,ra
+  64:	00008213          	mv	tp,ra
+  68:	00008293          	mv	t0,ra
+  6c:	00008313          	mv	t1,ra
+  70:	00008393          	mv	t2,ra
+  74:	00008413          	mv	s0,ra
+  78:	00008493          	mv	s1,ra
+  7c:	00008513          	mv	a0,ra
+  80:	00008593          	mv	a1,ra
+  84:	00008613          	mv	a2,ra
+  88:	00008693          	mv	a3,ra
+  8c:	00008713          	mv	a4,ra
+  90:	00008793          	mv	a5,ra
+  94:	00c002b7          	lui	t0,0xc00
+  98:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+  9c:	0002a103          	lw	sp,0(t0)
+  a0:	f79ff0ef          	jal	ra,18 <main>

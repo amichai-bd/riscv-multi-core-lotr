@@ -15,6 +15,8 @@ SECTIONS
         . = ALIGN(4);
         *(.start);
         *(.text);
+        . = ORIGIN(i_mem) + LENGTH(i_mem) - 1;
+        BYTE(0);
     }  > i_mem
 
     .data : {

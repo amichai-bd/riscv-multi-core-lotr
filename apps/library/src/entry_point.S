@@ -54,11 +54,15 @@ read_tid:
       lw t0, GPC_CR_MY_THREAD_ID(t0)
 
 init_stack:
-      li a1, GPC_MEM_STACK_SIZE
-      mv a2, t0
-      call init_multiply
-      addi sp, a0, GPC_MEM_STACK_SIZE - 4
-      mv fp, sp
+    // sp = STACK_BASE + (tid+1)*STACK_SIZE
+    // fp = sp (in case frame pointers are used)
+    // stack grows downwards, so need to use tid+1
+    li a1, GPC_MEM_STACK_SIZE
+    addi a2, t0, 1
+    call init_multiply
+    li a2, GPC_MEM_STACK_BASE
+    add sp, a0, a2
+    mv fp, sp
 
 init_gpc_params:
       li a1, PARAMS_SIZE
@@ -106,18 +110,26 @@ init_gp:
 init_tp:
       lw tp, PARAMS_OFFSET_LOCAL_DATA(a3)
 
+// user global setup flow:
+// SCRATCHPAD0 CR is used to synchronize execution
+// bootstrap thread invokes global init and then writes 1 to scrathpad
+// other threads wait until scratchpad is non-zero
 is_bootstrap_thread:
     li t2, GPC_CORE_BOOTSTRAP_THREAD_ID
     beq t0, t2, bootstrap_thread
-non_bootstrap_thread:
-    # TODO: wait/poll until bootstrap thread is done
-    ebreak
+
+non_bootstrap_thread_wait:
+    li t1, GPC_MEM_CR_BASE
+    lw t2, GPC_CR_SCRATCHPAD0(t1)
+    beqz t2, non_bootstrap_thread_wait
     j global_setup_done
+
 bootstrap_thread:
     mv a0, a3
     call gpc_global_setup
-    ebreak
-    # TODO: wake up other threads
+    li t1, GPC_MEM_CR_BASE
+    li t2, 1
+    sw t2, GPC_CR_SCRATCHPAD0(t1)
 global_setup_done:
 
 local_setup:

@@ -1,0 +1,81 @@
+
+Factorial_rv32i.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00000000 <_stack_start-0x400200>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	0a80006f          	j	bc <reset_handler>
+
+Disassembly of section .text:
+
+00000018 <factorial>:
+  18:	fd010113          	addi	sp,sp,-48
+  1c:	02112623          	sw	ra,44(sp)
+  20:	02812423          	sw	s0,40(sp)
+  24:	03010413          	addi	s0,sp,48
+  28:	fca42e23          	sw	a0,-36(s0)
+  2c:	fdc42703          	lw	a4,-36(s0)
+  30:	00100793          	li	a5,1
+  34:	00f71663          	bne	a4,a5,40 <factorial+0x28>
+  38:	00100793          	li	a5,1
+  3c:	0280006f          	j	64 <factorial+0x4c>
+  40:	fdc42783          	lw	a5,-36(s0)
+  44:	fff78793          	addi	a5,a5,-1
+  48:	00078513          	mv	a0,a5
+  4c:	fcdff0ef          	jal	ra,18 <factorial>
+  50:	00050713          	mv	a4,a0
+  54:	fdc42783          	lw	a5,-36(s0)
+  58:	00e787b3          	add	a5,a5,a4
+  5c:	fef42623          	sw	a5,-20(s0)
+  60:	fec42783          	lw	a5,-20(s0)
+  64:	00078513          	mv	a0,a5
+  68:	02c12083          	lw	ra,44(sp)
+  6c:	02812403          	lw	s0,40(sp)
+  70:	03010113          	addi	sp,sp,48
+  74:	00008067          	ret
+
+00000078 <main>:
+  78:	fe010113          	addi	sp,sp,-32
+  7c:	00112e23          	sw	ra,28(sp)
+  80:	00812c23          	sw	s0,24(sp)
+  84:	02010413          	addi	s0,sp,32
+  88:	00400513          	li	a0,4
+  8c:	f8dff0ef          	jal	ra,18 <factorial>
+  90:	fea42623          	sw	a0,-20(s0)
+  94:	004017b7          	lui	a5,0x401
+  98:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x700>
+  9c:	fec42703          	lw	a4,-20(s0)
+  a0:	00e7a023          	sw	a4,0(a5)
+  a4:	00000013          	nop
+  a8:	00078513          	mv	a0,a5
+  ac:	01c12083          	lw	ra,28(sp)
+  b0:	01812403          	lw	s0,24(sp)
+  b4:	02010113          	addi	sp,sp,32
+  b8:	00008067          	ret
+
+000000bc <reset_handler>:
+  bc:	00000093          	li	ra,0
+  c0:	00008113          	mv	sp,ra
+  c4:	00008193          	mv	gp,ra
+  c8:	00008213          	mv	tp,ra
+  cc:	00008293          	mv	t0,ra
+  d0:	00008313          	mv	t1,ra
+  d4:	00008393          	mv	t2,ra
+  d8:	00008413          	mv	s0,ra
+  dc:	00008493          	mv	s1,ra
+  e0:	00008513          	mv	a0,ra
+  e4:	00008593          	mv	a1,ra
+  e8:	00008613          	mv	a2,ra
+  ec:	00008693          	mv	a3,ra
+  f0:	00008713          	mv	a4,ra
+  f4:	00008793          	mv	a5,ra
+  f8:	00c002b7          	lui	t0,0xc00
+  fc:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+ 100:	0002a103          	lw	sp,0(t0)
+ 104:	f75ff0ef          	jal	ra,78 <main>
