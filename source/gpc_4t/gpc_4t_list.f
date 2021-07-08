@@ -3,7 +3,7 @@
 +incdir+../verif/tb/
 
 //PARAM PACAKGE
-../source/gpc_4t/rtl/gpc_4t_param_pkg.sv
+../source/common/lotr_pkg.sv
 
 //RTL
 ../source/gpc_4t/rtl/gpc_4t.sv

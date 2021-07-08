@@ -17,6 +17,7 @@
 
 `include "lotr_defines.sv"
 module gpc_4t_tile
+import lotr_pkg::*;
 (
     //General Interface
     input   logic         QClk                   ,
@@ -24,12 +25,12 @@ module gpc_4t_tile
     input   logic  [7:0]  CoreID                 ,
     //Ring ---> RC
     input   logic         RingInputValidQ500H    ,
-    input   logic  [1:0]  RingInputOpcodeQ500H   ,
+    input   t_opcode      RingInputOpcodeQ500H   ,
     input   logic  [31:0] RingInputAddressQ500H  ,
     input   logic  [31:0] RingInputDataQ500H     ,
     //RC   ---> Ring
     output  logic         RingOutputValidQ502H   ,
-    output  logic  [1:0]  RingOutputOpcodeQ502H  ,
+    output  t_opcode      RingOutputOpcodeQ502H  ,
     output  logic  [31:0] RingOutputAddressQ502H ,
     output  logic  [31:0] RingOutputDataQ502H
 );
@@ -40,23 +41,23 @@ module gpc_4t_tile
 // Core To Fabric(C2F) logic
 // C2F_Rsp
 logic        C2F_RspValidQ502H   ;  
-logic [1:0]  C2F_RspOpcodeQ502H  ;  
+t_opcode     C2F_RspOpcodeQ502H  ;  
 logic [1:0]  C2F_RspThreadIDQ502H;  
 logic [31:0] C2F_RspDataQ502H    ;
 logic        C2F_RspStall        ;
 // C2F_Req
 logic        C2F_ReqValidQ500H   ;
-logic [1:0]  C2F_ReqOpcodeQ500H  ;
+t_opcode     C2F_ReqOpcodeQ500H  ;
 logic [1:0]  C2F_ReqThreadIDQ500H;
 logic [31:0] C2F_ReqAddressQ500H ;
 logic [31:0] C2F_ReqDataQ500H    ;
 //Fabric To Core(F2C) logic
 logic        F2C_ReqValidQ502H   ;
-logic [1:0]  F2C_ReqOpcodeQ502H  ;
+t_opcode     F2C_ReqOpcodeQ502H  ;
 logic [31:0] F2C_ReqAddressQ502H ;
 logic [31:0] F2C_ReqDataQ502H    ;
 logic        F2C_RspValidQ500H   ;
-logic [1:0]  F2C_RspOpcodeQ500H  ;
+t_opcode     F2C_RspOpcodeQ500H  ;
 logic [31:0] F2C_RspAddressQ500H ;
 logic [31:0] F2C_RspDataQ500H    ;
 

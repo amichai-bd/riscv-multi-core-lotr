@@ -14,7 +14,8 @@
 //------------------------------------------------------------------------------
 
 `include "lotr_defines.sv"
-module d_mem_wrap import gpc_4t_pkg::*;  
+module d_mem_wrap 
+import lotr_pkg::*;  
                 (
                 input  logic               QClk           ,
                 input  logic               RstQnnnH       ,

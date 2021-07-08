@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
-// Title         : gpc_4t parameter package
-// Project       : gpc_4t
+// Title         : lort parameter package
+// Project       : lotr_pkg
 //-----------------------------------------------------------------------------
-// File          : gpc_4t_param_pkg.sv
+// File          : lotr_pkg.sv
 // Author        : Amichai Ben-David
 // Created       : 1/2020
 //-----------------------------------------------------------------------------
@@ -10,7 +10,56 @@
 // parameters and struct used in gpc_4t
 //-----------------------------------------------------------------------------
 
-package gpc_4t_pkg;
+package lotr_pkg;
+//=================================================================================
+//============                  RC - ring controller              =================
+//=================================================================================
+//=========================================
+// t_opcodes : Command type - RD=00 , RD_RSP=01 ,WR=10 , WR_BCAST=11
+//=========================================
+typedef enum logic [1:0] {
+    RD                = 2'b00 , 
+    RD_RSP            = 2'b01 ,
+    WR                = 2'b10 , 
+    WR_BCAST          = 2'b11 
+    } t_opcode ;
+//=========================================
+// t_states : FREE '000' , WRITE '001' , READ '010' , READ_PRGRS '011' , READ_RDY '100'
+//          WRITE_BCAST '101' , WRITE_BCAST_PRGRS '110'
+//=========================================
+typedef enum logic [2:0] {
+    FREE              = 3'b000 ,
+    WRITE             = 3'b001 ,
+    READ              = 3'b010 ,
+    READ_PRGRS        = 3'b011 ,
+    READ_RDY          = 3'b100 ,
+    WRITE_BCAST       = 3'b101 ,
+    WRITE_BCAST_PRGRS = 3'b110 ,
+    ERROR             = 3'b111
+    } t_state; 
+//=========================================
+// t_winner  : which signal to drive to the ring output - NOP=0 , RingInput=1 ,F2CResponse=2 , C2FRequest=3
+//=========================================
+typedef enum logic [1:0] {
+    BUBBLE_OUT        = 0 ,
+    RingInput         = 1 ,
+    F2CResponse       = 2 ,
+    C2FRequest        = 3 
+    } t_winner ;
+//=========================================
+//=========    Parameters    ==============
+//=========================================
+parameter C2F_ENTRIESNUM = 4                      ; 
+parameter C2F_MSB = C2F_ENTRIESNUM -1             ;
+parameter C2F_ENC_MSB = $clog2(C2F_ENTRIESNUM)-1  ; 
+
+parameter F2C_ENTRIESNUM = 4                      ; 
+parameter F2C_MSB = F2C_ENTRIESNUM -1             ;
+parameter F2C_ENC_MSB = $clog2(F2C_ENTRIESNUM)-1  ;
+
+//=================================================================================
+//============               END of RC - ring controller          =================
+//=================================================================================
 // number registers in register file.
 parameter OP_LUI       = 7'b0110111;
 parameter OP_AUIPC     = 7'b0010111;
@@ -33,9 +82,7 @@ parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 
 //  D_MEM          0x40_0000    4KB     1024
 //  CR             0xC0_0000 
 //---------------------------------------------------
-
 // agent_id [31:24] | region [23:22] | reserved[21:12] | offset [11:0]
-
 // Instruction Memory 4KB 
 parameter LSB_I_MEM        = 0 ;
 parameter MSB_I_MEM        = 11;
@@ -218,5 +265,5 @@ typedef struct packed {
 
 
 
-endpackage // gpc_pkg
+endpackage // lotr_pkg
 

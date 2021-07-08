@@ -20,7 +20,8 @@
 //  MMIO_general 
 //  MMIO_CSR     
 //---------------------------------------------------
-module i_mem_wrap import gpc_4t_pkg::*;
+module i_mem_wrap 
+import lotr_pkg::*;
                 (
                 input  logic        clock  ,
                 input  logic        rst    ,

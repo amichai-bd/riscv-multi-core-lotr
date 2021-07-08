@@ -15,7 +15,8 @@
 `include "lotr_defines.sv"
 
 //---------------------------------------------------
-module d_mem import gpc_4t_pkg::*; 
+module d_mem 
+import lotr_pkg::*; 
                (input  logic               clock    ,
                 //core access
                 input  logic [MSB_D_MEM:0] address  ,

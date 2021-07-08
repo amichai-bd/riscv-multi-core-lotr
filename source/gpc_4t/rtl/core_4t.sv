@@ -25,7 +25,7 @@
 
 `include "lotr_defines.sv"
 module core_4t 
-    import gpc_4t_pkg::*;  
+    import lotr_pkg::*;  
     (
     input  logic        QClk            ,
     input  logic        RstQnnnH        ,
