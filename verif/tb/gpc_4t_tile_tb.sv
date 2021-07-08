@@ -8,11 +8,11 @@ import lotr_pkg::*;
 	logic         RstQnnnH                 ;
 	logic  [7:0]  CoreID_tb  		       ; 
 	logic         RingInputValidQ500H_tb   ; 
-	t_opcode     RingInputOpcodeQ500H_tb  ; 
+	t_opcode      RingInputOpcodeQ500H_tb  ; 
 	logic  [31:0] RingInputAddressQ500H_tb ; 
 	logic  [31:0] RingInputDataQ500H_tb    ; 
 	logic         RingOutputValidQ502H_tb  ; 
-	t_opcode     RingOutputOpcodeQ502H_tb ; 
+	t_opcode      RingOutputOpcodeQ502H_tb ; 
 	logic  [31:0] RingOutputAddressQ502H_tb; 
 	logic  [31:0] RingOutputDataQ502H_tb   ; 
 	
@@ -55,19 +55,19 @@ import lotr_pkg::*;
 
 gpc_4t_tile gpc_4t_tile(	  
               //general signals input
-			  .QClk  		          (QClk),      //input
-			  .RstQnnnH  	          (RstQnnnH),  //input
-			  .CoreID       		  (CoreID_tb), //input
+			  .QClk  		          (QClk),                       //input
+			  .RstQnnnH  	          (RstQnnnH),                   //input
+			  .CoreID       		  (CoreID_tb),                  //input
               //tile input
 			  .RingInputValidQ500H    (RingInputValidQ500H_tb),     //input
 			  .RingInputOpcodeQ500H   (RingInputOpcodeQ500H_tb),    //input
 			  .RingInputAddressQ500H  (RingInputAddressQ500H_tb),   //input
 			  .RingInputDataQ500H     (RingInputDataQ500H_tb),      //input
               //tile output
-			  .RingOutputValidQ502H   (),   // outout
-			  .RingOutputOpcodeQ502H  (),   // outout
-			  .RingOutputAddressQ502H (),   // outout
-			  .RingOutputDataQ502H    ()    // outout
+			  .RingOutputValidQ502H   (),                           // outout
+			  .RingOutputOpcodeQ502H  (),                           // outout
+			  .RingOutputAddressQ502H (),                           // outout
+			  .RingOutputDataQ502H    ()                            // outout
 			 );
 
 

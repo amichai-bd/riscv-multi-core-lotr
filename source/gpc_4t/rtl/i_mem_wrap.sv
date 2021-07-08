@@ -23,22 +23,31 @@
 module i_mem_wrap 
 import lotr_pkg::*;
                 (
-                input  logic        clock  ,
-                input  logic        rst    ,
-                input  logic [31:0] address,//curr_pc    ,
-                input  logic [31:0] data   ,//core_wr_data ,
-                input  logic        rden   ,//core_rd_en   ,
-                input  logic        wren   ,//core_wr_en ,
-                output logic [31:0] q       //instruction,
+                input  logic        QClk  ,
+                input  logic        RstQnnnH    ,
+                //============================================
+                //      core interface
+                //============================================
+                input  logic [31:0] PcQ100H,        //curr_pc    ,
+                input  logic        RdEnableQ100H,  //core_rd_en   ,
+                output logic [31:0] InstFetchQ101H, //instruction,
+                //============================================
+                //      RC interface
+                //============================================
+                input  logic [31:0] F2C_ReqAddressQ503H,    // input   address input  should mux CORE vs MMIO
+                input  logic [31:0] F2C_ReqDataQ503H,       // input   wr_data only the MMIO inerface can write to the i_mem
+                input  logic        F2C_RdEnQ503H,          // input   rden    only the MMIO inerface can write to the i_mem
+                input  logic        F2C_WrEnQ503H,          // input   wren    when writing to i_mem rden should be desabled 
+                output logic [31:0] F2C_I_MemRspDataQ504H   // output  data    output should rename to general i_mem output data
                 );
 
 i_mem i_mem(      
-    .clock    (clock),
-    .address  (address[MSB_I_MEM:0]),
-    .data     (data),
-    .rden     (rden),
-    .wren     (wren),
-    .q        (q)
+    .clock    (QClk),
+    .address  (PcQ100H[MSB_I_MEM:0]),
+    .data     ('0),
+    .rden     (RdEnableQ100H),
+    .wren     ('0),
+    .q        (InstFetchQ101H)
     );
 
 endmodule               

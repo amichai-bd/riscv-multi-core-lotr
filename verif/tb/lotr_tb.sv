@@ -2,6 +2,7 @@
 
 `include "lotr_defines.sv"
 module lotr_tb ();
+import lotr_pkg::*;
 	logic         QClk                     ;
 	logic         RstQnnnH                 ;
 	// clock generation

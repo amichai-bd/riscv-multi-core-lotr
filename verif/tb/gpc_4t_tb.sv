@@ -4,7 +4,7 @@
 
 module gpc_4t_tb ();
 
-import gpc_4t_pkg::*; 
+import lotr_pkg::*; 
 
 
 // clock and reset for tb

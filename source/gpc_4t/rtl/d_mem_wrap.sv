@@ -17,22 +17,30 @@
 module d_mem_wrap 
 import lotr_pkg::*;  
                 (
-                input  logic               QClk           ,
-                input  logic               RstQnnnH       ,
-                input  logic [7:0]         CoreIdStrap    ,
-                //core access
-                input  logic [3:0]         ThreadQ103H    ,
-                input  logic [31:0]        PcQ103H        ,
-                input  logic [31:0]        AddressQ103H   ,
-                input  logic [3:0]         ByteEnQ103H    ,
-                input  logic [31:0]        WrDataQ103H    ,
-                input  logic               RdEnQ103H      ,
-                input  logic               WrEnQ103H      ,
-                output logic [31:0]        MemRdDataQ104H ,
-                //CR to control core
-                output  t_core_cr          CRQnnnH
+                input  logic         QClk           ,
+                input  logic         RstQnnnH       ,
+                input  logic [7:0]   CoreIdStrap    ,
+                output t_core_cr     CRQnnnH        ,
+                //============================================
+                //      core interface
+                //============================================
+                input  logic [3:0]   ThreadQ103H    ,
+                input  logic [31:0]  PcQ103H        ,
+                input  logic [31:0]  AddressQ103H   ,
+                input  logic [3:0]   ByteEnQ103H    ,
+                input  logic [31:0]  WrDataQ103H    ,
+                input  logic         RdEnQ103H      ,
+                input  logic         WrEnQ103H      ,
+                output logic [31:0]  MemRdDataQ104H ,
+                //============================================
+                //      RC interface
+                //============================================
+                input  logic [31:0]  F2C_AddressQ503H  ,
+                input  logic [31:0]  F2C_WrDataQ503H   ,
+                input  logic         F2C_RdEnQ503H     ,
+                input  logic         F2C_WrEnQ503H     ,
+                output logic [31:0]  F2C_MemRdDataQ504H
                );
-
 
 logic [31:0] cr_q;
 logic [31:0] cr_data_core;
@@ -77,7 +85,9 @@ cr_mem cr_mem (
     .QClk           (QClk),          
     .RstQnnnH       (RstQnnnH),          
     .CoreIdStrap    (CoreIdStrap),          
-    
+    //============================================
+    //      core interface
+    //============================================
     .CrAddressQ103H (AddressQ103H),
     .ThreadQ103H    (ThreadQ103H),
     .PcQ103H        (PcQ103H),
@@ -85,7 +95,6 @@ cr_mem cr_mem (
     .CrRdEnQ103H    (RdEnQ103H && MatchCrRegionQ103H && MatchLocalCoreQ103H),  
     .CrWrEnQ103H    (WrEnQ103H && MatchCrRegionQ103H && MatchLocalCoreQ103H),  
     .CrRdDataQ104H  (CrRdDataQ104H),     
-    
     .core_cr        (CRQnnnH)
     );
 `LOTR_MSFF(MatchCrRegionQ104H    , MatchCrRegionQ103H    , QClk)
