@@ -13,7 +13,8 @@
 //------------------------------------------------------------------------------
 `include "lotr_defines.sv"
 
-module i_mem import gpc_4t_pkg::*;
+module i_mem 
+import lotr_pkg::*;
                 (
                 input  logic               clock  ,
                 //core access

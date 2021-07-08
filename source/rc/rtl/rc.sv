@@ -19,7 +19,7 @@
 `include "lotr_defines.sv"
 
 module rc
-    import rc_pkg::*;  
+    import lotr_pkg::*;  
     (
     //General Interface
     input   logic         QClk                   ,
@@ -488,7 +488,7 @@ end //always_comb
 always_comb begin : ventilation_counter_asserting
     NextVentilationCounterQnnnH = VentilationCounterQnnnH + 2'b01 ; 
     EnVentilationQnnnH  = (SelRingOutQ501H == C2FRequest ) ; 
-    RstVentilationQnnnH =( (SelRingOutQ501H == NOP )                              || 
+    RstVentilationQnnnH =( (SelRingOutQ501H == BUBBLE_OUT )                              || 
                           ((SelRingOutQ501H == RingInput) && (!RingInputValidQ501H))) ;
 end //always_comb
 
@@ -500,7 +500,7 @@ end //always_comb
 //FIXME - this logic should be re-writtin in a more readable way.
 always_comb begin : set_the_select_next_ring_output_logic
     if (VentilationCounterQnnnH ==  2'b11 ) begin
-        SelRingOutQ501H = NOP ;  
+        SelRingOutQ501H = BUBBLE_OUT ;  
     //    VentilationCounterQnnnH = 2'b00 ; 
     end
     else if (((F2C_IsValidReqQ500H  == '0) || ((F2C_IsValidReqQ500H  == '1 )&& (F2C_FirstFreeEntryQ500H == '0)) ) && (C2F_FirstReadResponseMatchesQ501H == '0))
@@ -510,7 +510,7 @@ always_comb begin : set_the_select_next_ring_output_logic
     else if (C2F_ReqValidQ501H== 1'b1)
         SelRingOutQ501H = C2FRequest ; 
     else begin 
-        SelRingOutQ501H = NOP ; 
+        SelRingOutQ501H = BUBBLE_OUT ; 
     //    VentilationCounterQnnnH= 2'b00 ; 
     end
 end //always_comb
@@ -520,7 +520,7 @@ end //always_comb
 always_comb begin : select_next_ring_output
     //mux 4:1
     unique casez (SelRingOutQ501H)
-        NOP   : begin // Insert Invalid Cycle
+        BUBBLE_OUT   : begin // Insert BUBBLE_OUT Cycle
             RingOutputValidQ501H    = 1'b0; // FIXME - think and change the code to consider the valid bit 
             RingOutputOpcodeQ501H   = RD; //RD == 2'b0
             RingOutputAddressQ501H  = 32'b0;

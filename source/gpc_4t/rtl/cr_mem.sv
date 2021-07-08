@@ -14,7 +14,8 @@
 //------------------------------------------------------------------------------
 
 `include "lotr_defines.sv"
-module cr_mem import gpc_4t_pkg::*;  
+module cr_mem 
+import lotr_pkg::*;  
                 (input   logic             QClk,          
                  input   logic             RstQnnnH,          
                  input   logic [7:0]       CoreIdStrap,          
