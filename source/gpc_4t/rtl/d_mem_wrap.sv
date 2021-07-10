@@ -131,7 +131,7 @@ cr_mem cr_mem (
     //============================================
     //      core interface
     //============================================
-    .CrAddressQ103H (AddressQ103H),
+    .CrAddressQ103H (AddressQ103H[MSB_D_MEM:0]),
     .ThreadQ103H    (ThreadQ103H),
     .PcQ103H        (PcQ103H),
     .CrWrDataQ103H  (WrDataQ103H),
