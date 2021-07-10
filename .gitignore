@@ -1,5 +1,6 @@
 
 # modelsim generated files
+*.swp
 modelsim/work/*
 modelsim/*
 target/*
