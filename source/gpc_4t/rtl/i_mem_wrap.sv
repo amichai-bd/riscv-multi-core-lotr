@@ -12,14 +12,7 @@
 // Modification history :
 //------------------------------------------------------------------------------
 `include "lotr_defines.sv"
-//---------------------MEMORY------------------------
-//                start   size    end     # of words
-//  i memory  
-//  Data memory  
-//  Stack        
-//  MMIO_general 
-//  MMIO_CSR     
-//---------------------------------------------------
+
 module i_mem_wrap 
 import lotr_pkg::*;
                 (
@@ -34,21 +27,41 @@ import lotr_pkg::*;
                 //============================================
                 //      RC interface
                 //============================================
-                input  logic [31:0] F2C_ReqAddressQ503H,    // input   address input  should mux CORE vs MMIO
-                input  logic [31:0] F2C_ReqDataQ503H,       // input   wr_data only the MMIO inerface can write to the i_mem
-                input  logic        F2C_RdEnQ503H,          // input   rden    only the MMIO inerface can write to the i_mem
-                input  logic        F2C_WrEnQ503H,          // input   wren    when writing to i_mem rden should be desabled 
-                output logic [31:0] F2C_I_MemRspDataQ504H   // output  data    output should rename to general i_mem output data
+                input  logic        F2C_ReqValidQ503H     ,
+                input  t_opcode     F2C_ReqOpcodeQ503H    ,
+                input  logic [31:0] F2C_ReqAddressQ503H   ,
+                input  logic [31:0] F2C_ReqDataQ503H      ,
+                output logic        F2C_RspIMemValidQ504H , 
+                output logic [31:0] F2C_I_MemRspDataQ504H 
                 );
+
+
+logic  F2C_I_MemHitQ503H;
+logic  F2C_RdEnQ503H;
+logic  F2C_WrEnQ503H;
+//===========================================
+//    set F2C request 503 ( D_MEM )
+//===========================================
+assign F2C_I_MemHitQ503H =(F2C_ReqAddressQ503H[MSB_REGION:LSB_REGION] == I_MEM_REGION);
+assign F2C_RdEnQ503H     = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == RD) && F2C_I_MemHitQ503H;
+assign F2C_WrEnQ503H     = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && F2C_I_MemHitQ503H;
+
+`LOTR_MSFF(F2C_RspIMemValidQ504H, F2C_RdEnQ503H, QClk)
 
 i_mem i_mem(      
     .clock    (QClk),
-    .address  (PcQ100H[MSB_I_MEM:0]),
-    .data     ('0),
-    .rden     (RdEnableQ100H),
-    .wren     ('0),
-    .q        (InstFetchQ101H)
+    //Core interface (instruction fitch)
+    .address_a  (PcQ100H[MSB_I_MEM:0]),
+    .data_a     ('0),
+    .rden_a     (RdEnableQ100H),
+    .wren_a     ('0),
+    .q_a        (InstFetchQ101H),
+    //ring interface
+    .address_b  (F2C_ReqAddressQ503H[MSB_I_MEM:0]),
+    .data_b     (F2C_ReqDataQ503H),              
+    .rden_b     (F2C_RdEnQ503H),                
+    .wren_b     (F2C_WrEnQ503H),                
+    .q_b        (F2C_I_MemRspDataQ504H)              
     );
 
 endmodule               
-

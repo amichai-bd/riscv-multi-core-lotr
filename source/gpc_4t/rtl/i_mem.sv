@@ -16,35 +16,47 @@
 module i_mem 
 import lotr_pkg::*;
                 (
-                input  logic               clock  ,
+                input  logic               clock    ,
                 //core access
-                input  logic [MSB_I_MEM:0] address,//curr_pc    ,
-                input  logic [31:0]        data   ,//core_wr_data ,
-                input  logic               rden   ,//core_rd_en   ,
-                input  logic               wren   ,//core_wr_en ,
-                output logic [31:0]        q       //instruction,
+                input  logic [MSB_I_MEM:0] address_a,//curr_pc    ,
+                input  logic [31:0]        data_a   ,//core_wr_data ,
+                input  logic               rden_a   ,//core_rd_en   ,
+                input  logic               wren_a   ,//core_wr_en ,
+                output logic [31:0]        q_a      ,//instruction,
+                // ring access
+                input  logic [MSB_I_MEM:0] address_b,//curr_pc    ,
+                input  logic [31:0]        data_b   ,//core_wr_data ,
+                input  logic               rden_b   ,//core_rd_en   ,
+                input  logic               wren_b   ,//core_wr_en ,
+                output logic [31:0]        q_b       //instruction,
                 );
 logic [7:0]  mem     [SIZE_I_MEM-1:0];
 logic [7:0]  next_mem[SIZE_I_MEM-1:0];
-logic [31:0] pre_q;  
+logic [31:0] pre_q_a;  
+logic [31:0] pre_q_b;  
 
 always_comb begin : write_to_memory
     next_mem = mem;
-    if(wren) begin
-        next_mem[address+0]= data[7:0];
-        next_mem[address+1]= data[15:8];
-        next_mem[address+2]= data[23:16];
-        next_mem[address+3]= data[31:24]; 
+    if(wren_a) begin
+        next_mem[address_a+0]= data_a[7:0];
+        next_mem[address_a+1]= data_a[15:8];
+        next_mem[address_a+2]= data_a[23:16];
+        next_mem[address_a+3]= data_a[31:24]; 
+    end
+    if(wren_b) begin
+        next_mem[address_b+0]= data_b[7:0];
+        next_mem[address_b+1]= data_b[15:8];
+        next_mem[address_b+2]= data_b[23:16];
+        next_mem[address_b+3]= data_b[31:24]; 
     end
 end 
 
 // the memory flipflops
 `LOTR_MSFF(mem, next_mem, clock)
 
-assign pre_q = {mem[address+3],
-                mem[address+2],
-                mem[address+1],
-                mem[address+0]};
+assign pre_q_a = rden_a ? {mem[address_a+3], mem[address_a+2], mem[address_a+1], mem[address_a+0]} : '0;
+assign pre_q_b = rden_b ? {mem[address_b+3], mem[address_b+2], mem[address_b+1], mem[address_b+0]} : '0;
 
-`LOTR_MSFF(q, pre_q, clock)
+`LOTR_MSFF(q_a, pre_q_a, clock)
+`LOTR_MSFF(q_b, pre_q_b, clock)
 endmodule

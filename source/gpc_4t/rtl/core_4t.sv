@@ -170,12 +170,10 @@ assign ThreadQ104H = ThreadQ100H;
 //  the thread he represents is currently running on Q102H
 //////////////////////////////////////////////////////////////////////////////////////////////////
    
-assign EnPCQnnnH   = 4'b1111; //Enable all Threads FIXME - this is Temp for Enabling the PIPE - should come from the mmio_CR register
-//enable after:
-//assign EnPCQnnnH[0] = CRQnnnH.en_pc_0;
-//assign EnPCQnnnH[1] = CRQnnnH.en_pc_1;
-//assign EnPCQnnnH[2] = CRQnnnH.en_pc_2;
-//assign EnPCQnnnH[3] = CRQnnnH.en_pc_3;
+assign EnPCQnnnH[0] = CRQnnnH.en_pc_0;
+assign EnPCQnnnH[1] = CRQnnnH.en_pc_1;
+assign EnPCQnnnH[2] = CRQnnnH.en_pc_2;
+assign EnPCQnnnH[3] = CRQnnnH.en_pc_3;
 
 //  Enable bits for Thread's Pc - indicated from Q102H
 assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
@@ -184,10 +182,10 @@ assign T2EnPcQ100H = EnPCQnnnH[2] && ThreadQ102H[2];
 assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
   
   // The PCs
-`LOTR_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, RstQnnnH) 
-`LOTR_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, RstQnnnH) 
-`LOTR_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, RstQnnnH) 
-`LOTR_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H, RstQnnnH) 
+`LOTR_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, CRQnnnH.rst_pc_0 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, CRQnnnH.rst_pc_1 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, CRQnnnH.rst_pc_2 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H, CRQnnnH.rst_pc_3 || RstQnnnH) 
 
 always_comb begin : next_threads_pc_sel
   
@@ -220,8 +218,13 @@ end
 //  This pipe stage extract all data neccesary to complete command 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Insert NOP - (back pressure, Wait for Read, ext..)
-assign CtrlInsertNopQ101H = 1'b0;////Enable all Threads FIXME - this is Temp for Enabling the PIPE - should come from the mmio_CR register
+// Insert NOP - (back pressure, Wait for Read, ext..) - check if the thread PC is desabled.
+// TODO - test this feature.
+assign CtrlInsertNopQ101H = ((!EnPCQnnnH[0]) && ThreadQ100H[0]) ||
+                            ((!EnPCQnnnH[1]) && ThreadQ100H[1]) ||
+                            ((!EnPCQnnnH[2]) && ThreadQ100H[2]) ||
+                            ((!EnPCQnnnH[3]) && ThreadQ100H[3]) ;
+
 assign InstructionQ101H   = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;    //internal logic for the instruction - the input or NOP
 assign RegRdPtr1Q101H     = InstructionQ101H[19:15];  // rs1 register for R/S/I/B Type
 assign RegRdPtr2Q101H     = InstructionQ101H[24:20];  // rs2 register for R/S/B Type
@@ -288,23 +291,23 @@ always_comb begin : read_register_file
 end
 
 
-`LOTR_MSFF   ( OpcodeQ102H       , OpcodeQ101H       , QClk) 
-`LOTR_MSFF   ( InstructionQ102H  , InstructionQ101H  , QClk)        //save flops. TODO more info
-`LOTR_MSFF   ( PcQ102H           , PcQ101H           , QClk) 
-`LOTR_MSFF   ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
-`LOTR_MSFF   ( RegRdData2Q102H   , RegRdData2Q101H   , QClk)        //fix
-`LOTR_MSFF   ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
-`LOTR_MSFF   ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
-`LOTR_MSFF   ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
-`LOTR_MSFF   ( CtrlBranchQ102H   , CtrlBranchQ101H   , QClk)
-`LOTR_MSFF   ( CtrlITypeImmQ102H , CtrlITypeImmQ101H , QClk)
-`LOTR_MSFF   ( CtrlRegWrQ102H    , CtrlRegWrQ101H    , QClk)
-`LOTR_MSFF   ( CtrlLuiQ102H      , CtrlLuiQ101H      , QClk)
-`LOTR_MSFF   ( CtrlAuiPcQ102H    , CtrlAuiPcQ101H    , QClk)
-`LOTR_MSFF   ( CtrlMemToRegQ102H , CtrlMemToRegQ101H , QClk)
-`LOTR_MSFF   ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
-`LOTR_MSFF   ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
-`LOTR_MSFF   ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
+`LOTR_MSFF ( OpcodeQ102H       , OpcodeQ101H       , QClk) 
+`LOTR_MSFF ( InstructionQ102H  , InstructionQ101H  , QClk)  //save flops. TODO more info
+`LOTR_MSFF ( PcQ102H           , PcQ101H           , QClk) 
+`LOTR_MSFF ( RegRdData1Q102H   , RegRdData1Q101H   , QClk)
+`LOTR_MSFF ( RegRdData2Q102H   , RegRdData2Q101H   , QClk)  //fix
+`LOTR_MSFF ( CtrlJalQ102H      , CtrlJalQ101H      , QClk)
+`LOTR_MSFF ( CtrlJalrQ102H     , CtrlJalrQ101H     , QClk)
+`LOTR_MSFF ( CtrlPcToRegQ102H  , CtrlPcToRegQ101H  , QClk)
+`LOTR_MSFF ( CtrlBranchQ102H   , CtrlBranchQ101H   , QClk)
+`LOTR_MSFF ( CtrlITypeImmQ102H , CtrlITypeImmQ101H , QClk)
+`LOTR_MSFF ( CtrlRegWrQ102H    , CtrlRegWrQ101H    , QClk)
+`LOTR_MSFF ( CtrlLuiQ102H      , CtrlLuiQ101H      , QClk)
+`LOTR_MSFF ( CtrlAuiPcQ102H    , CtrlAuiPcQ101H    , QClk)
+`LOTR_MSFF ( CtrlMemToRegQ102H , CtrlMemToRegQ101H , QClk)
+`LOTR_MSFF ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
+`LOTR_MSFF ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
+`LOTR_MSFF ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -444,11 +447,11 @@ end
 `LOTR_MSFF   ( RegRdData1Q103H   , RegRdData1Q102H   , QClk)
 `LOTR_MSFF   ( RegRdData2Q103H   , RegRdData2Q102H   , QClk)
 `LOTR_MSFF   ( CtrlMemRdQ103H    , CtrlMemRdQ102H    , QClk) // output to DMEM
-`LOTR_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) //output to DMEM
+`LOTR_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) // output to DMEM
 `LOTR_MSFF   ( CtrlMemToRegQ103H , CtrlMemToRegQ102H , QClk)
 `LOTR_MSFF   ( CtrlPcToRegQ103H  , CtrlPcToRegQ102H  , QClk)
 `LOTR_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
-`LOTR_MSFF   ( PcQ103H           , NextPcQ102H       , QClk)
+`LOTR_MSFF   ( PcQ103H           , NextPcQ102H       , QClk) //FIXME - need to review nad understand - why not use PcQ102H?
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -483,7 +486,7 @@ assign  MemAdrsQ103H = AluOutQ103H;
 `LOTR_MSFF   ( CtrlRegWrQ104H    , CtrlRegWrQ103H    , QClk)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//    _____  __     __   _____   _        ______          ____    __    ___    _  _     _    _ 
+//    ____  __     __   _____   _        ______          ____    __    ___    _  _     _    _ 
 //  / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  | || |   | |  | |
 // | |       \ \_/ /  | |      | |      | |__          | |  | |  | | | | | | | || |_  | |__| |
 // | |        \   /   | |      | |      |  __|         | |  | |  | | | | | | |__   _| |  __  |
@@ -517,9 +520,6 @@ always_comb begin : write_register_file  //ADLV : Ask ABD about this comb
             default : NextRegister0Q104H[RegWrPtrQ104H] = RegWrDataQ104H; //TODO - set an Assertion incaes we reach the default  case
         endcase
     end //if
-            
-            
- //------------------------------------------------------------
  //Register[0] will always be tied to '0;
     NextRegister0Q104H[0] = 32'b0;  
     NextRegister1Q104H[0] = 32'b0;  
