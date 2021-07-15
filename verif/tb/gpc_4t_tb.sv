@@ -35,10 +35,24 @@ end: reset_gen
 string hpath = `TEST_DEFINE(`HPATH);
 
 // 
+
+//logic [7:0]  SystemMemQnnnH     [SIZE_MEM:0];
+//`LOTR_MSFF(SystemMemQnnnH, SystemMemQnnnH, clk)
+
 initial begin: test_seq
     $display(hpath);
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
+    //======================================
+    //load the program to the TB
+    //======================================
+    //$readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, SystemMemQnnnH);
+    //// Backdoor load the Instruction memory
+    //gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem = SystemMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
+    //gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem      = SystemMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
+    //// Backdoor load the Instruction memory
+    //gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.next_mem = SystemMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
+    //gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem      = SystemMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
     #200000         
     end_tb(" Finished Successfully");
 end: test_seq
@@ -87,17 +101,21 @@ task end_tb;
     input string msg;
     integer out1,out2,i,j,l;
     out1=$fopen({"../target/",hpath,"/d_mem_snapshot.log"},"w");
-    out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");  
-    for (i = SIZE_D_MEM; i >= 0; i = i-1) begin  
-        $fwrite(out1,"%8b ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
-        if ( (i%8)==0) begin
+    $fwrite(out1,"Offset 00000000 : ");
+    for (i = 0 ; i < SIZE_D_MEM; i++) begin  
+        $fwrite(out1,"%02x ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
+        if ( (i%8)==7) begin
             $fwrite(out1,"\n");
+            $fwrite(out1,"Offset %08x : ",i);
         end
     end
-    for (j = SIZE_D_MEM; j >= SIZE_SHRD_MEM; j = j-1) begin  
-        $fwrite(out2,"%8b ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[j]);
-        if ( (j%8)==0) begin
-            $fwrite(out1,"\n");
+    out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");  
+    $fwrite(out2,"Offset %08x : ",SIZE_SHRD_MEM);
+    for (j = SIZE_SHRD_MEM; j < SIZE_D_MEM; j++) begin  
+        $fwrite(out2,"%02x ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[j]);
+        if ( (j%8)==7) begin
+            $fwrite(out2,"\n");
+            $fwrite(out2,"Offset %08x : ",j);
         end
     end
     $fclose(trk_write_registers);
