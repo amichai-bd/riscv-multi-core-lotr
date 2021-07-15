@@ -84,17 +84,22 @@ parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 
 //---------------------------------------------------
 // agent_id [31:24] | region [23:22] | reserved[21:12] | offset [11:0]
 // Instruction Memory 4KB 
+parameter I_MEM_OFFSET     = 'h0000_0000;   // See I_MEM_REGION
 parameter LSB_I_MEM        = 0 ;
 parameter MSB_I_MEM        = 11;
 parameter SIZE_I_MEM       = 2**(MSB_I_MEM + 1);
 
 // Data Memory 4KB 
+parameter D_MEM_OFFSET     = 'h0040_0000;   // See D_MEM_REGION
 parameter LSB_D_MEM        = 0 ;
 parameter MSB_D_MEM        = 11;
 parameter SIZE_D_MEM       = 2**(MSB_D_MEM + 1);
 parameter SIZE_SHRD_MEM    = 2**(MSB_D_MEM );
 
+// For test bench use
+parameter SIZE_MEM         = D_MEM_OFFSET + SIZE_D_MEM ;
 parameter MSB_CR                      = 11;
+
 // CR Address Offsets
 parameter CR_WHO_AM_I                 = 12'h0  ;
 parameter CR_THREAD_ID                = 12'h4  ;
@@ -154,6 +159,8 @@ parameter MSB_REGION    = 23;
 parameter I_MEM_REGION  = 2'b00;
 parameter D_MEM_REGION  = 2'b01;
 parameter CR_REGION     = 2'b11;
+
+// region offset in 32 bit
 
 // CORE ID
 // 8'b0000_0000 reserved - Always Hit Local Core Memory.
