@@ -110,11 +110,11 @@ Disassembly of section .text:
 
 00000150 <global_setup_done>:
  150:	00068513          	mv	a0,a3
- 154:	068000ef          	jal	ra,1bc <gpc_local_setup>
+ 154:	064000ef          	jal	ra,1b8 <gpc_local_setup>
 
 00000158 <exec_loop>:
  158:	00068513          	mv	a0,a3
- 15c:	0cc000ef          	jal	ra,228 <gpc_loop>
+ 15c:	0c8000ef          	jal	ra,224 <gpc_loop>
  160:	ff9ff06f          	j	158 <exec_loop>
 
 00000164 <unreachable>:
@@ -140,105 +140,105 @@ Disassembly of section .text:
  190:	01400593          	li	a1,20
  194:	00040513          	mv	a0,s0
  198:	00112623          	sw	ra,12(sp)
- 19c:	164000ef          	jal	ra,300 <gpc_memset>
- 1a0:	ff7dd7b7          	lui	a5,0xff7dd
- 1a4:	44f78793          	addi	a5,a5,1103 # ff7dd44f <gpc_wait_for_non_zero+0xff7dd13b>
- 1a8:	00c12083          	lw	ra,12(sp)
- 1ac:	00f42023          	sw	a5,0(s0)
- 1b0:	00812403          	lw	s0,8(sp)
- 1b4:	01010113          	addi	sp,sp,16
- 1b8:	00008067          	ret
+ 19c:	160000ef          	jal	ra,2fc <gpc_memset>
+ 1a0:	3e500793          	li	a5,997
+ 1a4:	00c12083          	lw	ra,12(sp)
+ 1a8:	00f42023          	sw	a5,0(s0)
+ 1ac:	00812403          	lw	s0,8(sp)
+ 1b0:	01010113          	addi	sp,sp,16
+ 1b4:	00008067          	ret
 
-000001bc <gpc_local_setup>:
- 1bc:	ff010113          	addi	sp,sp,-16
- 1c0:	00912223          	sw	s1,4(sp)
- 1c4:	00c52483          	lw	s1,12(a0)
- 1c8:	00812423          	sw	s0,8(sp)
- 1cc:	00000613          	li	a2,0
- 1d0:	00050413          	mv	s0,a0
- 1d4:	00800593          	li	a1,8
- 1d8:	00048513          	mv	a0,s1
- 1dc:	01212023          	sw	s2,0(sp)
- 1e0:	00112623          	sw	ra,12(sp)
- 1e4:	00442903          	lw	s2,4(s0)
- 1e8:	118000ef          	jal	ra,300 <gpc_memset>
- 1ec:	00042703          	lw	a4,0(s0)
- 1f0:	02070063          	beqz	a4,210 <gpc_local_setup+0x54>
- 1f4:	00092783          	lw	a5,0(s2)
- 1f8:	00300693          	li	a3,3
- 1fc:	00d4a223          	sw	a3,4(s1)
- 200:	0017d793          	srli	a5,a5,0x1
- 204:	40e787b3          	sub	a5,a5,a4
- 208:	00178793          	addi	a5,a5,1
- 20c:	00f4a023          	sw	a5,0(s1)
- 210:	00c12083          	lw	ra,12(sp)
- 214:	00812403          	lw	s0,8(sp)
- 218:	00412483          	lw	s1,4(sp)
- 21c:	00012903          	lw	s2,0(sp)
- 220:	01010113          	addi	sp,sp,16
- 224:	00008067          	ret
+000001b8 <gpc_local_setup>:
+ 1b8:	ff010113          	addi	sp,sp,-16
+ 1bc:	00912223          	sw	s1,4(sp)
+ 1c0:	00c52483          	lw	s1,12(a0)
+ 1c4:	00812423          	sw	s000001300,8(sp)
+ 1c8:	00000613          	li	a2,0
+ 1cc:	00050413          	mv	s0,a0
+ 1d0:	00800593          	li	a1,8
+ 1d4:	00048513          	mv	a0,s1
+ 1d8:	01212023          	sw	s2,0(sp)
+ 1dc:	00112623          	sw	ra,12(sp)
+ 1e0:	00442903          	lw	s2,4(s0)
+ 1e4:	118000ef          	jal	ra,2fc <gpc_memset>
+ 1e8:	00042703          	lw	a4,0(s0)
+ 1ec:	02070063          	beqz	a4,20c <gpc_local_setup+0x54>
+ 1f0:	00092783          	lw	a5,0(s2)
+ 1f4:	00300693          	li	a3,3
+ 1f8:	00d4a223          	sw	a3,4(s1)
+ 1fc:	0017d793          	srli	a5,a5,0x1
+ 200:	40e787b3          	sub	a5,a5,a4
+ 204:	00178793          	addi	a5,a5,1
+ 208:	00f4a023          	sw	a5,0(s1)
+ 20c:	00c12083          	lw	ra,12(sp)
+ 210:	00812403          	lw	s0,8(sp)
+ 214:	00412483          	lw	s1,4(sp)
+ 218:	00012903          	lw	s2,0(sp)
+ 21c:	01010113          	addi	sp,sp,16
+ 220:	00008067          	ret
 
-00000228 <gpc_loop>:
- 228:	00052783          	lw	a5,0(a0)
- 22c:	00452603          	lw	a2,4(a0)
- 230:	04079e63          	bnez	a5,28c <gpc_loop+0x64>
- 234:	00c62783          	lw	a5,12(a2)
- 238:	00862683          	lw	a3,8(a2)
- 23c:	01062703          	lw	a4,16(a2)
- 240:	0017f593          	andi	a1,a5,1
- 244:	0036f693          	andi	a3,a3,3
- 248:	00b6e6b3          	or	a3,a3,a1
- 24c:	0027f793          	andi	a5,a5,2
- 250:	00177593          	andi	a1,a4,1
- 254:	0016c693          	xori	a3,a3,1
- 258:	00d7e6b3          	or	a3,a5,a3
- 25c:	fff5c793          	not	a5,a1
- 260:	00d7f6b3          	and	a3,a5,a3
- 264:	00462583          	lw	a1,4(a2)
- 268:	00277793          	andi	a5,a4,2
- 26c:	00d7e7b3          	or	a5,a5,a3
- 270:	0027f713          	andi	a4,a5,2
- 274:	fff7c793          	not	a5,a5
- 278:	00b76733          	or	a4,a4,a1
- 27c:	0017f793          	andi	a5,a5,1
- 280:	00f767b3          	or	a5,a4,a5
- 284:	00f62223          	sw	a5,4(a2)
- 288:	00008067          	ret
- 28c:	00c52503          	lw	a0,12(a0)
- 290:	00279793          	slli	a5,a5,0x2
- 294:	00f606b3          	add	a3,a2,a5
- 298:	00052703          	lw	a4,0(a0)
- 29c:	00100793          	li	a5,1
- 2a0:	0046a583          	lw	a1,4(a3)
- 2a4:	02e7fa63          	bgeu	a5,a4,2d8 <gpc_loop+0xb0>
- 2a8:	0015f793          	andi	a5,a1,1
- 2ac:	04079863          	bnez	a5,2fc <gpc_loop+0xd4>
- 2b0:	00062783          	lw	a5,0(a2)
- 2b4:	02f77863          	bgeu	a4,a5,2e4 <gpc_loop+0xbc>
- 2b8:	40e787b3          	sub	a5,a5,a4
- 2bc:	fef76ee3          	bltu	a4,a5,2b8 <gpc_loop+0x90>
- 2c0:	00452783          	lw	a5,4(a0)
- 2c4:	0035e593          	ori	a1,a1,3
- 2c8:	00b6a223          	sw	a1,4(a3)
- 2cc:	02f77263          	bgeu	a4,a5,2f0 <gpc_loop+0xc8>
- 2d0:	00052023          	sw	zero,0(a0)
- 2d4:	00008067          	ret
- 2d8:	0015e593          	ori	a1,a1,1
- 2dc:	00b6a223          	sw	a1,4(a3)
- 2e0:	00008067          	ret
- 2e4:	fc079ee3          	bnez	a5,2c0 <gpc_loop+0x98>
- 2e8:	00452783          	lw	a5,4(a0)
- 2ec:	fef762e3          	bltu	a4,a5,2d0 <gpc_loop+0xa8>
- 2f0:	40f70733          	sub	a4,a4,a5
- 2f4:	00e52023          	sw	a4,0(a0)
+00000224 <gpc_loop>:
+ 224:	00052783          	lw	a5,0(a0)
+ 228:	00452603          	lw	a2,4(a0)
+ 22c:	04079e63          	bnez	a5,288 <gpc_loop+0x64>
+ 230:	00c62783          	lw	a5,12(a2)
+ 234:	00862683          	lw	a3,8(a2)
+ 238:	01062703          	lw	a4,16(a2)
+ 23c:	0017f593          	andi	a1,a5,1
+ 240:	0036f693          	andi	a3,a3,3
+ 244:	00b6e6b3          	or	a3,a3,a1
+ 248:	0027f793          	andi	a5,a5,2
+ 24c:	00177593          	andi	a1,a4,1
+ 250:	0016c693          	xori	a3,a3,1
+ 254:	00d7e6b3          	or	a3,a5,a3
+ 258:	fff5c793          	not	a5,a1
+ 25c:	00d7f6b3          	and	a3,a5,a3
+ 260:	00462583          	lw	a1,4(a2)
+ 264:	00277793          	andi	a5,a4,2
+ 268:	00d7e7b3          	or	a5,a5,a3
+ 26c:	0027f713          	andi	a4,a5,2
+ 270:	fff7c793          	not	a5,a5
+ 274:	00b76733          	or	a4,a4,a1
+ 278:	0017f793          	andi	a5,a5,1
+ 27c:	00f767b3          	or	a5,a4,a5
+ 280:	00f62223          	sw	a5,4(a2)
+ 284:	00008067          	ret
+ 288:	00c52503          	lw	a0,12(a0)
+ 28c:	00279793          	slli	a5,a5,0x2
+ 290:	00f606b3          	add	a3,a2,a5
+ 294:	00052703          	lw	a4,0(a0)
+ 298:	00100793          	li	a5,1
+ 29c:	0046a583          	lw	a1,4(a3)
+ 2a0:	02e7fa63          	bgeu	a5,a4,2d4 <gpc_loop+0xb0>
+ 2a4:	0015f793          	andi	a5,a1,1
+ 2a8:	04079863          	bnez	a5,2f8 <gpc_loop+0xd4>
+ 2ac:	00062783          	lw	a5,0(a2)
+ 2b0:	02f77863          	bgeu	a4,a5,2e0 <gpc_loop+0xbc>
+ 2b4:	40e787b3          	sub	a5,a5,a4
+ 2b8:	fef76ee3          	bltu	a4,a5,2b4 <gpc_loop+0x90>
+ 2bc:	00452783          	lw	a5,4(a0)
+ 2c0:	0035e593          	ori	a1,a1,3
+ 2c4:	00b6a223          	sw	a1,4(a3)
+ 2c8:	02f77263          	bgeu	a4,a5,2ec <gpc_loop+0xc8>
+ 2cc:	00052023          	sw	zero,0(a0)
+ 2d0:	00008067          	ret
+ 2d4:	0015e593          	ori	a1,a1,1
+ 2d8:	00b6a223          	sw	a1,4(a3)
+ 2dc:	00008067          	ret
+ 2e0:	fc079ee3          	bnez	a5,2bc <gpc_loop+0x98>
+ 2e4:	00452783          	lw	a5,4(a0)
+ 2e8:	fef762e3          	bltu	a4,a5,2cc <gpc_loop+0xa8>
+ 2ec:	40f70733          	sub	a4,a4,a5
+ 2f0:	00e52023          	sw	a4,0(a0)
+ 2f4:	00008067          	ret
  2f8:	00008067          	ret
- 2fc:	00008067          	ret
 
-00000300 <gpc_memset>:
- 300:	00058863          	beqz	a1,310 <gpc_memset+0x10>
+000002fc <gpc_memset>:
+ 2fc:	00058a63          	beqz	a1,310 <gpc_memset+0x14>
+ 300:	00b505b3          	add	a1,a0,a1
  304:	00c52023          	sw	a2,0(a0)
  308:	00450513          	addi	a0,a0,4
- 30c:	ff9ff06f          	j	304 <gpc_memset+0x4>
+ 30c:	feb51ce3          	bne	a0,a1,304 <gpc_memset+0x8>
  310:	00008067          	ret
 
 00000314 <gpc_wait_for_non_zero>:
