@@ -1,7 +1,7 @@
-`timescale 1ns/1ps
+//`timescale 1ns/1ps
 
 module rc_tb() ;
-import rc_pkg::*;  
+import lotr_pkg::*;  
 // clock and reset for tb
 logic         clk_tb                       ;
 logic         rst_tb                       ;
@@ -77,45 +77,359 @@ initial begin: first_insertion
 end: first_insertion
 
 initial begin: main_testing
-// valid and invalid write request from ring input
+
+// ================= writes ========================
 		#95
-// [1]  write_req_1(500)
+// [1]  valid write_req_1(500)
 		RingInputValidQ500H_tb     = 1'b1  ; 
 		RingInputOpcodeQ500H_tb    = WR ; //write
-		RingInputAddressQ500H_tb   = 32'h0200_0001 ; 
-		RingInputDataQ500H_tb      = 32'h0200_0001 ; 
+		RingInputAddressQ500H_tb   = 32'h0200_1111 ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'h1111_1111 ; 
 		#10
-// expected : write_req_1 will get inserted to one of F2C entries (501) 
+// expected : write[1] will get inserted to one of F2C entries (501) 
 //            this request will be candidate from F2C to core 
-// [2]  write_req_2 (500)             
+
+// [2]  valid write_req_2(500)
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
+		RingInputAddressQ500H_tb   = 32'h0200_2222 ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'h2222_2222 ; 
+		#10
+// expected : write[2] will get inserted to one of F2C entries (501) 
+//            this request will be candidate from F2C to core 
+//            write[1] will disptached to the core(502) .
+
+
+// [3]  invalid_write_1 (500)             
 		RingInputValidQ500H_tb     = 1'b0  ; 
 		RingInputOpcodeQ500H_tb    = WR ; //write
-		RingInputAddressQ500H_tb   = 32'h0000_0000 ; 
-		RingInputDataQ500H_tb      = 32'h0000_0000 ;
+		RingInputAddressQ500H_tb   = 32'h0000_0000 ;  // MSB 0x02 not matches current RC 
+		RingInputDataQ500H_tb      = 32'h3333_3333 ;
 		#10                 
-// expected : write_req_1 will disptached to the core(502) .
-//            write_req_2 will get sampled (move to 501)
+// expected : write[2] will disptached to the core(502) .
+//            write[3] will get sampled (move to 501) . 
 
-// [3]   valid write_broadcast_1 (500)          
-        RingInputValidQ500H_tb     = 1'b1  ; 
-		RingInputOpcodeQ500H_tb    = WR ; //write_bcasr
-		RingInputAddressQ500H_tb   = 32'h1100_0001 ; 
-	    RingInputDataQ500H_tb      = 32'h1100_0001 ; 
-        #10
-// expected : write_req_2 (actually a NOP) will get chosen by RingMuxOut (move to 502)
-//            valid write_broadcast_1 will get inserted to one of F2C entries (501)       
-
-// write_broadcast_1 will disptached to the core(502) 
-// write_broadcast_1 will get chosen by RingMuxOut (move to 502)
-
-// dummy - recieveing NOPS
-       	RingInputValidQ500H_tb     = 1'b0  ; 
+// [4]  invalid_write_2 (500)             
+		RingInputValidQ500H_tb     = 1'b1  ; 
 		RingInputOpcodeQ500H_tb    = WR ; //write
-		RingInputAddressQ500H_tb   = 32'h0000_0000 ; 
-		RingInputDataQ500H_tb      = 32'h0000_0000 ;
-     //   #100
+		RingInputAddressQ500H_tb   = 32'hAA00_0000 ;  // MSB 0xAA not matches current RC 
+		RingInputDataQ500H_tb      = 32'h4444_4444 ;
+		#10                 
+// expected : write[4] will get sampled (move to 501) . 
+//            write[3] will get eliminated
 
-// [4]   valid read_1 (500) - read request from the Fabric
+// [5]  invalid_write_3 (500)             
+		RingInputValidQ500H_tb     = 1'b0  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
+		RingInputAddressQ500H_tb   = 32'h0200_0000 ;  // MSB 0x02 not matches current RC 
+		RingInputDataQ500H_tb      = 32'h5555_5555 ;
+		#10                 
+// expected : write[5] will get sampled (move to 501) . 
+//            write[4] will get eliminated
+
+// [6]  valid write from core
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = WR ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b00 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h6666_6666 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h6666_6666 ; 	
+		#10                         
+// expected : write[6] will get to one of C2F entries (501)  
+//            write[5] will get eliminated
+
+// [7]  valid write from core
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = WR ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b00 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h7777_7777 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h7777_7777 ; 
+		#10                                 	
+// expected :  write[6] will choesn by RingSelOut mux (move to 502)
+//             write[7] will get to one of C2F entries (501)  
+
+
+
+// [8+9] valid writes simulatenious from core+ring . 
+// [8] valid write from the ring 
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
+		RingInputAddressQ500H_tb   = 32'h0200_2222 ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'h8888_8888 ; 
+// [9] valid write from the core 
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = WR ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b01 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h9999_9999 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h9999_9999 ; 
+        #10
+        
+// expected :  write[7] choesn by RingSelOut mux (move to 502)
+//             write[8] will get sampled and inserted to F2C buffer (move to 501)
+//             write[9] will get inserted to one of C2F entries (501)  
+
+
+// [10+11] valid writes simulatenious from core+ring . 
+// [10] valid write from the ring 
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
+		RingInputAddressQ500H_tb   = 32'h0200_AAAA ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'hAAAA_AAAA ; 
+// [11] valid write from the core 
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = WR ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b01 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'hBBBB_BBBB ; 
+    	C2F_ReqDataQ500H_tb        = 32'hBBBB_BBBB ; 
+        #10
+      
+// expected :  write[8] choesn by RingSelOut mux (move to 502)
+//             write[9] will remain in C2F buffer , waiting to get chosen. 
+//             write[10] will get inserted to one of F2C entries (501)  
+//             write[11] will get inserted to one of C2F entries (501)  
+
+// dummy - inserting invalid request for 3 cycles - 
+		RingInputValidQ500H_tb     = 1'b0  ; 
+		RingInputOpcodeQ500H_tb    = WR ; //write
+		RingInputAddressQ500H_tb   = 32'h0000_0000 ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'h0000_0000 ; 
+		#30
+// expeteced to see the reqests in C2F+F2C buffer getting out throguh RingMuxOut in the following order : 9(F2C) -> 10(C2F old) -> 11 (C2F new) .
+
+// [12]  valid write_broadcast_1 from core (500)   
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = WR_BCAST ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b10 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'hCCCC_CCCC ; 
+    	C2F_ReqDataQ500H_tb        = 32'hCCCC_CCCC ; 
+        #10
+// expected :  write[12] will inserted to C2F buffer (move to 501)
+
+// [13]  valid write_broadcast_2 from ring (500)   
+        RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = WR_BCAST ; //write_bcast
+		RingInputAddressQ500H_tb   = 32'hFF00_DDDD ;  
+	    RingInputDataQ500H_tb      = 32'hDDDD_DDDD ; 
+        #10
+// expected :   write[12] will get dispatched to the Ring output (move to 502)
+//              write[13] will inserted to F2C buffer (move to 501)
+
+// [14] previous write broadcast from [12] return to the RC from the ring . 
+        RingInputValidQ500H_tb     = 1'b1 ;
+		RingInputOpcodeQ500H_tb    = WR_BCAST ; 
+		RingInputAddressQ500H_tb   = 32'hCCCC_CCCC ;
+	    RingInputDataQ500H_tb      = 32'hCCCC_CCCC ; 
+        #10
+// expected :   write[13] will get forworded to the Ring output (move to 502) + will move to the core . 
+//              write[14] will get sampled (move to 501)
+
+// dummy - inserting invalid request for 1 cycles - 
+		RingInputValidQ500H_tb     = 1'b0  ; 
+		#100
+// expected :   write[14] will get eliminated (match with C2F entry)  . 
+
+
+
+
+
+
+// ================ Read  ======================
+// [1]  valid read_req_1(500)
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'h0200_1111 ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'h1111_1111 ; 
+		#10
+// expected : read[1] will get inserted to one of F2C entries (501) 
+//            this request will be candidate from F2C to core 
+
+// [2]  valid read_req_2(500)
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'h0200_2222 ; // MSB 0x02 matches current RC 
+		RingInputDataQ500H_tb      = 32'h2222_2222 ; 
+		#10
+// expected : read[2] will get inserted to one of F2C entries (501) 
+//            this request will be candidate from F2C to core 
+//            read[1] will disptached to the core(502) .
+
+
+// [3]  invalid_read_1 (500)             
+		RingInputValidQ500H_tb     = 1'b0  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'h0000_0000 ;  // MSB 0x02 not matches current RC 
+		RingInputDataQ500H_tb      = 32'h3333_3333 ;
+		#10                 
+// expected : read[2] will disptached to the core(502) .
+//            read[3] will get sampled (move to 501) . 
+
+// [4]  invalid_read_2 (500)             
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'hAA00_0000 ;  // MSB 0xAA not matches current RC 
+		RingInputDataQ500H_tb      = 32'h4444_4444 ;
+		#10                 
+// expected :  read[3] will get eliminated 
+//             read[4] will get sampled (move to 501) . 
+
+// [5]  invalid_read_3 (500)             
+		RingInputValidQ500H_tb     = 1'b0  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'h0200_0000 ;  // MSB 0x02 not matches current RC 
+		RingInputDataQ500H_tb      = 32'h5555_5555 ;
+		#10                 
+// expected : read[5] will get sampled (move to 501) . 
+//            read[4] will get eliminated . 
+
+
+// [6]  valid read from core
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = RD ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b00 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h6666_6666 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h6666_6666 ; 	
+		#10                         
+// expected : read[6] will get to one of C2F entries (501)  
+//            read[5] will get eliminated . 
+
+// [7]  valid read from core
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = RD ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b01 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h7777_7777 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h7777_7777 ; 
+		#10                                 	
+// expected :  read[6] will choesn by RingSelOut mux (move to 502)+ change its state to READ_PRGRS.
+//             read[7] will get to one of C2F entries (501)  
+
+// [8]  valid read from core
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = RD ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b10 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h8888_8888 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h8888_8888 ; 	
+		#10                         
+// expected :  read[7] will choesn by RingSelOut mux (move to 502)+ change its state to READ_PRGRS.
+//             read[8] will get to one of C2F entries (501)  
+
+// [9]  valid read from core
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = RD ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b11 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h9999_9999 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h9999_9999 ; 
+		#10                                 	
+// expected :  read[8] will choesn by RingSelOut mux (move to 502)+ change its state to READ_PRGRS.
+//             read[9] will get to one of C2F entries (501) 
+//             expect to see stall signal raise . ( assuming C2F size is 4 ) . 
+ 
+
+// [10]   receiving read response of read[6] , from the ring input .
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD_RSP ; 
+		RingInputAddressQ500H_tb   = 32'h6666_6666 ;  
+        RingInputDataQ500H_tb      = 32'hAAAA_AAAA ;
+		#10    
+// expected :  read[9] will choesn by RingSelOut mux (move to 502)+ change its state to READ_PRGRS.
+//             read response[10] for read[6] will get sampled (move to 501).
+//             stall signal still high.
+ 
+// [11]   receiving read response of read[7] , from the ring input .
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD_RSP ; 
+		RingInputAddressQ500H_tb   = 32'h7777_7777 ;  
+        RingInputDataQ500H_tb      = 32'hBBBB_BBBB ;
+		#10    
+// expected :  read response[10] for read[6] will get dispatched to the core (move to 502)+change its state to FREE.
+//             read response[11] for read[7] will get sampled (move to 501).
+//             stall signal de-asserted . 
+
+// [12]   receiving read response of read[8] , from the ring input .
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD_RSP ; 
+		RingInputAddressQ500H_tb   = 32'h8888_8888 ;  
+        RingInputDataQ500H_tb      = 32'hCCCC_CCCC ;
+		#10    
+// expected :  read response[11] for read[7] will get dispatched to the core (move to 502)+change its state to FREE.
+//             read response[12] for read[8] will get sampled (move to 501).
+
+
+// [13+14] valid reads simulatenious from core+ring . 
+// [13] valid read from the ring 
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'h0200_DDDD ;  
+		RingInputDataQ500H_tb      = 32'hDDDD_DDDD ; 
+// [14] valid read from the core 
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = RD ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b01 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'hEEEE_EEEE ; 
+    	C2F_ReqDataQ500H_tb        = 32'hEEEE_EEEE ; 
+        #10
+// expected :  read response[12] for read[8] will get dispatched to the core (move to 502)+change its state to FREE.
+//             current C2F status is 1 read_prgrs ( read[9])
+//             read[13] will get sampled  (move to 501)+ inserted to F2C.
+//             read[14] (move to 501)+ inserted to C2F.
+
+
+// [15+16] valid reads simulatenious from core+ring . 
+// [15] valid read from the ring 
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD ; 
+		RingInputAddressQ500H_tb   = 32'h0200_DDDD ;  
+		RingInputDataQ500H_tb      = 32'hFFFF_FFFF ; 
+// [16] valid read from the core 
+    	C2F_ReqValidQ500H_tb       = 1'b1 ; 
+    	C2F_ReqOpcodeQ500H_tb      = RD ; 
+    	C2F_ReqThreadIDQ500H_tb    = 2'b01 ; 
+    	C2F_ReqAddressQ500H_tb     = 32'h0000_0000 ; 
+    	C2F_ReqDataQ500H_tb        = 32'h0000_0000 ; 
+        #10
+
+// expected :  read[13] will get dispatched to the core (move to 502) .
+//             read[14] will get dispatched to the Ring via RingMuxOut .
+//             read[15] will get sampled  (move to 501)+ inserted to F2C.
+//             read[16] (move to 501)+ inserted to C2F.
+//             current state in C2F : read[9]+read[14]
+
+// [17]   receiving read response of read[14] , from the ring input .
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD_RSP ; 
+		RingInputAddressQ500H_tb   = 32'hEEEE_EEEE ;  
+        RingInputDataQ500H_tb      = 32'hEEEE_EEEE ;
+		#10    
+// expected :  read response[17] for read[14] will move to 501
+//             read[16] will get dispatched to the ring (move to 502)+change its state to read_prgrs.
+
+// [18]   receiving read response of read[9] , from the ring input .
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD_RSP ; 
+		RingInputAddressQ500H_tb   = 32'h9999_9999 ;  
+        RingInputDataQ500H_tb      = 32'h9999_9999 ;
+		#10    
+// expected :  read response[18] for read[9] will move to 501
+//             read response[17] (matched read[14]) will get dipatched to the core (move to 502)+change its state to FREE .
+
+// [19]   receiving read response of read[16] , from the ring input .
+		RingInputValidQ500H_tb     = 1'b1  ; 
+		RingInputOpcodeQ500H_tb    = RD_RSP ; 
+		RingInputAddressQ500H_tb   = 32'h0000_0000 ;  
+        RingInputDataQ500H_tb      = 32'h0000_0000 ;
+		#10    
+// expected :  read response[19] for read[16] will move to 501
+//             read response[18] (matched read[9]) will get dipatched to the core (move to 502)+change its state to FREE .
+
+// dummy - inserting invalid request for 1 cycles - 
+		RingInputValidQ500H_tb     = 1'b0  ;
+        RingInputAddressQ500H_tb   = 32'hDEAD_BEEF ;  
+        RingInputDataQ500H_tb      = 32'hDEAD_BEEF ; 
+// expected :  
+//             read response[19] (matched read[16]) will get dipatched to the core (move to 502)+change its state to FREE .
+
+
+
+
+
 	end //initial 
 	/*
 	initial begin: rd_req_from_the_core
@@ -156,7 +470,7 @@ rc i_rc(
 			  .C2F_RspValidQ502H      (C2F_RspValidQ502H_tb)      , // out
 			  .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H_tb)   , // out
 			  .C2F_RspDataQ502H       (C2F_RspDataQ502H_tb)       , // out
-			  .C2F_RspStall           (C2F_RspStall_tb)           ,	// out		  
+			  .C2F_RspStallQnnnH      (C2F_RspStall_tb)           ,	// out		  
 			  
 			  .F2C_RspValidQ500H      (F2C_RspValidQ500H_tb)      ,
 			  .F2C_RspOpcodeQ500H     (F2C_RspOpcodeQ500H_tb)     , 

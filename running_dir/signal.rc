@@ -1,0 +1,128 @@
+Magic 271485
+Revision Verdi_P-2019.06-SP2
+
+; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
+viewPort 0 25 1590 370 468 113
+
+; File list:
+; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
+openDirFile -d / "" "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/inter.fsdb"
+
+; file time scale:
+; fileTimeScale ### s|ms|us|ns|ps
+
+; signal spacing:
+signalSpacing 5
+
+; windowTimeUnit is used for zoom, cursor & marker
+windowTimeUnit 1ns
+
+; waveform viewport range
+zoom 0.000000 98.984108 1n
+cursor 1000.000000
+marker 0.000000
+
+; user define markers
+; userMarker time_pos marker_name color linestyle
+; visible top row signal index
+top 0
+; marker line index
+markerPos 5
+
+; event list
+; addEvent event_name event_expression
+; curEvent event_name
+
+
+
+COMPLEX_EVENT_BEGIN
+
+
+COMPLEX_EVENT_END
+
+
+
+; toolbar current search type
+; curSTATUS search_type
+curSTATUS ByChange
+
+
+addGroup "G1"
+activeDirFile "" "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/inter.fsdb"
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/CoreID[7:0]
+addSignal -h 15 /rc_tb/clk_tb
+addSignal -h 15 /rc_tb/rst_tb
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/CoreID_tb[7:0]
+addSignal -h 15 /rc_tb/C2F_RspStall_tb
+addSubGroup "G2"
+addSignal -h 15 /rc_tb/i_rc/RingInputValidQ500H
+endSubGroup "G2"
+addSignal -h 15 /rc_tb/i_rc/RingInputValidQ501H
+addSignal -h 15 -UNSIGNED /rc_tb/RingInputOpcodeQ500H_tb[1:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/RingInputAddressQ500H_tb[31:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/RingInputDataQ500H_tb[31:0]
+addSignal -h 15 /rc_tb/i_rc/PreRingInputValidQ501H
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/RingInputAddressQ501H[31:24]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/RingOutputAddressQ502H_tb[31:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/RingOutputDataQ502H_tb[31:0]
+addSignal -h 15 /rc_tb/C2F_ReqValidQ500H_tb
+addSignal -h 15 -UNSIGNED /rc_tb/C2F_ReqOpcodeQ500H_tb[1:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/C2F_ReqThreadIDQ500H_tb[1:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/C2F_ReqAddressQ500H_tb[31:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/C2F_ReqDataQ500H_tb[31:0]
+addSignal -h 15 /rc_tb/C2F_RspValidQ502H_tb
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/C2F_RspThreadIDQ502H_tb[1:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/C2F_RspDataQ502H_tb[31:0]
+addSignal -h 15 /rc_tb/F2C_RspValidQ500H_tb
+addSignal -h 15 -UNSIGNED /rc_tb/F2C_RspOpcodeQ500H_tb[1:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/F2C_RspAddressQ500H_tb[31:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/F2C_RspDataQ500H_tb[31:0]
+addSignal -h 15 /rc_tb/F2C_ReqValidQ502H_tb
+addSignal -h 15 -UNSIGNED /rc_tb/F2C_ReqOpcodeQ502H_tb[1:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/F2C_ReqAddressQ502H_tb[31:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/F2C_ReqDataQ502H_tb[31:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_BufferStateQnnnH[3:0]
+addGroup "G2"
+addSignal -h 15 /rc_tb/i_rc/F2C_NextBufferStateQnnnH[3:0]
+addGroup "G3"
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_BufferValidQnnnH[3:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_BufferOpcodeQnnnH[3:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_BufferAddressQnnnH[3:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_BufferDataQnnnH[3:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_BufferStateQnnnH[3:0]
+addSignal -h 15 /rc_tb/i_rc/F2C_NextBufferValidQnnnH[0]
+addSignal -h 15 /rc_tb/i_rc/F2C_EnWrQnnnH[0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_EnCoreWrQ500H[3:0]
+addSignal -h 15 -UNSIGNED -HEX /rc_tb/i_rc/F2C_EnRingWrQ501H[3:0]
+addSignal -h 15 /rc_tb/i_rc/F2C_NextBufferValidQnnnH[0]
+addGroup "G4"
+addSignal -h 15 -UNSIGNED /rc_tb/RingOutputOpcodeQ502H_tb[1:0]
+addSignal -h 15 /rc_tb/i_rc/RingOutputValidQ501H
+addGroup "G5"
+
+; getSignalForm Scope Hierarchy Status
+; active file of getSignalForm
+
+
+FILTER_SIGNAL_BEGIN
+
+""
+
+FILTER_STRING_LIST_BEGIN
+FILTER_STRING_LIST_END
+
+FILTER_TYPE_LIST_BEGIN
+"All"
+"Input"
+"Output"
+"Inout"
+"Net"
+"Register"
+"Buffer"
+"Linkage"
+"ClassTransaction"
+"Property"
+"Others"
+FILTER_TYPE_LIST_END
+
+FILTER_SIGNAL_END
