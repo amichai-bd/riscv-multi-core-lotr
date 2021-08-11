@@ -10,6 +10,8 @@
 // parameters and struct used in gpc_4t
 //-----------------------------------------------------------------------------
 
+`timescale 1ns/1ps
+
 package lotr_pkg;
 //=================================================================================
 //============                  RC - ring controller              =================
@@ -41,10 +43,10 @@ typedef enum logic [2:0] {
 // t_winner  : which signal to drive to the ring output - NOP=0 , RingInput=1 ,F2CResponse=2 , C2FRequest=3
 //=========================================
 typedef enum logic [1:0] {
-    BUBBLE_OUT        = 0 ,
-    RingInput         = 1 ,
-    F2CResponse       = 2 ,
-    C2FRequest        = 3 
+    BUBBLE_OUT         = 0 ,
+    RING_INPUT         = 1 ,
+    F2C_RESPONSE       = 2 ,
+    C2F_REQUEST        = 3 
     } t_winner ;
 //=========================================
 //=========    Parameters    ==============

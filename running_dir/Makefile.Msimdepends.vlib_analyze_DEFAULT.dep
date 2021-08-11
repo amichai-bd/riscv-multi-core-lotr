@@ -1,0 +1,8 @@
+./AN.DB/_VCSgd_Ln7sKb_1.db : ../source/common/lotr_pkg.sv : vlogan -kdb -sverilog -full64 +incdir+../source/common/ -full64 ../source/common/lotr_pkg.sv
+
+./AN.DB/_VCSgd_MZE2dc_1.db : ../source/rc/rtl/rc.sv : vlogan -kdb -sverilog -full64 +incdir+../source/common/ -full64 ../source/rc/rtl/rc.sv
+
+./AN.DB/_VCSgd_fJAdb_1.db : ../source/rc/rtl/mro.sv : vlogan -kdb -sverilog -full64 +incdir+../source/common/ -full64 ../source/rc/rtl/mro.sv
+
+./AN.DB/_VCSgd_FVa7Dd_1.db : ../verif/tb/rc_tb.sv : vlogan -kdb -sverilog -full64 +incdir+../source/common/ -full64 ../verif/tb/rc_tb.sv
+

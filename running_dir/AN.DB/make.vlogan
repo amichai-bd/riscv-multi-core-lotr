@@ -1,0 +1,27 @@
+
+VLOGAN	= vlogan
+VLOGAN_OPT	= -kdb -sverilog -full64 +incdir+../source/common/ -full64
+
+all :		_VCSgd_Ln7sKb_1.db \
+	_VCSgd_MZE2dc_1.db \
+	_VCSgd_fJAdb_1.db \
+	_VCSgd_FVa7Dd_1.db \
+
+
+
+_VCSgd_Ln7sKb_1.db :	../source/common/lotr_pkg.sv 
+		${VLOGAN}  ${VLOGAN_OPT} ../source/common/lotr_pkg.sv
+
+
+_VCSgd_MZE2dc_1.db :	../source/rc/rtl/rc.sv 
+		${VLOGAN}  ${VLOGAN_OPT} ../source/rc/rtl/rc.sv
+
+
+_VCSgd_fJAdb_1.db :	../source/rc/rtl/mro.sv 
+		${VLOGAN}  ${VLOGAN_OPT} ../source/rc/rtl/mro.sv
+
+
+_VCSgd_FVa7Dd_1.db :	../verif/tb/rc_tb.sv 
+		${VLOGAN}  ${VLOGAN_OPT} ../verif/tb/rc_tb.sv
+
+

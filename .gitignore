@@ -1,4 +1,4 @@
-
+running_dir/*
 # modelsim generated files
 *.swp
 modelsim/work/*
