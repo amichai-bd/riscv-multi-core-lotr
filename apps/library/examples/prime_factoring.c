@@ -41,7 +41,7 @@ void gpc_global_setup(const gpc_params_t *gpc_params) {
     gpc_memset(g, sizeof(*g), 0);
     // TODO: an ugly hack to pass input. real world code will need a better mechanism
     // input was generated in a fair dice roll. guaranteed to be random
-    g->n = 4286436431;
+    g->n = 997;
 
 }
 

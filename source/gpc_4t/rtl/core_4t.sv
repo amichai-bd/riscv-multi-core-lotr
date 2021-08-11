@@ -181,7 +181,7 @@ assign T1EnPcQ100H = EnPCQnnnH[1] && ThreadQ102H[1];
 assign T2EnPcQ100H = EnPCQnnnH[2] && ThreadQ102H[2];
 assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
   
-  // The PCs
+// The PCs
 `LOTR_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, CRQnnnH.rst_pc_0 || RstQnnnH) 
 `LOTR_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, CRQnnnH.rst_pc_1 || RstQnnnH) 
 `LOTR_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, CRQnnnH.rst_pc_2 || RstQnnnH) 

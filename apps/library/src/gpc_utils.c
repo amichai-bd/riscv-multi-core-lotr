@@ -4,6 +4,7 @@ void gpc_memset(void *p, size_t s, uint32_t value) {
     while(s > 0) {
         *((uint32_t *)p) = value;
         p += 4;
+        s -= 4;
     }
 }
 
