@@ -43,7 +43,7 @@ t_cr_en             CrEnQ103H;
 logic [31:0]        CrRdDataQn03H[1:0];
 logic [MSB_D_MEM:0] AddressQn03H[1:0];
 logic               WrEnQn03H[1:0];
-logic [31:0]        WrDataQ103H;
+logic [31:0]        WrDataQ103H[1:0] ;
 logic [1:0]         CrRdEnQn03H;
 
 
@@ -151,37 +151,40 @@ assign TlsOffsetQ102H = (ThreadQ102H == 4'b0001) ? cr_rw.tls_ofst_0 :
 //================CR memory flops======================
 //=======================================================
 assign CrEnQ103H   = cr_en[0] | cr_en[1]; //bit wise operation
-assign WrDataQ103H = F2C_CrWrEnQ503H ? F2C_WrDataQ503H :
-                     CrWrEnQ103H     ? CrWrDataQ103H   :
-                                       '0;
+assign WrDataQ103H[0] = CrWrDataQ103H;
+assign WrDataQ103H[1] = F2C_WrDataQ503H;
+
+t_cr_en SelWrDataQ103H;
+
+assign SelWrDataQ103H = cr_en[1];
 //===========================================
 //              CRs - Write from core/ring write request
 //===========================================
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_0, WrDataQ103H[0]   , QClk  ,  CrEnQ103H.rst_pc_0     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_1, WrDataQ103H[0]   , QClk  ,  CrEnQ103H.rst_pc_1     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_2, WrDataQ103H[0]   , QClk  ,  CrEnQ103H.rst_pc_2     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_3, WrDataQ103H[0]   , QClk  ,  CrEnQ103H.rst_pc_3     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_0 , WrDataQ103H[0]   , QClk  ,  CrEnQ103H.en_pc_0      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_1 , WrDataQ103H[0]   , QClk  ,  CrEnQ103H.en_pc_1      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_2 , WrDataQ103H[0]   , QClk  ,  CrEnQ103H.en_pc_2      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_3 , WrDataQ103H[0]   , QClk  ,  CrEnQ103H.en_pc_3      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
-`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_0  , WrDataQ103H[4:0] , QClk  ,  CrEnQ103H.dfd_id_0     , RstQnnnH  ,  5'b0)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_1  , WrDataQ103H[4:0] , QClk  ,  CrEnQ103H.dfd_id_1     , RstQnnnH  ,  5'b0)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_2  , WrDataQ103H[4:0] , QClk  ,  CrEnQ103H.dfd_id_2     , RstQnnnH  ,  5'b0)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_3  , WrDataQ103H[4:0] , QClk  ,  CrEnQ103H.dfd_id_3     , RstQnnnH  ,  5'b0)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_0, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.stk_ofst_0   , RstQnnnH  ,  32'h400200)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_1, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.stk_ofst_1   , RstQnnnH  ,  32'h400400)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_2, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.stk_ofst_2   , RstQnnnH  ,  32'h400600)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_3, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.stk_ofst_3   , RstQnnnH  ,  32'h400800)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_0, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.tls_ofst_0   , RstQnnnH  ,  32'h400200)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_1, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.tls_ofst_1   , RstQnnnH  ,  32'h400400)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_2, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.tls_ofst_2   , RstQnnnH  ,  32'h400600)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_3, WrDataQ103H[31:0], QClk  ,  CrEnQ103H.tls_ofst_3   , RstQnnnH  ,  32'h400800)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.shrd_ofst , WrDataQ103H[31:0], QClk  ,  CrEnQ103H.shrd_ofst    , RstQnnnH  ,  32'h400f00)
-`LOTR_EN_RST_MSFF    (scratch_pad_0   , WrDataQ103H[31:0], QClk  ,  CrEnQ103H.scratch_pad_0, RstQnnnH )//Note: Reset Value is '0
-`LOTR_EN_RST_MSFF    (scratch_pad_1   , WrDataQ103H[31:0], QClk  ,  CrEnQ103H.scratch_pad_1, RstQnnnH )//Note: Reset Value is '0
-`LOTR_EN_RST_MSFF    (scratch_pad_2   , WrDataQ103H[31:0], QClk  ,  CrEnQ103H.scratch_pad_2, RstQnnnH )//Note: Reset Value is '0
-`LOTR_EN_RST_MSFF    (scratch_pad_3   , WrDataQ103H[31:0], QClk  ,  CrEnQ103H.scratch_pad_3, RstQnnnH )//Note: Reset Value is '0
+`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_0, WrDataQ103H[SelWrDataQ103H.rst_pc_0][0]          , QClk  ,  CrEnQ103H.rst_pc_0     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_1, WrDataQ103H[SelWrDataQ103H.rst_pc_1][0]          , QClk  ,  CrEnQ103H.rst_pc_1     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_2, WrDataQ103H[SelWrDataQ103H.rst_pc_2][0]          , QClk  ,  CrEnQ103H.rst_pc_2     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_3, WrDataQ103H[SelWrDataQ103H.rst_pc_3][0]          , QClk  ,  CrEnQ103H.rst_pc_3     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_0 , WrDataQ103H[SelWrDataQ103H.en_pc_0][0]           , QClk  ,  CrEnQ103H.en_pc_0      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_1 , WrDataQ103H[SelWrDataQ103H.en_pc_1][0]           , QClk  ,  CrEnQ103H.en_pc_1      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_2 , WrDataQ103H[SelWrDataQ103H.en_pc_2][0]           , QClk  ,  CrEnQ103H.en_pc_2      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
+`LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_3 , WrDataQ103H[SelWrDataQ103H.en_pc_3][0]           , QClk  ,  CrEnQ103H.en_pc_3      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
+`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_0  , WrDataQ103H[SelWrDataQ103H.dfd_id_0][4:0]        , QClk  ,  CrEnQ103H.dfd_id_0     , RstQnnnH  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_1  , WrDataQ103H[SelWrDataQ103H.dfd_id_1][4:0]        , QClk  ,  CrEnQ103H.dfd_id_1     , RstQnnnH  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_2  , WrDataQ103H[SelWrDataQ103H.dfd_id_2][4:0]        , QClk  ,  CrEnQ103H.dfd_id_2     , RstQnnnH  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_3  , WrDataQ103H[SelWrDataQ103H.dfd_id_3][4:0]        , QClk  ,  CrEnQ103H.dfd_id_3     , RstQnnnH  ,  5'b0)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_0, WrDataQ103H[SelWrDataQ103H.stk_ofst_0][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_0   , RstQnnnH  ,  32'h400200)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_1, WrDataQ103H[SelWrDataQ103H.stk_ofst_1][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_1   , RstQnnnH  ,  32'h400400)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_2, WrDataQ103H[SelWrDataQ103H.stk_ofst_2][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_2   , RstQnnnH  ,  32'h400600)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_3, WrDataQ103H[SelWrDataQ103H.stk_ofst_3][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_3   , RstQnnnH  ,  32'h400800)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_0, WrDataQ103H[SelWrDataQ103H.tls_ofst_0][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_0   , RstQnnnH  ,  32'h400200)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_1, WrDataQ103H[SelWrDataQ103H.tls_ofst_1][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_1   , RstQnnnH  ,  32'h400400)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_2, WrDataQ103H[SelWrDataQ103H.tls_ofst_2][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_2   , RstQnnnH  ,  32'h400600)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_3, WrDataQ103H[SelWrDataQ103H.tls_ofst_3][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_3   , RstQnnnH  ,  32'h400800)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.shrd_ofst , WrDataQ103H[SelWrDataQ103H.shrd_ofst][31:0]      , QClk  ,  CrEnQ103H.shrd_ofst    , RstQnnnH  ,  32'h400f00)
+`LOTR_EN_RST_MSFF    (scratch_pad_0   , WrDataQ103H[SelWrDataQ103H.scratch_pad_0][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_0, RstQnnnH )//Note: Reset Value is '0
+`LOTR_EN_RST_MSFF    (scratch_pad_1   , WrDataQ103H[SelWrDataQ103H.scratch_pad_1][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_1, RstQnnnH )//Note: Reset Value is '0
+`LOTR_EN_RST_MSFF    (scratch_pad_2   , WrDataQ103H[SelWrDataQ103H.scratch_pad_2][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_2, RstQnnnH )//Note: Reset Value is '0
+`LOTR_EN_RST_MSFF    (scratch_pad_3   , WrDataQ103H[SelWrDataQ103H.scratch_pad_3][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_3, RstQnnnH )//Note: Reset Value is '0
 //===========================================
 //              RO CRs - Read Only - the write is from HW and not core/ring write request
 //===========================================

@@ -1,7 +1,0 @@
-Command Line: /eda/synopsys/2019-20/RHELx86/VCS_2019.06-SP2/vcs/P-2019.06-SP2//linux64/bin/elabcom -logdir simv.daidir/elabcomLog -simvdaidir simv.daidir -elab simv.daidir/kdb -simflow -topfile simv.daidir/.elabcomTopFile -ssv -ssy +disable_message+C00380+C00381 +disable_message+C00388+C00389
-uname(Linux vlsi-ria67 3.10.0-1062.el7.x86_64 #1 SMP Thu Jul 18 20:25:13 UTC 2019 x86_64)
-[INFO] error/warning message 'C00380' has been suppressed.
-[INFO] error/warning message 'C00381' has been suppressed.
-[INFO] error/warning message 'C00388' has been suppressed.
-[INFO] error/warning message 'C00389' has been suppressed.
-au time 0.206031 0.013660 0.020990 delta 95084544 95084544 total 191393792 191393792
