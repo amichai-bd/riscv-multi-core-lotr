@@ -1,4 +1,0 @@
-../source/common/lotr_pkg.sv
-../source/rc/rtl/mro.sv
-../source/rc/rtl/rc.sv
-../verif/tb/rc_tb.sv

@@ -1,3 +1,0 @@
-*design* DebussyLib (btIdent Verdi_P-2019.06-SP2)
-Command arguments:  -elab  simv.daidir/kdb  -simflow  -topfile  simv.daidir/.elabcomTopFile  -ssv  -ssy  +disable_message+C00380+C00381  +disable_message+C00388+C00389  -SNPS_ELABCOM  -saveElab 
-Total	0 error(s),   0 warning(s)

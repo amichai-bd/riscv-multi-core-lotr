@@ -1,9 +1,0 @@
-#!/bin/sh -h 
-PYTHONHOME=/eda/synopsys/2019-20/RHELx86/VCS_2019.06-SP2/vcs/P-2019.06-SP2//etc/search/pyh
-export PYTHONHOME
-PYTHONPATH=/eda/synopsys/2019-20/RHELx86/VCS_2019.06-SP2/vcs/P-2019.06-SP2/linux64/lib/pylib27
-export PYTHONPATH
-LD_LIBRARY_PATH=/eda/synopsys/2019-20/RHELx86/VCS_2019.06-SP2/vcs/P-2019.06-SP2/linux64/lib:/eda/synopsys/2019-20/RHELx86/VCS_2019.06-SP2/vcs/P-2019.06-SP2/linux64/lib/pylib27
-export LD_LIBRARY_PATH
-/eda/synopsys/2019-20/RHELx86/VCS_2019.06-SP2/vcs/P-2019.06-SP2/linux64/bin/vcsfind_create_index.exe  -z  "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/simv.daidir/debug_dump/fsearch/./idents_rE3oJJ.xml.gz" "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/simv.daidir/debug_dump/fsearch/./idents_tapi.xml.gz" -o "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/simv.daidir/debug_dump/fsearch/fsearch.db_tmp"
-\mv "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/simv.daidir/debug_dump/fsearch/fsearch.db_tmp" "/users/eptzsh/1907_b/riscv-multi-core-lotr/running_dir/simv.daidir/debug_dump/fsearch/fsearch.db"
