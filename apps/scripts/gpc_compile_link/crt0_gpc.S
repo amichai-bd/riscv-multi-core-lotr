@@ -1,7 +1,21 @@
-  .section .text
+_start:
+  .global _start
+  
+/* PipeLine CleanUp  */
+
+  .section .vectors, "ax"
+  .option norvc;
+  .org 0x00
+  .rept 5
+  nop                       
+  .endr
+  .org 0x14
+  jal x0, reset_handler
+  
+
+/* Set all registers to zero and stack initilization*/
 
 reset_handler:
-  /* set all registers to zero */
   mv  x1, x0
   mv  x2, x1
   mv  x3, x1
@@ -33,32 +47,19 @@ reset_handler:
   mv x29, x1
   mv x30, x1
   mv x31, x1
-
   /* stack initilization */
   li   x5,12582924
   lw   x2, 0(x5)
-  jal x1, main
-  ebreak
+  jal x1, main      //jump to main
+  ebreak        //end
+  
+  .section .text
 
 
-_start:
-  .global _start
 
 
 
-/* This section has to be down here, since we have to disable rvc for it  */
 
-  .section .vectors, "ax"
-  .option norvc;
-  .org 0x00
-  .rept 5
-  nop                       
-  .endr
-
-
-  // reset vector
-  .org 0x14
-  jal x0, reset_handler
   
 
 

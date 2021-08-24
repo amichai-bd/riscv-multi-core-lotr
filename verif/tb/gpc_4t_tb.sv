@@ -57,7 +57,7 @@ initial begin: test_seq
     // Backdoor load the Instruction memory
     gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
     gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-    #100000         
+    #200000         
     end_tb(" Finished With time out");
 end: test_seq
     
