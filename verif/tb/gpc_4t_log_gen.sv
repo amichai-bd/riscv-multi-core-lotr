@@ -114,7 +114,6 @@ always_comb begin
             7'b0110011 : OPCODE ="OP_OP    ";
             7'b0001111 : OPCODE ="OP_FENCE ";
             7'b1110011 : OPCODE ="OP_SYSTEM";
-            7'b1110011 : OPCODE ="OP_EBREAK";
             default    : OPCODE ="NO       ";
 
         endcase
