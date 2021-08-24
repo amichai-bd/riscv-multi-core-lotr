@@ -54,10 +54,10 @@ if [ "$#" == "1" ];then
         (( y-- ))
         cat $1_inst_mem_rv32$mod.sv | tail -n $(( c-y )) > $1_data_mem_rv32$mod.sv
         cat $1_inst_mem_rv32$mod.sv | head -n $(( y )) > $1_inst_mem_rv32$mod.sv
-        mv $1_data_mem_rv32$mod.sv ../../../verif/Tests/$1
-    fi
-
-
+    else
+        echo "@00400800" > $1_data_mem_rv32$mod.sv
+    fi  
+    mv $1_data_mem_rv32$mod.sv ../../../verif/Tests/$1
     mv $1_inst_mem_rv32$mod.sv ../../../verif/Tests/$1
     
     exit 1
