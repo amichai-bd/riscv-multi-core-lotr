@@ -2,8 +2,7 @@
 Accelerator for multi-thread processing IP.     
 LOTR:  Lord-Of-The-Ring  
 Based on a Ring architecture to share all memory regions between threads and cores.
-![image](https://user-images.githubusercontent.com/81047407/131712090-cea2d08f-b634-48cb-a30c-0e09032e1469.png)
-
+![image](https://user-images.githubusercontent.com/81047407/131712270-aa066bfa-5a27-4547-9d5e-5dab767a269c.png)
 *** 
 ## The reposetory has 4 main projects:
 ### *1) GPC_4T - RISCV core RV32I/E.*  
