@@ -5,7 +5,7 @@ integer trk_alu;
 integer trk_PC0;
 integer trk_error;
 integer trk_shared_space;
-integer trk_thread0_reg_write,trk_thread1_reg_write,trk_thread2_reg_write,trk_thread3_reg_write;
+integer trk_thread0_reg_write,trk_thread1_reg_write,trk_thread2_reg_write,trk_thread3_reg_write,trk_cr_space;
 
 
 initial begin
@@ -16,6 +16,7 @@ initial begin
     trk_alu               = $fopen({"../target/",hpath,"/trk_alu.log"},"w");
     trk_error             = $fopen({"../target/",hpath,"/trk_error.log"},"w");
     trk_shared_space      = $fopen({"../target/",hpath,"/trk_shared_space.log"},"w");
+    trk_cr_space          = $fopen({"../target/",hpath,"/trk_cr_space.log"},"w");
     trk_thread0_reg_write = $fopen({"../target/",hpath,"/trk_thread0_reg_write.log"},"w");  
     trk_thread1_reg_write = $fopen({"../target/",hpath,"/trk_thread1_reg_write.log"},"w");  
     trk_thread2_reg_write = $fopen({"../target/",hpath,"/trk_thread2_reg_write.log"},"w");  
@@ -114,6 +115,7 @@ always_comb begin
             7'b0110011 : OPCODE ="OP_OP    ";
             7'b0001111 : OPCODE ="OP_FENCE ";
             7'b1110011 : OPCODE ="OP_SYSTEM";
+            7'b1110011 : OPCODE ="OP_EBREAK";
             default    : OPCODE ="NO       ";
 
         endcase
@@ -133,6 +135,13 @@ end //shared_space
 always @(posedge clk) begin : write_to_shrd
     if (CtrlMemWrQ104H && MemAdrsQ104H > 32'h400800 && MemAdrsQ104H < 32'h400fff ) begin 
         $fwrite(trk_shared_space,"%t\t| %8h\t| %8h\t| WRITE\t\t| %8h\t| \n", $realtime,PcQ104H,MemAdrsQ104H , MemWrDataWQ104H);
+    end //if
+end
+
+//tracker to CR space
+always @(posedge clk) begin : CR
+    if (CtrlMemWrQ104H && MemAdrsQ104H > 32'hc00000 && MemAdrsQ104H < 32'hc0020c  ) begin 
+        $fwrite(trk_cr_space,"%t\t| %8h\t| %8h\t| WRITE\t\t| %8h\t| \n", $realtime,PcQ104H,MemAdrsQ104H , MemWrDataWQ104H);
     end //if
 end
 

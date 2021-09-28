@@ -46,6 +46,8 @@ int Thread3 ( ){
  
 #define SHARED_SPACE  ((volatile int *) (0x00400f00))
 #define CR_THREAD  ((volatile int *) (0x00C00004))
+#define CR_SCRATCHPAD  ((volatile int *) (0x00C00200))
+
 int main() {
     int x = CR_THREAD[0];
 
@@ -53,15 +55,23 @@ int main() {
     {
         case 0x0 : //expect each thread to get from the MEM_WRAP the correct Thread.
             SHARED_SPACE[0] =  Thread0();
+            CR_SCRATCHPAD[0] = 1 ;
+            while( !CR_SCRATCHPAD[1] || !CR_SCRATCHPAD[2] || !CR_SCRATCHPAD[3] ){} //busy wait            
         break;
         case 0x1 :
             SHARED_SPACE[1] =  Thread1();
+            CR_SCRATCHPAD[1] = 1 ;    
+            while(1){} //busy wait            
         break;
         case 0x2 :
             SHARED_SPACE[2] =  Thread2();
+            CR_SCRATCHPAD[2] = 1 ;
+            while(1){} //busy wait
         break;
         case 0x3 :
             SHARED_SPACE[3] =  Thread3();
+            CR_SCRATCHPAD[3] = 1 ;
+            while(1){} //busy wait
         break;
     }   
 

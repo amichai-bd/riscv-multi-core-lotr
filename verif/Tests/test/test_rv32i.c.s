@@ -19,6 +19,10 @@ main:
 	lw	a5,-24(s0)
 	add	a5,a4,a5
 	sw	a5,-28(s0)
+	li	a5,4198400
+	addi	a5,a5,-256
+	lw	a4,-28(s0)
+	sw	a4,0(a5)
 	nop
 	mv	a0,a5
 	lw	s0,28(sp)
