@@ -75,7 +75,6 @@ int main() {
         while(!SCRATCHPAD[1] || !SCRATCHPAD[2] || !SCRATCHPAD[3]);
         // All threads are done in core CoreId. Notifying core1.
         SCRATCHPAD0_CORE_1[CoreId] = 1;
-        break;
     } else { // Core1.
         if(ThreadId != 0) {
             SCRATCHPAD[1]+=1;
@@ -83,7 +82,6 @@ int main() {
         }
         else { // Core1, thread 0. 
             while(!SCRATCHPAD[0] || !SCRATCHPAD[2] || !SCRATCHPAD[3] || SCRATCHPAD[1] != 3);
-            break;
         }
     } 
     // The Logic:
