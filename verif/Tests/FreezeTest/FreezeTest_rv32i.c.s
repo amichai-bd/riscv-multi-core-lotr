@@ -1,4 +1,4 @@
-	.file	"MulThread.c"
+	.file	"FreezeTest.c"
 	.option nopic
 	.attribute arch, "rv32i2p0"
 	.attribute unaligned_access, 0
@@ -113,24 +113,17 @@ main:
 	li	a5,12582912
 	addi	a5,a5,4
 	lw	a5,0(a5)
-	sw	a5,-20(s0)
-	lw	a4,-20(s0)
-	li	a5,3
-	beq	a4,a5,.L10
-	lw	a4,-20(s0)
-	li	a5,3
-	bgt	a4,a5,.L11
-	lw	a4,-20(s0)
-	li	a5,2
-	beq	a4,a5,.L12
-	lw	a4,-20(s0)
-	li	a5,2
-	bgt	a4,a5,.L11
-	lw	a5,-20(s0)
+	li	a4,3
+	beq	a5,a4,.L10
+	li	a4,3
+	bgt	a5,a4,.L11
+	li	a4,2
+	beq	a5,a4,.L12
+	li	a4,2
+	bgt	a5,a4,.L11
 	beq	a5,zero,.L13
-	lw	a4,-20(s0)
-	li	a5,1
-	beq	a4,a5,.L14
+	li	a4,1
+	beq	a5,a4,.L14
 	j	.L11
 .L13:
 	li	a5,4198400
@@ -139,7 +132,15 @@ main:
 	mv	a5,a0
 	sw	a5,0(s1)
 	li	a5,12582912
-	addi	a5,a5,512
+	addi	a5,a5,340
+	li	a4,1
+	sw	a4,0(a5)
+	li	a5,12582912
+	addi	a5,a5,344
+	li	a4,1
+	sw	a4,0(a5)
+	li	a5,12582912
+	addi	a5,a5,348
 	li	a4,1
 	sw	a4,0(a5)
 	nop
@@ -158,6 +159,10 @@ main:
 	beq	a5,zero,.L15
 	j	.L11
 .L14:
+	li	a5,12582912
+	addi	a5,a5,340
+	sw	zero,0(a5)
+	sw	zero,-20(s0)
 	li	a5,4198400
 	addi	s1,a5,-252
 	call	Thread1
@@ -170,6 +175,10 @@ main:
 .L16:
 	j	.L16
 .L12:
+	li	a5,12582912
+	addi	a5,a5,344
+	sw	zero,0(a5)
+	sw	zero,-20(s0)
 	li	a5,4198400
 	addi	s1,a5,-248
 	call	Thread2
@@ -182,6 +191,10 @@ main:
 .L17:
 	j	.L17
 .L10:
+	li	a5,12582912
+	addi	a5,a5,348
+	sw	zero,0(a5)
+	sw	zero,-20(s0)
 	li	a5,4198400
 	addi	s1,a5,-244
 	call	Thread3
@@ -194,7 +207,7 @@ main:
 .L18:
 	j	.L18
 .L11:
-	nop
+	li	a5,0
 	mv	a0,a5
 	lw	ra,28(sp)
 	lw	s0,24(sp)

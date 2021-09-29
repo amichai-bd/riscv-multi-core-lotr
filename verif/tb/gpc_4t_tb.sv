@@ -102,26 +102,20 @@ gpc_4t gpc_4t(
 // 4.fclose on all open files    
 // 5.exit test with message   
 task end_tb;
+
     input string msg;
     integer out1,out2,i,j,l;
     out1=$fopen({"../target/",hpath,"/d_mem_snapshot.log"},"w");
-    $fwrite(out1,"Offset 00000000 : ");
-    for (i = 0 ; i < SIZE_D_MEM; i++) begin  
-        $fwrite(out1,"%02x ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
-        if ( (i%8)==7) begin
-            $fwrite(out1,"\n");
-            $fwrite(out1,"Offset %08x : ",i);
-        end
+    for (i = 0 ; i < SIZE_D_MEM; i = i+4) begin  
+        $fwrite(out1,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+3],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+2],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+1],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
     end
-    out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");  
-    $fwrite(out2,"Offset %08x : ",SIZE_SHRD_MEM);
-    for (j = SIZE_SHRD_MEM; j < SIZE_D_MEM; j++) begin  
-        $fwrite(out2,"%02x ",gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[j]);
-        if ( (j%8)==7) begin
-            $fwrite(out2,"\n");
-            $fwrite(out2,"Offset %08x : ",j);
-        end
-    end
+    
+    out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");   
+
+    for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
+        $fwrite(out2,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+3],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+2],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+1],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
+    end    
+    
     $fclose(trk_write_registers);
     $fclose(trk_d_mem_access);  
     $fclose(trk_brach_op);  

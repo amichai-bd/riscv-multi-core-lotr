@@ -159,7 +159,24 @@ Disassembly of section .text:
  234:	00008693          	mv	a3,ra
  238:	00008713          	mv	a4,ra
  23c:	00008793          	mv	a5,ra
- 240:	00c002b7          	lui	t0,0xc00
- 244:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
- 248:	0002a103          	lw	sp,0(t0)
- 24c:	ef9ff0ef          	jal	ra,144 <main>
+ 240:	00008813          	mv	a6,ra
+ 244:	00008893          	mv	a7,ra
+ 248:	00008913          	mv	s2,ra
+ 24c:	00008993          	mv	s3,ra
+ 250:	00008a13          	mv	s4,ra
+ 254:	00008a93          	mv	s5,ra
+ 258:	00008b13          	mv	s6,ra
+ 25c:	00008b93          	mv	s7,ra
+ 260:	00008c13          	mv	s8,ra
+ 264:	00008c93          	mv	s9,ra
+ 268:	00008d13          	mv	s10,ra
+ 26c:	00008d93          	mv	s11,ra
+ 270:	00008e13          	mv	t3,ra
+ 274:	00008e93          	mv	t4,ra
+ 278:	00008f13          	mv	t5,ra
+ 27c:	00008f93          	mv	t6,ra
+ 280:	00c002b7          	lui	t0,0xc00
+ 284:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+ 288:	0002a103          	lw	sp,0(t0)
+ 28c:	eb9ff0ef          	jal	ra,144 <main>
+ 290:	00100073          	ebreak
