@@ -3,8 +3,8 @@
 `include "lotr_defines.sv"
 module lotr_tb ();
 import lotr_pkg::*;
-	logic         QClk                     ;
-	logic         RstQnnnH                 ;
+	logic         QClk      ;
+	logic         RstQnnnH  ;
 	// clock generation
 	initial begin: clock_gen
 		forever begin
@@ -24,11 +24,10 @@ import lotr_pkg::*;
         $finish;
 	end// reset_gen
 
-
 lotr lotr(
     //general signals input
-    .QClk  		          (QClk),      //input
-    .RstQnnnH  	          (RstQnnnH)
+    .QClk  		(QClk),   //input
+    .RstQnnnH  	(RstQnnnH)
     );
 
 
