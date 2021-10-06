@@ -149,7 +149,7 @@ gpc_4t gpc_4t(
     .RstQnnnH               (RstQnnnH)               ,//input
     .CoreID                 (CoreID)                 ,//input
     //================================================
-    //        Core Interface
+    //        Core to Fabric
     //================================================
     // input - Rsp to Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//input
@@ -164,7 +164,7 @@ gpc_4t gpc_4t(
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//output
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//output
     //================================================
-    //        Core Interface
+    //        Fabric to Core
     //================================================
     // input - Req from Ring/Fabric
     .F2C_ReqValidQ502H      (F2C_ReqValidQ502H)      ,//input
