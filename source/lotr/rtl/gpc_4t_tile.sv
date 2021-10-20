@@ -20,19 +20,36 @@ module gpc_4t_tile
 import lotr_pkg::*;
 (
     //General Interface
-    input   logic         QClk                   ,
-    input   logic         RstQnnnH               ,
-    input   logic  [7:0]  CoreID                 ,
-    //Ring ---> RC
-    input   logic         RingInputValidQ500H    ,
-    input   t_opcode      RingInputOpcodeQ500H   ,
-    input   logic  [31:0] RingInputAddressQ500H  ,
-    input   logic  [31:0] RingInputDataQ500H     ,
-    //RC   ---> Ring
-    output  logic         RingOutputValidQ502H   ,
-    output  t_opcode      RingOutputOpcodeQ502H  ,
-    output  logic  [31:0] RingOutputAddressQ502H ,
-    output  logic  [31:0] RingOutputDataQ502H
+    input   logic         QClk                     ,
+    input   logic         RstQnnnH                 ,
+    input   logic  [7:0]  CoreID                   ,
+    //===================================
+    // Tile <-> Fabric Inteface
+    //===================================
+    //Ring ---> RC , RingReqIn
+    input   logic         RingReqInValidQ500H      ,
+    input   logic  [9:0]  RingReqInRequestorQ500H  ,    
+    input   t_opcode      RingReqInOpcodeQ500H     ,
+    input   logic  [31:0] RingReqInAddressQ500H    ,
+    input   logic  [31:0] RingReqInDataQ500H       ,
+    //Ring ---> RC , RingRspIn
+    input   logic         RingRspInValidQ500H      ,
+    input   logic  [9:0]  RingRspInRequestorQ500H  ,    
+    input   t_opcode      RingRspInOpcodeQ500H     ,
+    input   logic  [31:0] RingRspInAddressQ500H    ,
+    input   logic  [31:0] RingRspInDataQ500H       ,
+    //RC   ---> Ring , RingReqOut
+    output  logic         RingReqOutValidQ502H     ,
+    output  logic  [9:0]  RingReqOutRequestorQ502H ,    
+    output  t_opcode      RingReqOutOpcodeQ502H    ,
+    output  logic  [31:0] RingReqOutAddressQ502H   ,
+    output  logic  [31:0] RingReqOutDataQ502H      ,
+     //RC   ---> Ring , RingRspOut
+    output  logic         RingRspOutValidQ502H     ,
+    output  logic  [9:0]  RingRspOutRequestorQ502H ,    
+    output  t_opcode      RingRspOutOpcodeQ502H    ,
+    output  logic  [31:0] RingRspOutAddressQ502H   ,
+    output  logic  [31:0] RingRspOutDataQ502H 
 );
 
 //================================================
@@ -74,16 +91,30 @@ rc rc(
     //================================================
     //        RING Interface
     //================================================
-    // input - Req/Rsp from Ring
-    .RingInputValidQ500H    (RingInputValidQ500H)    ,//input
-    .RingInputOpcodeQ500H   (RingInputOpcodeQ500H)   ,//input
-    .RingInputAddressQ500H  (RingInputAddressQ500H)  ,//input
-    .RingInputDataQ500H     (RingInputDataQ500H)     ,//input
-    // output - Req/Rsp to Ring
-    .RingOutputValidQ502H   (RingOutputValidQ502H)   ,//output
-    .RingOutputOpcodeQ502H  (RingOutputOpcodeQ502H)  ,//output
-    .RingOutputAddressQ502H (RingOutputAddressQ502H) ,//output 
-    .RingOutputDataQ502H    (RingOutputDataQ502H)    ,//output
+    //Ring ---> RC , RingReqIn
+    .RingReqInValidQ500H        (RingReqInValidQ500H)      ,//input
+    .RingReqInRequestorQ500H    (RingReqInRequestorQ500H)  ,//input
+    .RingReqInOpcodeQ500H       (RingReqInOpcodeQ500H)     ,//input
+    .RingReqInAddressQ500H      (RingReqInAddressQ500H)    ,//input
+    .RingReqInDataQ500H         (RingReqInDataQ500H)       ,//input
+    //Ring ---> RC , RingRspIn
+    .RingRspInValidQ500H        (RingRspInValidQ500H)      ,//input
+    .RingRspInRequestorQ500H    (RingRspInRequestorQ500H)  ,//input
+    .RingRspInOpcodeQ500H       (RingRspInOpcodeQ500H)     ,//input
+    .RingRspInAddressQ500H      (RingRspInAddressQ500H)    ,//input
+    .RingRspInDataQ500H         (RingRspInDataQ500H)       ,//input
+    //RC   ---> Ring , RingReqOut
+    .RingReqOutValidQ502H       (RingReqOutValidQ502H)     ,//output
+    .RingReqOutRequestorQ502H   (RingReqOutRequestorQ502H) ,//output
+    .RingReqOutOpcodeQ502H      (RingReqOutOpcodeQ502H)    ,//output
+    .RingReqOutAddressQ502H     (RingReqOutAddressQ502H)   ,//output
+    .RingReqOutDataQ502H        (RingReqOutDataQ502H)      ,//output
+     //RC   ---> Ring , RingRspOut
+    .RingRspOutValidQ502H       (RingRspOutValidQ502H)     ,//output
+    .RingRspOutRequestorQ502H   (RingRspOutRequestorQ502H) ,//output
+    .RingRspOutOpcodeQ502H      (RingRspOutOpcodeQ502H)    ,//output
+    .RingRspOutAddressQ502H     (RingRspOutAddressQ502H)   ,//output
+    .RingRspOutDataQ502H        (RingRspOutDataQ502H)      ,//output
     //================================================
     //        Core Interface
     //================================================
@@ -93,7 +124,7 @@ rc rc(
     .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H)   ,//input
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//input
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//input
-    // input - Rsp to Core
+    // output - Rsp to Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//output
     .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H)   ,//output
     .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//output
@@ -118,7 +149,7 @@ gpc_4t gpc_4t(
     .RstQnnnH               (RstQnnnH)               ,//input
     .CoreID                 (CoreID)                 ,//input
     //================================================
-    //        Core Interface
+    //        Core to Fabric
     //================================================
     // input - Rsp to Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//input
@@ -133,7 +164,7 @@ gpc_4t gpc_4t(
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//output
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//output
     //================================================
-    //        Core Interface
+    //        Fabric to Core
     //================================================
     // input - Req from Ring/Fabric
     .F2C_ReqValidQ502H      (F2C_ReqValidQ502H)      ,//input

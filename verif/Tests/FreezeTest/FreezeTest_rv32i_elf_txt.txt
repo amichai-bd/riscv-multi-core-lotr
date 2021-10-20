@@ -1,0 +1,369 @@
+
+FreezeTest_rv32i.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00000000 <reset_handler-0x18>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000013          	nop
+  14:	0040006f          	j	18 <reset_handler>
+
+00000018 <reset_handler>:
+  18:	00000093          	li	ra,0
+  1c:	00008113          	mv	sp,ra
+  20:	00008193          	mv	gp,ra
+  24:	00008213          	mv	tp,ra
+  28:	00008293          	mv	t0,ra
+  2c:	00008313          	mv	t1,ra
+  30:	00008393          	mv	t2,ra
+  34:	00008413          	mv	s0,ra
+  38:	00008493          	mv	s1,ra
+  3c:	00008513          	mv	a0,ra
+  40:	00008593          	mv	a1,ra
+  44:	00008613          	mv	a2,ra
+  48:	00008693          	mv	a3,ra
+  4c:	00008713          	mv	a4,ra
+  50:	00008793          	mv	a5,ra
+  54:	00008813          	mv	a6,ra
+  58:	00008893          	mv	a7,ra
+  5c:	00008913          	mv	s2,ra
+  60:	00008993          	mv	s3,ra
+  64:	00008a13          	mv	s4,ra
+  68:	00008a93          	mv	s5,ra
+  6c:	00008b13          	mv	s6,ra
+  70:	00008b93          	mv	s7,ra
+  74:	00008c13          	mv	s8,ra
+  78:	00008c93          	mv	s9,ra
+  7c:	00008d13          	mv	s10,ra
+  80:	00008d93          	mv	s11,ra
+  84:	00008e13          	mv	t3,ra
+  88:	00008e93          	mv	t4,ra
+  8c:	00008f13          	mv	t5,ra
+  90:	00008f93          	mv	t6,ra
+  94:	00c002b7          	lui	t0,0xc00
+  98:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+  9c:	0002a103          	lw	sp,0(t0)
+  a0:	138000ef          	jal	ra,1d8 <main>
+  a4:	00100073          	ebreak
+
+Disassembly of section .text:
+
+000000a8 <Thread0>:
+  a8:	fe010113          	addi	sp,sp,-32
+  ac:	00112e23          	sw	ra,28(sp)
+  b0:	00812c23          	sw	s0,24(sp)
+  b4:	02010413          	addi	s0,sp,32
+  b8:	01400793          	li	a5,20
+  bc:	fef42623          	sw	a5,-20(s0)
+  c0:	00500793          	li	a5,5
+  c4:	fef42423          	sw	a5,-24(s0)
+  c8:	fe842583          	lw	a1,-24(s0)
+  cc:	fec42503          	lw	a0,-20(s0)
+  d0:	298000ef          	jal	ra,368 <__mulsi3>
+  d4:	00050793          	mv	a5,a0
+  d8:	fef42223          	sw	a5,-28(s0)
+  dc:	fe442783          	lw	a5,-28(s0)
+  e0:	00078513          	mv	a0,a5
+  e4:	01c12083          	lw	ra,28(sp)
+  e8:	01812403          	lw	s0,24(sp)
+  ec:	02010113          	addi	sp,sp,32
+  f0:	00008067          	ret
+
+000000f4 <Thread1>:
+  f4:	fe010113          	addi	sp,sp,-32
+  f8:	00112e23          	sw	ra,28(sp)
+  fc:	00812c23          	sw	s0,24(sp)
+ 100:	02010413          	addi	s0,sp,32
+ 104:	00800793          	li	a5,8
+ 108:	fef42623          	sw	a5,-20(s0)
+ 10c:	01900793          	li	a5,25
+ 110:	fef42423          	sw	a5,-24(s0)
+ 114:	fe842583          	lw	a1,-24(s0)
+ 118:	fec42503          	lw	a0,-20(s0)
+ 11c:	24c000ef          	jal	ra,368 <__mulsi3>
+ 120:	00050793          	mv	a5,a0
+ 124:	fef42223          	sw	a5,-28(s0)
+ 128:	fe442783          	lw	a5,-28(s0)
+ 12c:	00078513          	mv	a0,a5
+ 130:	01c12083          	lw	ra,28(sp)
+ 134:	01812403          	lw	s0,24(sp)
+ 138:	02010113          	addi	sp,sp,32
+ 13c:	00008067          	ret
+
+00000140 <Thread2>:
+ 140:	fe010113          	addi	sp,sp,-32
+ 144:	00112e23          	sw	ra,28(sp)
+ 148:	00812c23          	sw	s0,24(sp)
+ 14c:	02010413          	addi	s0,sp,32
+ 150:	00a00793          	li	a5,10
+ 154:	fef42623          	sw	a5,-20(s0)
+ 158:	01e00793          	li	a5,30
+ 15c:	fef42423          	sw	a5,-24(s0)
+ 160:	fe842583          	lw	a1,-24(s0)
+ 164:	fec42503          	lw	a0,-20(s0)
+ 168:	200000ef          	jal	ra,368 <__mulsi3>
+ 16c:	00050793          	mv	a5,a0
+ 170:	fef42223          	sw	a5,-28(s0)
+ 174:	fe442783          	lw	a5,-28(s0)
+ 178:	00078513          	mv	a0,a5
+ 17c:	01c12083          	lw	ra,28(sp)
+ 180:	01812403          	lw	s0,24(sp)
+ 184:	02010113          	addi	sp,sp,32
+ 188:	00008067          	ret
+
+0000018c <Thread3>:
+ 18c:	fe010113          	addi	sp,sp,-32
+ 190:	00112e23          	sw	ra,28(sp)
+ 194:	00812c23          	sw	s0,24(sp)
+ 198:	02010413          	addi	s0,sp,32
+ 19c:	06400793          	li	a5,100
+ 1a0:	fef42623          	sw	a5,-20(s0)
+ 1a4:	00400793          	li	a5,4
+ 1a8:	fef42423          	sw	a5,-24(s0)
+ 1ac:	fe842583          	lw	a1,-24(s0)
+ 1b0:	fec42503          	lw	a0,-20(s0)
+ 1b4:	1b4000ef          	jal	ra,368 <__mulsi3>
+ 1b8:	00050793          	mv	a5,a0
+ 1bc:	fef42223          	sw	a5,-28(s0)
+ 1c0:	fe442783          	lw	a5,-28(s0)
+ 1c4:	00078513          	mv	a0,a5
+ 1c8:	01c12083          	lw	ra,28(sp)
+ 1cc:	01812403          	lw	s0,24(sp)
+ 1d0:	02010113          	addi	sp,sp,32
+ 1d4:	00008067          	ret
+
+000001d8 <main>:
+ 1d8:	fe010113          	addi	sp,sp,-32
+ 1dc:	00112e23          	sw	ra,28(sp)
+ 1e0:	00812c23          	sw	s0,24(sp)
+ 1e4:	00912a23          	sw	s1,20(sp)
+ 1e8:	02010413          	addi	s0,sp,32
+ 1ec:	00c007b7          	lui	a5,0xc00
+ 1f0:	00478793          	addi	a5,a5,4 # c00004 <_bss_end+0x7ff804>
+ 1f4:	0007a783          	lw	a5,0(a5)
+ 1f8:	00300713          	li	a4,3
+ 1fc:	10e78c63          	beq	a5,a4,314 <_stack_len+0x114>
+ 200:	00300713          	li	a4,3
+ 204:	14f74463          	blt	a4,a5,34c <_stack_len+0x14c>
+ 208:	00200713          	li	a4,2
+ 20c:	0ce78863          	beq	a5,a4,2dc <_stack_len+0xdc>
+ 210:	00200713          	li	a4,2
+ 214:	12f74c63          	blt	a4,a5,34c <_stack_len+0x14c>
+ 218:	00078863          	beqz	a5,228 <_stack_len+0x28>
+ 21c:	00100713          	li	a4,1
+ 220:	08e78263          	beq	a5,a4,2a4 <_stack_len+0xa4>
+ 224:	1280006f          	j	34c <_stack_len+0x14c>
+ 228:	004017b7          	lui	a5,0x401
+ 22c:	f0078493          	addi	s1,a5,-256 # 400f00 <_bss_end+0x700>
+ 230:	e79ff0ef          	jal	ra,a8 <Thread0>
+ 234:	00050793          	mv	a5,a0
+ 238:	00f4a023          	sw	a5,0(s1)
+ 23c:	00c007b7          	lui	a5,0xc00
+ 240:	15478793          	addi	a5,a5,340 # c00154 <_bss_end+0x7ff954>
+ 244:	00100713          	li	a4,1
+ 248:	00e7a023          	sw	a4,0(a5)
+ 24c:	00c007b7          	lui	a5,0xc00
+ 250:	15878793          	addi	a5,a5,344 # c00158 <_bss_end+0x7ff958>
+ 254:	00100713          	li	a4,1
+ 258:	00e7a023          	sw	a4,0(a5)
+ 25c:	00c007b7          	lui	a5,0xc00
+ 260:	15c78793          	addi	a5,a5,348 # c0015c <_bss_end+0x7ff95c>
+ 264:	00100713          	li	a4,1
+ 268:	00e7a023          	sw	a4,0(a5)
+ 26c:	00000013          	nop
+ 270:	00c007b7          	lui	a5,0xc00
+ 274:	20478793          	addi	a5,a5,516 # c00204 <_bss_end+0x7ffa04>
+ 278:	0007a783          	lw	a5,0(a5)
+ 27c:	fe078ae3          	beqz	a5,270 <_stack_len+0x70>
+ 280:	00c007b7          	lui	a5,0xc00
+ 284:	20878793          	addi	a5,a5,520 # c00208 <_bss_end+0x7ffa08>
+ 288:	0007a783          	lw	a5,0(a5)
+ 28c:	fe0782e3          	beqz	a5,270 <_stack_len+0x70>
+ 290:	00c007b7          	lui	a5,0xc00
+ 294:	20c78793          	addi	a5,a5,524 # c0020c <_bss_end+0x7ffa0c>
+ 298:	0007a783          	lw	a5,0(a5)
+ 29c:	fc078ae3          	beqz	a5,270 <_stack_len+0x70>
+ 2a0:	0ac0006f          	j	34c <_stack_len+0x14c>
+ 2a4:	00c007b7          	lui	a5,0xc00
+ 2a8:	15478793          	addi	a5,a5,340 # c00154 <_bss_end+0x7ff954>
+ 2ac:	0007a023          	sw	zero,0(a5)
+ 2b0:	fe042623          	sw	zero,-20(s0)
+ 2b4:	004017b7          	lui	a5,0x401
+ 2b8:	f0478493          	addi	s1,a5,-252 # 400f04 <_bss_end+0x704>
+ 2bc:	e39ff0ef          	jal	ra,f4 <Thread1>
+ 2c0:	00050793          	mv	a5,a0
+ 2c4:	00f4a023          	sw	a5,0(s1)
+ 2c8:	00c007b7          	lui	a5,0xc00
+ 2cc:	20478793          	addi	a5,a5,516 # c00204 <_bss_end+0x7ffa04>
+ 2d0:	00100713          	li	a4,1
+ 2d4:	00e7a023          	sw	a4,0(a5)
+ 2d8:	0000006f          	j	2d8 <_stack_len+0xd8>
+ 2dc:	00c007b7          	lui	a5,0xc00
+ 2e0:	15878793          	addi	a5,a5,344 # c00158 <_bss_end+0x7ff958>
+ 2e4:	0007a023          	sw	zero,0(a5)
+ 2e8:	fe042623          	sw	zero,-20(s0)
+ 2ec:	004017b7          	lui	a5,0x401
+ 2f0:	f0878493          	addi	s1,a5,-248 # 400f08 <_bss_end+0x708>
+ 2f4:	e4dff0ef          	jal	ra,140 <Thread2>
+ 2f8:	00050793          	mv	a5,a0
+ 2fc:	00f4a023          	sw	a5,0(s1)
+ 300:	00c007b7          	lui	a5,0xc00
+ 304:	20878793          	addi	a5,a5,520 # c00208 <_bss_end+0x7ffa08>
+ 308:	00100713          	li	a4,1
+ 30c:	00e7a023          	sw	a4,0(a5)
+ 310:	0000006f          	j	310 <_stack_len+0x110>
+ 314:	00c007b7          	lui	a5,0xc00
+ 318:	15c78793          	addi	a5,a5,348 # c0015c <_bss_end+0x7ff95c>
+ 31c:	0007a023          	sw	zero,0(a5)
+ 320:	fe042623          	sw	zero,-20(s0)
+ 324:	004017b7          	lui	a5,0x401
+ 328:	f0c78493          	addi	s1,a5,-244 # 400f0c <_bss_end+0x70c>
+ 32c:	e61ff0ef          	jal	ra,18c <Thread3>
+ 330:	00050793          	mv	a5,a0
+ 334:	00f4a023          	sw	a5,0(s1)
+ 338:	00c007b7          	lui	a5,0xc00
+ 33c:	20c78793          	addi	a5,a5,524 # c0020c <_bss_end+0x7ffa0c>
+ 340:	00100713          	li	a4,1
+ 344:	00e7a023          	sw	a4,0(a5)
+ 348:	0000006f          	j	348 <_stack_len+0x148>
+ 34c:	00000793          	li	a5,0
+ 350:	00078513          	mv	a0,a5
+ 354:	01c12083          	lw	ra,28(sp)
+ 358:	01812403          	lw	s0,24(sp)
+ 35c:	01412483          	lw	s1,20(sp)
+ 360:	02010113          	addi	sp,sp,32
+ 364:	00008067          	ret
+
+00000368 <__mulsi3>:
+ 368:	00050613          	mv	a2,a0
+ 36c:	00000513          	li	a0,0
+ 370:	0015f693          	andi	a3,a1,1
+ 374:	00068463          	beqz	a3,37c <__mulsi3+0x14>
+ 378:	00c50533          	add	a0,a0,a2
+ 37c:	0015d593          	srli	a1,a1,0x1
+ 380:	00161613          	slli	a2,a2,0x1
+ 384:	fe0596e3          	bnez	a1,370 <__mulsi3+0x8>
+ 388:	00008067          	ret
+Raw dump of debug contents of section .debug_line (loaded from FreezeTest_rv32i.elf):
+
+  Offset:                      0x0
+  Length:                      142
+  DWARF Version:               3
+  Prologue Length:             72
+  Minimum Instruction Length:  1
+  Initial value of 'is_stmt':  1
+  Line Base:                   -5
+  Line Range:                  14
+  Opcode Base:                 13
+
+ Opcodes:
+  Opcode 1 has 0 args
+  Opcode 2 has 1 arg
+  Opcode 3 has 1 arg
+  Opcode 4 has 1 arg
+  Opcode 5 has 1 arg
+  Opcode 6 has 0 args
+  Opcode 7 has 0 args
+  Opcode 8 has 0 args
+  Opcode 9 has 1 arg
+  Opcode 10 has 0 args
+  Opcode 11 has 0 args
+  Opcode 12 has 1 arg
+
+ The Directory Table (offset 0x1b):
+  1	../../.././riscv-gcc/libgcc/config/riscv
+
+ The File Name Table (offset 0x45):
+  Entry	Dir	Time	Size	Name
+  1	1	0	0	muldi3.S
+
+ Line Number Statements:
+  [0x00000052]  Extended opcode 2: set Address to 0x368
+  [0x00000059]  Advance Line by 36 to 37
+  [0x0000005b]  Copy
+  [0x0000005c]  Advance Line by 1 to 38
+  [0x0000005e]  Advance PC by fixed size amount 4 to 0x36c
+  [0x00000061]  Copy (view 1)
+  [0x00000062]  Advance Line by 2 to 40
+  [0x00000064]  Advance PC by fixed size amount 4 to 0x370
+  [0x00000067]  Copy (view 2)
+  [0x00000068]  Advance Line by 1 to 41
+  [0x0000006a]  Advance PC by fixed size amount 4 to 0x374
+  [0x0000006d]  Copy (view 3)
+  [0x0000006e]  Advance Line by 1 to 42
+  [0x00000070]  Advance PC by fixed size amount 4 to 0x378
+  [0x00000073]  Copy (view 4)
+  [0x00000074]  Advance Line by 2 to 44
+  [0x00000076]  Advance PC by fixed size amount 4 to 0x37c
+  [0x00000079]  Copy (view 5)
+  [0x0000007a]  Advance Line by 1 to 45
+  [0x0000007c]  Advance PC by fixed size amount 4 to 0x380
+  [0x0000007f]  Copy (view 6)
+  [0x00000080]  Advance Line by 1 to 46
+  [0x00000082]  Advance PC by fixed size amount 4 to 0x384
+  [0x00000085]  Copy (view 7)
+  [0x00000086]  Advance Line by 1 to 47
+  [0x00000088]  Advance PC by fixed size amount 4 to 0x388
+  [0x0000008b]  Copy (view 8)
+  [0x0000008c]  Advance PC by fixed size amount 4 to 0x38c
+  [0x0000008f]  Extended opcode 1: End of Sequence
+
+
+Contents of the .debug_info section (loaded from FreezeTest_rv32i.elf):
+
+  Compilation Unit @ offset 0x0:
+   Length:        0x22 (32-bit)
+   Version:       2
+   Abbrev Offset: 0x0
+   Pointer Size:  4
+ <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
+    <c>   DW_AT_stmt_list   : 0x0
+    <10>   DW_AT_low_pc      : 0x368
+    <14>   DW_AT_high_pc     : 0x38c
+    <18>   DW_AT_name        : (indirect string, offset: 0x0): ../../.././riscv-gcc/libgcc/config/riscv/muldi3.S
+    <1c>   DW_AT_comp_dir    : (indirect string, offset: 0x32): /home/adlv/projects/riscv/riscv-gnu-toolchain/build-gcc-newlib-stage2/riscv32-unknown-elf/libgcc
+    <20>   DW_AT_producer    : (indirect string, offset: 0x93): GNU AS 2.35
+    <24>   DW_AT_language    : 32769	(MIPS assembler)
+
+Contents of the .debug_abbrev section (loaded from FreezeTest_rv32i.elf):
+
+  Number TAG (0x0)
+   1      DW_TAG_compile_unit    [no children]
+    DW_AT_stmt_list    DW_FORM_data4
+    DW_AT_low_pc       DW_FORM_addr
+    DW_AT_high_pc      DW_FORM_addr
+    DW_AT_name         DW_FORM_strp
+    DW_AT_comp_dir     DW_FORM_strp
+    DW_AT_producer     DW_FORM_strp
+    DW_AT_language     DW_FORM_data2
+    DW_AT value: 0     DW_FORM value: 0
+
+Contents of the .debug_aranges section (loaded from FreezeTest_rv32i.elf):
+
+  Length:                   28
+  Version:                  2
+  Offset into .debug_info:  0x0
+  Pointer Size:             4
+  Segment Size:             0
+
+    Address    Length
+    00000368 00000024 
+    00000000 00000000 
+
+Contents of the .debug_str section (loaded from FreezeTest_rv32i.elf):
+
+  0x00000000 2e2e2f2e 2e2f2e2e 2f2e2f72 69736376 ../../.././riscv
+  0x00000010 2d676363 2f6c6962 6763632f 636f6e66 -gcc/libgcc/conf
+  0x00000020 69672f72 69736376 2f6d756c 6469332e ig/riscv/muldi3.
+  0x00000030 53002f68 6f6d652f 61646c76 2f70726f S./home/adlv/pro
+  0x00000040 6a656374 732f7269 7363762f 72697363 jects/riscv/risc
+  0x00000050 762d676e 752d746f 6f6c6368 61696e2f v-gnu-toolchain/
+  0x00000060 6275696c 642d6763 632d6e65 776c6962 build-gcc-newlib
+  0x00000070 2d737461 6765322f 72697363 7633322d -stage2/riscv32-
+  0x00000080 756e6b6e 6f776e2d 656c662f 6c696267 unknown-elf/libg
+  0x00000090 63630047 4e552041 5320322e 333500   cc.GNU AS 2.35.
+

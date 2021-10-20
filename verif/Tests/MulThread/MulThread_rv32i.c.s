@@ -138,6 +138,24 @@ main:
 	call	Thread0
 	mv	a5,a0
 	sw	a5,0(s1)
+	li	a5,12582912
+	addi	a5,a5,512
+	li	a4,1
+	sw	a4,0(a5)
+	nop
+.L15:
+	li	a5,12582912
+	addi	a5,a5,516
+	lw	a5,0(a5)
+	beq	a5,zero,.L15
+	li	a5,12582912
+	addi	a5,a5,520
+	lw	a5,0(a5)
+	beq	a5,zero,.L15
+	li	a5,12582912
+	addi	a5,a5,524
+	lw	a5,0(a5)
+	beq	a5,zero,.L15
 	j	.L11
 .L14:
 	li	a5,4198400
@@ -145,21 +163,36 @@ main:
 	call	Thread1
 	mv	a5,a0
 	sw	a5,0(s1)
-	j	.L11
+	li	a5,12582912
+	addi	a5,a5,516
+	li	a4,1
+	sw	a4,0(a5)
+.L16:
+	j	.L16
 .L12:
 	li	a5,4198400
 	addi	s1,a5,-248
 	call	Thread2
 	mv	a5,a0
 	sw	a5,0(s1)
-	j	.L11
+	li	a5,12582912
+	addi	a5,a5,520
+	li	a4,1
+	sw	a4,0(a5)
+.L17:
+	j	.L17
 .L10:
 	li	a5,4198400
 	addi	s1,a5,-244
 	call	Thread3
 	mv	a5,a0
 	sw	a5,0(s1)
-	nop
+	li	a5,12582912
+	addi	a5,a5,524
+	li	a4,1
+	sw	a4,0(a5)
+.L18:
+	j	.L18
 .L11:
 	nop
 	mv	a0,a5

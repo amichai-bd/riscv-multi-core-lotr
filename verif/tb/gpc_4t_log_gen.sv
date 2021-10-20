@@ -2,9 +2,10 @@ integer trk_write_registers;
 integer trk_d_mem_access;
 integer trk_brach_op;
 integer trk_alu;
+integer trk_PC0;
 integer trk_error;
 integer trk_shared_space;
-integer trk_thread0_reg_write,trk_thread1_reg_write,trk_thread2_reg_write,trk_thread3_reg_write;
+integer trk_thread0_reg_write,trk_thread1_reg_write,trk_thread2_reg_write,trk_thread3_reg_write,trk_cr_space;
 
 
 initial begin
@@ -15,10 +16,12 @@ initial begin
     trk_alu               = $fopen({"../target/",hpath,"/trk_alu.log"},"w");
     trk_error             = $fopen({"../target/",hpath,"/trk_error.log"},"w");
     trk_shared_space      = $fopen({"../target/",hpath,"/trk_shared_space.log"},"w");
+    trk_cr_space          = $fopen({"../target/",hpath,"/trk_cr_space.log"},"w");
     trk_thread0_reg_write = $fopen({"../target/",hpath,"/trk_thread0_reg_write.log"},"w");  
     trk_thread1_reg_write = $fopen({"../target/",hpath,"/trk_thread1_reg_write.log"},"w");  
     trk_thread2_reg_write = $fopen({"../target/",hpath,"/trk_thread2_reg_write.log"},"w");  
-    trk_thread3_reg_write = $fopen({"../target/",hpath,"/trk_thread3_reg_write.log"},"w");          
+    trk_thread3_reg_write = $fopen({"../target/",hpath,"/trk_thread3_reg_write.log"},"w");    
+    trk_PC0               = $fopen({"../target/",hpath,"/trk_PC0.log"},"w"); 
     $fwrite(trk_write_registers,"-------------------------------------------------\n");
     $fwrite(trk_write_registers,"Time\t| Thread| PC \t |Register Num\t| Wr Data\t|\n");
     $fwrite(trk_write_registers,"-------------------------------------------------\n");
@@ -45,6 +48,7 @@ logic        CtrlBranchQ102H    ;
 logic        CtrlBranchQ103H    ;
 logic        BranchCondMetQ102H ;
 logic        BranchCondMetQ103H ;
+logic        AssertEBREAK       ;
 logic [6:0]  ALU_OPQ102H        ;
 logic [6:0]  ALU_OPQ103H        ;
 logic [31:0] AluIn1Q103H        ;
@@ -80,6 +84,7 @@ logic [1:0]  threadnumQ104H     ;
 string OPCODE ,BrnchOP;
 assign CtrlBranchQ102H = gpc_4t_tb.gpc_4t.core_4t.CtrlBranchQ102H;
 assign AssertIllegalOpCode = (OPCODE == "NO       " && BrnchOP == "NO  " && $realtime > 41);
+assign AssertEBREAK = (ALU_OPQ103H == 7'b1110011);
 
 
 always_comb begin 
@@ -132,6 +137,13 @@ always @(posedge clk) begin : write_to_shrd
     end //if
 end
 
+//tracker to CR space
+always @(posedge clk) begin : CR
+    if (CtrlMemWrQ104H && MemAdrsQ104H > 32'hc00000 && MemAdrsQ104H < 32'hc0020c  ) begin 
+        $fwrite(trk_cr_space,"%t\t| %8h\t| %8h\t| WRITE\t\t| %8h\t| \n", $realtime,PcQ104H,MemAdrsQ104H , MemWrDataWQ104H);
+    end //if
+end
+
 //tracker on write to registers
 always @(posedge clk) begin : write_to_registers
     if (CtrlRegWrQ104H && RegWrPtrQ104H!=0) begin 
@@ -150,6 +162,13 @@ end
 always @(posedge clk) begin : brnch_print
     if(CtrlBranchQ103H) begin
         $fwrite(trk_brach_op,"%t\t| %8h |%s \t\t|%8h \t|%8h \t|%8h \t| \n", $realtime,PcQ103H,BrnchOP, AluIn1Q103H , AluIn2Q103H,BranchCondMetQ103H);
+    end //if
+end
+
+//tracker on PC0
+always @(posedge clk) begin : trk_PC00
+    if(threadnumQ104H==0) begin
+        $fwrite(trk_PC0,"%t\t| %8h  \n", $realtime,PcQ104H);
     end //if
 end
 
@@ -207,10 +226,13 @@ always_comb begin
     if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalRegister) begin
         $fwrite(trk_error, "ERROR : AssertIllegalRegister - Illegal register .above 16 on time %t\n",$realtime);
     end
+    if(AssertEBREAK) begin
+        end_tb(" Finished with EBREAK command");
+    end
     if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalPC) begin
         $fwrite(trk_error, "ERROR : AssertIllegalPC",$realtime);
         end_tb(" Finished with PC overflow");
-    end
+    end    
     if(AssertIllegalOpCode) begin
         $fwrite(trk_error, "ERROR : AssertIllegalOpCode - Illegal OpCode : %7b on time %t\n" ,ALU_OPQ103H,$realtime);
     end

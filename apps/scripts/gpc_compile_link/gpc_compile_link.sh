@@ -47,7 +47,17 @@ if [ "$#" == "1" ];then
     mv $1_rv32$mod.elf ../../../verif/Tests/$1
     
     mv $1_rv32${mod}_elf_txt.txt ../../../verif/Tests/$1
-
+    
+    if grep -q @00400800 "$1_inst_mem_rv32$mod.sv"; then
+        c=`cat $1_inst_mem_rv32$mod.sv | wc -l`
+        y=`cat $1_inst_mem_rv32$mod.sv | grep -n @00400800 | cut -d ':' -f 1 |tail -n 1`
+        (( y-- ))
+        cat $1_inst_mem_rv32$mod.sv | tail -n $(( c-y )) > $1_data_mem_rv32$mod.sv
+        cat $1_inst_mem_rv32$mod.sv | head -n $(( y )) > $1_inst_mem_rv32$mod.sv
+    else
+        echo "@00400800" > $1_data_mem_rv32$mod.sv
+    fi  
+    mv $1_data_mem_rv32$mod.sv ../../../verif/Tests/$1
     mv $1_inst_mem_rv32$mod.sv ../../../verif/Tests/$1
     
     exit 1

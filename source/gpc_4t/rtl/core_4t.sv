@@ -119,7 +119,7 @@ logic               CtrlStoreQ101H    , CtrlStoreQ102H    ;
 logic               CtrlRegWrQ101H    , CtrlRegWrQ102H    , CtrlRegWrQ103H    , CtrlRegWrQ104H;
 logic               CtrlMemToRegQ101H , CtrlMemToRegQ102H , CtrlMemToRegQ103H , CtrlMemToRegQ104H;
 logic               CtrlPcToRegQ101H  , CtrlPcToRegQ102H  , CtrlPcToRegQ103H  , CtrlPcToRegQ104H;
-logic               CtrlInsertNopQ101H;
+logic               CtrlInsertNopQ101H,CtrlInsertNopQ100H;
 logic               BranchCondMetQ102H;
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -199,10 +199,17 @@ always_comb begin : next_threads_pc_sel
     endcase
 end
 
+// Insert NOP - (back pressure, Wait for Read, ext..) - check if the thread PC is desabled.
+// TODO - test this feature.
+assign CtrlInsertNopQ100H = ((!EnPCQnnnH[0]) && ThreadQ100H[0]) ||
+                            ((!EnPCQnnnH[1]) && ThreadQ100H[1]) ||
+                            ((!EnPCQnnnH[2]) && ThreadQ100H[2]) ||
+                            ((!EnPCQnnnH[3]) && ThreadQ100H[3]) ;
+                            
 /// Q100H to Q101H Flip Flops. 
 /// Data from I_MEM is sampled inside I_MEM module ????????
 `LOTR_MSFF   ( PcQ101H,    PcQ100H,    QClk ) 
-
+`LOTR_MSFF   (CtrlInsertNopQ101H, CtrlInsertNopQ100H, QClk) 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //   _____  __     __   _____   _        ______          ____    __    ___    __   _    _ 
@@ -218,13 +225,6 @@ end
 //  This pipe stage extract all data neccesary to complete command 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Insert NOP - (back pressure, Wait for Read, ext..) - check if the thread PC is desabled.
-// TODO - test this feature.
-assign CtrlInsertNopQ101H = ((!EnPCQnnnH[0]) && ThreadQ100H[0]) ||
-                            ((!EnPCQnnnH[1]) && ThreadQ100H[1]) ||
-                            ((!EnPCQnnnH[2]) && ThreadQ100H[2]) ||
-                            ((!EnPCQnnnH[3]) && ThreadQ100H[3]) ;
-
 assign InstructionQ101H   = CtrlInsertNopQ101H ? NOP : InstFetchQ101H;    //internal logic for the instruction - the input or NOP
 assign RegRdPtr1Q101H     = InstructionQ101H[19:15];  // rs1 register for R/S/I/B Type
 assign RegRdPtr2Q101H     = InstructionQ101H[24:20];  // rs2 register for R/S/B Type
@@ -236,6 +236,7 @@ assign OpcodeQ101H        = InstructionQ101H[6:0];    // opcode       for each p
 //////////////////////////////////////////////////S//////////////////////////////////////
 always_comb begin : decode_opcode
     //Decode control bits
+   
     CtrlJalQ101H        =   (OpcodeQ101H == OP_JAL);
     CtrlPcToRegQ101H    =   (OpcodeQ101H == OP_JAL) || (OpcodeQ101H == OP_JALR);;
     CtrlJalrQ101H       =   (OpcodeQ101H == OP_JALR);

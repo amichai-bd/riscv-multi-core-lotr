@@ -16,30 +16,39 @@ Created : 05/2021
 //----------------------------------------------------------
 #define MMIO_GENERAL  (*(volatile int (*)[1])(0x00400F00))//
 
-int main() {
-	int arr[8];
-  arr[0]=1;
-  arr[1]=5;
-  arr[2]=7;
-  arr[3]=3;
-  arr[4]=5;
-  arr[5]=9;
-  arr[6]=50;
-  arr[7]=2;
-  int num_to_search = 9;
-  int low = 0;
-  int high = 2;
-  int found = 0;
-  MMIO_GENERAL[0]=0;
-  while (low <= high && !found) {
-    int mid = low + (high - low) / 2;
-    if (arr[mid] == num_to_search){
-      found = 1;
-      MMIO_GENERAL[0]=1;
+int binarySearch(int arr[], int l, int r, int x)
+{
+    while (l <= r) {
+        int m = l + (r - l) / 2;
+  
+        // Check if x is present at mid
+        if (arr[m] == x)
+            return m;
+  
+        // If x greater, ignore left half
+        if (arr[m] < x)
+            l = m + 1;
+  
+        // If x is smaller, ignore right half
+        else
+            r = m - 1;
     }
-    if (arr[mid] < num_to_search)
-      low = mid + 1;
+  
+    // if we reach here, then element was
+    // not present
+    return -1;
+}
+  
+int main()
+{
+    int arr[] = { 2, 3, 4, 10, 40 };
+    int n = 6;
+    int x = 10;
+    int result = binarySearch(arr, 0, n - 1, x);
+    if (result == -1)
+        MMIO_GENERAL[0] = 0;
     else
-        high = mid - 1;
-  }
-}// main
+        MMIO_GENERAL[0]=1;
+
+    return 0;
+}
