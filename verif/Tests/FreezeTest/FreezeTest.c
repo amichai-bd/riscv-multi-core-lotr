@@ -41,7 +41,7 @@ int Thread3 ( ){
 
 
 int main() {
-    int x;
+
     switch (CR_THREAD[0]) //the CR Address
     {
         case 0x0 : //expect each thread to get from the MEM_WRAP the correct Thread.
@@ -49,25 +49,22 @@ int main() {
             CR_THREAD1_PC_EN[0]=1;
             CR_THREAD2_PC_EN[0]=1;
             CR_THREAD3_PC_EN[0]=1;
-            while( !CR_SCRATCHPAD[1] || !CR_SCRATCHPAD[2] || !CR_SCRATCHPAD[3] ){} //busy wait                
+            while( !CR_SCRATCHPAD[1] || !CR_SCRATCHPAD[2] || !CR_SCRATCHPAD[3] ){} //busy wait             
         break;
         case 0x1 :
             CR_THREAD1_PC_EN[0]=0;
-            x = 0 ;
             SHARED_SPACE[1] =  Thread1();
             CR_SCRATCHPAD[1] = 1 ;  
-            while(1){} //busy wait   
+            while(1){} //busy wait          
         break;
         case 0x2 :
             CR_THREAD2_PC_EN[0]=0;
-            x = 0 ;
             SHARED_SPACE[2] =  Thread2();
             CR_SCRATCHPAD[2] = 1 ;  
             while(1){} //busy wait
         break;
         case 0x3 :
             CR_THREAD3_PC_EN[0]=0;
-            x = 0 ;
             SHARED_SPACE[3] =  Thread3();
             CR_SCRATCHPAD[3] = 1 ;  
             while(1){} //busy wait

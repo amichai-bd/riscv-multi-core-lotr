@@ -119,7 +119,7 @@ logic               CtrlStoreQ101H    , CtrlStoreQ102H    ;
 logic               CtrlRegWrQ101H    , CtrlRegWrQ102H    , CtrlRegWrQ103H    , CtrlRegWrQ104H;
 logic               CtrlMemToRegQ101H , CtrlMemToRegQ102H , CtrlMemToRegQ103H , CtrlMemToRegQ104H;
 logic               CtrlPcToRegQ101H  , CtrlPcToRegQ102H  , CtrlPcToRegQ103H  , CtrlPcToRegQ104H;
-logic               CtrlInsertNopQ101H,CtrlInsertNopQ100H;
+logic               CtrlInsertNopQ102H, CtrlInsertNopQ101H, CtrlInsertNopQ100H;
 logic               BranchCondMetQ102H;
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -182,10 +182,10 @@ assign T2EnPcQ100H = EnPCQnnnH[2] && ThreadQ102H[2];
 assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
   
 // The PCs
-`LOTR_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H, CRQnnnH.rst_pc_0 || RstQnnnH) 
-`LOTR_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H, CRQnnnH.rst_pc_1 || RstQnnnH) 
-`LOTR_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H, CRQnnnH.rst_pc_2 || RstQnnnH) 
-`LOTR_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H, CRQnnnH.rst_pc_3 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T0PcQ100H, NextPcQ102H, QClk, T0EnPcQ100H && !CtrlInsertNopQ102H , CRQnnnH.rst_pc_0 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T1PcQ100H, NextPcQ102H, QClk, T1EnPcQ100H && !CtrlInsertNopQ102H , CRQnnnH.rst_pc_1 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T2PcQ100H, NextPcQ102H, QClk, T2EnPcQ100H && !CtrlInsertNopQ102H , CRQnnnH.rst_pc_2 || RstQnnnH) 
+`LOTR_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H && !CtrlInsertNopQ102H , CRQnnnH.rst_pc_3 || RstQnnnH) 
 
 always_comb begin : next_threads_pc_sel
   
@@ -207,9 +207,9 @@ assign CtrlInsertNopQ100H = ((!EnPCQnnnH[0]) && ThreadQ100H[0]) ||
                             ((!EnPCQnnnH[3]) && ThreadQ100H[3]) ;
                             
 /// Q100H to Q101H Flip Flops. 
-/// Data from I_MEM is sampled inside I_MEM module ????????
 `LOTR_MSFF   ( PcQ101H,    PcQ100H,    QClk ) 
 `LOTR_MSFF   (CtrlInsertNopQ101H, CtrlInsertNopQ100H, QClk) 
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //   _____  __     __   _____   _        ______          ____    __    ___    __   _    _ 
@@ -309,6 +309,7 @@ end
 `LOTR_MSFF ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
 `LOTR_MSFF ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
 `LOTR_MSFF ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
+`LOTR_MSFF (CtrlInsertNopQ102H , CtrlInsertNopQ101H, QClk) 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
