@@ -105,11 +105,11 @@ Thread3:
 	.globl	main
 	.type	main, @function
 main:
-	addi	sp,sp,-32
-	sw	ra,28(sp)
-	sw	s0,24(sp)
-	sw	s1,20(sp)
-	addi	s0,sp,32
+	addi	sp,sp,-16
+	sw	ra,12(sp)
+	sw	s0,8(sp)
+	sw	s1,4(sp)
+	addi	s0,sp,16
 	li	a5,12582912
 	addi	a5,a5,4
 	lw	a5,0(a5)
@@ -162,7 +162,6 @@ main:
 	li	a5,12582912
 	addi	a5,a5,340
 	sw	zero,0(a5)
-	sw	zero,-20(s0)
 	li	a5,4198400
 	addi	s1,a5,-252
 	call	Thread1
@@ -178,7 +177,6 @@ main:
 	li	a5,12582912
 	addi	a5,a5,344
 	sw	zero,0(a5)
-	sw	zero,-20(s0)
 	li	a5,4198400
 	addi	s1,a5,-248
 	call	Thread2
@@ -194,7 +192,6 @@ main:
 	li	a5,12582912
 	addi	a5,a5,348
 	sw	zero,0(a5)
-	sw	zero,-20(s0)
 	li	a5,4198400
 	addi	s1,a5,-244
 	call	Thread3
@@ -209,10 +206,10 @@ main:
 .L11:
 	li	a5,0
 	mv	a0,a5
-	lw	ra,28(sp)
-	lw	s0,24(sp)
-	lw	s1,20(sp)
-	addi	sp,sp,32
+	lw	ra,12(sp)
+	lw	s0,8(sp)
+	lw	s1,4(sp)
+	addi	sp,sp,16
 	jr	ra
 	.size	main, .-main
 	.ident	"GCC: (GNU) 10.2.0"
