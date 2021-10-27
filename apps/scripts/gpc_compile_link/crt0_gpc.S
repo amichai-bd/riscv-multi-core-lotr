@@ -1,3 +1,5 @@
+#define THREAD_STACK_ADDRESS 0xC0000C
+
 _start:
   .global _start
   
@@ -6,9 +8,11 @@ _start:
   .section .vectors, "ax"
   .option norvc;
   .org 0x00
-  .rept 5
-  nop                       
-  .endr
+  nop
+  nop
+  nop
+  nop
+  nop
   .org 0x14
   jal x0, reset_handler
   
@@ -48,7 +52,7 @@ reset_handler:
   mv x30, x1
   mv x31, x1
   /* stack initilization */
-  li   x5,12582924
+  li   x5,THREAD_STACK_ADDRESS
   lw   x2, 0(x5)
   jal x1, main      //jump to main
   ebreak        //end
