@@ -41,6 +41,12 @@ module core_4t
     output logic [3:0]  ThreadQ103H     ,
     output logic [31:0] PcQ103H         ,
     input  logic [31:0] MemRdDataQ104H  ,
+    input logic         T0RcAccess      ,
+    input logic         T1RcAccess      ,
+    input logic         T2RcAccess      ,
+    input logic         T3RcAccess      ,
+    
+    
     //MMIO
     input  t_core_cr         CRQnnnH
     );
@@ -170,10 +176,10 @@ assign ThreadQ104H = ThreadQ100H;
 //  the thread he represents is currently running on Q102H
 //////////////////////////////////////////////////////////////////////////////////////////////////
    
-assign EnPCQnnnH[0] = CRQnnnH.en_pc_0;
-assign EnPCQnnnH[1] = CRQnnnH.en_pc_1;
-assign EnPCQnnnH[2] = CRQnnnH.en_pc_2;
-assign EnPCQnnnH[3] = CRQnnnH.en_pc_3;
+assign EnPCQnnnH[0] = CRQnnnH.en_pc_0 && !T0RcAccess;
+assign EnPCQnnnH[1] = CRQnnnH.en_pc_1 && !T1RcAccess;
+assign EnPCQnnnH[2] = CRQnnnH.en_pc_2 && !T2RcAccess;
+assign EnPCQnnnH[3] = CRQnnnH.en_pc_3 && !T3RcAccess;
 
 //  Enable bits for Thread's Pc - indicated from Q102H
 assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
