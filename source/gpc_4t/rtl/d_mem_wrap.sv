@@ -116,8 +116,9 @@ logic       C2F_Match_Q104H    ;
 
 
 
-assign C2F_ReqValidQ500H = (WrEnQ103H||RdEnQ103H) && MatchD_MemRegionQ103H && !MatchLocalCoreQ103H;
-//assign C2F_ReqOpcodeQ500H = RdEnQ103H ? 2'b00 : WrEnQ103H ? 2'b10 : 2'b00;
+assign C2F_ReqValidQ500H = (WrEnQ103H||RdEnQ103H) && !MatchLocalCoreQ103H;
+assign C2F_ReqOpcodeQ500H = WrEnQ103H ? WR : 
+                            RdEnQ103H ? RD : RD;
 assign C2F_ReqThreadIDQ500H =  (ThreadQ103H == 4'b0001) ? 2'b00 :
                                (ThreadQ103H == 4'b0010) ? 2'b01 :
                                (ThreadQ103H == 4'b0100) ? 2'b10 :
@@ -125,12 +126,10 @@ assign C2F_ReqThreadIDQ500H =  (ThreadQ103H == 4'b0001) ? 2'b00 :
 assign C2F_ReqAddressQ500H = C2F_ReqValidQ500H ? AddressQ103H : 0;
 assign C2F_ReqDataQ500H = WrDataQ103H;
 
-
-
-assign T0C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b00) ? 1'b1 : 1'b0;
-assign T1C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b01) ? 1'b1 : 1'b0;
-assign T2C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b10) ? 1'b1 : 1'b0;
-assign T3C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b11) ? 1'b1 : 1'b0;
+assign T0C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b00) ? 1'b1 : 1'b0;
+assign T1C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b01) ? 1'b1 : 1'b0;
+assign T2C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b10) ? 1'b1 : 1'b0;
+assign T3C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b11) ? 1'b1 : 1'b0;
 
 `LOTR_EN_RST_MSFF (T0RcAccess , T0C2FReq , QClk ,T0C2FReq ,  RstQnnnH||T0C2FRes );
 `LOTR_EN_RST_MSFF (T1RcAccess , T1C2FReq , QClk ,T1C2FReq ,  RstQnnnH||T1C2FRes );
