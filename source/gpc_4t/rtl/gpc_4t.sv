@@ -83,6 +83,10 @@ logic [31:0]   F2C_I_MemRspDataQ504H;
 logic [31:0]   F2C_D_MemRspDataQ504H; 
 logic          F2C_RspDMemValidQ504H;
 logic          F2C_RspIMemValidQ504H;
+logic          T0RcAccess;
+logic          T1RcAccess;
+logic          T2RcAccess;
+logic          T3RcAccess;
 
 //=========================================
 //      Fabric to local memory interface repeater
@@ -112,7 +116,12 @@ core_4t core_4t (
     .PcQ103H         (PcQ103H)        ,  //
     .MemRdDataQ104H  (MemRdDataQ104H) ,  // input
     //MMIO
-    .CRQnnnH         (CRQnnnH)           // input
+    .CRQnnnH         (CRQnnnH)        ,   // input
+    .T0RcAccess      (T0RcAccess)     ,
+    .T1RcAccess      (T1RcAccess)     ,
+    .T2RcAccess      (T2RcAccess)     ,
+    .T3RcAccess      (T3RcAccess)     
+    
 );
 
 //============================================
@@ -156,7 +165,11 @@ d_mem_wrap d_mem_wrap (
     .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H  ),
     .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H),
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H ),
-    .C2F_ReqDataQ500H       (C2F_ReqDataQ500H    )
+    .C2F_ReqDataQ500H       (C2F_ReqDataQ500H    ),
+    .T0RcAccess      (T0RcAccess)     ,
+    .T1RcAccess      (T1RcAccess)     ,
+    .T2RcAccess      (T2RcAccess)     ,
+    .T3RcAccess      (T3RcAccess)     
     
 );
 

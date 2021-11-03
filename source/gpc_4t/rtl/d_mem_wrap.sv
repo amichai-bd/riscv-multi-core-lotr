@@ -32,6 +32,11 @@ import lotr_pkg::*;
                 input  logic         RdEnQ103H      ,
                 input  logic         WrEnQ103H      ,
                 output logic [31:0]  MemRdDataQ104H ,
+                output logic         T0RcAccess     ,
+                output logic         T1RcAccess     ,
+                output logic         T2RcAccess     ,
+                output logic         T3RcAccess     ,
+                
                 //============================================
                 //      RC interface
                 //============================================
@@ -85,15 +90,31 @@ logic        F2C_CrRdEnQ503H   ;
 logic        F2C_CrRdEnQ504H   ;
 logic        F2C_CrWrEnQ503H   ;
 
+logic        T0C2FReq          ;
+logic        T1C2FReq          ;
+logic        T2C2FReq          ;
+logic        T3C2FReq          ;
+logic        T0C2FRes          ;
+logic        T1C2FRes          ;
+logic        T2C2FRes          ;
+logic        T3C2FRes          ;
 
-logic [31:0] CrFreezeAddress;
-logic CrWrEnMatchQ103H;
-logic [31:0]  CrWrDataQ103H;
-logic toOtherCore;
-logic CrWrEnQ103H;
-logic CrRdEnQ103H;
-logic [31:0] CrAddressQ103H;
-logic T0C2F_En,T1C2F_En,T2C2F_En,T3C2F_En;
+logic [31:0] T0Data            ;
+logic [31:0] T1Data            ;
+logic [31:0] T2Data            ;
+logic [31:0] T3Data            ;
+logic [31:0]C2F_RspDataQ503H   ;
+logic [31:0]C2F_RspDataQ504H   ;
+
+logic       T0C2F_Match        ;
+logic       T1C2F_Match        ;
+logic       T2C2F_Match        ;
+logic       T3C2F_Match        ;
+logic       C2F_Match_Q103H    ;
+logic       C2F_Match_Q104H    ;
+
+
+
 
 assign C2F_ReqValidQ500H = (WrEnQ103H||RdEnQ103H) && MatchD_MemRegionQ103H && !MatchLocalCoreQ103H;
 //assign C2F_ReqOpcodeQ500H = RdEnQ103H ? 2'b00 : WrEnQ103H ? 2'b10 : 2'b00;
@@ -104,45 +125,49 @@ assign C2F_ReqThreadIDQ500H =  (ThreadQ103H == 4'b0001) ? 2'b00 :
 assign C2F_ReqAddressQ500H = C2F_ReqValidQ500H ? AddressQ103H : 0;
 assign C2F_ReqDataQ500H = WrDataQ103H;
 
-assign CrAddressQ103H = C2F_ReqValidQ500H&&RdEnQ103H ? CrFreezeAddress :
-                        C2F_RspValidQ502H            ? CrUnFreezeAddress :
-                                                       AddressQ103H    ;
-                                                
-                                                
-assign CrWrDataQ103H = (C2F_ReqValidQ500H&&RdEnQ103H) ? 32'b0      : 
-                        C2F_RspValidQ502H             ? 1'b1       :
-                                                        WrDataQ103H;
 
-assign CrWrEnQ103H = C2F_ReqValidQ500H ? 1 : WrEnMatchQ103H;
-assign CrRdEnQ103H = C2F_ReqValidQ500H ? 1 : RdEnMatchQ103H;
+
+assign T0C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b00) ? 1'b1 : 1'b0;
+assign T1C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b01) ? 1'b1 : 1'b0;
+assign T2C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b10) ? 1'b1 : 1'b0;
+assign T3C2FReq = (C2F_ReqValidQ500H && C2F_ReqThreadIDQ500H == 2'b11) ? 1'b1 : 1'b0;
+
+`LOTR_EN_RST_MSFF (T0RcAccess , T0C2FReq , QClk ,T0C2FReq ,  RstQnnnH||T0C2FRes );
+`LOTR_EN_RST_MSFF (T1RcAccess , T1C2FReq , QClk ,T1C2FReq ,  RstQnnnH||T1C2FRes );
+`LOTR_EN_RST_MSFF (T2RcAccess , T2C2FReq , QClk ,T2C2FReq ,  RstQnnnH||T2C2FRes );
+`LOTR_EN_RST_MSFF (T3RcAccess , T3C2FReq , QClk ,T3C2FReq ,  RstQnnnH||T3C2FRes );
+
+assign T0C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b00) ? 1'b1 : 1'b0;
+assign T1C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b01) ? 1'b1 : 1'b0;
+assign T2C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b10) ? 1'b1 : 1'b0;
+assign T3C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b11) ? 1'b1 : 1'b0;
+
+`LOTR_EN_RST_MSFF (T0Data , C2F_RspDataQ502H , QClk ,T0C2FRes , RstQnnnH||(ThreadQ103H == 4'b0001) );
+`LOTR_EN_RST_MSFF (T1Data , C2F_RspDataQ502H , QClk ,T1C2FRes , RstQnnnH||(ThreadQ103H == 4'b0010) );
+`LOTR_EN_RST_MSFF (T2Data , C2F_RspDataQ502H , QClk ,T2C2FRes , RstQnnnH||(ThreadQ103H == 4'b0100) );
+`LOTR_EN_RST_MSFF (T3Data , C2F_RspDataQ502H , QClk ,T3C2FRes , RstQnnnH||(ThreadQ103H == 4'b1000) );
 
 assign C2F_RspDataQ503H =      (ThreadQ103H == 4'b0001) ? T0Data :
                                (ThreadQ103H == 4'b0010) ? T1Data :
                                (ThreadQ103H == 4'b0100) ? T2Data :
                                                           T3Data ;
 
-assign T0C2F_En = (C2F_RspValidQ502H&&(C2F_RspThreadIDQ502H==2'b00));
-assign T1C2F_En = (C2F_RspValidQ502H&&(C2F_RspThreadIDQ502H==2'b01));
-assign T2C2F_En = (C2F_RspValidQ502H&&(C2F_RspThreadIDQ502H==2'b10));
-assign T3C2F_En = (C2F_RspValidQ502H&&(C2F_RspThreadIDQ502H==2'b11));
-
-`LOTR_EN_RST_MSFF (T0C2F_Match ,  1'b1 , QClk ,T0C2F_En , (ThreadQ103H == 4'b0001));
-`LOTR_EN_RST_MSFF (T1C2F_Match ,  1'b1 , QClk ,T1C2F_En , (ThreadQ103H == 4'b0010));
-`LOTR_EN_RST_MSFF (T2C2F_Match ,  1'b1 , QClk ,T2C2F_En , (ThreadQ103H == 4'b0100));
-`LOTR_EN_RST_MSFF (T3C2F_Match ,  1'b1 , QClk ,T3C2F_En , (ThreadQ103H == 4'b1000));
-
-`LOTR_EN_RST_MSFF (T0Data , C2F_RspDataQ502H , QClk ,T0C2F_En,RstQnnnH );
-`LOTR_EN_RST_MSFF (T1Data , C2F_RspDataQ502H , QClk ,T1C2F_En,RstQnnnH );
-`LOTR_EN_RST_MSFF (T2Data , C2F_RspDataQ502H , QClk ,T2C2F_En,RstQnnnH );
-`LOTR_EN_RST_MSFF (T3Data , C2F_RspDataQ502H , QClk ,T3C2F_En,RstQnnnH );
 `LOTR_RST_MSFF (C2F_RspDataQ504H , C2F_RspDataQ503H , QClk , RstQnnnH);
+
+
+`LOTR_EN_RST_MSFF (T0C2F_Match ,  1'b1 , QClk ,T0C2FRes , RstQnnnH||(ThreadQ103H == 4'b0001));
+`LOTR_EN_RST_MSFF (T1C2F_Match ,  1'b1 , QClk ,T1C2FRes , RstQnnnH||(ThreadQ103H == 4'b0010));
+`LOTR_EN_RST_MSFF (T2C2F_Match ,  1'b1 , QClk ,T2C2FRes , RstQnnnH||(ThreadQ103H == 4'b0100));
+`LOTR_EN_RST_MSFF (T3C2F_Match ,  1'b1 , QClk ,T3C2FRes , RstQnnnH||(ThreadQ103H == 4'b1000));
 
 assign C2F_Match_Q103H = (T0C2F_Match && (ThreadQ103H == 4'b0001))
                        ||(T0C2F_Match && (ThreadQ103H == 4'b0010))
                        ||(T0C2F_Match && (ThreadQ103H == 4'b0100))
                        ||(T0C2F_Match && (ThreadQ103H == 4'b1000));
-                       
-`LOTR_RST_MSFF (C2F_Match_Q104H , C2F_Match_Q103H , QClk , RstQnnnH);                       
+
+`LOTR_RST_MSFF (C2F_Match_Q104H , C2F_Match_Q103H , QClk , RstQnnnH); 
+
+                  
                        
 //===========================================
 //    core interface
@@ -155,24 +180,24 @@ always_comb begin
 end
 
 
-always_comb begin
-unique case (C2F_ReqThreadIDQ500H)
-               2'b00         : CrFreezeAddress       = 32'h00C00150 ;
-               2'b01         : CrFreezeAddress       = 32'h00C00154 ;
-               2'b10         : CrFreezeAddress       = 32'h00C00158 ;
-               2'b11         : CrFreezeAddress       = 32'h00C0015C ;
-               default         : /*do nothing - TODO add assertion*/;
-            endcase
-unique case (C2F_RspThreadIDQ502H)
-               2'b00         : CrUnFreezeAddress       = 32'h00C00150 ;
-               2'b01         : CrUnFreezeAddress       = 32'h00C00154 ;
-               2'b10         : CrUnFreezeAddress       = 32'h00C00158 ;
-               2'b11         : CrUnFreezeAddress       = 32'h00C0015C ;
-               default         : /*do nothing - TODO add assertion*/;
-            endcase
-
-
-end
+//always_comb begin
+//unique case (C2F_ReqThreadIDQ500H)
+//               2'b00         : CrFreezeAddress       = 32'h00C00150 ;
+//               2'b01         : CrFreezeAddress       = 32'h00C00154 ;
+//               2'b10         : CrFreezeAddress       = 32'h00C00158 ;
+//               2'b11         : CrFreezeAddress       = 32'h00C0015C ;
+//               default         : /*do nothing - TODO add assertion*/;
+//            endcase
+//unique case (C2F_RspThreadIDQ502H)
+//               2'b00         : CrUnFreezeAddress       = 32'h00C00150 ;
+//               2'b01         : CrUnFreezeAddress       = 32'h00C00154 ;
+//               2'b10         : CrUnFreezeAddress       = 32'h00C00158 ;
+//               2'b11         : CrUnFreezeAddress       = 32'h00C0015C ;
+//               default         : /*do nothing - TODO add assertion*/;
+//            endcase
+//
+//
+//end
 
 assign RdEnMatchQ103H = RdEnQ103H && MatchD_MemRegionQ103H && MatchLocalCoreQ103H;
 assign WrEnMatchQ103H = WrEnQ103H && MatchD_MemRegionQ103H && MatchLocalCoreQ103H;
@@ -228,12 +253,20 @@ cr_mem cr_mem (
     //============================================
     //      core interface
     //============================================
-    .CrAddressQ103H (CrAddressQ103H[MSB_D_MEM:0]),
+    //.CrAddressQ103H (CrAddressQ103H[MSB_D_MEM:0]),
+    //.ThreadQ103H    (ThreadQ103H),
+    //.PcQ103H        (PcQ103H),
+    //.CrWrDataQ103H  (CrWrDataQ103H),
+    //.CrRdEnQ103H    (CrRdEnQ103H),  
+    //.CrWrEnQ103H    (CrWrEnQ103H),  
+    //.CrRdDataQ104H  (CrRdDataQ104H),     
+    //.core_cr        (CRQnnnH),
+    .CrAddressQ103H (AddressQ103H[MSB_D_MEM:0]),
     .ThreadQ103H    (ThreadQ103H),
     .PcQ103H        (PcQ103H),
-    .CrWrDataQ103H  (CrWrDataQ103H),
-    .CrRdEnQ103H    (CrRdEnQ103H),  
-    .CrWrEnQ103H    (CrWrEnQ103H),  
+    .CrWrDataQ103H  (WrDataQ103H),
+    .CrRdEnQ103H    (RdEnQ103H && MatchCrRegionQ103H && MatchLocalCoreQ103H),  
+    .CrWrEnQ103H    (WrEnQ103H && MatchCrRegionQ103H && MatchLocalCoreQ103H),  
     .CrRdDataQ104H  (CrRdDataQ104H),     
     .core_cr        (CRQnnnH),
     //============================================
@@ -255,6 +288,10 @@ assign MemRdDataQ104H  = (C2F_Match_Q104H )                   ? C2F_RspDataQ504H
                          (RdEnQ104H && MatchD_MemRegionQ104H) ? RdDataQ104H      :
                                                                 32'b0            ;
 
+//assign MemRdDataQ104H  = (RdEnQ104H && MatchCrRegionQ104H   ) ? CrRdDataQ104H    :
+//                         (RdEnQ104H && MatchD_MemRegionQ104H) ? RdDataQ104H      :
+//                                                                32'b0            ;
+                                                                
 //Set th RspEn and the Read Rsp Data to F2C Requests.
 `LOTR_MSFF(F2C_RdEnQ504H    , F2C_RdEnQ503H    , QClk)
 `LOTR_MSFF(F2C_CrRdEnQ504H  , F2C_CrRdEnQ503H  , QClk)
