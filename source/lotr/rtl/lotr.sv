@@ -98,7 +98,7 @@ gpc_4t_tile gpc_4t_tile_0
     //General Interface
     .QClk       (QClk)         , //input  logic        
     .RstQnnnH   (RstQnnnH)     , //input  logic        
-    .CoreID     (1) , //input  logic  [7:0] 
+    .CoreID     (8'd1) , //input  logic  [7:0] 
     //================================================
     //        RING Interface
     //================================================
@@ -132,7 +132,7 @@ gpc_4t_tile gpc_4t_tile_1
     //General Interface
     .QClk       (QClk)         , //input  logic        
     .RstQnnnH   (RstQnnnH)     , //input  logic        
-    .CoreID     (2) , //input  logic  [7:0] 
+    .CoreID     (8'd2) , //input  logic  [7:0] 
     //================================================
     //        RING Interface
     //================================================

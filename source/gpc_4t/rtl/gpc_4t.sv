@@ -26,21 +26,25 @@ module gpc_4t
     input  logic          RstQnnnH            ,
     input  logic [7:0]    CoreID              ,
     //Core To Fabric(C2F)
+    //----input----
     input  logic          C2F_RspValidQ502H   ,  
     input  t_opcode       C2F_RspOpcodeQ502H  ,  
     input  logic [1:0]    C2F_RspThreadIDQ502H,  
     input  logic [31:0]   C2F_RspDataQ502H    ,
     input  logic          C2F_RspStall        ,
+    //----output----
     output logic          C2F_ReqValidQ500H   ,
     output t_opcode       C2F_ReqOpcodeQ500H  ,
     output logic [1:0]    C2F_ReqThreadIDQ500H,
     output logic [31:0]   C2F_ReqAddressQ500H ,
     output logic [31:0]   C2F_ReqDataQ500H    ,
     //Fabric To Core(F2C)
+    //----input----
     input  logic          F2C_ReqValidQ502H   ,
     input  t_opcode       F2C_ReqOpcodeQ502H  ,
     input  logic [31:0]   F2C_ReqAddressQ502H ,
     input  logic [31:0]   F2C_ReqDataQ502H    ,
+    //----output----
     output logic          F2C_RspValidQ500H   ,
     output t_opcode       F2C_RspOpcodeQ500H  ,
     output logic [31:0]   F2C_RspAddressQ500H ,
@@ -79,6 +83,10 @@ logic [31:0]   F2C_I_MemRspDataQ504H;
 logic [31:0]   F2C_D_MemRspDataQ504H; 
 logic          F2C_RspDMemValidQ504H;
 logic          F2C_RspIMemValidQ504H;
+logic          T0RcAccess;
+logic          T1RcAccess;
+logic          T2RcAccess;
+logic          T3RcAccess;
 
 //=========================================
 //      Fabric to local memory interface repeater
@@ -108,7 +116,12 @@ core_4t core_4t (
     .PcQ103H         (PcQ103H)        ,  //
     .MemRdDataQ104H  (MemRdDataQ104H) ,  // input
     //MMIO
-    .CRQnnnH         (CRQnnnH)           // input
+    .CRQnnnH         (CRQnnnH)        ,   // input
+    .T0RcAccess      (T0RcAccess)     ,
+    .T1RcAccess      (T1RcAccess)     ,
+    .T2RcAccess      (T2RcAccess)     ,
+    .T3RcAccess      (T3RcAccess)     
+    
 );
 
 //============================================
@@ -134,12 +147,30 @@ d_mem_wrap d_mem_wrap (
     //============================================
     //      RC interface
     //============================================
+    //F2C:
     .F2C_ReqValidQ503H    (F2C_ReqValidQ503H    ), // input 
     .F2C_ReqOpcodeQ503H   (F2C_ReqOpcodeQ503H   ), // input 
     .F2C_ReqAddressQ503H  (F2C_ReqAddressQ503H  ), // input 
     .F2C_ReqDataQ503H     (F2C_ReqDataQ503H     ), // input 
     .F2C_RspDMemValidQ504H(F2C_RspDMemValidQ504H), // output
-    .F2C_D_MemRspDataQ504H(F2C_D_MemRspDataQ504H)  // output
+    .F2C_D_MemRspDataQ504H(F2C_D_MemRspDataQ504H), // output
+    //C2F:
+    .C2F_RspValidQ502H      (C2F_RspValidQ502H   ),
+    .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H  ),
+    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H),
+    .C2F_RspDataQ502H       (C2F_RspDataQ502H    ),
+    .C2F_RspStall           (C2F_RspStall        ),
+                           
+    .C2F_ReqValidQ500H      (C2F_ReqValidQ500H   ),
+    .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H  ),
+    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H),
+    .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H ),
+    .C2F_ReqDataQ500H       (C2F_ReqDataQ500H    ),
+    .T0RcAccess      (T0RcAccess)     ,
+    .T1RcAccess      (T1RcAccess)     ,
+    .T2RcAccess      (T2RcAccess)     ,
+    .T3RcAccess      (T3RcAccess)     
+    
 );
 
 //============================================
