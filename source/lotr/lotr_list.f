@@ -25,6 +25,8 @@
 //===========
 // rc
 //===========
+../source/rc/rtl/f2c.sv
+../source/rc/rtl/c2f.sv
 ../source/rc/rtl/rc.sv
 ../source/rc/rtl/mro.sv
 
