@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 // File             : rc.sv 
 // Original Author  : Tzahi Peretz, Shimi Haleluya 
+// Adviser          : Amichai Ben-David
 // Created          : 5/2021
 //-----------------------------------------------------------------------------
 // Description :
@@ -15,9 +16,8 @@
 //
 //
 //------------------------------------------------------------------------------
-//`timescale 1ns/1ps  
+//`timescale 1ps/1ps  
 `include "lotr_defines.sv"
-
 module rc
     import lotr_pkg::*;  
     (
@@ -119,7 +119,6 @@ t_opcode                  F2C_RspOpcodeQ501H    ;
 logic   [31:0]            F2C_RspAddressQ501H   ;
 logic   [31:0]            F2C_RspDataQ501H      ;
 
-
 //=========================================
 //=====    Control Bits Signals   =========
 //=========================================
@@ -173,13 +172,13 @@ logic [F2C_MSB:0] F2C_SelDataSrc = '0;
 //=========================================
 // Ring input Interface
 //=========================================
-`LOTR_MSFF( RingReqInValidQ501H    , RingReqInValidQ500H    , QClk )
+`LOTR_RST_MSFF( RingReqInValidQ501H, RingReqInValidQ500H    , QClk ,RstQnnnH)
 `LOTR_MSFF( RingReqInRequestorQ501H, RingReqInRequestorQ500H, QClk )
 `LOTR_MSFF( RingReqInOpcodeQ501H   , RingReqInOpcodeQ500H   , QClk )
 `LOTR_MSFF( RingReqInAddressQ501H  , RingReqInAddressQ500H  , QClk )
 `LOTR_MSFF( RingReqInDataQ501H     , RingReqInDataQ500H     , QClk )
 
-`LOTR_MSFF( RingRspInValidQ501H    , RingRspInValidQ500H    , QClk )
+`LOTR_RST_MSFF( RingRspInValidQ501H, RingRspInValidQ500H    , QClk ,RstQnnnH)
 `LOTR_MSFF( RingRspInRequestorQ501H, RingRspInRequestorQ500H, QClk )
 `LOTR_MSFF( RingRspInOpcodeQ501H   , RingRspInOpcodeQ500H   , QClk )
 `LOTR_MSFF( RingRspInAddressQ501H  , RingRspInAddressQ500H  , QClk )
@@ -192,24 +191,35 @@ logic  [31:0] C2F_ReqAddressQ501H ;
 logic  [31:0] C2F_ReqDataQ501H    ;
 logic  [1:0]  C2F_ReqThreadIdQ501H;
 //FIXME - Temporarly connecting the C2F_request to the RingReqOut to allow simple Enablemnt of writes from core to Fabric.
-`LOTR_MSFF( C2F_ReqValidQ501H   , C2F_ReqValidQ500H   , QClk )
-`LOTR_MSFF( C2F_ReqOpcodeQ501H  , C2F_ReqOpcodeQ500H  , QClk )
-`LOTR_MSFF( C2F_ReqAddressQ501H , C2F_ReqAddressQ500H , QClk )
-`LOTR_MSFF( C2F_ReqDataQ501H    , C2F_ReqDataQ500H    , QClk )
-`LOTR_MSFF( C2F_ReqThreadIdQ501H, C2F_ReqThreadIDQ500H, QClk )
+`LOTR_RST_MSFF( C2F_ReqValidQ501H, C2F_ReqValidQ500H   , QClk ,RstQnnnH)
+`LOTR_MSFF( C2F_ReqOpcodeQ501H   , C2F_ReqOpcodeQ500H  , QClk )
+`LOTR_MSFF( C2F_ReqAddressQ501H  , C2F_ReqAddressQ500H , QClk )
+`LOTR_MSFF( C2F_ReqDataQ501H     , C2F_ReqDataQ500H    , QClk )
+`LOTR_MSFF( C2F_ReqThreadIdQ501H , C2F_ReqThreadIDQ500H, QClk )
 // C2F_ReqValidQ501H || RingReqInValidQ501H -> FIXME - The C2F_ReqValidQ501H come from C2F Buffer
 assign RingReqOutValidQ501H     = (C2F_ReqValidQ501H) || (RingReqInValidQ501H && ((!F2C_MatchIdQ501H) || (RingReqInOpcodeQ501H == WR_BCAST)));
 assign RingReqOutRequestorQ501H = C2F_ReqValidQ501H ? {CoreID,C2F_ReqThreadIdQ501H} : RingReqInRequestorQ501H;
 assign RingReqOutOpcodeQ501H    = C2F_ReqValidQ501H ? C2F_ReqOpcodeQ501H            : RingReqInOpcodeQ501H   ;
 assign RingReqOutAddressQ501H   = C2F_ReqValidQ501H ? C2F_ReqAddressQ501H           : RingReqInAddressQ501H  ;
 assign RingReqOutDataQ501H      = C2F_ReqValidQ501H ? C2F_ReqDataQ501H              : RingReqInDataQ501H     ;
-`LOTR_MSFF( RingReqOutValidQ502H    , RingReqOutValidQ501H    , QClk )
+`LOTR_RST_MSFF( RingReqOutValidQ502H, RingReqOutValidQ501H    , QClk ,RstQnnnH)
 `LOTR_MSFF( RingReqOutRequestorQ502H, RingReqOutRequestorQ501H, QClk )
 `LOTR_MSFF( RingReqOutOpcodeQ502H   , RingReqOutOpcodeQ501H   , QClk )
 `LOTR_MSFF( RingReqOutAddressQ502H  , RingReqOutAddressQ501H  , QClk )
 `LOTR_MSFF( RingReqOutDataQ502H     , RingReqOutDataQ501H     , QClk )
 //==========================================================================
-
+//FIXME - temporary until the C2F BUFFER will be ready:
+logic         C2F_RspValidQ501H    ;
+logic  [31:0] C2F_RspDataQ501H     ;
+logic  [1:0]  C2F_RspThreadIDQ501H ; 
+assign C2F_RspStall         = '0;
+logic  RingRspValidMatchQ501H   = CoreIDMatchRspQ501H && RingRspInValidQ501H;
+assign C2F_RspValidQ501H        = RingRspValidMatchQ501H ? RingRspInValidQ501H          : 1'b0;
+assign C2F_RspDataQ501H         = RingRspValidMatchQ501H ? RingRspInDataQ501H           : '0;
+assign C2F_RspThreadIDQ501H     = RingRspValidMatchQ501H ? RingRspInRequestorQ501H[1:0] : '0;
+`LOTR_MSFF( C2F_RspValidQ502H     , C2F_RspValidQ501H    , QClk )
+`LOTR_MSFF( C2F_RspDataQ502H      , C2F_RspDataQ501H     , QClk )
+`LOTR_MSFF( C2F_RspThreadIDQ502H  , C2F_RspThreadIDQ501H , QClk )
 
 //==================================================================================
 //              The F2C Buffer - Fabric 2 Core
@@ -294,12 +304,10 @@ always_comb begin : next_f2c_buffer_per_buffer_entry
             READ :
                 if (F2C_DecodedSelRdCoreQ502H[i] ==  1'b1)
                     F2C_NextBufferStateQnnnH[i] =  READ_PRGRS ;
-
         //Slot is READ PRGRS
             READ_PRGRS :            
                 if (F2C_RspMatchQ500H[i])
                     F2C_NextBufferStateQnnnH[i] =  READ_RDY ;
-
         //Slot is READ_RDY
             READ_RDY :
                 if ((F2C_DecodedSelRdRingQ501H[i] == 1'b1) && ( SelRingRspOutQ501H == F2C_RESPONSE)) begin 
@@ -307,11 +315,9 @@ always_comb begin : next_f2c_buffer_per_buffer_entry
                     F2C_ResetValidQnnnH[i] = 1'b1 ; 
                 end
             default  : F2C_NextBufferStateQnnnH = F2C_BufferStateQnnnH;
-                    
         endcase
     end //for F2C_BUFFER_SIZE
 end //always_comb
-
 // ==== F2C Buffer ================= 
 genvar F2C_ENTRY;
 generate for ( F2C_ENTRY =0 ; F2C_ENTRY < F2C_ENTRIESNUM ; F2C_ENTRY++) begin : the_f2c_buffer_array
@@ -321,10 +327,7 @@ generate for ( F2C_ENTRY =0 ; F2C_ENTRY < F2C_ENTRIESNUM ; F2C_ENTRY++) begin : 
     `LOTR_EN_MSFF     ( F2C_BufferDataQnnnH     [F2C_ENTRY], F2C_NextBufferDataQnnnH     [F2C_ENTRY], QClk, F2C_EnWrDataQnnnH    [F2C_ENTRY])
 end endgenerate // for , generate
 
-
-
 // ==== init F2C MRO ==========
-
 always_comb begin : create_mro_input_f2c
     for (int i =0 ; i <F2C_ENTRIESNUM ; i++ ) begin
         F2C_DeallocMroQnnnH[i] = (F2C_NextBufferStateQnnnH[i] == FREE);
@@ -368,7 +371,6 @@ always_comb begin : select_f2c_from_buffer
     
 end //always_comb
 
-
 //==================================================================================
 //                  Ring output Interface
 //==================================================================================
@@ -376,7 +378,6 @@ end //always_comb
 //  Select the Ring Output.
 //  C2F_Req / F2C_Rsp / RingInput
 //==================================================================================
-
 always_comb begin : ventilation_counter_asserting
     NextVentilationCounterRspQnnnH = VentilationCounterRspQnnnH + 2'b01 ; 
     EnVentilationRspQnnnH  = ( SelRingRspOutQ501H == F2C_RESPONSE ); 
@@ -386,29 +387,25 @@ end //always_comb
 
 `LOTR_EN_RST_MSFF(VentilationCounterRspQnnnH , NextVentilationCounterRspQnnnH , QClk, EnVentilationRspQnnnH, (RstVentilationRspQnnnH || RstQnnnH))
 
-
 assign CoreIDMatchRspQ501H = (RingRspInAddressQ501H[31:24] == CoreID) ; 
-assign MustFwdOutQ501H = (RingRspInValidQ501H && !CoreIDMatchRspQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
+assign MustFwdOutQ501H     = (RingRspInValidQ501H && !CoreIDMatchRspQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
 
+logic  NeedToventilateQnnnH;
+assign NeedToVentilateQnnnH = (VentilationCounterRspQnnnH ==  2'b11);
 always_comb begin : set_the_select_next_ring_output_logic_from_F2C
-    if (MustFwdOutQ501H) begin
-        SelRingRspOutQ501H = RING_INPUT ;
-    end //if  
-    else if (VentilationCounterRspQnnnH ==  2'b11 ) 
-        SelRingRspOutQ501H = BUBBLE_OUT ;  
-    // FIXME - add round robin logic to allow fairness between F2C and C2F 
-    else if (F2C_RspValidQ501H == 1'b1)
-        SelRingRspOutQ501H = F2C_RESPONSE ; 
-    else begin 
-        SelRingRspOutQ501H = BUBBLE_OUT ; 
-    end
+    unique casez ({MustFwdOutQ501H, NeedToVentilateQnnnH, F2C_RspValidQ501H})
+        3'b1??  : SelRingRspOutQ501H = RING_INPUT   ;
+        3'b01?  : SelRingRspOutQ501H = BUBBLE_OUT   ;  
+        3'b001  : SelRingRspOutQ501H = F2C_RESPONSE ;
+        default : SelRingRspOutQ501H = BUBBLE_OUT   ; 
+    endcase
 end //always_comb
 
 always_comb begin : select_next_ring_output
     //mux 4:1
     unique casez (SelRingRspOutQ501H)
         BUBBLE_OUT   : begin // Insert BUBBLE_OUT Cycle
-            RingRspOutValidQ501H     = 1'b0; // FIXME - think and change the code to consider the valid bit 
+            RingRspOutValidQ501H     = 1'b0;
             RingRspOutRequestorQ501H = 10'b0;
             RingRspOutOpcodeQ501H    = RD; //RD == 2'b00 
             RingRspOutAddressQ501H   = 32'b0;
@@ -428,10 +425,17 @@ always_comb begin : select_next_ring_output
             RingRspOutAddressQ501H   = F2C_RspAddressQ501H  ;
             RingRspOutDataQ501H      = F2C_RspDataQ501H     ;
         end
+        default        : begin
+            RingRspOutValidQ501H     = 1'b0;
+            RingRspOutRequestorQ501H = 10'b0;
+            RingRspOutOpcodeQ501H    = RD;
+            RingRspOutAddressQ501H   = 32'b0;
+            RingRspOutDataQ501H      = 32'b0;
+        end
     endcase
 end
 //The Sample before Ring Output
-`LOTR_MSFF( RingRspOutValidQ502H     , RingRspOutValidQ501H     , QClk )
+`LOTR_RST_MSFF( RingRspOutValidQ502H , RingRspOutValidQ501H     , QClk ,RstQnnnH)
 `LOTR_MSFF( RingRspOutRequestorQ502H , RingRspOutRequestorQ501H , QClk )
 `LOTR_MSFF( RingRspOutOpcodeQ502H    , RingRspOutOpcodeQ501H    , QClk )
 `LOTR_MSFF( RingRspOutAddressQ502H   , RingRspOutAddressQ501H   , QClk )

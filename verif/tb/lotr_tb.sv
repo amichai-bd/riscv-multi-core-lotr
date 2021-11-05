@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ps/1ps
 
 `include "lotr_defines.sv"
 module lotr_tb ();
@@ -95,12 +95,10 @@ lotr lotr(
 task end_tb;
 
     input string msg;
-    integer SHRD_0,SHRD_1,SHRD_2,SHRD_3;
+    integer SHRD_0,SHRD_1;
     
     SHRD_0=$fopen({"../target/",hpath,"/shrd_mem_0_snapshot.log"},"w");   
     SHRD_1=$fopen({"../target/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
-    SHRD_2=$fopen({"../target/",hpath,"/shrd_mem_2_snapshot.log"},"w");   
-    SHRD_3=$fopen({"../target/",hpath,"/shrd_mem_3_snapshot.log"},"w");   
 
     for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
         $fwrite(SHRD_0,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i+3],
@@ -116,8 +114,6 @@ task end_tb;
     
     $fclose(SHRD_0);
     $fclose(SHRD_1);
-    $fclose(SHRD_2);
-    $fclose(SHRD_3);
       
     $display({"Test : ",hpath,msg});        
     $finish;
