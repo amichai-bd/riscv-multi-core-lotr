@@ -76,90 +76,43 @@ module rc
 //=========================================
 //=====    Data Path Signals    ===========
 //=========================================
-
-logic         RingReqInValidQ501H    ;
-logic  [9:0]  RingReqInRequestorQ501H;    
-t_opcode      RingReqInOpcodeQ501H   ; 
-logic  [31:0] RingReqInAddressQ501H  ; 
-logic  [31:0] RingReqInDataQ501H     ; 
-logic         RingRspInValidQ501H    ; 
-logic  [9:0]  RingRspInRequestorQ501H;    
-t_opcode      RingRspInOpcodeQ501H   ; 
-logic  [31:0] RingRspInAddressQ501H  ; 
-logic  [31:0] RingRspInDataQ501H     ; 
-logic         RingReqOutValidQ501H     ;  
-logic  [9:0]  RingReqOutRequestorQ501H ;     
-t_opcode      RingReqOutOpcodeQ501H    ; 
-logic  [31:0] RingReqOutAddressQ501H   ;
-logic  [31:0] RingReqOutDataQ501H      ;
-logic         RingRspOutValidQ501H     ;
-logic  [9:0]  RingRspOutRequestorQ501H ;   
-t_opcode      RingRspOutOpcodeQ501H    ;
-logic  [31:0] RingRspOutAddressQ501H   ;
-logic  [31:0] RingRspOutDataQ501H      ;
+//            RingReqInQ501H             RingRspInQ501H    
+logic         RingReqInValidQ501H      , RingRspInValidQ501H      ;
+logic  [9:0]  RingReqInRequestorQ501H  , RingRspInRequestorQ501H  ;
+t_opcode      RingReqInOpcodeQ501H     , RingRspInOpcodeQ501H     ;
+logic  [31:0] RingReqInAddressQ501H    , RingRspInAddressQ501H    ;
+logic  [31:0] RingReqInDataQ501H       , RingRspInDataQ501H       ;
+//            RingReqOutQ501H            RingRspOutQ501H 
+logic         RingReqOutValidQ501H     , RingRspOutValidQ501H     ;  
+logic  [9:0]  RingReqOutRequestorQ501H , RingRspOutRequestorQ501H ;     
+t_opcode      RingReqOutOpcodeQ501H    , RingRspOutOpcodeQ501H    ; 
+logic  [31:0] RingReqOutAddressQ501H   , RingRspOutAddressQ501H   ;
+logic  [31:0] RingReqOutDataQ501H      , RingRspOutDataQ501H      ;
     
-// F2C BUFFER
-logic   [F2C_MSB:0]       F2C_BufferValidQnnnH     ;
-logic   [F2C_MSB:0][9:0]  F2C_BufferRequestorQnnnH ;
-logic   [F2C_MSB:0][31:0] F2C_BufferAddressQnnnH   ;
-logic   [F2C_MSB:0][31:0] F2C_BufferDataQnnnH      ;
-t_state [F2C_MSB:0]       F2C_BufferStateQnnnH     ;
-logic   [F2C_MSB:0][9:0]  F2C_NextBufferRequestorQnnnH ;
-logic   [F2C_MSB:0][31:0] F2C_NextBufferAddressQnnnH   ;
-logic   [F2C_MSB:0][31:0] F2C_NextBufferDataQnnnH      ;
-t_state [F2C_MSB:0]       F2C_NextBufferStateQnnnH     ;
-logic                     F2C_RspValidQ501H     ;
-logic   [9:0]             F2C_RspRequestorQ501H ;     
-t_opcode                  F2C_RspOpcodeQ501H    ;
-logic   [31:0]            F2C_RspAddressQ501H   ;
-logic   [31:0]            F2C_RspDataQ501H      ;
+logic         F2C_RspValidQ501H        , C2F_ReqValidQ501H      ;
+logic  [9:0]  F2C_RspRequestorQ501H    , C2F_ReqRequestorQ501H  ;
+t_opcode      F2C_RspOpcodeQ501H       , C2F_ReqOpcodeQ501H     ;
+logic  [31:0] F2C_RspAddressQ501H      , C2F_ReqAddressQ501H    ;
+logic  [31:0] F2C_RspDataQ501H         , C2F_ReqDataQ501H       ;
 
 //=========================================
 //=====    Control Bits Signals   =========
 //=========================================
 // === General ===
-t_winner              SelRingReqOutQ501H     ;
-t_winner              SelRingRspOutQ501H     ;
-logic                 CoreIDMatchRspQ501H    ;
-t_state               state ; 
-// === F2C ===
-logic [F2C_MSB:0]     F2C_EnAllocEntryQ501H ;
-logic [F2C_MSB:0]     F2C_EnWrDataQnnnH     ;
-logic [F2C_MSB:0]     F2C_SelDataSrcQnnnH   ;
-// F2C data out
-logic [F2C_ENC_MSB:0] F2C_SelRdRingQ501H    ;
-logic [F2C_ENC_MSB:0] F2C_SelRdCoreQ502H    ;
-// === FIXME description
-logic [F2C_MSB:0] F2C_FirstFreeEntryQ501H          ; 
-logic [F2C_MSB:0] F2C_FreeEntriesQ501H             ; 
-logic             F2C_MatchIdQ501H                 ;
-logic [F2C_MSB:0] F2C_RspMatchQ500H                ;  
-logic [F2C_MSB:0] F2C_FirstReadResponseMatcesQ500H ; 
-logic [F2C_MSB:0] F2C_ResetValidQnnnH              ;
-// ==== init F2C MRO ==========
-logic [F2C_MSB:0] F2C_DeallocMroQnnnH ;
-logic [F2C_MSB:0] F2C_Mask0MroQnnnH   ;
-logic [F2C_MSB:0] F2C_Mask1MroQnnnH   ;
-logic [F2C_MSB:0] F2C_DecodedSelRdRingQ501H;
-logic [F2C_MSB:0] F2C_DecodedSelRdCoreQ502H;
-// ==== C2F =====================
-logic         C2F_ReqValidQ501H      ;
-logic  [9:0]  C2F_ReqRequestorQ501H  ;     
-t_opcode      C2F_ReqOpcodeQ501H     ;
-logic  [31:0] C2F_ReqAddressQ501H    ;
-logic  [31:0] C2F_ReqDataQ501H       ;
+t_winner          SelRingReqOutQ501H ;
+t_winner          SelRingRspOutQ501H ;
+logic             CoreIDMatchRspQ501H;
+logic             F2C_MatchIdQ501H   ;
 // === Rsp ventilation
 logic[1:0]        VentilationCounterRspQnnnH    ;
 logic[1:0]        NextVentilationCounterRspQnnnH;
 logic             EnVentilationRspQnnnH         ;
 logic             RstVentilationRspQnnnH        ;
-// prepreation for ventilation counter for req -- not implemented yet.
+// === Req ventilation counter - not implemented yet.
 logic[1:0]        VentilationCounterReqQnnnH    ;
 logic[1:0]        NextVentilationCounterReqQnnnH;
 logic             EnVentilationReqQnnnH         ;
 logic             RstVentilationReqQnnnH        ;
-// F2C data in selector muxs
-logic [F2C_MSB:0] F2C_SelDataSrc = '0;
 
 
 //======================================================================================

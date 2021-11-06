@@ -38,6 +38,8 @@ logic [7:0]  DMemQnnnH     [D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
 `LOTR_MSFF(IMemQnnnH, IMemQnnnH, QClk)
 `LOTR_MSFF(DMemQnnnH, DMemQnnnH, QClk)
 localparam    NUM_TILE = 2;
+genvar TILE;
+int TILE_FOR;
 int i;
 initial begin: test_seq
     $display(hpath);
@@ -46,14 +48,14 @@ initial begin: test_seq
     //======================================
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, IMemQnnnH);
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_data_mem_rv32i.sv"}, DMemQnnnH);
-    //TILE 0    
+    ////TILE 0    
         // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
         lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-    //TILE 1    
+    ////TILE 1    
         // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
@@ -64,6 +66,15 @@ initial begin: test_seq
     end_tb(" Finished With time out");
 end: test_seq
 
+//generate for ( TILE=0 ; TILE<NUM_TILE ; TILE++) begin : gen_gpc_tile
+//initial begin
+//    force lotr_tb.lotr.gen_gpc_tile[TILE].gpc_4t_tile.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
+//    force lotr_tb.lotr.gen_gpc_tile[TILE].gpc_4t_tile.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
+//    #10
+//    release lotr_tb.lotr.gen_gpc_tile[TILE].gpc_4t_tile.gpc_4t.i_mem_wrap.i_mem.next_mem;
+//    release lotr_tb.lotr.gen_gpc_tile[TILE].gpc_4t_tile.gpc_4t.i_mem_wrap.i_mem.mem     ;
+//end
+//end endgenerate // generate for
 
 
 //================================================================================
@@ -93,13 +104,10 @@ lotr lotr(
 // 5.exit test with message   
 
 task end_tb;
-
     input string msg;
     integer SHRD_0,SHRD_1;
-    
     SHRD_0=$fopen({"../target/",hpath,"/shrd_mem_0_snapshot.log"},"w");   
     SHRD_1=$fopen({"../target/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
-
     for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
         $fwrite(SHRD_0,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i+3],
                                                                           lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i+2],
@@ -109,12 +117,9 @@ task end_tb;
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+2],
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+1],
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i]);
-
-    end    
-    
+    end 
     $fclose(SHRD_0);
     $fclose(SHRD_1);
-      
     $display({"Test : ",hpath,msg});        
     $finish;
 endtask

@@ -8,7 +8,6 @@
 //-----------------------------------------------------------------------------
 // Description :
 // 
-//
 // 
 //------------------------------------------------------------------------------
 // Modification history :
@@ -54,7 +53,7 @@ assign RingRspDataQnnnH     [0] = RingRspDataQnnnH     [NUM_TILE];
 
 
 //genvar TILE;
-//generate for ( TILE=0 ; TILE<NUM_TILE ; TILE++) begin : generat_block_gpc_tiles
+//generate for ( TILE=0 ; TILE<NUM_TILE ; TILE++) begin : gen_gpc_tiles
 //assign CoreID[TILE] = 8'(TILE+1); //cast to 8 bit the CoreID
 //gpc_4t_tile gpc_4t_tile
 //(
