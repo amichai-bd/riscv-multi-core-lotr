@@ -126,6 +126,7 @@ rc rc(
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//input
     // output - Rsp to Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//output
+    .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)     ,//output
     .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H)   ,//output
     .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//output
     .C2F_RspStall           (C2F_RspStall)           ,//output

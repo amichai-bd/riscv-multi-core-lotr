@@ -87,6 +87,7 @@ logic          T0RcAccess;
 logic          T1RcAccess;
 logic          T2RcAccess;
 logic          T3RcAccess;
+logic          C2F_RspMatchQ104H;
 
 //=========================================
 //      Fabric to local memory interface repeater
@@ -104,17 +105,18 @@ core_4t core_4t (
     .QClk            (QClk)           ,  // input 
     .RstQnnnH        (RstQnnnH)       ,  // input 
     //Instruction Memory
-    .PcQ100H         (PcQ100H)        ,  // output 
-    .InstFetchQ101H  (InstFetchQ101H) ,  // input
+    .PcQ100H           (PcQ100H)        ,  // output 
+    .InstFetchQ101H    (InstFetchQ101H) ,  // input
     //Data Memory
-    .MemAdrsQ103H    (MemAdrsQ103H)   ,  // output 
-    .MemWrDataQ103H  (MemWrDataQ103H) ,  // output 
-    .CtrlMemWrQ103H  (CtrlMemWrQ103H) ,  // output 
-    .CtrlMemRdQ103H  (CtrlMemRdQ103H) ,  // output 
-    .MemByteEnQ103H  (MemByteEnQ103H) ,  // output 
-    .ThreadQ103H     (ThreadQ103H)    ,  // output   
-    .PcQ103H         (PcQ103H)        ,  //
-    .MemRdDataQ104H  (MemRdDataQ104H) ,  // input
+    .MemAdrsQ103H      (MemAdrsQ103H)   ,  // output 
+    .MemWrDataQ103H    (MemWrDataQ103H) ,  // output 
+    .CtrlMemWrQ103H    (CtrlMemWrQ103H) ,  // output 
+    .CtrlMemRdQ103H    (CtrlMemRdQ103H) ,  // output 
+    .MemByteEnQ103H    (MemByteEnQ103H) ,  // output 
+    .ThreadQ103H       (ThreadQ103H)    ,  // output   
+    .PcQ103H           (PcQ103H)        ,  //
+    .MemRdDataQ104H    (MemRdDataQ104H) ,  // input
+    .C2F_RspMatchQ104H (C2F_RspMatchQ104H),// input
     //MMIO
     .CRQnnnH         (CRQnnnH)        ,   // input
     .T0RcAccess      (T0RcAccess)     ,
@@ -144,6 +146,7 @@ d_mem_wrap d_mem_wrap (
     .RdEnQ103H            (CtrlMemRdQ103H) ,  // input
     .WrEnQ103H            (CtrlMemWrQ103H) ,  // input
     .MemRdDataQ104H       (MemRdDataQ104H) ,  // output
+    .C2F_RspMatchQ104H    (C2F_RspMatchQ104H),// output
     //============================================
     //      RC interface
     //============================================

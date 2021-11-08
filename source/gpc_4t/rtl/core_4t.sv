@@ -41,6 +41,7 @@ module core_4t
     output logic [3:0]  ThreadQ103H     ,
     output logic [31:0] PcQ103H         ,
     input  logic [31:0] MemRdDataQ104H  ,
+    input logic         C2F_RspMatchQ104H,
     input logic         T0RcAccess      ,
     input logic         T1RcAccess      ,
     input logic         T2RcAccess      ,
@@ -80,6 +81,12 @@ logic [31:0]        RegRdData2Q103H;
 logic [4:0]         RegWrPtrQ102H;
 logic [4:0]         RegWrPtrQ103H;
 logic [4:0]         RegWrPtrQ104H;
+logic [4:0]         RegWrPtrQ105H;
+logic [4:0]         PreRegWrPtrQ104H;
+logic [4:0]         T0RegWrPtrQnnnH;
+logic [4:0]         T1RegWrPtrQnnnH;
+logic [4:0]         T2RegWrPtrQnnnH;
+logic [4:0]         T3RegWrPtrQnnnH;
 logic [31:0]        RegWrDataQ104H;
 logic [31:0][31:0]  Register0QnnnH;
 logic [31:0][31:0]  Register1QnnnH;
@@ -127,7 +134,15 @@ logic               CtrlMemToRegQ101H , CtrlMemToRegQ102H , CtrlMemToRegQ103H , 
 logic               CtrlPcToRegQ101H  , CtrlPcToRegQ102H  , CtrlPcToRegQ103H  , CtrlPcToRegQ104H;
 logic               CtrlInsertNopQ102H, CtrlInsertNopQ101H, CtrlInsertNopQ100H;
 logic               BranchCondMetQ102H;
-
+//Multi Core - Ring Controler (Fabric) access - Read Response
+logic SampT0RcAccess;
+logic SampT1RcAccess;
+logic SampT2RcAccess;
+logic SampT3RcAccess;
+logic T0EnRegWrPtrQnnnH;
+logic T1EnRegWrPtrQnnnH;
+logic T2EnRegWrPtrQnnnH;
+logic T3EnRegWrPtrQnnnH;
 ////////////////////////////////////////////////////////////////////////////////////////
 //          CORE_4t Module Code
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -175,11 +190,11 @@ assign ThreadQ104H = ThreadQ100H;
 //  Each PC samples the value from Q102H and its enable signal toggle when 
 //  the thread he represents is currently running on Q102H
 //////////////////////////////////////////////////////////////////////////////////////////////////
-   
-assign EnPCQnnnH[0] = CRQnnnH.en_pc_0 && !T0RcAccess;
-assign EnPCQnnnH[1] = CRQnnnH.en_pc_1 && !T1RcAccess;
-assign EnPCQnnnH[2] = CRQnnnH.en_pc_2 && !T2RcAccess;
-assign EnPCQnnnH[3] = CRQnnnH.en_pc_3 && !T3RcAccess;
+
+assign EnPCQnnnH[0] = CRQnnnH.en_pc_0 && (!(T0RcAccess));
+assign EnPCQnnnH[1] = CRQnnnH.en_pc_1 && (!(T1RcAccess));
+assign EnPCQnnnH[2] = CRQnnnH.en_pc_2 && (!(T2RcAccess));
+assign EnPCQnnnH[3] = CRQnnnH.en_pc_3 && (!(T3RcAccess));
 
 //  Enable bits for Thread's Pc - indicated from Q102H
 assign T0EnPcQ100H = EnPCQnnnH[0] && ThreadQ102H[0];
@@ -194,7 +209,6 @@ assign T3EnPcQ100H = EnPCQnnnH[3] && ThreadQ102H[3];
 `LOTR_EN_RST_MSFF( T3PcQ100H, NextPcQ102H, QClk, T3EnPcQ100H && !CtrlInsertNopQ102H , CRQnnnH.rst_pc_3 || RstQnnnH) 
 
 always_comb begin : next_threads_pc_sel
-  
     //mux 4:1
     unique casez (ThreadQ100H) 
         4'b0001  : PcQ100H = T0PcQ100H; 
@@ -315,7 +329,7 @@ end
 `LOTR_MSFF ( CtrlMemRdQ102H    , CtrlMemRdQ101H    , QClk)
 `LOTR_MSFF ( CtrlMemWrQ102H    , CtrlMemWrQ101H    , QClk)
 `LOTR_MSFF ( CtrlStoreQ102H    , CtrlStoreQ101H    , QClk)
-`LOTR_MSFF (CtrlInsertNopQ102H , CtrlInsertNopQ101H, QClk) 
+`LOTR_MSFF ( CtrlInsertNopQ102H, CtrlInsertNopQ101H, QClk) 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,11 +502,32 @@ assign  MemAdrsQ103H = AluOutQ103H;
 
 `LOTR_MSFF   ( PcPlus4Q104H      , PcPlus4Q103H      , QClk) 
 `LOTR_MSFF   ( AluOutQ104H       , AluOutQ103H       , QClk)
-`LOTR_MSFF   ( RegWrPtrQ104H     , RegWrPtrQ103H     , QClk)
-`LOTR_MSFF   (CtrlMemToRegQ104H  , CtrlMemToRegQ103H , QClk)
-`LOTR_MSFF   (CtrlPcToRegQ104H   , CtrlPcToRegQ103H  , QClk)
+`LOTR_MSFF   ( CtrlMemToRegQ104H , CtrlMemToRegQ103H , QClk)
+`LOTR_MSFF   ( CtrlPcToRegQ104H  , CtrlPcToRegQ103H  , QClk)
 `LOTR_MSFF   ( CtrlRegWrQ104H    , CtrlRegWrQ103H    , QClk)
+`LOTR_MSFF   ( PreRegWrPtrQ104H  , RegWrPtrQ103H     , QClk)
+`LOTR_MSFF   ( SampT0RcAccess,    T0RcAccess,    QClk ) 
+`LOTR_MSFF   ( SampT1RcAccess,    T1RcAccess,    QClk ) 
+`LOTR_MSFF   ( SampT2RcAccess,    T2RcAccess,    QClk ) 
+`LOTR_MSFF   ( SampT3RcAccess,    T3RcAccess,    QClk ) 
 
+//This logic is used to remember the WrPtr when the LOAD request is not Local (Latecy is unknown)
+// RcAccess -> Ring Controller Access
+always_comb begin
+if( (ThreadQ104H[0] && (!SampT0RcAccess)) || 
+    (ThreadQ104H[1] && (!SampT1RcAccess)) || 
+    (ThreadQ104H[2] && (!SampT2RcAccess)) || 
+    (ThreadQ104H[3] && (!SampT3RcAccess)) ) begin
+        //This is the common case
+        RegWrPtrQ104H  = PreRegWrPtrQ104H;  
+    end else begin
+        //Only in the case of LOAD from non-local Memory
+        RegWrPtrQ104H = ThreadQ104H[0] ? T0RegWrPtrQnnnH :
+                        ThreadQ104H[1] ? T1RegWrPtrQnnnH :
+                        ThreadQ104H[2] ? T2RegWrPtrQnnnH :
+                      /*ThreadQ104H[3]*/ T3RegWrPtrQnnnH ;
+    end
+end
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //    ____  __     __   _____   _        ______          ____    __    ___    _  _     _    _ 
 //  / ____| \ \   / /  / ____| | |      |  ____|        / __ \  /_ |  / _ \  | || |   | |  | |
@@ -505,10 +540,11 @@ assign  MemAdrsQ103H = AluOutQ103H;
  
 
 always_comb begin : candidates_for_register_write_data
-    unique casez ({CtrlMemToRegQ104H , CtrlPcToRegQ104H}) 
-        2'b01   : RegWrDataQ104H = PcPlus4Q104H   ; //Data from PC - for JAL?
-        2'b10   : RegWrDataQ104H = MemRdDataQ104H ; //Data from Memory
-        default : RegWrDataQ104H = AluOutQ104H    ; //Data from ALU (Common case)
+    unique casez ({CtrlMemToRegQ104H , CtrlPcToRegQ104H , C2F_RspMatchQ104H}) 
+        3'b010   : RegWrDataQ104H = PcPlus4Q104H   ; //Data from PC - for JAL?
+        3'b100   : RegWrDataQ104H = MemRdDataQ104H ; //Data from Memory
+        3'b001   : RegWrDataQ104H = MemRdDataQ104H ; //Data from Memory- C2F Response 
+        default  : RegWrDataQ104H = AluOutQ104H    ; //Data from ALU (Common case)
     endcase         
 end // always_comb
             
@@ -534,11 +570,20 @@ always_comb begin : write_register_file  //ADLV : Ask ABD about this comb
     NextRegister2Q104H[0] = 32'b0;  
     NextRegister3Q104H[0] = 32'b0;  
 end // always_comb
+//This will freeze the WrPtr (RegDst) when waiting for RD_RSP from Fabric.
+assign T0EnRegWrPtrQnnnH =(ThreadQ103H[0] && (!SampT0RcAccess));
+assign T1EnRegWrPtrQnnnH =(ThreadQ103H[1] && (!SampT1RcAccess));
+assign T2EnRegWrPtrQnnnH =(ThreadQ103H[2] && (!SampT2RcAccess));
+assign T3EnRegWrPtrQnnnH =(ThreadQ103H[3] && (!SampT3RcAccess));
+`LOTR_EN_MSFF( T0RegWrPtrQnnnH   , RegWrPtrQ103H  , QClk , T0EnRegWrPtrQnnnH)
+`LOTR_EN_MSFF( T1RegWrPtrQnnnH   , RegWrPtrQ103H  , QClk , T1EnRegWrPtrQnnnH)
+`LOTR_EN_MSFF( T2RegWrPtrQnnnH   , RegWrPtrQ103H  , QClk , T2EnRegWrPtrQnnnH)
+`LOTR_EN_MSFF( T3RegWrPtrQnnnH   , RegWrPtrQ103H  , QClk , T3EnRegWrPtrQnnnH)
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          assertions
 ////////////////////////////////////////////////////////////////////////////////////////
-assign core_id_strap = 8'b0; //DIXME
+assign core_id_strap = 8'b0; //FIXME
 logic               AssertBadMemR_W; 
 logic               AssertIllegalRegister; 
 logic               AssertBadMemAccessReg;

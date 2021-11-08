@@ -67,6 +67,7 @@ module rc
     input   logic  [31:0] C2F_ReqDataQ500H       ,
     input   logic  [1:0]  C2F_ReqThreadIDQ500H   ,
     output  logic         C2F_RspValidQ502H      ,
+    output  t_opcode      C2F_RspOpcodeQ502H     ,
     output  logic  [31:0] C2F_RspDataQ502H       ,
     output  logic         C2F_RspStall           ,
     output  logic  [1:0]  C2F_RspThreadIDQ502H     
@@ -186,6 +187,7 @@ c2f c2f (
     .RingRspInDataQ501H     (RingRspInDataQ501H     ),//input   logic  [31:0] 
     //C2F ---> Core          /C2F ---> Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H      ),//output  logic         
+    .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H     ),//output  t_opcode
     .C2F_RspDataQ502H       (C2F_RspDataQ502H       ),//output  logic  [31:0] 
     .C2F_RspStall           (C2F_RspStall           ),//output  logic         
     .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H   ) //output  logic  [1:0]  
@@ -258,7 +260,7 @@ end //always_comb
 
 `LOTR_EN_RST_MSFF(VentilationCounterRspQnnnH , NextVentilationCounterRspQnnnH , QClk, EnVentilationRspQnnnH, (RstVentilationRspQnnnH || RstQnnnH))
 
-assign CoreIDMatchRspQ501H = (RingRspInAddressQ501H[31:24] == CoreID) ; 
+assign CoreIDMatchRspQ501H = (RingRspInRequestorQ501H[9:2] == CoreID) ; 
 assign MustFwdOutQ501H     = (RingRspInValidQ501H && !CoreIDMatchRspQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
 
 logic  NeedToventilateQnnnH;
