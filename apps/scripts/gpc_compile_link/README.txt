@@ -43,3 +43,12 @@ The .c or .s file without extension
 ###########################################
 ####riscv32e NOT SUPPORTED AT THIS TIME####
 ###########################################
+
+
+For RISCV Compiler from windows (not WSL):
+run:
+./abd_compile.sh <test_name>
+./abd_compile.sh abd_RingStress
+
+
+
