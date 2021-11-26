@@ -247,9 +247,7 @@ f2c f2c (
 //==================================================================================
 //                  Ring output Interface
 //==================================================================================
-//  TODO - add more detailed discription of this block
-//  Select the Ring Output.
-//  C2F_Req / F2C_Rsp / RingInput
+// =============== RingRspOut
 //==================================================================================
 always_comb begin : ventilation_counter_asserting
     NextVentilationCounterRspQnnnH = VentilationCounterRspQnnnH + 2'b01 ; 
@@ -308,6 +306,89 @@ always_comb begin : select_next_ring_output
     endcase
 end
 
+    
+//==================================================================================
+// =============== RingReqOut
+//==================================================================================
+
+// === General ===
+
+logic             CoreIDMatchReqQ501H;
+logic             C2F_MatchIdQ501H   ;
+// === Rsp ventilation
+logic[1:0]        VentilationCounterReqQnnnH    ;
+logic[1:0]        NextVentilationCounterReqQnnnH;
+logic             EnVentilationReqQnnnH         ;
+logic             RstVentilationReqQnnnH        ;
+// === Req ventilation counter - not implemented yet.
+logic[1:0]        VentilationCounterReqQnnnH    ;
+logic[1:0]        NextVentilationCounterReqQnnnH;
+logic             EnVentilationReqQnnnH         ;
+logic             RstVentilationReqQnnnH        ;
+logic             MustFwdOutReqQ501H ; 
+    
+    
+always_comb begin : ventilation_counter_asserting
+    NextVentilationCounterReqQnnnH = VentilationCounterReqQnnnH + 2'b01 ; 
+    EnVentilationReqQnnnH  = ( SelRingReqOutQ501H == C2F_REQUEST ); 
+    RstVentilationRspQnnnH = ((SelRingReqOutQ501H == BUBBLE_OUT ) || 
+                              ((SelRingReqOutQ501H == RING_INPUT) && (!RingReqInValidQ501H))) ;
+end //always_comb
+
+    `LOTR_EN_RST_MSFF(VentilationCounterReqQnnnH , NextVentilationCounterReqQnnnH , QClk, EnVentilationReqQnnnH, (RstVentilationReqQnnnH || RstQnnnH))
+
+assign CoreIDMatchReqQ501H = (RingReqInRequestorQ501H[9:2] == CoreID) ; 
+assign MustFwdOutReqQ501H     = (RingReqInValidQ501H && !CoreIDMatchReqQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
+
+logic  NeedToventilateReqQnnnH;
+assign NeedToVentilateReqQnnnH = (VentilationCounterReqQnnnH ==  2'b11);
+    
+    
+always_comb begin : set_the_select_next_ring_output_logic_from_F2C
+    unique casez ({MustFwdOutReqQ501H, NeedToVentilateReqQnnnH, C2F_ReqValidQ501H})
+        3'b1??  : SelRingReqOutQ501H = RING_INPUT   ;
+        3'b01?  : SelRingReqOutQ501H = BUBBLE_OUT   ;  
+        3'b001  : SelRingReqOutQ501H = C2F_REQUEST  ;
+        default : SelRingReqOutQ501H = BUBBLE_OUT   ; 
+    endcase
+end //always_comb
+
+always_comb begin : select_next_ring_output
+    //mux 4:1
+    unique casez (SelRingRspOutQ501H)
+        BUBBLE_OUT   : begin // Insert BUBBLE_OUT Cycle
+            RingReqOutValidQ501H     = 1'b0;
+            RingReqOutRequestorQ501H = 10'b0;
+            RingReqOutOpcodeQ501H    = RD; //RD == 2'b00 
+            RingReqOutAddressQ501H   = 32'b0;
+            RingReqOutDataQ501H      = 32'b0;
+        end
+        RING_INPUT   : begin // Foword the Ring Input
+            RingReqOutValidQ501H     = RingReqInValidQ501H  ; 
+            RingReqOutRequestorQ501H = RingReqInRequestorQ501H;
+            RingReqOutOpcodeQ501H    = RingReqInOpcodeQ501H ;
+            RingReqOutAddressQ501H   = RingReqInAddressQ501H;
+            RingReqOutDataQ501H      = RingReqInDataQ501H   ;
+        end
+        F2C_RESPONSE   : begin 
+            RingReqOutValidQ501H     = C2F_ReqValidQ501H    ;
+            RingReqOutRequestorQ501H = C2F_ReqRequestorQ501H;            
+            RingReqOutOpcodeQ501H    = C2F_ReqOpcodeQ501H   ;
+            RingReqOutAddressQ501H   = C2F_ReqAddressQ501H  ;
+            RingReqOutDataQ501H      = C2F_ReqDataQ501H     ;
+        end
+        default        : begin
+            RingReqOutValidQ501H     = 1'b0;
+            RingReqOutRequestorQ501H = 10'b0;
+            RingReqOutOpcodeQ501H    = RD;
+            RingReqOutAddressQ501H   = 32'b0;
+            RingReqOutDataQ501H      = 32'b0;
+        end
+    endcase
+end
+
+    
+    
 
 endmodule // module rc
 
