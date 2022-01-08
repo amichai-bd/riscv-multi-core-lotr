@@ -80,7 +80,6 @@ logic [F2C_MSB:0]     F2C_FirstFreeEntryQ501H          ;
 logic [F2C_MSB:0]     F2C_FreeEntriesQ501H             ; 
 logic [F2C_MSB:0]     F2C_RspMatchQ500H                ;  
 logic [F2C_MSB:0]     F2C_FirstReadResponseMatcesQ500H ; 
-logic [F2C_MSB:0]     F2C_ResetValidQnnnH              ;
 // ==== init F2C MRO ==========
 logic [F2C_MSB:0]     F2C_DeallocMroQnnnH ;
 logic [F2C_MSB:0]     F2C_Mask0MroQnnnH   ;
@@ -150,9 +149,8 @@ end // always_comb
 // ===== F2C Buffer State Machine =========
 // =================================
 always_comb begin : next_f2c_buffer_per_buffer_entry
-    F2C_NextBufferStateQnnnH = F2C_BufferStateQnnnH ; // default value for state machine .
-    F2C_ResetValidQnnnH = '0 ;
     for(int i =0; i < F2C_ENTRIESNUM; i++) begin
+        F2C_NextBufferStateQnnnH[i]     = F2C_BufferStateQnnnH[i] ; // default value for state machine .
         F2C_NextBufferRequestorQnnnH[i] = RingReqInRequestorQ501H;
         F2C_NextBufferAddressQnnnH[i]   = RingReqInAddressQ501H;
         F2C_NextBufferDataQnnnH[i]      = F2C_SelDataSrcQnnnH[i]   ? RingReqInDataQ501H  :  F2C_RspDataQ500H;
@@ -169,7 +167,6 @@ always_comb begin : next_f2c_buffer_per_buffer_entry
             WRITE : 
                 if (F2C_DecodedSelRdCoreQ502H[i] == 1'b1) begin
                     F2C_NextBufferStateQnnnH[i] =  FREE ;
-                    F2C_ResetValidQnnnH[i] = 1'b1 ; 
                 end // end if
         //Slot is READ
             READ :
@@ -183,7 +180,6 @@ always_comb begin : next_f2c_buffer_per_buffer_entry
             READ_RDY :
                 if ((F2C_DecodedSelRdRingQ501H[i] == 1'b1) && ( SelRingRspOutQ501H == F2C_RESPONSE)) begin 
                     F2C_NextBufferStateQnnnH[i] =  FREE ;
-                    F2C_ResetValidQnnnH[i] = 1'b1 ; 
                 end
             default  : F2C_NextBufferStateQnnnH = F2C_BufferStateQnnnH;
         endcase
@@ -235,12 +231,11 @@ always_comb begin : select_f2c_from_buffer
     F2C_RspRequestorQ501H = F2C_BufferRequestorQnnnH [F2C_SelRdRingQ501H] ;
 
     // F2C_buffer -> Core (Request)
-    F2C_ReqValidQ502H     = (F2C_BufferStateQnnnH [F2C_SelRdCoreQ502H] == READ) || (F2C_BufferStateQnnnH [F2C_SelRdCoreQ502H] == WRITE) ;
-    F2C_ReqOpcodeQ502H    = (F2C_BufferStateQnnnH [F2C_SelRdCoreQ502H] == READ)  ? RD : 
-                            (F2C_BufferStateQnnnH [F2C_SelRdCoreQ502H] == WRITE) ? WR :
-                                                                                   RD ; // defualt value.
-    F2C_ReqAddressQ502H   =  F2C_BufferAddressQnnnH[F2C_SelRdCoreQ502H]; // Note: The 502 Cycle is due to the origin of the Response (RingInputQ500H->RingInputQ501H)
-    F2C_ReqDataQ502H      =  F2C_BufferDataQnnnH   [F2C_SelRdCoreQ502H];
+    F2C_ReqValidQ502H     = (F2C_BufferStateQnnnH     [F2C_SelRdCoreQ502H] == READ) || (F2C_BufferStateQnnnH [F2C_SelRdCoreQ502H] == WRITE) ;
+    F2C_ReqOpcodeQ502H    = (F2C_BufferStateQnnnH     [F2C_SelRdCoreQ502H] == READ)  ? RD : 
+                            (F2C_BufferStateQnnnH     [F2C_SelRdCoreQ502H] == WRITE) ? WR :RD ; // defualt value.
+    F2C_ReqAddressQ502H   =  F2C_BufferAddressQnnnH   [F2C_SelRdCoreQ502H]; // Note: The 502 Cycle is due to the origin of the Response (RingInputQ500H->RingInputQ501H)
+    F2C_ReqDataQ502H      =  F2C_BufferDataQnnnH      [F2C_SelRdCoreQ502H];
 end //always_comb
 
 

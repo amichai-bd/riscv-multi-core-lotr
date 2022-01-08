@@ -115,6 +115,11 @@ logic[1:0]        NextVentilationCounterReqQnnnH;
 logic             EnVentilationReqQnnnH         ;
 logic             RstVentilationReqQnnnH        ;
 
+// === General ===
+logic             CoreIDMatchReqQ501H;
+// === Req ventilation counter - not implemented yet.
+logic             MustFwdOutReqQ501H ; 
+    
 
 //======================================================================================
 //=========================     Module Content      ====================================
@@ -155,6 +160,10 @@ logic             RstVentilationReqQnnnH        ;
 //==================================================================================
 //              The C2F Buffer - Core 2 Fabric
 //==================================================================================
+logic [9:0] C2F_ReqRequestorQ500H;
+logic [9:0] C2F_RspRequestorQ502H;
+assign C2F_ReqRequestorQ500H = { CoreID,C2F_ReqThreadIDQ500H};
+assign C2F_RspThreadIDQ502H  = C2F_RspRequestorQ502H[1:0];
 c2f c2f (
     //General Interface
     .QClk                   (QClk              ),//input   logic         
@@ -169,7 +178,7 @@ c2f c2f (
     .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H   ),//input   t_opcode      
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H  ),//input   logic  [31:0] 
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H     ),//input   logic  [31:0] 
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H ),//input   logic  [1:0]  
+    .C2F_ReqRequestorQ500H  (C2F_ReqRequestorQ500H),//input   logic  [1:0]  
     //F2C ---> RING , RingRspOut
     .C2F_ReqValidQ501H      (C2F_ReqValidQ501H    ),//output  logic         
     .C2F_ReqRequestorQ501H  (C2F_ReqRequestorQ501H),//output  logic  [9:0]       
@@ -190,19 +199,14 @@ c2f c2f (
     .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H     ),//output  t_opcode
     .C2F_RspDataQ502H       (C2F_RspDataQ502H       ),//output  logic  [31:0] 
     .C2F_RspStall           (C2F_RspStall           ),//output  logic         
-    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H   ) //output  logic  [1:0]  
-);
-//==========================================================================
-//      FIXME - Make correct Arbiter for the RingReq Output Channel.
-//==========================================================================
-// C2F_ReqValidQ501H || RingReqInValidQ501H -> FIXME - The C2F_ReqValidQ501H come from C2F Buffer
-assign RingReqOutValidQ501H     = (C2F_ReqValidQ501H) || (RingReqInValidQ501H && ((!F2C_MatchIdQ501H) || (RingReqInOpcodeQ501H == WR_BCAST)));
-assign RingReqOutRequestorQ501H = C2F_ReqValidQ501H ? C2F_ReqRequestorQ501H : RingReqInRequestorQ501H;
-assign RingReqOutOpcodeQ501H    = C2F_ReqValidQ501H ? C2F_ReqOpcodeQ501H    : RingReqInOpcodeQ501H   ;
-assign RingReqOutAddressQ501H   = C2F_ReqValidQ501H ? C2F_ReqAddressQ501H   : RingReqInAddressQ501H  ;
-assign RingReqOutDataQ501H      = C2F_ReqValidQ501H ? C2F_ReqDataQ501H      : RingReqInDataQ501H     ;
-//==========================================================================
+    .C2F_RspRequestorQ502H  (C2F_RspRequestorQ502H  ),//output  logic  [9:0]  
+    // Incase of brodcast:
+    .RingReqInValidQ501H    (RingReqInValidQ501H    ),//input
+    .RingReqInRequestorQ501H(RingReqInRequestorQ501H),//input
+    .RingReqInOpcodeQ501H   (RingReqInOpcodeQ501H   ),//input
+    .RingReqInAddressQ501H  (RingReqInAddressQ501H  ) //input
 
+);
 //==================================================================================
 //              The F2C Buffer - Fabric 2 Core
 //==================================================================================
@@ -249,7 +253,7 @@ f2c f2c (
 //==================================================================================
 // =============== RingRspOut
 //==================================================================================
-always_comb begin : ventilation_counter_asserting
+always_comb begin : ventilation_rsp_counter_asserting
     NextVentilationCounterRspQnnnH = VentilationCounterRspQnnnH + 2'b01 ; 
     EnVentilationRspQnnnH  = ( SelRingRspOutQ501H == F2C_RESPONSE ); 
     RstVentilationRspQnnnH = ((SelRingRspOutQ501H == BUBBLE_OUT ) || 
@@ -272,7 +276,7 @@ always_comb begin : set_the_select_next_ring_output_logic_from_F2C
     endcase
 end //always_comb
 
-always_comb begin : select_next_ring_output
+always_comb begin : select_next_ring_rsp_output
     //mux 4:1
     unique casez (SelRingRspOutQ501H)
         BUBBLE_OUT   : begin // Insert BUBBLE_OUT Cycle
@@ -311,27 +315,11 @@ end
 // =============== RingReqOut
 //==================================================================================
 
-// === General ===
-
-logic             CoreIDMatchReqQ501H;
-logic             C2F_MatchIdQ501H   ;
-// === Rsp ventilation
-logic[1:0]        VentilationCounterReqQnnnH    ;
-logic[1:0]        NextVentilationCounterReqQnnnH;
-logic             EnVentilationReqQnnnH         ;
-logic             RstVentilationReqQnnnH        ;
-// === Req ventilation counter - not implemented yet.
-logic[1:0]        VentilationCounterReqQnnnH    ;
-logic[1:0]        NextVentilationCounterReqQnnnH;
-logic             EnVentilationReqQnnnH         ;
-logic             RstVentilationReqQnnnH        ;
-logic             MustFwdOutReqQ501H ; 
     
-    
-always_comb begin : ventilation_counter_asserting
+always_comb begin : ventilation_req_counter_asserting
     NextVentilationCounterReqQnnnH = VentilationCounterReqQnnnH + 2'b01 ; 
     EnVentilationReqQnnnH  = ( SelRingReqOutQ501H == C2F_REQUEST ); 
-    RstVentilationRspQnnnH = ((SelRingReqOutQ501H == BUBBLE_OUT ) || 
+    RstVentilationReqQnnnH = ((SelRingReqOutQ501H == BUBBLE_OUT ) || 
                               ((SelRingReqOutQ501H == RING_INPUT) && (!RingReqInValidQ501H))) ;
 end //always_comb
 
@@ -344,7 +332,7 @@ logic  NeedToventilateReqQnnnH;
 assign NeedToVentilateReqQnnnH = (VentilationCounterReqQnnnH ==  2'b11);
     
     
-always_comb begin : set_the_select_next_ring_output_logic_from_F2C
+always_comb begin : set_the_select_next_ring_output_logic_from_C2F
     unique casez ({MustFwdOutReqQ501H, NeedToVentilateReqQnnnH, C2F_ReqValidQ501H})
         3'b1??  : SelRingReqOutQ501H = RING_INPUT   ;
         3'b01?  : SelRingReqOutQ501H = BUBBLE_OUT   ;  
@@ -353,7 +341,7 @@ always_comb begin : set_the_select_next_ring_output_logic_from_F2C
     endcase
 end //always_comb
 
-always_comb begin : select_next_ring_output
+always_comb begin : select_next_ring_req_output
     //mux 4:1
     unique casez (SelRingRspOutQ501H)
         BUBBLE_OUT   : begin // Insert BUBBLE_OUT Cycle
