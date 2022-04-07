@@ -1,17 +1,17 @@
-`timescale 1ps/1ps
+`timescale 1ns/1ns
 
 `include "lotr_defines.sv"
 module lotr_tb ();
 import lotr_pkg::*;
-	logic         QClk      ;
+	logic         clk      ;
 	logic         RstQnnnH  ;
 	// clock generation
 	initial begin: clock_gen
 		forever begin
             #5 
-            QClk = 1'b0;
+            clk = 1'b0;
             #5 
-            QClk = 1'b1;
+            clk = 1'b1;
 		end
 	end// clock_gen
 
@@ -35,8 +35,8 @@ string hpath = `TEST_DEFINE(`HPATH);
 logic [7:0]  IMemQnnnH     [I_MEM_OFFSET+SIZE_I_MEM-1:I_MEM_OFFSET];
 logic [7:0]  DMemQnnnH     [D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
 
-`LOTR_MSFF(IMemQnnnH, IMemQnnnH, QClk)
-`LOTR_MSFF(DMemQnnnH, DMemQnnnH, QClk)
+`LOTR_MSFF(IMemQnnnH, IMemQnnnH, clk)
+`LOTR_MSFF(DMemQnnnH, DMemQnnnH, clk)
 localparam    NUM_TILE = 2;
 genvar TILE;
 int TILE_FOR;
@@ -82,7 +82,7 @@ end: test_seq
 //================================================================================
 lotr lotr(
     //general signals input
-    .QClk  		(QClk),   //input
+    .QClk  		(clk),   //input
     .RstQnnnH  	(RstQnnnH)
     );
 
@@ -120,6 +120,7 @@ task end_tb;
     end 
     $fclose(SHRD_0);
     $fclose(SHRD_1);
+    $fclose(trk_rc_transactions);
     $display({"Test : ",hpath,msg});        
     $finish;
 endtask
