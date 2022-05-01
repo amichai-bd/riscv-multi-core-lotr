@@ -50,18 +50,18 @@ initial begin: test_seq
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_data_mem_rv32i.sv"}, DMemQnnnH);
     ////TILE 0    
         // Backdoor load the Instruction memory
-        lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
-        lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
-        // Backdoor load the Instruction memory
-        lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-        lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-    ////TILE 1    
-        // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
-        // Backdoor load the Instruction memory
+        // Backdoor load the Inst1uction memory
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
+    ////TILE 1    
+        // Backdoor load the Instruction memory
+        lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
+        lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
+        // Backdoor load the Inst2uction memory
+        lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
+        lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
     #200000         
     end_tb(" Finished With time out");
 end: test_seq
@@ -105,21 +105,21 @@ lotr lotr(
 
 task end_tb;
     input string msg;
-    integer SHRD_0,SHRD_1;
-    SHRD_0=$fopen({"../target/",hpath,"/shrd_mem_0_snapshot.log"},"w");   
+    integer SHRD_1,SHRD_2;
     SHRD_1=$fopen({"../target/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
+    SHRD_2=$fopen({"../target/",hpath,"/shrd_mem_2_snapshot.log"},"w");   
     for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
-        $fwrite(SHRD_0,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i+3],
-                                                                          lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i+2],
-                                                                          lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i+1],
-                                                                          lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.d_mem_wrap.d_mem.mem[i]);
         $fwrite(SHRD_1,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+3],
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+2],
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+1],
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i]);
+        $fwrite(SHRD_2,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i+3],
+                                                                          lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i+2],
+                                                                          lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i+1],
+                                                                          lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i]);
     end 
-    $fclose(SHRD_0);
     $fclose(SHRD_1);
+    $fclose(SHRD_2);
     $fclose(trk_rc_transactions);
     $display({"Test : ",hpath,msg});        
     $finish;

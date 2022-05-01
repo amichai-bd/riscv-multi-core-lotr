@@ -207,8 +207,8 @@ end //always_comb
 genvar C2F_ENTRY;
 generate for ( C2F_ENTRY =0 ; C2F_ENTRY < C2F_ENTRIESNUM ; C2F_ENTRY++) begin : the_c2f_buffer_array
     `LOTR_RST_VAL_MSFF     ( C2F_BufferStateQnnnH    [C2F_ENTRY], C2F_NextBufferStateQnnnH    [C2F_ENTRY], QClk, RstQnnnH , FREE )
-    `LOTR_EN_MSFF          ( C2F_BufferAddressQnnnH  [C2F_ENTRY], C2F_NextBufferAddressQnnnH  [C2F_ENTRY], QClk, C2F_EnAllocEntryQ501H[C2F_ENTRY])
-    `LOTR_EN_MSFF          ( C2F_BufferRequestorQnnnH[C2F_ENTRY], C2F_NextBufferRequestorQnnnH[C2F_ENTRY], QClk, C2F_EnAllocEntryQ501H[C2F_ENTRY])
+    `LOTR_EN_MSFF          ( C2F_BufferAddressQnnnH  [C2F_ENTRY], C2F_NextBufferAddressQnnnH  [C2F_ENTRY], QClk, C2F_EnAllocEntryQ500H[C2F_ENTRY])
+    `LOTR_EN_MSFF          ( C2F_BufferRequestorQnnnH[C2F_ENTRY], C2F_NextBufferRequestorQnnnH[C2F_ENTRY], QClk, C2F_EnAllocEntryQ500H[C2F_ENTRY])
     `LOTR_EN_MSFF          ( C2F_BufferDataQnnnH     [C2F_ENTRY], C2F_NextBufferDataQnnnH     [C2F_ENTRY], QClk, C2F_EnWrQnnnH[C2F_ENTRY])
 end endgenerate // for , generate
 

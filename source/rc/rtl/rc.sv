@@ -343,7 +343,7 @@ end //always_comb
 
 always_comb begin : select_next_ring_req_output
     //mux 4:1
-    unique casez (SelRingRspOutQ501H)
+    unique casez (SelRingReqOutQ501H)
         BUBBLE_OUT   : begin // Insert BUBBLE_OUT Cycle
             RingReqOutValidQ501H     = 1'b0;
             RingReqOutRequestorQ501H = 10'b0;
@@ -358,7 +358,7 @@ always_comb begin : select_next_ring_req_output
             RingReqOutAddressQ501H   = RingReqInAddressQ501H;
             RingReqOutDataQ501H      = RingReqInDataQ501H   ;
         end
-        F2C_RESPONSE   : begin 
+        C2F_REQUEST   : begin 
             RingReqOutValidQ501H     = C2F_ReqValidQ501H    ;
             RingReqOutRequestorQ501H = C2F_ReqRequestorQ501H;            
             RingReqOutOpcodeQ501H    = C2F_ReqOpcodeQ501H   ;
