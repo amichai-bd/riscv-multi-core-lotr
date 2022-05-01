@@ -6,7 +6,7 @@ initial begin
     $timeformat(-9, 1, " ", 6);
     trk_rc_transactions   = $fopen({"../target/",hpath,"/trk_RC_transactions.log"},"w");
     $fwrite(trk_rc_transactions,"----------------------------------------------------------------------------\n");
-    $fwrite(trk_rc_transactions,"Time\t| Tile ID \t| Channel \t| Requestor \t| OpCode \t| Address \t| Data\t|\n");
+    $fwrite(trk_rc_transactions,"Time\t| Tile ID \t | Channel \t\t| Requestor \t| OpCode \t| Address \t| Data\t|\n");
     $fwrite(trk_rc_transactions,"----------------------------------------------------------------------------\n");
         
 
@@ -18,170 +18,265 @@ end //initial
 
 //****RC <---> Core C2F*****//
 //RC <-- CORE C2F
-logic         C2F_ReqValidQ501H      ;
-t_opcode      C2F_ReqOpcodeQ501H     ;
-logic  [31:0] C2F_ReqAddressQ501H    ;
-logic  [31:0] C2F_ReqDataQ501H       ;
-logic  [1:0]  C2F_ReqThreadIDQ501H   ;
+logic  [2:1]       C2F_ReqValidQ500H      ;
+t_opcode[2:1]      C2F_ReqOpcodeQ500H     ;
+logic  [2:1][31:0] C2F_ReqAddressQ500H    ;
+logic  [2:1][31:0] C2F_ReqDataQ500H       ;
+logic  [2:1][1:0]  C2F_ReqThreadIDQ500H   ;
 //RC --> CORE C2F                    ;
-logic         C2F_RspValidQ503H      ;
-t_opcode      C2F_RspOpcodeQ503H     ;
-logic  [31:0] C2F_RspDataQ503H       ;
-logic         C2F_RspStall           ;
-logic  [1:0]  C2F_RspThreadIDQ503H   ;
+logic   [2:1]      C2F_RspValidQ502H      ;
+t_opcode[2:1]      C2F_RspOpcodeQ502H     ;
+logic  [2:1][31:0] C2F_RspDataQ502H       ;
+logic  [2:1]       C2F_RspStall           ;
+logic  [2:1][1:0]  C2F_RspThreadIDQ502H   ;
                                      ;
 //******RC <---> Core F2C*****//     ;
 //RC_F2C <-- CORE                    ;
-logic         F2C_RspValidQ501H      ;
-t_opcode      F2C_RspOpcodeQ501H     ;
-logic  [31:0] F2C_RspAddressQ501H    ;
-logic  [31:0] F2C_RspDataQ501H       ;
+logic  [2:1]       F2C_RspValidQ500H      ;
+t_opcode[2:1]      F2C_RspOpcodeQ500H     ;
+logic  [2:1][31:0] F2C_RspAddressQ500H    ;
+logic  [2:1][31:0] F2C_RspDataQ500H       ;
 //RC _F2C --> CORE                   ;
-logic         F2C_ReqValidQ503H      ;
-t_opcode      F2C_ReqOpcodeQ503H     ; 
-logic  [31:0] F2C_ReqAddressQ503H    ;
-logic  [31:0] F2C_ReqDataQ503H       ;
+logic  [2:1]       F2C_ReqValidQ502H      ;
+t_opcode[2:1]      F2C_ReqOpcodeQ502H     ; 
+logic  [2:1][31:0] F2C_ReqAddressQ502H    ;
+logic  [2:1][31:0] F2C_ReqDataQ502H       ;
 
 //===================================
 // Ring Controler <-> Fabric Inteface
 //===================================
 //Ring ---> RC , RingReqIn
-logic         RingReqInValidQ501H    ;
-logic  [9:0]  RingReqInRequestorQ501H;
-t_opcode      RingReqInOpcodeQ501H   ;
-logic  [31:0] RingReqInAddressQ501H  ;
-logic  [31:0] RingReqInDataQ501H     ;
+logic  [2:1]       RingReqInValidQ500H    ;
+logic  [2:1][9:0]  RingReqInRequestorQ500H;
+t_opcode[2:1]      RingReqInOpcodeQ500H   ;
+logic  [2:1][31:0] RingReqInAddressQ500H  ;
+logic  [2:1][31:0] RingReqInDataQ500H     ;
 //Ring ---> RC , RingRspIn           ;
-logic         RingRspInValidQ501H    ;
-logic  [9:0]  RingRspInRequestorQ501H;
-t_opcode      RingRspInOpcodeQ501H   ;
-logic  [31:0] RingRspInAddressQ501H  ;
-logic  [31:0] RingRspInDataQ501H     ;
+logic   [2:1]      RingRspInValidQ500H    ;
+logic  [2:1][9:0]  RingRspInRequestorQ500H;
+t_opcode[2:1]      RingRspInOpcodeQ500H   ;
+logic  [2:1][31:0] RingRspInAddressQ500H  ;
+logic  [2:1][31:0] RingRspInDataQ500H     ;
 //RC   ---> Ring , RingReqOut
-logic         RingReqOutValidQ503H     ;
-logic  [9:0]  RingReqOutRequestorQ503H ;
-t_opcode      RingReqOutOpcodeQ503H    ;
-logic  [31:0] RingReqOutAddressQ503H   ;
-logic  [31:0] RingReqOutDataQ503H      ;
+logic  [2:1]       RingReqOutValidQ502H     ;
+logic  [2:1][9:0]  RingReqOutRequestorQ502H ;
+t_opcode[2:1]      RingReqOutOpcodeQ502H    ;
+logic  [2:1][31:0] RingReqOutAddressQ502H   ;
+logic  [2:1][31:0] RingReqOutDataQ502H      ;
  //RC   ---> Ring , RingRspOut         ;
-logic         RingRspOutValidQ503H     ;
-logic  [9:0]  RingRspOutRequestorQ503H ;
-t_opcode      RingRspOutOpcodeQ503H    ;
-logic  [31:0] RingRspOutAddressQ503H   ;
-logic  [31:0] RingRspOutDataQ503H      ;
+logic  [2:1]       RingRspOutValidQ502H     ;
+logic  [2:1][9:0]  RingRspOutRequestorQ502H ;
+t_opcode[2:1]      RingRspOutOpcodeQ502H    ;
+logic  [2:1][31:0] RingRspOutAddressQ502H   ;
+logic  [2:1][31:0] RingRspOutDataQ502H      ;
 logic        AssertEBREAK       ;
-assign AssertEBREAK = (lotr_tb.lotr.gpc_4t_tile_0.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
 
+string opCode;
 
+assign AssertEBREAK = (lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011) ||
+                      (lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
 
-`LOTR_MSFF(C2F_ReqValidQ501H     , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_ReqValidQ500H               , clk)
-`LOTR_MSFF(C2F_ReqOpcodeQ501H    , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_ReqOpcodeQ500H              , clk)
-`LOTR_MSFF(C2F_ReqAddressQ501H   , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_ReqAddressQ500H             , clk)
-`LOTR_MSFF(C2F_ReqDataQ501H      , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_ReqDataQ500H                , clk)
-`LOTR_MSFF(C2F_ReqThreadIDQ501H  , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_ReqThreadIDQ500H            , clk)
-                                                                 
-`LOTR_MSFF(C2F_RspValidQ503H     , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_RspValidQ502H               , clk)
-`LOTR_MSFF(C2F_RspOpcodeQ503H    , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_RspOpcodeQ502H              , clk)
-`LOTR_MSFF(C2F_RspDataQ503H      , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_RspDataQ502H                , clk)
-`LOTR_MSFF(C2F_RspStall          , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_RspStall                    , clk)
-`LOTR_MSFF(C2F_RspThreadIDQ503H  , lotr_tb.lotr.gpc_4t_tile_0.rc.C2F_RspThreadIDQ502H            , clk)
-                                                                 
-`LOTR_MSFF(F2C_ReqValidQ503H      ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_ReqValidQ502H                , clk)
-`LOTR_MSFF(F2C_ReqOpcodeQ503H     ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_ReqOpcodeQ502H               , clk)
-`LOTR_MSFF(F2C_ReqAddressQ503H    ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_ReqAddressQ502H              , clk)
-`LOTR_MSFF(F2C_ReqDataQ503H       ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_ReqDataQ502H                 , clk)
-
-`LOTR_MSFF(F2C_RspValidQ501H      ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_RspValidQ500H                , clk)
-`LOTR_MSFF(F2C_RspOpcodeQ501H     ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_RspOpcodeQ500H               , clk)
-`LOTR_MSFF(F2C_RspAddressQ501H    ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_RspAddressQ500H              , clk)
-`LOTR_MSFF(F2C_RspDataQ501H       ,lotr_tb.lotr.gpc_4t_tile_0.rc.F2C_RspDataQ500H                 , clk)
-                                                                 
-`LOTR_MSFF(RingReqInValidQ501H       , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqInValidQ500H       , clk)
-`LOTR_MSFF(RingReqInRequestorQ501H   , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqInRequestorQ500H   , clk)
-`LOTR_MSFF(RingReqInOpcodeQ501H      , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqInOpcodeQ500H      , clk)
-`LOTR_MSFF(RingReqInAddressQ501H     , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqInAddressQ500H     , clk)
-`LOTR_MSFF(RingReqInDataQ501H        , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqInDataQ500H        , clk)
+assign C2F_ReqValidQ500H       [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_ReqValidQ500H         ;
+assign C2F_ReqOpcodeQ500H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_ReqOpcodeQ500H        ;
+assign C2F_ReqAddressQ500H     [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_ReqAddressQ500H       ;
+assign C2F_ReqDataQ500H        [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_ReqDataQ500H          ;
+assign C2F_ReqThreadIDQ500H    [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_ReqThreadIDQ500H      ;
+                                                                                              
+assign C2F_ReqValidQ500H       [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_ReqValidQ500H         ;
+assign C2F_ReqOpcodeQ500H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_ReqOpcodeQ500H        ;
+assign C2F_ReqAddressQ500H     [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_ReqAddressQ500H       ;
+assign C2F_ReqDataQ500H        [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_ReqDataQ500H          ;
+assign C2F_ReqThreadIDQ500H    [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_ReqThreadIDQ500H      ;
+                                                                                        
+                                                                                        
+assign C2F_RspValidQ502H       [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_RspValidQ502H         ;
+assign C2F_RspOpcodeQ502H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_RspOpcodeQ502H        ;
+assign C2F_RspDataQ502H        [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_RspDataQ502H          ;
+assign C2F_RspStall            [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_RspStall              ;
+assign C2F_RspThreadIDQ502H    [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.C2F_RspThreadIDQ502H      ;
+                                                                                              
+assign C2F_RspValidQ502H       [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_RspValidQ502H         ;
+assign C2F_RspOpcodeQ502H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_RspOpcodeQ502H        ;
+assign C2F_RspDataQ502H        [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_RspDataQ502H          ;
+assign C2F_RspStall            [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_RspStall              ;
+assign C2F_RspThreadIDQ502H    [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.C2F_RspThreadIDQ502H      ;
                                                                                              
-`LOTR_MSFF(RingRspInValidQ501H       , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspInValidQ500H       , clk)
-`LOTR_MSFF(RingRspInRequestorQ501H   , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspInRequestorQ500H   , clk)
-`LOTR_MSFF(RingRspInOpcodeQ501H      , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspInOpcodeQ500H      , clk)
-`LOTR_MSFF(RingRspInAddressQ501H     , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspInAddressQ500H     , clk)
-`LOTR_MSFF(RingRspInDataQ501H        , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspInDataQ500H        , clk)
-                                                                     
-`LOTR_MSFF(RingReqOutValidQ503H      , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqOutValidQ502H      , clk)
-`LOTR_MSFF(RingReqOutRequestorQ503H  , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqOutRequestorQ502H  , clk)
-`LOTR_MSFF(RingReqOutOpcodeQ503H     , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqOutOpcodeQ502H     , clk)
-`LOTR_MSFF(RingReqOutAddressQ503H    , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqOutAddressQ502H    , clk)
-`LOTR_MSFF(RingReqOutDataQ503H       , lotr_tb.lotr.gpc_4t_tile_0.rc.RingReqOutDataQ502H       , clk)
                                                                                              
-`LOTR_MSFF(RingRspOutValidQ503H      , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspOutValidQ502H      , clk)
-`LOTR_MSFF(RingRspOutRequestorQ503H  , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspOutRequestorQ502H  , clk)
-`LOTR_MSFF(RingRspOutOpcodeQ503H     , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspOutOpcodeQ502H     , clk)
-`LOTR_MSFF(RingRspOutAddressQ503H    , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspOutAddressQ502H    , clk)
-`LOTR_MSFF(RingRspOutDataQ503H       , lotr_tb.lotr.gpc_4t_tile_0.rc.RingRspOutDataQ502H       , clk)
+assign F2C_ReqValidQ502H       [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_ReqValidQ502H         ;
+assign F2C_ReqOpcodeQ502H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_ReqOpcodeQ502H        ;
+assign F2C_ReqAddressQ502H     [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_ReqAddressQ502H       ;
+assign F2C_ReqDataQ502H        [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_ReqDataQ502H          ;
+                                                                                             
+assign F2C_ReqValidQ502H       [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_ReqValidQ502H         ;
+assign F2C_ReqOpcodeQ502H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_ReqOpcodeQ502H        ;
+assign F2C_ReqAddressQ502H     [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_ReqAddressQ502H       ;
+assign F2C_ReqDataQ502H        [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_ReqDataQ502H          ;
+                                                                                              
+                                                                                              
+assign F2C_RspValidQ500H       [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_RspValidQ500H         ;
+assign F2C_RspOpcodeQ500H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_RspOpcodeQ500H        ;
+assign F2C_RspAddressQ500H     [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_RspAddressQ500H       ;
+assign F2C_RspDataQ500H        [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.F2C_RspDataQ500H          ;
+                                                                                             
+assign F2C_RspValidQ500H       [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_RspValidQ500H         ;
+assign F2C_RspOpcodeQ500H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_RspOpcodeQ500H        ;
+assign F2C_RspAddressQ500H     [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_RspAddressQ500H       ;
+assign F2C_RspDataQ500H        [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.F2C_RspDataQ500H          ;
+                                                                                             
+                                                                                             
+assign RingReqInValidQ500H     [1] =lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqInValidQ500H        ;
+assign RingReqInRequestorQ500H [1] =lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqInRequestorQ500H    ;
+assign RingReqInOpcodeQ500H    [1] =lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqInOpcodeQ500H       ;
+assign RingReqInAddressQ500H   [1] =lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqInAddressQ500H      ;
+assign RingReqInDataQ500H      [1] =lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqInDataQ500H         ;
+                                                                                             
+assign RingReqInValidQ500H     [2] =lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqInValidQ500H        ;
+assign RingReqInRequestorQ500H [2] =lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqInRequestorQ500H    ;
+assign RingReqInOpcodeQ500H    [2] =lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqInOpcodeQ500H       ;
+assign RingReqInAddressQ500H   [2] =lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqInAddressQ500H      ;
+assign RingReqInDataQ500H      [2] =lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqInDataQ500H         ;
+                                                                                             
+                                                                                             
+assign RingRspInValidQ500H     [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspInValidQ500H       ;
+assign RingRspInRequestorQ500H [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspInRequestorQ500H   ;
+assign RingRspInOpcodeQ500H    [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspInOpcodeQ500H      ;
+assign RingRspInAddressQ500H   [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspInAddressQ500H     ;
+assign RingRspInDataQ500H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspInDataQ500H        ;
+                                                                                             
+                                                                                             
+assign RingRspInValidQ500H     [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspInValidQ500H       ;                                                              
+assign RingRspInRequestorQ500H [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspInRequestorQ500H   ;
+assign RingRspInOpcodeQ500H    [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspInOpcodeQ500H      ;
+assign RingRspInAddressQ500H   [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspInAddressQ500H     ;
+assign RingRspInDataQ500H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspInDataQ500H        ;
+                                                                                             
+                                                                                             
+assign RingReqOutValidQ502H     [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqOutValidQ502H     ;
+assign RingReqOutRequestorQ502H [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqOutRequestorQ502H ;
+assign RingReqOutOpcodeQ502H    [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqOutOpcodeQ502H    ;
+assign RingReqOutAddressQ502H   [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqOutAddressQ502H   ;
+assign RingReqOutDataQ502H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingReqOutDataQ502H      ;
+                                                                                             
+assign RingReqOutValidQ502H     [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqOutValidQ502H     ;
+assign RingReqOutRequestorQ502H [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqOutRequestorQ502H ;
+assign RingReqOutOpcodeQ502H    [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqOutOpcodeQ502H    ;                                                                                            
+assign RingReqOutAddressQ502H   [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqOutAddressQ502H   ;
+assign RingReqOutDataQ502H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingReqOutDataQ502H      ;  
+                                                                                             
+                                                                                             
+assign RingRspOutValidQ502H     [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspOutValidQ502H      ;
+assign RingRspOutRequestorQ502H [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspOutRequestorQ502H  ;
+assign RingRspOutOpcodeQ502H    [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspOutOpcodeQ502H     ;
+assign RingRspOutAddressQ502H   [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspOutAddressQ502H    ;
+assign RingRspOutDataQ502H      [1] = lotr_tb.lotr.gpc_4t_tile_1.rc.RingRspOutDataQ502H       ;
+                                                                                              
+assign RingRspOutValidQ502H     [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspOutValidQ502H      ;
+assign RingRspOutRequestorQ502H [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspOutRequestorQ502H  ;
+assign RingRspOutOpcodeQ502H    [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspOutOpcodeQ502H     ;
+assign RingRspOutAddressQ502H   [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspOutAddressQ502H    ;
+assign RingRspOutDataQ502H      [2] = lotr_tb.lotr.gpc_4t_tile_2.rc.RingRspOutDataQ502H       ;
+
+
 
 
 //tracker on memory transactions
-always @(posedge clk) begin : C2F_Req
-    if (C2F_ReqValidQ501H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"C2F_Req", C2F_ReqThreadIDQ501H , C2F_ReqOpcodeQ501H,C2F_ReqAddressQ501H ,C2F_ReqDataQ501H  );
+always @(posedge clk) begin : transactions
+    if (C2F_ReqValidQ500H[1]) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"C2F_Req", C2F_ReqThreadIDQ500H[1] , C2F_ReqOpcodeQ500H[1],C2F_ReqAddressQ500H[1] ,C2F_ReqDataQ500H[1]  );
+    end
+    
+    if (C2F_RspValidQ502H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"C2F_Rsp", C2F_RspThreadIDQ502H[1] , C2F_RspOpcodeQ502H[1],C2F_ReqAddressQ500H[1] ,C2F_RspDataQ502H[1]  );
     end //if
+
+    if (F2C_ReqValidQ502H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"F2C_Req", C2F_ReqThreadIDQ500H[1] , F2C_ReqOpcodeQ502H[1], F2C_ReqAddressQ502H[1] ,F2C_ReqDataQ502H[1]  );
+    end //if
+
+    if (F2C_RspValidQ500H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"F2C_Rsp", C2F_RspThreadIDQ502H[1] , F2C_RspOpcodeQ500H[1],F2C_RspAddressQ500H[1] ,F2C_RspDataQ500H[1]  );
+    end //if
+
+    if (RingReqOutValidQ502H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"RingReqOut", RingReqOutRequestorQ502H[1] , RingReqOutOpcodeQ502H[1],RingReqOutAddressQ502H[1] ,RingReqOutDataQ502H[1]  );
+    end //if
+
+    if (RingRspOutValidQ502H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"RingRspOut", RingRspOutRequestorQ502H[1] , RingRspOutOpcodeQ502H[1],RingRspOutAddressQ502H[1] ,RingRspOutDataQ502H[1]  );
+    end //if
+    if (RingReqInValidQ500H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s | %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"RingReqIn", RingReqInRequestorQ500H[1] , RingReqInOpcodeQ500H[1],RingReqInAddressQ500H[1] ,RingReqInDataQ500H[1]  );
+    end //if
+
+    if (RingRspInValidQ500H[1] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s | %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 1 ,"RingRspIn", RingRspInRequestorQ500H[1] , RingRspInOpcodeQ500H[1],RingRspInAddressQ500H[1] ,RingRspInDataQ500H[1]  );
+    end //if
+
+
+    
+    
+    
+    
+    
+        
+    if (C2F_ReqValidQ500H[2]) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"C2F_Req", C2F_ReqThreadIDQ500H[2] , C2F_ReqOpcodeQ500H[2],C2F_ReqAddressQ500H[2] ,C2F_ReqDataQ500H[2]  );
+    end
+        
+     if (C2F_RspValidQ502H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"C2F_Rsp", C2F_RspThreadIDQ502H[2] , C2F_RspOpcodeQ502H[2],C2F_ReqAddressQ500H[2] ,C2F_RspDataQ502H[2]  );
+    end //if
+
+    if (F2C_ReqValidQ502H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"F2C_Req", C2F_ReqThreadIDQ500H[2] , F2C_ReqOpcodeQ502H[2], F2C_ReqAddressQ502H[2] ,F2C_ReqDataQ502H[2]  );
+    end //if
+
+    if (F2C_RspValidQ500H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s \t| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"F2C_Rsp", C2F_RspThreadIDQ502H[2] , F2C_RspOpcodeQ500H[2],F2C_RspAddressQ500H[2] ,F2C_RspDataQ500H[2]  );
+    end //if
+
+    if (RingReqOutValidQ502H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"RingReqOut", RingReqOutRequestorQ502H[2] , RingReqOutOpcodeQ502H[2],RingReqOutAddressQ502H[2] ,RingReqOutDataQ502H[2]  );
+    end //if
+
+    if (RingRspOutValidQ502H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s| %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"RingRspOut", RingRspOutRequestorQ502H[2] , RingRspOutOpcodeQ502H[2],RingRspOutAddressQ502H[2] ,RingRspOutDataQ502H[2]  );
+    end //if
+    if (RingReqInValidQ500H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s | %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"RingReqIn", RingReqInRequestorQ500H[2] , RingReqInOpcodeQ500H[2],RingReqInAddressQ500H[2] ,RingReqInDataQ500H[2]  );
+    end //if
+
+    if (RingRspInValidQ500H[2] ) begin 
+        $fwrite(trk_rc_transactions,"%t\t|\t%d | %s | %8b\t\t | %d \t\t| %8h\t| %8h \n",
+        $realtime, 2 ,"RingRspIn", RingRspInRequestorQ500H[2] , RingRspInOpcodeQ500H[2],RingRspInAddressQ500H[2] ,RingRspInDataQ500H[2]  );
+    end //if
+
 end 
 
-always @(posedge clk) begin : C2F_Rsp
-    if (C2F_RspValidQ503H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"C2F_Rsp", C2F_RspThreadIDQ503H , C2F_RspOpcodeQ503H,C2F_ReqAddressQ501H ,C2F_RspDataQ503H  );
-    end //if
-end 
-
-always @(posedge clk) begin : F2C_Req
-    if (F2C_ReqValidQ503H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"F2C_Req", C2F_ReqThreadIDQ501H , F2C_ReqOpcodeQ503H, F2C_ReqAddressQ503H ,F2C_ReqDataQ503H  );
-    end //if
-end 
-
-always @(posedge clk) begin : F2C_Rsp
-    if (F2C_RspValidQ501H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"F2C_Rsp", C2F_RspThreadIDQ503H , F2C_RspOpcodeQ501H,F2C_RspAddressQ501H ,F2C_RspDataQ501H  );
-    end //if
-end 
-
-
-
-
-always @(posedge clk) begin : RingReqIn
-    if (RingReqInValidQ501H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"RingReqIn", RingReqInRequestorQ501H , RingReqInOpcodeQ501H,RingReqInAddressQ501H ,RingReqInDataQ501H  );
-    end //if
-end 
-
-always @(posedge clk) begin : RingRspIn
-    if (RingRspInValidQ501H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"RingRspIn", RingRspInRequestorQ501H , RingRspInOpcodeQ501H,RingRspInAddressQ501H ,RingRspInDataQ501H  );
-    end //if
-end 
-
-always @(posedge clk) begin : RingReqOut
-    if (RingReqOutValidQ503H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"RingReqOut", RingReqOutRequestorQ503H , RingReqOutOpcodeQ503H,RingReqOutAddressQ503H ,RingReqOutDataQ503H  );
-    end //if
-end 
-
-always @(posedge clk) begin : RingRspOut
-    if (RingRspOutValidQ503H) begin 
-        $fwrite(trk_rc_transactions,"%t\t| \t%d | %s \t| %4b\t | %d \t| %8h\t| %8h \n",
-        $realtime, 0 ,"RingRspOut", RingRspOutRequestorQ503H , RingRspOutOpcodeQ503H,RingRspOutAddressQ503H ,RingRspOutDataQ503H  );
-    end //if
-end 
 
 always_comb begin
+    if( RingRspInOpcodeQ500H[1] == WR || RingRspInOpcodeQ500H[2] == WR) begin
+        opCode = "WR"; end
+    else if ( RingRspInOpcodeQ500H[1] == RD || RingRspInOpcodeQ500H[2] == RD) begin
+        opCode ="RD"; end
+    else
+        opCode = "NULL";
+
     if(AssertEBREAK) begin
         end_tb(" Finished with EBREAK command");
     end

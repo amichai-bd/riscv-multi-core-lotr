@@ -36,6 +36,7 @@ import lotr_pkg::*;
 logic [7:0]  mem     [SIZE_D_MEM-1:0];
 logic [7:0]  next_mem[SIZE_D_MEM-1:0];
 logic [31:0] pre_q_a;  
+logic [31:0] pre_q_b; 
 
 //=======================================
 //          Writing to memory
