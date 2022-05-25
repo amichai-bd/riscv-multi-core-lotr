@@ -28,6 +28,17 @@ elseif ($args[0] -eq "-G"){
     write-host "     $($args[1]) Test will be simulated with ModelSim GUI"
     write-host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"`n""`n""
 }
+elseif ($args[0] -eq "-nv"){
+    if ($args.Count -gt 2 ) {
+        write-host ""`n"Only one test can be simulated with no verification"`n""
+        Pop-Location
+        exit
+    }
+    $tests += $args[1]
+    write-host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    write-host "     $($args[1]) Test will be simulated with no verification"
+    write-host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"`n""`n""
+}
 Else
 {
     $tests = $args
@@ -58,25 +69,38 @@ for ( $i = 0; $i -lt $tests.count; $i++ ) {
      Else {
         vsim.exe -gui work.lotr_tb   }
      write-host ""`n""`n"."`n"."`n""    
-     write-host "Simulation Ended. Details $Above"`n""`n""   
-    # write-host "Initiate Verification..."`n"."`n"."`n"."
-    # $fileA = "..\verif\Tests\$($tests[$i])\golden_shrd_mem_snapshot.log"
-    # $fileB = "..\target\$($tests[$i])\shrd_mem_snapshot.log"
-    # write-host ""`n""`n""       
-    # if(Compare-Object -ReferenceObject $(Get-Content $fileA) -DifferenceObject $(Get-Content $fileB))
-    # 
-    #    {
-    #     write-host "Verification for test $($tests[$i]) failed : Memory snapshot is different from Gloden Memory Snapshot"
-    #     write-host "Differences: "`n""
-    #     fc.exe $fileA $fileB | select -Skip 1
-    #     #diff (cat $fileA) (cat $fileB)
-    #     $FailedTests+=$tests[$i]
-    #     }
-    # 
-    # Else {
-    #     "Verification Succeeded ! Memory snapshot match Gloden Memory Snapshot"
-    # }        
-    # write-host "."`n"."`n"Verification Ended. Details above"`n""`n""`n""
+     write-host "Simulation Ended. Details $Above"`n""`n""  
+    if ($args[0] -ne "-nv"){     
+         write-host "Initiate Verification..."`n"."`n"."`n"."
+         $fileA = "..\verif\Tests\$($tests[$i])\golden_shrd_mem_1_snapshot.log"
+         $fileB = "..\target\$($tests[$i])\shrd_mem_1_snapshot.log"
+         $fileC = "..\verif\Tests\$($tests[$i])\golden_shrd_mem_2_snapshot.log"
+         $fileD = "..\target\$($tests[$i])\shrd_mem_2_snapshot.log"     
+         write-host ""`n""`n""       
+         if(Compare-Object -ReferenceObject $(Get-Content $fileA) -DifferenceObject $(Get-Content $fileB))
+         
+            {
+             write-host "Verification for test $($tests[$i]) failed : Memory snapshot for core 1 is different from Gloden Memory Snapshot of core 1"
+             write-host "Differences: "`n""
+             fc.exe $fileA $fileB | select -Skip 1
+             #diff (cat $fileA) (cat $fileB)
+             $FailedTests+=$tests[$i]
+             }
+         if(Compare-Object -ReferenceObject $(Get-Content $fileC) -DifferenceObject $(Get-Content $fileD))
+         
+            {
+             write-host "Verification for test $($tests[$i]) failed : Memory snapshot for core 2 is different from Gloden Memory Snapshot of core 2"
+             write-host "Differences: "`n""
+             fc.exe $fileC $fileD | select -Skip 1
+             #diff (cat $fileA) (cat $fileB)
+             $FailedTests+=$tests[$i]
+             }         
+         
+         Else {
+             "Verification Succeeded ! Memory snapshot match Gloden Memory Snapshot for all cores"
+         }        
+         write-host "."`n"."`n"Verification Ended. Details above"`n""`n""`n""
+    }
      write-host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"`n""       
      write-host "Test number $i has ended"`n""  
      write-host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"       
