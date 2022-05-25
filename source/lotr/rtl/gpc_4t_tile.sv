@@ -59,13 +59,13 @@ import lotr_pkg::*;
 // C2F_Rsp
 logic        C2F_RspValidQ502H   ;  
 t_opcode     C2F_RspOpcodeQ502H  ;  
-logic [1:0]  C2F_RspThreadIDQ502H;  
+logic [9:0]  C2F_RspThreadIDQ502H;  
 logic [31:0] C2F_RspDataQ502H    ;
 logic        C2F_RspStall        ;
 // C2F_Req
 logic        C2F_ReqValidQ500H   ;
 t_opcode     C2F_ReqOpcodeQ500H  ;
-logic [1:0]  C2F_ReqThreadIDQ500H;
+logic [9:0]  C2F_ReqThreadIDQ500H;
 logic [31:0] C2F_ReqAddressQ500H ;
 logic [31:0] C2F_ReqDataQ500H    ;
 //Fabric To Core(F2C) logic
@@ -80,7 +80,8 @@ logic [31:0] F2C_RspDataQ500H    ;
 
 
 
-
+assign C2F_ReqThreadIDQ500H[9:2] = CoreID;
+assign C2F_RspThreadIDQ502H[9:2] = CoreID;
 rc rc(	  
     //================================================
     //        General Interface
@@ -121,13 +122,13 @@ rc rc(
     // input - Req from Core
     .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)      ,//input
     .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)     ,//input
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H)   ,//input
+    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0])   ,//input
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//input
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//input
     // output - Rsp to Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//output
     .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)     ,//output
-    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H)   ,//output
+    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H[1:0])   ,//output
     .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//output
     .C2F_RspStall           (C2F_RspStall)           ,//output
     // input - Rsp from Local Memory -> to Ring/Fabric
@@ -155,13 +156,13 @@ gpc_4t gpc_4t(
     // input - Rsp to Core
     .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//input
     .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)     ,//input
-    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H)   ,//input
+    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H[1:0])   ,//input
     .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//input
     .C2F_RspStall           (C2F_RspStall)           ,//input
     // output - Req from Core
     .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)      ,//output
     .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)     ,//output
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H)   ,//output
+    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0])   ,//output
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//output
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//output
     //================================================
