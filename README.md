@@ -58,28 +58,26 @@ Using Modelsim - https://fpgasoftware.intel.com/
 - Core - GPC_4T - RTL Design:   
 HAS (High-Level-Architecture-Specification):     
 RISCV Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf   
-HW Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-CORE-GPC_4T  
+HW Spec - <TODO>  
 MAS (Micro-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-CORE-GPC_4T  
+<TODO>  
 
 - Ring Controler - RC - RTL Deisgn:     
 HAS (High-Level-Architecture-Specification):      
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-RING_CTRL-RC  
+<TODO>  
 MAS (Micro-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/MAS-RING_CTRL-RC  
+<TODO>  
 
 - Fabric - LOTR - (Integration Model) - RTL Deisgn:     
 HAS (High-Level-Architecture-Specification):  
-https://github.com/amichai-bd/riscv-multi-core-lotr/wiki/HAS-FABRIC-LOTR  
+<TODO>  
 MAS (Micro-Level-Architecture-Specification):  
-TODO
+<TODO>  
 
-- SW Stack: TODO  
+- SW Stack: 
+  <TODO>  
 
-- Validation: TODO
+- Validation:  
+<TODO>  
 
-
-
-FIXME
-
-# 
+ 
