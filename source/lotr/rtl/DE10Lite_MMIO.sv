@@ -53,7 +53,7 @@ import lotr_pkg::*;
     output logic [6:0] SEG7_3,
     output logic [6:0] SEG7_4,
     output logic [6:0] SEG7_5,
-    output logic [6:0] LED
+    output logic [9:0] LED
 );
 
 // Memory CR objects (behavrial - not for FPGA/ASIC)
@@ -101,7 +101,7 @@ always_comb begin
             CR_SEG7_3 : cr_rw_next.SEG7_3 = F2C_ReqDataQ503H[6:0];
             CR_SEG7_4 : cr_rw_next.SEG7_4 = F2C_ReqDataQ503H[6:0];
             CR_SEG7_5 : cr_rw_next.SEG7_5 = F2C_ReqDataQ503H[6:0];
-            CR_LED    : cr_rw_next.LED    = F2C_ReqDataQ503H[6:0];
+            CR_LED    : cr_rw_next.LED    = F2C_ReqDataQ503H[9:0];
             // ---- Other ----
             default   : /* Do nothing */;
         endcase

@@ -21,9 +21,26 @@ import lotr_pkg::*;
 (
     //General Interface
     input   logic        QClk    ,
-    input   logic        RstQnnnH 
-);
+    // input   logic        RstQnnnH,
+    //==============================
+    // LOTR <-> FPGA TOP
+    //==============================
+    // LOTR ---> Top
+    input logic Button_0                            ,
+    input logic Button_1                            ,
+    input logic [9:0] Switch                        ,
 
+    // Top ----> LOTR
+    output logic [6:0] SEG7_0                       ,
+    output logic [6:0] SEG7_1                       ,
+    output logic [6:0] SEG7_2                       ,
+    output logic [6:0] SEG7_3                       ,
+    output logic [6:0] SEG7_4                       ,
+    output logic [6:0] SEG7_5                       ,
+    output logic [9:0] LED 
+);
+logic RstQnnnH;
+assign RstQnnnH = Button_0;
 //=========================================
 //=====    ===========
 //=========================================
@@ -193,7 +210,23 @@ fpga_tile fpga_tile
     .RingRspOutRequestorQ502H   (RingRspRequestorQnnnH[4]),//output
     .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [4]),//output
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [4]),//output
-    .RingRspOutDataQ502H        (RingRspDataQnnnH     [4]) //output
+    .RingRspOutDataQ502H        (RingRspDataQnnnH     [4]), //output
+        //==============================
+    // Tile <-> FPGA TOP
+    //==============================
+    // FPGA interface inputs
+    .Button_0    (1'b0),
+    .Button_1    (1'b0),
+    .Switch      (10'b0),
+
+    //utputs
+    .SEG7_0  (SEG7_0),
+    .SEG7_1  (SEG7_1),
+    .SEG7_2  (SEG7_2),
+    .SEG7_3  (SEG7_3),
+    .SEG7_4  (SEG7_4),
+    .SEG7_5  (SEG7_5),
+    .LED     (LED)
 );
 
 
