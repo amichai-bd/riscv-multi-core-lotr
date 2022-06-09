@@ -48,10 +48,11 @@ assign F2C_WrEnQ503H     = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && F2
 
 `LOTR_MSFF(F2C_RspIMemValidQ504H, F2C_RdEnQ503H, QClk)
 `ifdef DE10_LITE
-d_mem_4k d_mem ( //FIXME - point to altera Memory
-i_mem      
+i_mem_4k i_mem ( //FIXME - point to altera Memory
+`else
+i_mem    i_mem  (
 `endif
-    i_mem(
+   
     .clock    (QClk),
     //Core interface (instruction fitch)
     .address_a  (PcQ100H[MSB_I_MEM:2]),
