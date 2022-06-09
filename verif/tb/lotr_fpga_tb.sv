@@ -5,6 +5,16 @@ module lotr_fpga_tb ();
 import lotr_pkg::*;
 	logic         clk      ;
 	logic         RstQnnnH  ;
+    logic Button_0      ;     
+    logic Button_1     ;
+    logic [9:0] Switch ;
+    logic [6:0] SEG7_0;
+    logic [6:0] SEG7_1;
+    logic [6:0] SEG7_2;
+    logic [6:0] SEG7_3;
+    logic [6:0] SEG7_4;
+    logic [6:0] SEG7_5;
+    logic [9:0] LED ;
 	// clock generation
 	initial begin: clock_gen
 		forever begin
@@ -68,7 +78,20 @@ end: test_seq
 lotr lotr(
     //general signals input
     .QClk  		(clk),   //input
-    .RstQnnnH  	(RstQnnnH)
+    // .RstQnnnH  	(RstQnnnH),
+    // FPGA interface inputs
+    .Button_0    (RstQnnnH),
+    .Button_1    (1'b0),
+    .Switch      (10'b0),
+
+    //utputs
+    .SEG7_0  (SEG7_0),
+    .SEG7_1  (SEG7_1),
+    .SEG7_2  (SEG7_2),
+    .SEG7_3  (SEG7_3),
+    .SEG7_4  (SEG7_4),
+    .SEG7_5  (SEG7_5),
+    .LED     (LED)
     );
 
 //================================================================================

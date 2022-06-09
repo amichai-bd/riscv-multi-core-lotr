@@ -49,7 +49,24 @@ import lotr_pkg::*;
     output  logic  [9:0]  RingRspOutRequestorQ502H ,    
     output  t_opcode      RingRspOutOpcodeQ502H    ,
     output  logic  [31:0] RingRspOutAddressQ502H   ,
-    output  logic  [31:0] RingRspOutDataQ502H 
+    output  logic  [31:0] RingRspOutDataQ502H      ,
+
+    //==============================
+    // Tile <-> FPGA TOP
+    //==============================
+    // Tile ---> Top
+    input logic Button_0                            ,
+    input logic Button_1                            ,
+    input logic [9:0] Switch                        ,
+
+    // Top ----> Tile
+    output logic [6:0] SEG7_0                       ,
+    output logic [6:0] SEG7_1                       ,
+    output logic [6:0] SEG7_2                       ,
+    output logic [6:0] SEG7_3                       ,
+    output logic [6:0] SEG7_4                       ,
+    output logic [6:0] SEG7_5                       ,
+    output logic [9:0] LED
 );
 
 //================================================
@@ -77,13 +94,7 @@ logic        F2C_RspValidQ500H   ;
 t_opcode     F2C_RspOpcodeQ500H  ;
 logic [31:0] F2C_RspAddressQ500H ;
 logic [31:0] F2C_RspDataQ500H    ;
-logic [6:0] SEG7_0;
-logic [6:0] SEG7_1;
-logic [6:0] SEG7_2;
-logic [6:0] SEG7_3;
-logic [6:0] SEG7_4;
-logic [6:0] SEG7_5;
-logic [6:0] LED;
+
 
 
 assign C2F_ReqThreadIDQ500H[9:2] = CoreID;
@@ -156,21 +167,6 @@ DE10Lite_MMIO DE10Lite_MMIO(
     .CLK_50                   (QClk)                   ,//input
     .RstQnnnH               (RstQnnnH)               ,//input
     .CoreID                 (CoreID)                 ,//input
-    // //================================================
-    // //        Core to Fabric
-    // //================================================
-    // // input - Rsp to Core
-    // .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//input
-    // .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)     ,//input
-    // .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H[1:0])   ,//input
-    // .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//input
-    // .C2F_RspStall           (C2F_RspStall)           ,//input
-    // // output - Req from Core
-    // .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)      ,//output
-    // .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)     ,//output
-    // .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0])   ,//output
-    // .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//output
-    // .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//output
     //================================================
     //        Fabric to Core
     //================================================
@@ -185,9 +181,9 @@ DE10Lite_MMIO DE10Lite_MMIO(
     .F2C_RspAddressQ500H    (F2C_RspAddressQ500H)    ,//output
     .F2C_RspDataQ500H       (F2C_RspDataQ500H),        //output
     // FPGA interface inputs
-    .Button_0    (0),
-    .Button_1    (0),
-    .Switch      (10'b0),
+    .Button_0    (Button_0),
+    .Button_1    (Button_1),
+    .Switch      (Switch),
 
     //utputs
     .SEG7_0  (SEG7_0),
