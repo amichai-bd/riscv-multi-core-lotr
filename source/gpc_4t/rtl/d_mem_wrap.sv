@@ -234,7 +234,7 @@ d_mem d_mem (
     //============================================
     //      core interface
     //============================================
-    .address_a  (AddressQ103H[MSB_D_MEM:0]),
+    .address_a  (AddressQ103H[MSB_D_MEM:2]),
     .byteena_a  (ByteEnQ103H),
     .data_a     (WrDataQ103H),
     .rden_a     (RdEnMatchQ103H),
@@ -243,7 +243,7 @@ d_mem d_mem (
     //============================================
     //      Ring interface
     //============================================
-    .address_b  (F2C_ReqAddressQ503H[MSB_D_MEM:0]),
+    .address_b  (F2C_ReqAddressQ503H[MSB_D_MEM:2]),
     .byteena_b  (4'b1111),
     .data_b     (F2C_ReqDataQ503H),
     .rden_b     (F2C_RdEnQ503H),
