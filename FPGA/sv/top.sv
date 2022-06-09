@@ -1,6 +1,6 @@
 module top(
         input  logic        CLK_50,
-        input  logic [3:0]  SW,
+        input  logic [9:0]  SW,
         input  logic [1:0]  BUTTON,
 
         output logic [6:0]  HEX0,
@@ -22,17 +22,23 @@ module top(
 lotr lotr(
     //general signals input
     .QClk  	(CLK_50),   //input
-    .RstQnnnH  	(BUTTON[0])
+    //.RstQnnnH  	(BUTTON[0])
+    .Button_0    (BUTTON[0]),
+    .Button_1    (BUTTON[1]),
+    .Switch      (SW),
+
+    //utputs
+    .SEG7_0  (HEX0),
+    .SEG7_1  (HEX1),
+    .SEG7_2  (HEX2),
+    .SEG7_3  (HEX3),
+    .SEG7_4  (HEX4),
+    .SEG7_5  (HEX5),
+    .LED     (LED)
+    
     );
 	 
 	  
-	assign HEX0 = '0;
-        assign HEX1 = '0;
-        assign HEX2 = '0;
-        assign HEX3 = '0;
-        assign HEX4 = '0;
-        assign HEX5 = '0;
-        assign LED  = '0;
 
         assign RED      = '0;
         assign GREEN    = '0;
