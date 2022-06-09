@@ -66,11 +66,11 @@ module c2f
 logic   [C2F_MSB:0][9:0]  C2F_BufferRequestorQnnnH ;
 logic   [C2F_MSB:0][31:0] C2F_BufferAddressQnnnH   ;
 logic   [C2F_MSB:0][31:0] C2F_BufferDataQnnnH      ;
-t_state [C2F_MSB:0]       C2F_BufferStateQnnnH     ;
+t_state                   C2F_BufferStateQnnnH [C2F_MSB:0]  ;
 logic   [C2F_MSB:0][9:0]  C2F_NextBufferRequestorQnnnH ;
 logic   [C2F_MSB:0][31:0] C2F_NextBufferAddressQnnnH   ;
 logic   [C2F_MSB:0][31:0] C2F_NextBufferDataQnnnH      ;
-t_state [C2F_MSB:0]       C2F_NextBufferStateQnnnH     ;
+t_state                   C2F_NextBufferStateQnnnH [C2F_MSB:0]   ;
 //=========================================
 //=====    Control Bits Signals   =========
 //=========================================

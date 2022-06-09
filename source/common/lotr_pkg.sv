@@ -43,10 +43,10 @@ typedef enum logic [2:0] {
 // t_winner  : which signal to drive to the ring output - NOP=0 , RingInput=1 ,F2CResponse=2 , C2FRequest=3
 //=========================================
 typedef enum logic [1:0] {
-    BUBBLE_OUT         = 0 ,
-    RING_INPUT         = 1 ,
-    F2C_RESPONSE       = 2 ,
-    C2F_REQUEST        = 3 
+    BUBBLE_OUT         = 2'd0 ,
+    RING_INPUT         = 2'd1 ,
+    F2C_RESPONSE       = 2'd2 ,
+    C2F_REQUEST        = 2'd3 
     } t_winner ;
 //=========================================
 //=========    Parameters    ==============

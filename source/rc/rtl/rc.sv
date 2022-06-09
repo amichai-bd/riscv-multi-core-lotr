@@ -261,11 +261,11 @@ always_comb begin : ventilation_rsp_counter_asserting
 end //always_comb
 
 `LOTR_EN_RST_MSFF(VentilationCounterRspQnnnH , NextVentilationCounterRspQnnnH , QClk, EnVentilationRspQnnnH, (RstVentilationRspQnnnH || RstQnnnH))
-
+logic MustFwdOutQ501H;
 assign CoreIDMatchRspQ501H = (RingRspInRequestorQ501H[9:2] == CoreID) ; 
 assign MustFwdOutQ501H     = (RingRspInValidQ501H && !CoreIDMatchRspQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
 
-logic  NeedToventilateQnnnH;
+logic  NeedToVentilateQnnnH;
 assign NeedToVentilateQnnnH = (VentilationCounterRspQnnnH ==  2'b11);
 always_comb begin : set_the_select_next_ring_output_logic_from_F2C
     unique casez ({MustFwdOutQ501H, NeedToVentilateQnnnH, F2C_RspValidQ501H})
@@ -328,7 +328,7 @@ end //always_comb
 assign CoreIDMatchReqQ501H = (RingReqInAddressQ501H[31:24] == CoreID) ; 
 assign MustFwdOutReqQ501H     = (RingReqInValidQ501H && !CoreIDMatchReqQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
 
-logic  NeedToventilateReqQnnnH;
+logic  NeedToVentilateReqQnnnH;
 assign NeedToVentilateReqQnnnH = (VentilationCounterReqQnnnH ==  2'b11);
     
     

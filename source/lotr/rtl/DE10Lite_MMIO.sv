@@ -77,10 +77,10 @@ logic CtrlCRMemRdEnQ504;
 logic CtrlCRMemWrEnQ504;
 
 //Sample input 502 -> 503
-`LOTR_MSFF(F2C_ReqValidQ503H   , F2C_ReqValidQ502H   , CLK_50);
-`LOTR_MSFF(F2C_ReqOpcodeQ503H  , F2C_ReqOpcodeQ502H  , CLK_50);
-`LOTR_MSFF(F2C_ReqAddressQ503H , F2C_ReqAddressQ502H , CLK_50);
-`LOTR_MSFF(F2C_ReqDataQ503H    , F2C_ReqDataQ502H    , CLK_50);
+`LOTR_MSFF(F2C_ReqValidQ503H   , F2C_ReqValidQ502H   , CLK_50)
+`LOTR_MSFF(F2C_ReqOpcodeQ503H  , F2C_ReqOpcodeQ502H  , CLK_50)
+`LOTR_MSFF(F2C_ReqAddressQ503H , F2C_ReqAddressQ502H , CLK_50)
+`LOTR_MSFF(F2C_ReqDataQ503H    , F2C_ReqDataQ502H    , CLK_50)
 
 assign CtrlCRMemRdEnQ503 = F2C_ReqValidQ503H && F2C_ReqOpcodeQ503H == RD;
 assign CtrlCRMemWrEnQ503 = F2C_ReqValidQ503H && F2C_ReqOpcodeQ503H == WR;
@@ -116,6 +116,7 @@ end
 
 // This is the load
 always_comb begin
+		F2C_RspDataQ503H = '0;
     if(CtrlCRMemRdEnQ503) begin
         unique casez (F2C_ReqAddressQ503H[19:0]) // AluOut holds the offset
             // ---- RW memory ----
@@ -145,16 +146,16 @@ assign      F2C_RspOpcodeQ504H  = RD_RSP;
 
 // Sample the data load - synchorus load
 `LOTR_MSFF( F2C_RspAddressQ504H,  F2C_ReqAddressQ503H, CLK_50)
-`LOTR_MSFF(F2C_RspDataQ504H, F2C_RspDataQ503H, CLK_50);
-`LOTR_MSFF(CtrlCRMemRdEnQ504, CtrlCRMemRdEnQ503, CLK_50);
-`LOTR_MSFF(CtrlCRMemWrEnQ504, CtrlCRMemWrEnQ503, CLK_50);
+`LOTR_MSFF(F2C_RspDataQ504H, F2C_RspDataQ503H, CLK_50)
+`LOTR_MSFF(CtrlCRMemRdEnQ504, CtrlCRMemRdEnQ503, CLK_50)
+`LOTR_MSFF(CtrlCRMemWrEnQ504, CtrlCRMemWrEnQ503, CLK_50)
 
 assign F2C_RspValidQ504H = CtrlCRMemRdEnQ504 || CtrlCRMemWrEnQ504;
 
 `LOTR_MSFF(F2C_RspValidQ500H   , F2C_RspValidQ504H   , CLK_50)
 `LOTR_MSFF(F2C_RspOpcodeQ500H  , F2C_RspOpcodeQ504H  , CLK_50)
 `LOTR_MSFF(F2C_RspAddressQ500H , F2C_RspAddressQ504H , CLK_50)
-`LOTR_MSFF(F2C_RspDataQ500H, F2C_RspDataQ504H, CLK_50);
+`LOTR_MSFF(F2C_RspDataQ500H, F2C_RspDataQ504H, CLK_50)
 
 
 

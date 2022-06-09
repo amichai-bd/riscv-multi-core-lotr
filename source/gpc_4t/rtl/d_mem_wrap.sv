@@ -136,32 +136,32 @@ assign T1C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b
 assign T2C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b10);
 assign T3C2FReq = (C2F_ReqValidQ500H && RdEnQ103H && C2F_ReqThreadIDQ500H == 2'b11);
 
-`LOTR_EN_RST_MSFF (T0RcAccess , T0C2FReq , QClk ,T0C2FReq ,  ( RstQnnnH || RstT0RcAccess ));
-`LOTR_EN_RST_MSFF (T1RcAccess , T1C2FReq , QClk ,T1C2FReq ,  ( RstQnnnH || RstT1RcAccess ));
-`LOTR_EN_RST_MSFF (T2RcAccess , T2C2FReq , QClk ,T2C2FReq ,  ( RstQnnnH || RstT2RcAccess ));
-`LOTR_EN_RST_MSFF (T3RcAccess , T3C2FReq , QClk ,T3C2FReq ,  ( RstQnnnH || RstT3RcAccess ));
+`LOTR_EN_RST_MSFF (T0RcAccess , T0C2FReq , QClk ,T0C2FReq ,  ( RstQnnnH || RstT0RcAccess ))
+`LOTR_EN_RST_MSFF (T1RcAccess , T1C2FReq , QClk ,T1C2FReq ,  ( RstQnnnH || RstT1RcAccess ))
+`LOTR_EN_RST_MSFF (T2RcAccess , T2C2FReq , QClk ,T2C2FReq ,  ( RstQnnnH || RstT2RcAccess ))
+`LOTR_EN_RST_MSFF (T3RcAccess , T3C2FReq , QClk ,T3C2FReq ,  ( RstQnnnH || RstT3RcAccess ))
 
 assign T0C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b00);
 assign T1C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b01);
 assign T2C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b10);
 assign T3C2FRes = (C2F_RspValidQ502H && C2F_RspThreadIDQ502H == 2'b11);
 
-`LOTR_EN_RST_MSFF (T0Data , C2F_RspDataQ502H , QClk ,T0C2FRes , RstQnnnH);
-`LOTR_EN_RST_MSFF (T1Data , C2F_RspDataQ502H , QClk ,T1C2FRes , RstQnnnH);
-`LOTR_EN_RST_MSFF (T2Data , C2F_RspDataQ502H , QClk ,T2C2FRes , RstQnnnH);
-`LOTR_EN_RST_MSFF (T3Data , C2F_RspDataQ502H , QClk ,T3C2FRes , RstQnnnH);
+`LOTR_EN_RST_MSFF (T0Data , C2F_RspDataQ502H , QClk ,T0C2FRes , RstQnnnH)
+`LOTR_EN_RST_MSFF (T1Data , C2F_RspDataQ502H , QClk ,T1C2FRes , RstQnnnH)
+`LOTR_EN_RST_MSFF (T2Data , C2F_RspDataQ502H , QClk ,T2C2FRes , RstQnnnH)
+`LOTR_EN_RST_MSFF (T3Data , C2F_RspDataQ502H , QClk ,T3C2FRes , RstQnnnH)
 
 assign C2F_RspDataQ503H =      (ThreadQ103H == 4'b0001) ? T0Data :
                                (ThreadQ103H == 4'b0010) ? T1Data :
                                (ThreadQ103H == 4'b0100) ? T2Data :
                                                           T3Data ;
-`LOTR_RST_MSFF (C2F_RspDataQ504H , C2F_RspDataQ503H , QClk , RstQnnnH);
+`LOTR_RST_MSFF (C2F_RspDataQ504H , C2F_RspDataQ503H , QClk , RstQnnnH)
 
 
-`LOTR_EN_RST_MSFF (T0C2F_Match ,  1'b1 , QClk ,T0C2FRes , RstQnnnH||(ThreadQ103H == 4'b0001));
-`LOTR_EN_RST_MSFF (T1C2F_Match ,  1'b1 , QClk ,T1C2FRes , RstQnnnH||(ThreadQ103H == 4'b0010));
-`LOTR_EN_RST_MSFF (T2C2F_Match ,  1'b1 , QClk ,T2C2FRes , RstQnnnH||(ThreadQ103H == 4'b0100));
-`LOTR_EN_RST_MSFF (T3C2F_Match ,  1'b1 , QClk ,T3C2FRes , RstQnnnH||(ThreadQ103H == 4'b1000));
+`LOTR_EN_RST_MSFF (T0C2F_Match ,  1'b1 , QClk ,T0C2FRes , RstQnnnH||(ThreadQ103H == 4'b0001))
+`LOTR_EN_RST_MSFF (T1C2F_Match ,  1'b1 , QClk ,T1C2FRes , RstQnnnH||(ThreadQ103H == 4'b0010))
+`LOTR_EN_RST_MSFF (T2C2F_Match ,  1'b1 , QClk ,T2C2FRes , RstQnnnH||(ThreadQ103H == 4'b0100))
+`LOTR_EN_RST_MSFF (T3C2F_Match ,  1'b1 , QClk ,T3C2FRes , RstQnnnH||(ThreadQ103H == 4'b1000))
 
 assign C2F_Match_Q103H = (T0C2F_Match && ThreadQ103H[0])  ||
                          (T1C2F_Match && ThreadQ103H[1])  ||
@@ -173,7 +173,7 @@ assign RstT1RcAccess   = (C2F_Match_Q103H && ThreadQ103H[1]);
 assign RstT2RcAccess   = (C2F_Match_Q103H && ThreadQ103H[2]);
 assign RstT3RcAccess   = (C2F_Match_Q103H && ThreadQ103H[3]);
 
-`LOTR_RST_MSFF (C2F_RspMatchQ104H , C2F_Match_Q103H , QClk , RstQnnnH); 
+`LOTR_RST_MSFF (C2F_RspMatchQ104H , C2F_Match_Q103H , QClk , RstQnnnH) 
 
                   
                        
