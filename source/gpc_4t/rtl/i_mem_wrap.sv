@@ -47,11 +47,8 @@ assign F2C_RdEnQ503H     = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == RD) && F2
 assign F2C_WrEnQ503H     = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && F2C_I_MemHitQ503H;
 
 `LOTR_MSFF(F2C_RspIMemValidQ504H, F2C_RdEnQ503H, QClk)
-`ifdef FPGA 
-quartus_32_512_da_en
-`elif ASIC
-tsmc_32_512_da_en
-`else
+`ifdef DE10_LITE
+d_mem_4k d_mem ( //FIXME - point to altera Memory
 i_mem      
 `endif
     i_mem(
