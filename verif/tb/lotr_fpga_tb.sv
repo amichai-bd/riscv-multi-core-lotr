@@ -80,7 +80,7 @@ lotr lotr(
     .QClk  		(clk),   //input
     // .RstQnnnH  	(RstQnnnH),
     // FPGA interface inputs
-    .Button_0    (RstQnnnH),
+    .Button_0    (~RstQnnnH),
     .Button_1    (1'b0),
     .Switch      (10'b0),
 

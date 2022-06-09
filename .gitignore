@@ -11,3 +11,4 @@ target/*
 transcript
 !modelsim/README*
 !target/README*
+!FPGA/output_files/*.sof

@@ -18,10 +18,14 @@ module top(
         output logic        v_sync
     );
 	 
-
+logic CLK_5;
+	pll_5Mhz pll_5Mhz (
+	.inclk0 ( CLK_50),
+	.c0		(CLK_5));
+	 
 lotr lotr(
     //general signals input
-    .QClk  	(CLK_50),   //input
+    .QClk  	(CLK_5),   //input
     //.RstQnnnH  	(BUTTON[0])
     .Button_0    (BUTTON[0]),
     .Button_1    (BUTTON[1]),
