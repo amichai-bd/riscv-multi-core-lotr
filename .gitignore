@@ -1,4 +1,8 @@
 running_dir/*
+FPGA/db/.cmp.kpt
+FPGA/db/*
+FPGA/incremental_db/*
+FPGA/output_files/*
 # modelsim generated files
 *.swp
 modelsim/work/*
