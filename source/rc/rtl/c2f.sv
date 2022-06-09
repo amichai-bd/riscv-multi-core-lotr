@@ -187,7 +187,7 @@ always_comb begin : next_c2f_buffer_per_buffer_entry
                 end //if 
             //Slot is READ_RDY
             READ_RDY :
-                if (C2F_DecodedSel2RingQ501H[i]) begin
+                if (C2F_DecodedSel2CoreQ502H[i]) begin
                     C2F_NextBufferStateQnnnH[i] = FREE ;
                 end //if                         
             //Slot is WRITE BCAST PRGRS

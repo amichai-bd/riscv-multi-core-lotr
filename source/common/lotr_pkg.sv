@@ -272,7 +272,32 @@ typedef struct packed {
     logic scratch_pad_3;
 } t_cr_en;
 
+parameter CR_SEG7_0    = 20'h2000 ; // RW 7 bit
+parameter CR_SEG7_1    = 20'h2004 ; // RW 7 bit
+parameter CR_SEG7_2    = 20'h2008 ; // RW 7 bit
+parameter CR_SEG7_3    = 20'h200c ; // RW 7 bit
+parameter CR_SEG7_4    = 20'h2010 ; // RW 7 bit
+parameter CR_SEG7_5    = 20'h2014 ; // RW 7 bit
+parameter CR_LED       = 20'h2018 ; // RW 7 bit
+parameter CR_Button_0  = 20'h201c ; // RO 1 bit
+parameter CR_Button_1  = 20'h2020 ; // RO 1 bit
+parameter CR_Switch    = 20'h2024 ; // RO 10 bit
 
+typedef struct packed { // RO
+    logic       Button_0;
+    logic       Button_1;
+    logic [9:0] Switch;
+} t_cr_ro_fpga ;
+
+typedef struct packed { // RW
+    logic [6:0] SEG7_0;
+    logic [6:0] SEG7_1;
+    logic [6:0] SEG7_2;
+    logic [6:0] SEG7_3;
+    logic [6:0] SEG7_4;
+    logic [6:0] SEG7_5;
+    logic [6:0] LED;
+} t_cr_rw_fpga ;
 
 endpackage // lotr_pkg
 

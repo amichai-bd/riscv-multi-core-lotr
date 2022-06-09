@@ -325,7 +325,7 @@ end //always_comb
 
     `LOTR_EN_RST_MSFF(VentilationCounterReqQnnnH , NextVentilationCounterReqQnnnH , QClk, EnVentilationReqQnnnH, (RstVentilationReqQnnnH || RstQnnnH))
 
-assign CoreIDMatchReqQ501H = (RingReqInRequestorQ501H[9:2] == CoreID) ; 
+assign CoreIDMatchReqQ501H = (RingReqInAddressQ501H[31:24] == CoreID) ; 
 assign MustFwdOutReqQ501H     = (RingReqInValidQ501H && !CoreIDMatchReqQ501H) ; // need to consider about check if we are the initiators of this BC not implemented due to lack of C2F
 
 logic  NeedToventilateReqQnnnH;

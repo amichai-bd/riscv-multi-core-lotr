@@ -27,7 +27,7 @@ import lotr_pkg::*;
 //=========================================
 //=====    ===========
 //=========================================
-localparam    NUM_TILE = 2;
+localparam    NUM_TILE = 3;
 logic  [7:0]  CoreID               [NUM_TILE + 1 : 1];
 logic         RingReqValidQnnnH    [NUM_TILE + 1 : 1];
 logic  [9:0]  RingReqRequestorQnnnH[NUM_TILE + 1 : 1];
@@ -159,6 +159,41 @@ gpc_4t_tile gpc_4t_tile_2
     .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [3]),//output
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [3]),//output
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [3]) //output
+);
+
+fpga_tile fpga_tile
+(
+    //General Interface
+    .QClk       (QClk)         , //input  logic        
+    .RstQnnnH   (RstQnnnH)     , //input  logic        
+    .CoreID     (8'd3) , //input  logic  [7:0] 
+    //================================================
+    //        RING Interface
+    //================================================
+    //Ring ---> RC , RingReqIn
+    .RingReqInValidQ500H        (RingReqValidQnnnH     [3])  ,//input
+    .RingReqInRequestorQ500H    (RingReqRequestorQnnnH [3])  ,//input
+    .RingReqInOpcodeQ500H       (RingReqOpcodeQnnnH    [3])  ,//input
+    .RingReqInAddressQ500H      (RingReqAddressQnnnH   [3])  ,//input
+    .RingReqInDataQ500H         (RingReqDataQnnnH      [3])  ,//input
+    //Ring ---> RC , RingRspIn                          3
+    .RingRspInValidQ500H        (RingRspValidQnnnH     [3])  ,//input
+    .RingRspInRequestorQ500H    (RingRspRequestorQnnnH [3])  ,//input
+    .RingRspInOpcodeQ500H       (RingRspOpcodeQnnnH    [3])  ,//input
+    .RingRspInAddressQ500H      (RingRspAddressQnnnH   [3])  ,//input
+    .RingRspInDataQ500H         (RingRspDataQnnnH      [3])  ,//input
+    //RC   ---> Ring , RingReqOut
+    .RingReqOutValidQ502H       (RingReqValidQnnnH    [4]),//output
+    .RingReqOutRequestorQ502H   (RingReqRequestorQnnnH[4]),//output
+    .RingReqOutOpcodeQ502H      (RingReqOpcodeQnnnH   [4]),//output
+    .RingReqOutAddressQ502H     (RingReqAddressQnnnH  [4]),//output
+    .RingReqOutDataQ502H        (RingReqDataQnnnH     [4]),//output
+     //RC   ---> Ring , RingRspOut                     4
+    .RingRspOutValidQ502H       (RingRspValidQnnnH    [4]),//output
+    .RingRspOutRequestorQ502H   (RingRspRequestorQnnnH[4]),//output
+    .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [4]),//output
+    .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [4]),//output
+    .RingRspOutDataQ502H        (RingRspDataQnnnH     [4]) //output
 );
 
 

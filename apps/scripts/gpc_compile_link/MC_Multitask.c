@@ -1,4 +1,5 @@
-/*McBubble.c
+/*MC_Multitask.c
+This test check some limiths of the LOTR
 thread 0 from core 1 sorting array located on thread 0 core 2.
 thread 1 from core 1 loading an array to be sorted to core 1 shared memory
 thread 2 from core 1 loading 2 matrices to be multiple to core 1 shared memory
@@ -30,9 +31,16 @@ Created : 15/05/2025
 #define SCRATCHPAD3_CORE    ((volatile int *) (0x00400C00))
 
 #define SHARED_SPACE ((volatile int *) (0x00400f00))
-#define CR_THREAD  ((volatile int *) (0x00C00004))
-#define CR_THREAD_PC_EN  ((volatile int *)  (0x00C00150))
-#define CR_CORE_ID ((volatile int *) (0x00C00008))
+#define CR_ID10_PC_EN  ((volatile int *)  (0x01C00150))
+#define CR_ID11_PC_EN  ((volatile int *)  (0x01C00154))
+#define CR_ID12_PC_EN  ((volatile int *)  (0x01C00158))
+#define CR_ID13_PC_EN  ((volatile int *)  (0x01C0015c))
+
+#define CR_ID20_PC_EN  ((volatile int *)  (0x02C00150))
+#define CR_ID21_PC_EN  ((volatile int *)  (0x02C00154))
+#define CR_ID22_PC_EN  ((volatile int *)  (0x02C00158))
+#define CR_ID23_PC_EN  ((volatile int *)  (0x02C0015c))
+
 #define CR_WHO_AM_I ((volatile int *) (0x00C00000))
 
 
@@ -61,23 +69,14 @@ void bubbleSort(volatile int arr[], int n)
 void multiply(volatile int a[],volatile int b[],volatile int res[]) 
 {
     int i,j,k,sum,sum1,sum2;
-    res[0]=15;
+            res[0] = 0xff;
+            res[0] = 0xfe;
     for (i = 0; i < 4; i++) {
-        res[0]=14;
         for (j = 0; j < 4; j++) {
-            res[0]=13;
             sum = 0;
             for (k = 0; k < 4; k++){
-                res[0]=12;
-                sum1 = a[i * 4 + k];
-                res[1] = sum1;
-                sum2 = b[k * 4 + j];
-                res[2]=sum2;
-                sum = sum + sum1 + sum2;
-                //sum = sum + a[i * 4 + k] * b[k * 4 + j];
-                res[0] = 11;
+                sum = sum + a[i * 4 + k] * b[k * 4 + j];
             }
-            res[0] = 10;
             res[i * 4 + j] = sum;
         }
     }
@@ -91,9 +90,11 @@ int main() {
     int counter = 0 ;
     switch (UniqeId) //the CR Address
     {
+        //core 1 threads:
+
         case 0x4 : // parameterize 
         {
-            while(counter++ < 50){};
+            CR_ID10_PC_EN[0] = 0;   //freeze itself and wating for core 2 to finish loading array
             volatile int* arr = SCRATCHPAD0_CORE_2;
             bubbleSort(arr, 8);
             while(1);
@@ -109,6 +110,7 @@ int main() {
             for(j = 0 ; j < 8 ; j++){
                 SCRATCHPAD0_CORE[j] = arr[j];   
             }           
+            CR_ID21_PC_EN[0] = 1;   // signals core 1 to start sorting
             while(1); 
         }
         
@@ -117,12 +119,13 @@ int main() {
         case 0x6 :
         {
             int j,k,l=0;
-            int mat1[16] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};              
+            int mat1[16] = {1,2,3,4,5,6,7,8,9,10,11,12,20,14,15,16};              
             int mat2[16] = {13,14,15,16,9,10,11,12,5,6,7,8,1,2,3,4};
             for(j = 0 ; j < 16 ; j++){
                     SCRATCHPAD1_CORE[j] = mat1[j];
                     SCRATCHPAD2_CORE[j] = mat2[j];
             }
+            CR_ID22_PC_EN[0] = 1;   // signals core 2 to start multipling           
             while(1); 
         }
         break;
@@ -131,20 +134,22 @@ int main() {
             while(1); 
         break;
         
+        //Core 2 threads
         case 0x8 : 
         {
             int j;
             int arr[8] = {6,1,0,3,5,9,50,2};
             for(j = 0 ; j < 8 ; j++){
                 SCRATCHPAD0_CORE[j] = arr[j];   
-            }           
+            }
+            CR_ID10_PC_EN[0] = 1;   // signals core 1 to start sorting           
             while(1);
         }
         break;
         
         case 0x9 :
         {
-            while(counter++ < 50){};
+            CR_ID21_PC_EN[0] = 0;   //wating for core 1 to finish loading array
             volatile int* arr = SCRATCHPAD0_CORE_1;
             bubbleSort(arr, 8);
             while(1){};
@@ -153,13 +158,11 @@ int main() {
         
         case 0xa :
         {
-            while(counter++ < 200){};
+            CR_ID22_PC_EN[0] = 0;   //wating for core 1 to finish loading matrices
             volatile int* mat1 = SCRATCHPAD1_CORE_1;
             volatile int* mat2 = SCRATCHPAD2_CORE_1;
-            volatile int* res  = SCRATCHPAD3_CORE; // To store result
+            volatile int* res  = SCRATCHPAD3_CORE_1; // To store result
             multiply(mat1, mat2, res);
-            //matmul(mat1, mat2, res);    
-            //while(1); 
         }
         break;
         
