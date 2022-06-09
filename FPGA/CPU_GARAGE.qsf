@@ -238,8 +238,9 @@ set_global_assignment -name FLOW_ENABLE_IO_ASSIGNMENT_ANALYSIS OFF
 set_global_assignment -name FLOW_ENABLE_POWER_ANALYZER OFF
 set_global_assignment -name POWER_DEFAULT_INPUT_IO_TOGGLE_RATE 12.5%
 set_global_assignment -name VERILOG_INPUT_VERSION VERILOG_2001
-set_global_assignment -name IP_SEARCH_PATHS "c:\\users\\abendavid\\onedrive - nvidia corporation\\desktop\\github\\riscv-multi-core-lotr\\source\\common"
+set_global_assignment -name IP_SEARCH_PATHS "c:\\users\\abendavid\\onedrive - nvidia corporation\\desktop\\github\\riscv-multi-core-lotr\\fpga;c:\\users\\abendavid\\onedrive - nvidia corporation\\desktop\\github\\riscv-multi-core-lotr\\source\\common"
 set_global_assignment -name SEARCH_PATH "c:\\users\\abendavid\\onedrive - nvidia corporation\\desktop\\github\\riscv-multi-core-lotr\\source\\common"
+set_global_assignment -name SYSTEMVERILOG_FILE platform.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/fpga_tile.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/DE10Lite_MMIO.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/rc/rtl/rc.sv
@@ -249,14 +250,14 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../source/rc/rtl/c2f.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/lotr.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/gpc_4t_tile.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/i_mem_wrap.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/i_mem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/gpc_4t.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/d_mem_wrap.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/d_mem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/cr_mem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/core_4t.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/common/lotr_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/common/lotr_defines.sv
 set_global_assignment -name SYSTEMVERILOG_FILE sv/top.sv
 set_global_assignment -name SDC_FILE DE10_LITE_TEST.SDC
+set_global_assignment -name QIP_FILE sv/d_mem_4k.qip
+set_global_assignment -name QIP_FILE sv/i_mem_4k.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

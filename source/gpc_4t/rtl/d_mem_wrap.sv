@@ -225,8 +225,8 @@ assign F2C_CrWrEnQ503H   = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && F2
 //=======================================================
 //================   D_MEM Access  ======================
 //=======================================================
-`ifdef FPGA
-d_mem d_mem ( //FIXME - point to altera Memory
+`ifdef DE10_LITE
+d_mem_4k d_mem ( //FIXME - point to altera Memory
 `else
 d_mem d_mem (                                                             
 `endif

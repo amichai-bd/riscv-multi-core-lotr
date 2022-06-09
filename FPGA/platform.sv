@@ -1,1 +1,1 @@
-define DE10_LITE
+`define DE10_LITE
