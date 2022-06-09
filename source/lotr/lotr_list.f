@@ -35,10 +35,13 @@
 //===========
 ../source/lotr/rtl/gpc_4t_tile.sv
 ../source/lotr/rtl/lotr.sv
+../source/lotr/rtl/fpga_tile.sv
+../source/lotr/rtl/DE10Lite_MMIO.sv
 
 //====================================
 //==  Simulation - Test Bench ========
 //====================================
 ../verif/tb/gpc_4t_tile_tb.sv
 ../verif/tb/lotr_tb.sv
+../verif/tb/lotr_fpga_tb.sv
 
