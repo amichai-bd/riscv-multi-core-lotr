@@ -68,7 +68,7 @@ end //always_comb  history_assign
 genvar row ,col; 
 generate 
 for( row =0 ; row < MRO_SIZE; row++) begin : history_matrix_sampling
-    for ( col = 0 ; col < MRO_SIZE ; col++) begin 
+    for ( col = 0 ; col < MRO_SIZE ; col++) begin : col_for
 	    `LOTR_EN_RST_MSFF(HistoryMatrix[col][row], NextHistoryMatrix[col][row] ,Clk, EnShiftCol[col][row] ,  RstRow[col][row])
 	end //for
 end //for

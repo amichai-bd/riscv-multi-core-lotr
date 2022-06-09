@@ -60,11 +60,11 @@ module f2c
 logic   [F2C_MSB:0][9:0]  F2C_BufferRequestorQnnnH ;
 logic   [F2C_MSB:0][31:0] F2C_BufferAddressQnnnH   ;
 logic   [F2C_MSB:0][31:0] F2C_BufferDataQnnnH      ;
-t_state [F2C_MSB:0]       F2C_BufferStateQnnnH     ;
+t_state                   F2C_BufferStateQnnnH  [F2C_MSB:0]   ;
 logic   [F2C_MSB:0][9:0]  F2C_NextBufferRequestorQnnnH ;
 logic   [F2C_MSB:0][31:0] F2C_NextBufferAddressQnnnH   ;
 logic   [F2C_MSB:0][31:0] F2C_NextBufferDataQnnnH      ;
-t_state [F2C_MSB:0]       F2C_NextBufferStateQnnnH     ;
+t_state                   F2C_NextBufferStateQnnnH   [F2C_MSB:0]  ;
 //=========================================
 //=====    Control Bits Signals   =========
 //=========================================
@@ -134,7 +134,7 @@ always_comb begin : set_enwritedata_f2c
                                      (F2C_RspValidQ500H             && 
                                      (F2C_RspOpcodeQ500H == RD_RSP) &&
                                      F2C_RspMatchQ500H[i]           &&
-                                     F2C_BufferStateQnnnH == READ_PRGRS ) 
+                                     F2C_BufferStateQnnnH[i] == READ_PRGRS ) 
                                     ) ; 
     end //for
 end //always_comb
@@ -181,7 +181,7 @@ always_comb begin : next_f2c_buffer_per_buffer_entry
                 if ((F2C_DecodedSelRdRingQ501H[i] == 1'b1) && ( SelRingRspOutQ501H == F2C_RESPONSE)) begin 
                     F2C_NextBufferStateQnnnH[i] =  FREE ;
                 end
-            default  : F2C_NextBufferStateQnnnH = F2C_BufferStateQnnnH;
+            default  : F2C_NextBufferStateQnnnH[i] = F2C_BufferStateQnnnH[i];
         endcase
     end //for F2C_BUFFER_SIZE
 end //always_comb
