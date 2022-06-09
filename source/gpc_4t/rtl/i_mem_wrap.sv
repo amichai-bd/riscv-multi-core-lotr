@@ -54,13 +54,13 @@ i_mem
     i_mem(
     .clock    (QClk),
     //Core interface (instruction fitch)
-    .address_a  (PcQ100H[MSB_I_MEM:0]),
+    .address_a  (PcQ100H[MSB_I_MEM:2]),
     .data_a     ('0),
     .rden_a     (RdEnableQ100H),
     .wren_a     ('0),
     .q_a        (InstFetchQ101H),
     //ring interface
-    .address_b  (F2C_ReqAddressQ503H[MSB_I_MEM:0]),
+    .address_b  (F2C_ReqAddressQ503H[MSB_I_MEM:2]),
     .data_b     (F2C_ReqDataQ503H),              
     .rden_b     (F2C_RdEnQ503H),                
     .wren_b     (F2C_WrEnQ503H),                
