@@ -296,7 +296,7 @@ typedef struct packed { // RW
     logic [6:0] SEG7_3;
     logic [6:0] SEG7_4;
     logic [6:0] SEG7_5;
-    logic [6:0] LED;
+    logic [9:0] LED;
 } t_cr_rw_fpga ;
 
 endpackage // lotr_pkg
