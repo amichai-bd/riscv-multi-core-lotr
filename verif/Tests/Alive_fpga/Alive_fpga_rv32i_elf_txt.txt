@@ -66,25 +66,13 @@ Disassembly of section .text:
   d0:	fe042623          	sw	zero,-20(s0)
   d4:	fe442703          	lw	a4,-28(s0)
   d8:	00400793          	li	a5,4
-  dc:	04f71063          	bne	a4,a5,11c <_min_stack+0x1c>
+  dc:	02f71263          	bne	a4,a5,100 <_min_stack>
   e0:	030027b7          	lui	a5,0x3002
-  e4:	00100713          	li	a4,1
-  e8:	00e7a023          	sw	a4,0(a5) # 3002000 <_bss_end+0x2c01800>
-  ec:	00000013          	nop
+  e4:	01878793          	addi	a5,a5,24 # 3002018 <_bss_end+0x2c01818>
+  e8:	fec42703          	lw	a4,-20(s0)
+  ec:	00e7a023          	sw	a4,0(a5)
   f0:	fec42783          	lw	a5,-20(s0)
-  f4:	00178713          	addi	a4,a5,1
-  f8:	fee42623          	sw	a4,-20(s0)
-  fc:	00900713          	li	a4,9
- 100:	fef758e3          	bge	a4,a5,f0 <main+0x48>
- 104:	03002737          	lui	a4,0x3002
- 108:	004017b7          	lui	a5,0x401
- 10c:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x700>
- 110:	00072703          	lw	a4,0(a4) # 3002000 <_bss_end+0x2c01800>
- 114:	00e7a023          	sw	a4,0(a5)
- 118:	0080006f          	j	120 <_min_stack+0x20>
- 11c:	0000006f          	j	11c <_min_stack+0x1c>
- 120:	00000793          	li	a5,0
- 124:	00078513          	mv	a0,a5
- 128:	01c12403          	lw	s0,28(sp)
- 12c:	02010113          	addi	sp,sp,32
- 130:	00008067          	ret
+  f4:	00178793          	addi	a5,a5,1
+  f8:	fef42623          	sw	a5,-20(s0)
+  fc:	fe5ff06f          	j	e0 <main+0x38>
+ 100:	0000006f          	j	100 <_min_stack>

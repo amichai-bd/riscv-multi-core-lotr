@@ -12,7 +12,7 @@ Created : 22/08/2021
 // 0x400000 - 0x400200 - Thread 0
 
 // REGION == 2'b01;
-#define SEG0_FGPA  ((volatile int *) (0x03002000))
+#define LED_FGPA  ((volatile int *) (0x03002018))
 #define SCRATCHPAD0_CORE_2  ((volatile int *) (0x02400900))
 #define SCRATCHPAD0_CORE    ((volatile int *) (0x00400900))
 #define SHARED_SPACE ((volatile int *) (0x00400f00))
@@ -29,11 +29,14 @@ int main() {
     {
         case 0x4 : // parameterize 
          
-                SEG0_FGPA[0] = 0x1;               //Writing to fpga
+            while (1){
+                LED_FGPA[0] = counter;
+                counter ++;
+              //  if (counter == 1024) counter = 0;               //Writing to fpga
+            }
+                // while(counter++ < 10){};          // busy wait until data arrived from Core1
 
-                while(counter++ < 10){};          // busy wait until data arrived from Core1
-
-                SHARED_SPACE[0] = SEG0_FGPA[0];    //Reading from fpga 
+                // SHARED_SPACE[0] = SEG0_FGPA[0];    //Reading from fpga 
                 //while(1);    
         break;
         default :
