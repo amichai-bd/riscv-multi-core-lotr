@@ -48,7 +48,8 @@ assign F2C_WrEnQ503H     = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && F2
 
 `LOTR_MSFF(F2C_RspIMemValidQ504H, F2C_RdEnQ503H, QClk)
 `ifdef DE10_LITE
-i_mem_4k i_mem ( //FIXME - point to altera Memory
+//i_mem_4k i_mem (
+i_mem_4k_take2 i_mem (
 `else
 i_mem    i_mem  (
 `endif
