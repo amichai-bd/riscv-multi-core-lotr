@@ -1,10 +1,20 @@
 running_dir/*
+
+#############
+#FPGA
+#############
 FPGA/db/.cmp.kpt
 FPGA/db/*
 FPGA/incremental_db/*
 FPGA/output_files/*
+FPGA/greybox_tmp/cbx_args.txt
+FPGA/CPU_GARAGE.qws
+
+#############
 # modelsim generated files
+#############
 *.swp
+*.bak
 modelsim/work/*
 modelsim/*
 target/*
