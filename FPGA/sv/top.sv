@@ -23,12 +23,17 @@ logic CLK_5;
 	.inclk0 ( CLK_50),
 	.c0		(CLK_5));
 	 
+logic CLK_50Khz;
+	pll_50Khz pll_5Khz (
+	.inclk0 ( CLK_50),
+	.c0		(CLK_50Khz));
+	
 lotr lotr(
     //general signals input
-    .QClk  	(CLK_5),   //input
+    .QClk  	(CLK_50Khz),   //input
     //.RstQnnnH  	(BUTTON[0])
-    .Button_0    (SW[0]),//BUTTON[0]),
-    .Button_1    (SW[1]),//BUTTON[1]),
+    .Button_0    (BUTTON[0]),
+    .Button_1    (BUTTON[1]),
     .Switch      (SW),
 
     //utputs
