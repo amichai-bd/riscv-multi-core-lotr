@@ -195,10 +195,10 @@ assign SelWrDataQ103H = cr_en[1];
 `LOTR_EN_RST_MSFF    (cr_ro.pc_1      , PcQ103H,             QClk  ,  CrEnQ103H.pc_1       , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_2      , PcQ103H,             QClk  ,  CrEnQ103H.pc_2       , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_3      , PcQ103H,             QClk  ,  CrEnQ103H.pc_3       , RstQnnnH )
-`LOTR_EN_RST_MSFF    (cr_ro.sts_0     , 32'b0,               QClk  ,  CrEnQ103H.sts_0      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
-`LOTR_EN_RST_MSFF    (cr_ro.sts_1     , 32'b0,               QClk  ,  CrEnQ103H.sts_1      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
-`LOTR_EN_RST_MSFF    (cr_ro.sts_2     , 32'b0,               QClk  ,  CrEnQ103H.sts_2      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
-`LOTR_EN_RST_MSFF    (cr_ro.sts_3     , 32'b0,               QClk  ,  CrEnQ103H.sts_3      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_0     , 8'b0,               QClk  ,  CrEnQ103H.sts_0      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_1     , 8'b0,               QClk  ,  CrEnQ103H.sts_1      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_2     , 8'b0,               QClk  ,  CrEnQ103H.sts_2      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_3     , 8'b0,               QClk  ,  CrEnQ103H.sts_3      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
 `LOTR_EN_RST_MSFF    (cr_ro.expt_0    , 32'b0,               QClk  ,  CrEnQ103H.expt_0     , RstQnnnH )//FIXME assign exception code logic.
 `LOTR_EN_RST_MSFF    (cr_ro.expt_1    , 32'b0,               QClk  ,  CrEnQ103H.expt_1     , RstQnnnH )//FIXME assign exception code logic.
 `LOTR_EN_RST_MSFF    (cr_ro.expt_2    , 32'b0,               QClk  ,  CrEnQ103H.expt_2     , RstQnnnH )//FIXME assign exception code logic.

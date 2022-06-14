@@ -120,13 +120,13 @@ always_comb begin
     if(CtrlCRMemRdEnQ503) begin
         unique casez (F2C_ReqAddressQ503H[19:0]) // AluOut holds the offset
             // ---- RW memory ----
-            CR_SEG7_0   : F2C_RspDataQ503H = {27'b0 , cr_rw_next.SEG7_0}   ; 
-            CR_SEG7_1   : F2C_RspDataQ503H = {27'b0 , cr_rw_next.SEG7_1}   ;
-            CR_SEG7_2   : F2C_RspDataQ503H = {27'b0 , cr_rw_next.SEG7_2}   ;
-            CR_SEG7_3   : F2C_RspDataQ503H = {27'b0 , cr_rw_next.SEG7_3}   ;
-            CR_SEG7_4   : F2C_RspDataQ503H = {27'b0 , cr_rw_next.SEG7_4}   ;
-            CR_SEG7_5   : F2C_RspDataQ503H = {27'b0 , cr_rw_next.SEG7_5}   ;
-            CR_LED      : F2C_RspDataQ503H = {27'b0 , cr_rw_next.LED}      ;
+            CR_SEG7_0   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_0}   ; 
+            CR_SEG7_1   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_1}   ;
+            CR_SEG7_2   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_2}   ;
+            CR_SEG7_3   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_3}   ;
+            CR_SEG7_4   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_4}   ;
+            CR_SEG7_5   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_5}   ;
+            CR_LED      : F2C_RspDataQ503H = {22'b0 , cr_rw_next.LED}      ;
             // ---- RO memory ----
             CR_Button_0 : F2C_RspDataQ503H = {31'b0 , cr_ro_next.Button_0} ;
             CR_Button_1 : F2C_RspDataQ503H = {31'b0 , cr_ro_next.Button_1} ;

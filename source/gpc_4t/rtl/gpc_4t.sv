@@ -180,6 +180,7 @@ d_mem_wrap d_mem_wrap (
 //      i_mem_wrap 
 //============================================
 i_mem_wrap i_mem_wrap (
+//i_mem_byte_wrap i_mem_byte_wrap (
     .QClk                   (QClk)           ,  // input 
     .RstQnnnH               (RstQnnnH)       ,  // input 
     //============================================
