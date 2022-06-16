@@ -35,8 +35,13 @@ if [ "$#" == "1" ];then
     $GNU_DIR/riscv32-unknown-elf-objdump -gd $1_rv32$mod.elf > $1_rv32${mod}_elf_txt.txt
     #creates the instruction file 
     $GNU_DIR/riscv32-unknown-elf-objcopy --srec-len 1 --output-target=verilog $1_rv32$mod.elf $1_inst_mem_rv32$mod.sv 
-    #creates the instruction file 
+    #creates the hex file for FPGA
     $GNU_DIR/riscv32-unknown-elf-objcopy --srec-len 1 --output-target=ihex $1_rv32$mod.elf $1_inst_mem_rv32$mod.hex 
+    #create mif file from hex file
+    srec_cat $1_inst_mem_rv32$mod.hex -Intel -o $1.mif -Memory_Initialization_File 32
+    #transform mif to little Endian
+    ./BEtoLE.sh $1
+
 
     if [ ! -d "../../../verif/Tests/$1" ];then
         mkdir ../../../verif/Tests/$1
