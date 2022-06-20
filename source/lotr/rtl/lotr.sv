@@ -217,7 +217,7 @@ fpga_tile fpga_tile
     // FPGA interface inputs
     .Button_0    (1'b0),
     .Button_1    (1'b0),
-    .Switch      (10'b0),
+    .Switch      (Switch),
 
     //utputs
     .SEG7_0  (SEG7_0),
