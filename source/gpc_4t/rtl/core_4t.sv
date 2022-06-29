@@ -47,9 +47,8 @@ module core_4t
     input logic         T2RcAccess      ,
     input logic         T3RcAccess      ,
     
-    
     //MMIO
-    input  t_core_cr         CRQnnnH
+    input  var t_core_cr         CRQnnnH
     );
 //  program counter
 logic [31:0]        PcQ101H;

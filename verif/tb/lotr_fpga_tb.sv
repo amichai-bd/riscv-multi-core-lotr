@@ -91,6 +91,11 @@ lotr lotr(
     .SEG7_3  (SEG7_3),
     .SEG7_4  (SEG7_4),
     .SEG7_5  (SEG7_5),
+    .RED     (),//output logic [3:0] 
+    .GREEN   (),//output logic [3:0] 
+    .BLUE    (),//output logic [3:0] 
+    .v_sync  (),//output logic       
+    .h_sync  (),//output logic      
     .LED     (LED)
     );
 

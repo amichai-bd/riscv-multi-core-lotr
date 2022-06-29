@@ -37,6 +37,9 @@
 ../source/lotr/rtl/lotr.sv
 ../source/lotr/rtl/fpga_tile.sv
 ../source/lotr/rtl/DE10Lite_MMIO.sv
+../source/lotr/rtl/vga_ctrl.sv
+../source/lotr/rtl/vga_mem.sv
+../source/lotr/rtl/vga_sync_gen.sv
 
 //====================================
 //==  Simulation - Test Bench ========
