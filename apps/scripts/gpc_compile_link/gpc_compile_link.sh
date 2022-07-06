@@ -67,6 +67,8 @@ if [ "$#" == "1" ];then
     mv $1_data_mem_rv32$mod.sv ../../../verif/Tests/$1
     mv $1_inst_mem_rv32$mod.sv ../../../verif/Tests/$1
     mv $1_instt_mem_rv32$mod.sv ../../../verif/Tests/$1
+    mv $1.mif ../../../FPGA/mem_bkp
+    mv $1_inst_mem_rv32$mod.hex ../../../FPGA/mem_bkp
     
     exit 1
 fi

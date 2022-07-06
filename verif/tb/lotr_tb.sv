@@ -5,6 +5,16 @@ module lotr_tb ();
 import lotr_pkg::*;
 	logic         clk      ;
 	logic         RstQnnnH  ;
+    logic Button_0      ;     
+    logic Button_1     ;
+    logic [9:0] Switch ;
+    logic [6:0] SEG7_0;
+    logic [6:0] SEG7_1;
+    logic [6:0] SEG7_2;
+    logic [6:0] SEG7_3;
+    logic [6:0] SEG7_4;
+    logic [6:0] SEG7_5;
+    logic [9:0] LED ;    
 	// clock generation
 	initial begin: clock_gen
 		forever begin
@@ -62,7 +72,7 @@ initial begin: test_seq
         // Backdoor load the Inst2uction memory
         lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
         lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-    #400000         
+    #300000         
     end_tb(" Finished With time out");
 end: test_seq
 
@@ -83,7 +93,18 @@ end: test_seq
 lotr lotr(
     //general signals input
     .QClk  		(clk),   //input
-    .RstQnnnH  	(RstQnnnH)
+    .Button_0    (~RstQnnnH),
+    .Button_1    (1'b0),
+    .Switch      (10'b0),
+
+    //utputs
+    .SEG7_0  (SEG7_0),
+    .SEG7_1  (SEG7_1),
+    .SEG7_2  (SEG7_2),
+    .SEG7_3  (SEG7_3),
+    .SEG7_4  (SEG7_4),
+    .SEG7_5  (SEG7_5),
+    .LED     (LED)
     );
 
 //================================================================================

@@ -12,14 +12,7 @@ Created : 22/08/2021
 // 0x400000 - 0x400200 - Thread 0
 
 // REGION == 2'b01;
-#define LED_FGPA  ((volatile int *) (0x03002018))
-#define SCRATCHPAD0_CORE_2  ((volatile int *) (0x02400900))
-#define SCRATCHPAD0_CORE    ((volatile int *) (0x00400900))
-#define SHARED_SPACE ((volatile int *) (0x00400f00))
-#define CR_THREAD  ((volatile int *) (0x00C00004))
-#define CR_THREAD_PC_EN  ((volatile int *)  (0x00C00150))
-#define CR_CORE_ID ((volatile int *) (0x00C00008))
-#define CR_WHO_AM_I ((volatile int *) (0x00C00000))
+#include "LOTR_defines.h"
 
 int main() {
     int ThreadId = CR_THREAD[0];
