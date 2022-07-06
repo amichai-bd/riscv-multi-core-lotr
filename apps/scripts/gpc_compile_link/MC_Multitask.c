@@ -70,13 +70,24 @@ void multiply(volatile int a[],volatile int b[],volatile int res[])
 {
     int i,j,k,sum,sum1,sum2;
             res[0] = 0xff;
-            res[0] = 0xfe;
+            res[1] = 0xfe;
     for (i = 0; i < 4; i++) {
+            // res[2] = 0xfe;
+
         for (j = 0; j < 4; j++) {
+             res[3] = 0xfe;
+
             sum = 0;
             for (k = 0; k < 4; k++){
-                sum = sum + a[i * 4 + k] * b[k * 4 + j];
+                sum1 =  a[i * 4 + k];
+                // sum2 = b[k * 4 + j];
+                res[6] = sum1+sum2;
+                // sum = sum + a[i * 4 + k] + b[k * 4 + j];
             }
+            res[7] = sum1+sum2;
+
+            // res[5] = 0xfe;
+
             res[i * 4 + j] = sum;
         }
     }
@@ -163,6 +174,8 @@ int main() {
             volatile int* mat2 = SCRATCHPAD2_CORE_1;
             volatile int* res  = SCRATCHPAD3_CORE_1; // To store result
             multiply(mat1, mat2, res);
+            // while(1); 
+
         }
         break;
         
