@@ -3,12 +3,12 @@ module top(
         input  logic [9:0]  SW,
         input  logic [1:0]  BUTTON,
 
-        output logic [6:0]  HEX0,
-        output logic [6:0]  HEX1,
-        output logic [6:0]  HEX2,
-        output logic [6:0]  HEX3,
-        output logic [6:0]  HEX4,
-        output logic [6:0]  HEX5,
+        output logic [7:0]  HEX0,
+        output logic [7:0]  HEX1,
+        output logic [7:0]  HEX2,
+        output logic [7:0]  HEX3,
+        output logic [7:0]  HEX4,
+        output logic [7:0]  HEX5,
         output logic [9:0]  LED,
 
         output logic [3:0]  RED,
@@ -43,8 +43,12 @@ lotr lotr(
     .SEG7_3  (HEX3),
     .SEG7_4  (HEX4),
     .SEG7_5  (HEX5),
+    .RED     (RED   ),//output logic [3:0] 
+    .GREEN   (GREEN ),//output logic [3:0] 
+    .BLUE    (BLUE  ),//output logic [3:0] 
+    .v_sync  (v_sync),//output logic       
+    .h_sync  (h_sync),//output logic      
     .LED     (LED)
-    
     );
 	 
 //	 assign HEX0 = SW[0] ? '0 : '1;
@@ -54,9 +58,9 @@ lotr lotr(
 //	 assign HEX4 = SW[4] ? '0 : '1;
 //	 assign HEX5 = SW[5] ? '0 : '1;
 	  
-        assign RED      = '0;
-        assign GREEN    = '0;
-        assign BLUE     = '0;
-        assign h_sync   = '0;
-        assign v_sync   = '0;
+//        assign RED      = '0;
+//        assign GREEN    = '0;
+//        assign BLUE     = '0;
+//        assign h_sync   = '0;
+//        assign v_sync   = '0;
 endmodule

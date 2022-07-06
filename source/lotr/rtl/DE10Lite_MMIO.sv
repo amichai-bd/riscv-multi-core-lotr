@@ -53,6 +53,11 @@ import lotr_pkg::*;
     output logic [6:0] SEG7_3,
     output logic [6:0] SEG7_4,
     output logic [6:0] SEG7_5,
+    output logic [3:0] RED,
+    output logic [3:0] GREEN,
+    output logic [3:0] BLUE,
+    output logic       v_sync,
+    output logic       h_sync,
     output logic [9:0] LED
 );
 
@@ -70,11 +75,17 @@ logic [31:0] F2C_RspAddressQ504H;
 logic [31:0] F2C_ReqDataQ503H;
 logic [31:0] F2C_RspDataQ503H;
 logic [31:0] F2C_RspDataQ504H;
+logic [31:0] CrRspDataQ504H;
+logic [31:0] VgaRspDataQ504H;
 t_opcode F2C_RspOpcodeQ504H;
 logic CtrlCRMemRdEnQ503; 
 logic CtrlCRMemWrEnQ503;
 logic CtrlCRMemRdEnQ504; 
 logic CtrlCRMemWrEnQ504;
+logic CtrlVgaMemRdEnQ503; 
+logic CtrlVgaMemWrEnQ503;
+logic CtrlVgaMemRdEnQ504; 
+logic CtrlVgaMemWrEnQ504;
 
 //Sample input 502 -> 503
 `LOTR_MSFF(F2C_ReqValidQ503H   , F2C_ReqValidQ502H   , CLK_50)
@@ -82,8 +93,48 @@ logic CtrlCRMemWrEnQ504;
 `LOTR_MSFF(F2C_ReqAddressQ503H , F2C_ReqAddressQ502H , CLK_50)
 `LOTR_MSFF(F2C_ReqDataQ503H    , F2C_ReqDataQ502H    , CLK_50)
 
-assign CtrlCRMemRdEnQ503 = F2C_ReqValidQ503H && F2C_ReqOpcodeQ503H == RD;
-assign CtrlCRMemWrEnQ503 = F2C_ReqValidQ503H && F2C_ReqOpcodeQ503H == WR;
+assign CtrlCRMemRdEnQ503 = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == RD) && (F2C_ReqAddressQ503H[MSB_REGION:LSB_REGION] == CR_REGION);
+assign CtrlCRMemWrEnQ503 = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && (F2C_ReqAddressQ503H[MSB_REGION:LSB_REGION] == CR_REGION);
+
+assign CtrlVgaMemRdEnQ503 = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == RD) && (F2C_ReqAddressQ503H[MSB_REGION:LSB_REGION] == D_MEM_REGION);
+assign CtrlVgaMemWrEnQ503 = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && (F2C_ReqAddressQ503H[MSB_REGION:LSB_REGION] == D_MEM_REGION);
+
+
+//[31:24] TILEID
+//[23:22] region
+//[16:0]  offset
+//
+//            D_MEM
+//32'b00000011_01_0000<offset> //offset is 0->38400 (This is in Byte)
+//                             //offset is 0->9600 (This is in 32 bit words)
+//                             //offset is 2D VGA[80][120]
+//            CR_MEM                             
+//32'b00000011_10_0000<offset>
+//
+
+`LOTR_MSFF(CtrlVgaMemRdEnQ504    , CtrlVgaMemRdEnQ503    , CLK_50)
+`LOTR_MSFF(CtrlVgaMemWrEnQ504    , CtrlVgaMemWrEnQ503    , CLK_50)
+vga_ctrl vga_ctrl (
+    .CLK_50           (CLK_50           ),  //input  logic        
+    .QClk             (QClk             ),  //input  logic        
+    .Reset            (RstQnnnH         ),  //input  logic        
+    //// VGA memory 
+    .RegRdData2       (F2C_ReqDataQ503H   ),//input  logic [31:0] 
+    .AluOut           (F2C_ReqAddressQ503H),//input  logic [31:0] 
+    .CtrlVGAMemByteEn (4'b1111 ),           //input  logic [3:0]  
+    .CtrlVGAMemWrEn   (CtrlVgaMemWrEnQ503),  //input  logic        
+    //// Read core  
+    .SelVGAMemWb      (CtrlVgaMemRdEnQ503),  //input  logic        
+    .VGAMemRdDataQ104H(VgaRspDataQ504H),    //output logic [31:0] 
+    //// VGA output  
+    .RED              (RED              ),  //output logic [3:0]  
+    .GREEN            (GREEN            ),  //output logic [3:0]  
+    .BLUE             (BLUE             ),  //output logic [3:0]  
+    .h_sync           (h_sync           ),  //output logic        
+    .v_sync           (v_sync           )   //output logic        
+);
+
+
 //==============================
 // Memory Access
 //------------------------------
@@ -145,17 +196,19 @@ assign      F2C_RspOpcodeQ504H  = RD_RSP;
 
 
 // Sample the data load - synchorus load
-`LOTR_MSFF( F2C_RspAddressQ504H,  F2C_ReqAddressQ503H, CLK_50)
-`LOTR_MSFF(F2C_RspDataQ504H, F2C_RspDataQ503H, CLK_50)
-`LOTR_MSFF(CtrlCRMemRdEnQ504, CtrlCRMemRdEnQ503, CLK_50)
-`LOTR_MSFF(CtrlCRMemWrEnQ504, CtrlCRMemWrEnQ503, CLK_50)
+`LOTR_MSFF(F2C_RspAddressQ504H,  F2C_ReqAddressQ503H, CLK_50)
+`LOTR_MSFF(CrRspDataQ504H,       F2C_RspDataQ503H, CLK_50)
+`LOTR_MSFF(CtrlCRMemRdEnQ504,    CtrlCRMemRdEnQ503, CLK_50)
+`LOTR_MSFF(CtrlCRMemWrEnQ504,    CtrlCRMemWrEnQ503, CLK_50)
 
-assign F2C_RspValidQ504H = CtrlCRMemRdEnQ504 || CtrlCRMemWrEnQ504;
-
+assign F2C_RspValidQ504H = CtrlCRMemRdEnQ504 || CtrlCRMemWrEnQ504 || CtrlVgaMemRdEnQ504 || CtrlVgaMemWrEnQ504;
+assign F2C_RspDataQ504H  = CtrlCRMemRdEnQ504  ? CrRspDataQ504H  : 
+                           CtrlVgaMemRdEnQ504 ? VgaRspDataQ504H :
+                                                '0              ;
 `LOTR_MSFF(F2C_RspValidQ500H   , F2C_RspValidQ504H   , CLK_50)
 `LOTR_MSFF(F2C_RspOpcodeQ500H  , F2C_RspOpcodeQ504H  , CLK_50)
 `LOTR_MSFF(F2C_RspAddressQ500H , F2C_RspAddressQ504H , CLK_50)
-`LOTR_MSFF(F2C_RspDataQ500H, F2C_RspDataQ504H, CLK_50)
+`LOTR_MSFF(F2C_RspDataQ500H    , F2C_RspDataQ504H    , CLK_50)
 
 
 
@@ -163,12 +216,12 @@ assign F2C_RspValidQ504H = CtrlCRMemRdEnQ504 || CtrlCRMemWrEnQ504;
 `LOTR_MSFF(cr_ro, cr_ro_next, CLK_50)
 
 // Reflects outputs to the FPGA - synchorus reflects
-`LOTR_MSFF(SEG7_0 , cr_rw_next.SEG7_0 , CLK_50)
-`LOTR_MSFF(SEG7_1 , cr_rw_next.SEG7_1 , CLK_50)
-`LOTR_MSFF(SEG7_2 , cr_rw_next.SEG7_2 , CLK_50)
-`LOTR_MSFF(SEG7_3 , cr_rw_next.SEG7_3 , CLK_50)
-`LOTR_MSFF(SEG7_4 , cr_rw_next.SEG7_4 , CLK_50)
-`LOTR_MSFF(SEG7_5 , cr_rw_next.SEG7_5 , CLK_50)
-`LOTR_MSFF(LED    , cr_rw_next.LED    , CLK_50)
+`LOTR_RST_MSFF(SEG7_0 , cr_rw_next.SEG7_0 , CLK_50, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_1 , cr_rw_next.SEG7_1 , CLK_50, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_2 , cr_rw_next.SEG7_2 , CLK_50, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_3 , cr_rw_next.SEG7_3 , CLK_50, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_4 , cr_rw_next.SEG7_4 , CLK_50, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_5 , cr_rw_next.SEG7_5 , CLK_50, RstQnnnH)
+`LOTR_RST_MSFF(LED    , cr_rw_next.LED    , CLK_50, RstQnnnH)
 
 endmodule // Module rvc_asap_5pl_cr_mem

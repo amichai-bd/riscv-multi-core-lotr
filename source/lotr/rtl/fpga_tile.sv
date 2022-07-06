@@ -66,6 +66,11 @@ import lotr_pkg::*;
     output logic [6:0] SEG7_3                       ,
     output logic [6:0] SEG7_4                       ,
     output logic [6:0] SEG7_5                       ,
+    output logic [3:0] RED,
+    output logic [3:0] GREEN,
+    output logic [3:0] BLUE,
+    output logic       v_sync,
+    output logic       h_sync,
     output logic [9:0] LED
 );
 
@@ -192,6 +197,11 @@ DE10Lite_MMIO DE10Lite_MMIO(
     .SEG7_3  (SEG7_3),
     .SEG7_4  (SEG7_4),
     .SEG7_5  (SEG7_5),
+    .RED     (RED   ),//output logic [3:0] 
+    .GREEN   (GREEN ),//output logic [3:0] 
+    .BLUE    (BLUE  ),//output logic [3:0] 
+    .v_sync  (v_sync),//output logic       
+    .h_sync  (h_sync),//output logic       
     .LED     (LED)
 
 

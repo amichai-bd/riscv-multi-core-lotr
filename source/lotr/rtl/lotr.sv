@@ -26,17 +26,22 @@ import lotr_pkg::*;
     // LOTR <-> FPGA TOP
     //==============================
     // LOTR ---> Top
-    input logic Button_0                            ,
-    input logic Button_1                            ,
-    input logic [9:0] Switch                        ,
+    input logic Button_0,
+    input logic Button_1,
+    input logic [9:0] Switch,
 
     // Top ----> LOTR
-    output logic [6:0] SEG7_0                       ,
-    output logic [6:0] SEG7_1                       ,
-    output logic [6:0] SEG7_2                       ,
-    output logic [6:0] SEG7_3                       ,
-    output logic [6:0] SEG7_4                       ,
-    output logic [6:0] SEG7_5                       ,
+    output logic [6:0] SEG7_0,
+    output logic [6:0] SEG7_1,
+    output logic [6:0] SEG7_2,
+    output logic [6:0] SEG7_3,
+    output logic [6:0] SEG7_4,
+    output logic [6:0] SEG7_5,
+    output logic [3:0] RED,
+    output logic [3:0] GREEN,
+    output logic [3:0] BLUE,
+    output logic       h_sync,
+    output logic       v_sync,
     output logic [9:0] LED 
 );
 logic RstQnnnH;
@@ -226,6 +231,11 @@ fpga_tile fpga_tile
     .SEG7_3  (SEG7_3),
     .SEG7_4  (SEG7_4),
     .SEG7_5  (SEG7_5),
+    .RED     (RED   ),//output logic [3:0] 
+    .GREEN   (GREEN ),//output logic [3:0] 
+    .BLUE    (BLUE  ),//output logic [3:0] 
+    .v_sync  (v_sync),//output logic       
+    .h_sync  (h_sync),//output logic      
     .LED     (LED)
 );
 
