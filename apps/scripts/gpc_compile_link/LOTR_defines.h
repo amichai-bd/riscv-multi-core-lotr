@@ -51,3 +51,4 @@ Created : 1/07/2022
 #define BUTTON1_FGPA  ((volatile int *) (0x0300201c))
 #define BUTTON2_FGPA  ((volatile int *) (0x03002020))
 #define SWITCH_FGPA  ((volatile int *) (0x03002024))
+#define VGA_FPGA  ((volatile int *) (0x03400000))

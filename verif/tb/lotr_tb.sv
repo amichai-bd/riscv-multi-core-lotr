@@ -50,7 +50,7 @@ logic [7:0]  DMemQnnnH     [D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
 localparam    NUM_TILE = 2;
 genvar TILE;
 int TILE_FOR;
-int i;
+int i,j,k,l;
 initial begin: test_seq
     $display(hpath);
     //======================================
@@ -93,6 +93,7 @@ end: test_seq
 lotr lotr(
     //general signals input
     .QClk  		(clk),   //input
+    .CLK_50  		(clk),   //input
     .Button_0    (~RstQnnnH),
     .Button_1    (1'b0),
     .Switch      (10'b0),
@@ -128,10 +129,17 @@ lotr lotr(
 // 3.snapshot of registers to text file    
 // 4.fclose on all open files    
 // 5.exit test with message   
+// define data memory sizes
+
+
+// define VGA memory sizes
+parameter VGA_MEM_OFFSET     = 'h3000;  
+parameter SIZE_VGA_MEM       = 38400;
+
 
 task end_tb;
     input string msg;
-    integer SHRD_1,SHRD_2;
+    integer SHRD_1,SHRD_2,fd1;
     SHRD_1=$fopen({"../target/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
     SHRD_2=$fopen({"../target/",hpath,"/shrd_mem_2_snapshot.log"},"w");   
     for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
@@ -144,6 +152,21 @@ task end_tb;
                                                                           lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i+1],
                                                                           lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i]);
     end 
+        // VGA memory snapshot - simulate a screen
+    fd1 = $fopen({"../target/",hpath,"/screen.log"},"w");
+    if (fd1) $display("File was open succesfully : %0d", fd1);
+    else $display("File was not open succesfully : %0d", fd1);
+    for (i = 0 ; i < 38400; i = i+320) begin // Lines
+        for (j = 0 ; j < 4; j = j+1) begin // Bytes
+            for (k = 0 ; k < 320; k = k+4) begin // Words
+                for (l = 0 ; l < 8; l = l+1) begin // Bits  
+                    $fwrite(fd1,"%01b",lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[VGA_MEM_OFFSET+k+j+i][l]);
+                end        
+            end 
+            $fwrite(fd1,"\n");
+        end
+    end
+    $fclose(fd1);
     $fclose(SHRD_1);
     $fclose(SHRD_2);
     $fclose(trk_rc_transactions);

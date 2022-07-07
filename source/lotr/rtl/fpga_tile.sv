@@ -21,6 +21,7 @@ import lotr_pkg::*;
 (
     //General Interface
     input   logic         QClk                     ,
+    input   logic         CLK_50                     ,
     input   logic         RstQnnnH                 ,
     input   logic  [7:0]  CoreID                   ,
     //===================================
@@ -169,7 +170,8 @@ DE10Lite_MMIO DE10Lite_MMIO(
     //================================================
     //        General Interface
     //================================================
-    .CLK_50                   (QClk)                   ,//input
+    .QClk                   (QClk)                   ,//input
+    .CLK_50                   (CLK_50)                   ,//input
     .RstQnnnH               (RstQnnnH)               ,//input
     .CoreID                 (CoreID)                 ,//input
     //================================================
