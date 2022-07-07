@@ -31,6 +31,7 @@ logic CLK_50Khz;
 lotr lotr(
     //general signals input
     .QClk  	(CLK_50Khz),   //input
+    .CLK_50 (CLK_50),   //input
     //.RstQnnnH  	(BUTTON[0])
     .Button_0    (BUTTON[0]),
     .Button_1    (BUTTON[1]),

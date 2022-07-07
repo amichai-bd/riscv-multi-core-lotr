@@ -17,9 +17,11 @@ vsim.exe work.gpc_4t_tb -c -do 'run -all'
 vsim.exe -gui work.gpc_4t_tb
 
 # 4) quick lotr alive test
-vlog.exe +define+HPATH=Alive_Mul_Core -f ../source/lotr/lotr_list.f
-vlog.exe +define+HPATH=abd_MultiCore -f ../source/lotr/lotr_list.f
-vlog.exe +define+HPATH=abd_RingStress -f ../source/lotr/lotr_list.f
+vlog.exe +define+HPATH=Alive_Mul_Core +define+SIMULATION_ON  -f ../source/lotr/lotr_list.f
+vlog.exe +define+HPATH=abd_MultiCore +define+SIMULATION_ON  -f ../source/lotr/lotr_list.f
+vlog.exe +define+HPATH=abd_RingStress +define+SIMULATION_ON  -f ../source/lotr/lotr_list.f
+
+vlog.exe +define+HPATH=Alive_VGA +define+SIMULATION_ON  -f ../source/lotr/lotr_list.f
 vsim.exe work.lotr_tb -c -do 'run -all'
 vsim.exe -gui work.lotr_tb &
 
