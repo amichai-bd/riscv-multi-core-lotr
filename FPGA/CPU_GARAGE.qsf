@@ -6,7 +6,7 @@ set_global_assignment -name FAMILY "MAX 10"
 set_global_assignment -name DEVICE 10M50DAF484C7G
 set_global_assignment -name TOP_LEVEL_ENTITY top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 16.0.0
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "17.1.0 Lite Edition"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "20:55:01 AUGUST 09,2021"
 set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 484
@@ -239,12 +239,9 @@ set_global_assignment -name FLOW_ENABLE_POWER_ANALYZER OFF
 set_global_assignment -name POWER_DEFAULT_INPUT_IO_TOGGLE_RATE 12.5%
 set_global_assignment -name VERILOG_INPUT_VERSION VERILOG_2001
 set_global_assignment -name IP_SEARCH_PATHS ..\\source\\common
-set_global_assignment -name SEARCH_PATH "c:\\users\\abendavid\\onedrive - nvidia corporation\\desktop\\github\\riscv-multi-core-lotr\\source\\common"
 set_global_assignment -name ENABLE_SIGNALTAP ON
 set_global_assignment -name USE_SIGNALTAP_FILE output_files/stp1.stp
-set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/vga_sync_gen.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/vga_mem.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/vga_ctrl.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../source/common/lotr_defines.sv
 set_global_assignment -name HEX_FILE mem_hex/Alive_fpga_inst_mem_rv32i.hex
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/i_mem_byte_wrap.sv
 set_global_assignment -name SYSTEMVERILOG_FILE platform.sv
@@ -262,7 +259,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/d_mem_wrap.s
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/cr_mem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/gpc_4t/rtl/core_4t.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/common/lotr_pkg.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../source/common/lotr_defines.sv
 set_global_assignment -name SYSTEMVERILOG_FILE sv/top.sv
 set_global_assignment -name SDC_FILE DE10_LITE_TEST.SDC
 set_global_assignment -name QIP_FILE sv/d_mem_4k.qip
@@ -272,6 +268,5 @@ set_global_assignment -name SIGNALTAP_FILE output_files/stp1.stp
 set_global_assignment -name QIP_FILE sv/i_mem_4k_take2.qip
 set_global_assignment -name QIP_FILE sv/i_mem_byte_4k.qip
 set_global_assignment -name QIP_FILE sv/pll_50Khz.qip
-set_global_assignment -name QIP_FILE sv/pll_25.qip
-set_global_assignment -name QIP_FILE sv/vga_mem_fpga.qip
+set_global_assignment -name SEARCH_PATH "c:\\users\\adi-pc\\onedrive - technion\\project2\\newrepo\\riscv-multi-core-lotr\\source\\common"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

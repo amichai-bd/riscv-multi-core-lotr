@@ -21,6 +21,7 @@ import lotr_pkg::*;
 (
     //General Interface
     input   logic        QClk    ,
+    input   logic        CLK_50    ,
     // input   logic        RstQnnnH,
     //==============================
     // LOTR <-> FPGA TOP
@@ -187,6 +188,7 @@ fpga_tile fpga_tile
 (
     //General Interface
     .QClk       (QClk)         , //input  logic        
+    .CLK_50       (CLK_50)         , //input  logic        
     .RstQnnnH   (RstQnnnH)     , //input  logic        
     .CoreID     (8'd3) , //input  logic  [7:0] 
     //================================================
