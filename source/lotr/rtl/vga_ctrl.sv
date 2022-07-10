@@ -52,7 +52,7 @@ logic [8:0]  LineQ0, LineQ1;
 logic [31:0] RdDataQ2;
 logic [4:0]  SampleReset;
 logic [6:0]  HEX; 
-logic [12:0] WordOffsetQ1;
+logic [13:0] WordOffsetQ1;
 logic [2:0]  CountBitOffsetQ1, CountBitOffsetQ2 ;
 logic [1:0]  CountByteOffsetQ1, CountByteOffsetQ2;
 logic [7:0]  CountWordOffsetQ1;

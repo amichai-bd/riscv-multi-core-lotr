@@ -274,5 +274,5 @@ set_global_assignment -name QIP_FILE sv/pll_50Khz.qip
 set_global_assignment -name QIP_FILE sv/pll_25.qip
 set_global_assignment -name QIP_FILE sv/vga_mem_fpga.qip
 
-set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp

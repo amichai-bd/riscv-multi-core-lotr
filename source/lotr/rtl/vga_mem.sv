@@ -25,7 +25,7 @@ module vga_mem (
     input  logic        rden_a,
     output logic [31:0] q_a,
     // Read vga controller
-    input  logic [12:0] address_b,
+    input  logic [13:0] address_b,
     output logic [31:0] q_b
 );
 import lotr_pkg::*;

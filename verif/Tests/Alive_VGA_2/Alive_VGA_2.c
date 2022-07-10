@@ -74,12 +74,12 @@ int main() {
         
             for ( i = 0 ; i < 80 ; i++) {
                 VGA_FPGA[i]           = 0xffffffff; //First row
-                VGA_FPGA[i + 4800 -80]  = 0xffffffff; //First row
-                VGA_FPGA[i + 9520]    = 0xffffffff; // Last row
+                VGA_FPGA[i + 4800 -80]= 0xffffffff; //middle row
+                VGA_FPGA[i + 9520]    = 0xffffffff; //Last row
             }
             for ( i = 0 ; i < 120 ; i++) {
                 VGA_FPGA[i*80]        = 0xffffffff; // first Line
-                VGA_FPGA[i*80 + 39]   = 0xffffffff; // last  Line
+                VGA_FPGA[i*80 + 39]   = 0xffffffff; // middle Line
                 VGA_FPGA[i*80 + 79]   = 0xffffffff; // last  Line
             }
 
