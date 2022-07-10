@@ -139,6 +139,7 @@ parameter SIZE_VGA_MEM       = 38400;
 task end_tb;
     input string msg;
     integer SHRD_1,SHRD_2,fd1;
+    string draw;
     SHRD_1=$fopen({"../target/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
     SHRD_2=$fopen({"../target/",hpath,"/shrd_mem_2_snapshot.log"},"w");   
     for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
@@ -159,7 +160,8 @@ task end_tb;
         for (j = 0 ; j < 4; j = j+1) begin // Bytes
             for (k = 0 ; k < 320; k = k+4) begin // Words
                 for (l = 0 ; l < 8; l = l+1) begin // Bits  
-                    $fwrite(fd1,"%01b",lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[k+j+i][l]);
+                    draw = (lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[k+j+i][l] === 1'b1) ? "x" : "_";
+                    $fwrite(fd1,"%s",draw);
                 end        
             end 
             $fwrite(fd1,"\n");
