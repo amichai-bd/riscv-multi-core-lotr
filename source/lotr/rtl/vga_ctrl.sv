@@ -121,25 +121,25 @@ assign CurentPixelQ2 = RdDataQ2[{CountByteOffsetQ2,CountBitOffsetQ2}];
 //=========================
 `ifdef SIMULATION_ON
 vga_mem vga_mem (
-    .Clock             (QClk),
-    .CLK_25            (CLK_25),
+    .clock_a        (QClk),
+    .clock_b        (CLK_25),
     // Write
-    .RegRdData2        (RegRdData2),
-    .AluOut            (AluOut),
-    .CtrlVGAMemByteEn  (CtrlVGAMemByteEn),
-    .CtrlVGAMemWrEn    (CtrlVGAMemWrEn),
+    .data_a         (RegRdData2),
+    .address_a      (AluOut[31:2]),
+    .byteena_a      (CtrlVGAMemByteEn),
+    .wren_a         (CtrlVGAMemWrEn),
     // Read from core
-    .SelVGAMemWb       (SelVGAMemWb),
-    .VGAMemRdDataQ104H (VGAMemRdDataQ104H),
+    .rden_a         (SelVGAMemWb),
+    .q_a            (VGAMemRdDataQ104H),
     // Read from vga controller
-    .rdaddress         (WordOffsetQ1), // Word offset (not Byte)
-    .q                 (RdDataQ2)
+    .address_b      (WordOffsetQ1), // Word offset (not Byte)
+    .q_b            (RdDataQ2)
 );
 `else
 vga_mem_fpga vga_mem(
 	//CORE interface
     .clock_a        (QClk),
-    .wren_a         (CtrlVGAMemWrEn),	
+    .wren_a         (CtrlVGAMemWrEn),
     .byteena_a      (CtrlVGAMemByteEn),
     .address_a      (AluOut[31:2]),
     .data_a         (RegRdData2),

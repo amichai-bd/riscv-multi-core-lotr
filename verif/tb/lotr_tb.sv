@@ -133,7 +133,6 @@ lotr lotr(
 
 
 // define VGA memory sizes
-parameter VGA_MEM_OFFSET     = 'h3000;  
 parameter SIZE_VGA_MEM       = 38400;
 
 
@@ -160,7 +159,7 @@ task end_tb;
         for (j = 0 ; j < 4; j = j+1) begin // Bytes
             for (k = 0 ; k < 320; k = k+4) begin // Words
                 for (l = 0 ; l < 8; l = l+1) begin // Bits  
-                    $fwrite(fd1,"%01b",lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[VGA_MEM_OFFSET+k+j+i][l]);
+                    $fwrite(fd1,"%01b",lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[k+j+i][l]);
                 end        
             end 
             $fwrite(fd1,"\n");
