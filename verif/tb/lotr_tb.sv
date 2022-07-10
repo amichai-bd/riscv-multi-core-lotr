@@ -160,7 +160,7 @@ task end_tb;
         for (j = 0 ; j < 4; j = j+1) begin // Bytes
             for (k = 0 ; k < 320; k = k+4) begin // Words
                 for (l = 0 ; l < 8; l = l+1) begin // Bits  
-                    draw = (lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[k+j+i][l] === 1'b1) ? "x" : "_";
+                    draw = (lotr_tb.lotr.fpga_tile.DE10Lite_MMIO.vga_ctrl.vga_mem.VGAMem[k+j+i][l] === 1'b1) ? "x" : " ";
                     $fwrite(fd1,"%s",draw);
                 end        
             end 
