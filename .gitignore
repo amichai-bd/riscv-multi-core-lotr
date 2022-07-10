@@ -15,10 +15,11 @@ FPGA/CPU_GARAGE.qws
 #############
 *.swp
 *.bak
-#modelsim/work/*
-#modelsim/*
+modelsim/work/*
+modelsim/*
 target/*
 transcript
 !modelsim/README*
+!modelsim/work/README*
 !target/README*
 !FPGA/output_files/*.sof

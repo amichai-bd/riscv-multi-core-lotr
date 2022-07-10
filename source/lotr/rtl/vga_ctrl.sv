@@ -141,7 +141,7 @@ vga_mem_fpga vga_mem(
     .clock_a        (QClk),
     .wren_a         (CtrlVGAMemWrEn),	
     .byteena_a      (CtrlVGAMemByteEn),
-    .address_a      (AluOut),
+    .address_a      (AluOut[31:2]),
     .data_a         (RegRdData2),
     .rden_a         (SelVGAMemWb),	
     .q_a            (VGAMemRdDataQ104H),
