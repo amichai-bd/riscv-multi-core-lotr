@@ -1,9 +1,15 @@
+
 # riscv-multi-core-lotr
 Accelerator for multi-thread processing IP.     
 LOTR:  Lord-Of-The-Ring  
-Based on a Ring architecture to share all memory regions between threads and cores.
+Based on a Ring architecture to share all memory regions between threads and cores.  
+<img src="https://user-images.githubusercontent.com/81047407/173294229-dec18c7b-75c9-429f-b922-b4633fe54678.png" width="500">
 
-![image](https://user-images.githubusercontent.com/81047407/173294229-dec18c7b-75c9-429f-b922-b4633fe54678.png)
+The Design is loaded to the DE10Lite FPGA:  
+<img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="500">
+
+Writing to Display - accessable with LOAD/STORE from any Thread.  
+<img src="https://user-images.githubusercontent.com/81047407/178192931-b3714594-96ae-46d2-856a-4d72668a098f.jpeg" width="500">
 
 *** 
 ## The reposetory has 4 main projects:
