@@ -209,8 +209,10 @@ int main() {
     int UniqeId = CR_WHO_AM_I[0];
     int counter = 0 ;
     int i;
-    int hello []  = {'H','E','L','L','O',' ','P','R','I','N','T',',','\n','\0'};
-    int zero  []  = {'0','\n','\0'};
+    //This works in simulation! - but adds data to the D_MEM which we dont 
+    //int hello []  = {'H','E','L','L','O',' ','P','R','I','N','T',',','\n','\0'};
+    int hello []  = {'H','I','\0'};
+    int zero  []  = {' ','\n','\0'};
     int one   []  = {'1','\n','\0'};
     int two   []  = {'2','\n','\0'};
     int three []  = {'3','\n','\0'};
@@ -223,6 +225,7 @@ int main() {
         rvc_printf(zero);
         rvc_printf(one);
         rvc_printf(two);
+        rvc_printf(three);
         rvc_printf(three);
         break;
         case 0x5 : // 

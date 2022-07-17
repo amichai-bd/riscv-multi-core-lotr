@@ -1,5 +1,5 @@
 # Compile C source
-if [ "$#" != "3" ]&&[ "$#" != "1" ];then
+if [ "$#" != "3" ]&&[ "$#" != "1" ] && [ "$2" != "-abd" ];then
     echo "Not enought arguments, enter '-help' for help"
     exit 1
 fi
@@ -24,8 +24,11 @@ if [ "$1" == "-e" ];then
 fi
 
 GNU_DIR=/home/${GNU_DIR_NAME}/projects/$str
+if [ "$#" == "2" ]&&[ "$2" == "-abd" ];then
+  GNU_DIR=/root/riscv_local_repo/install/rv32i/bin
+fi
 
-if [ "$#" == "1" ];then
+if [ "$#" != "3" ];then
     #create assembly file from c file
     $GNU_DIR/riscv32-unknown-elf-gcc -S -ffreestanding -march=rv32$mod $1.c -o $1_rv32$mod.c.s;
      #link new ams file with gpc initializer and creates elf file

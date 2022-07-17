@@ -1,5 +1,8 @@
 	.file	"Alive_VGA_3.c"
 	.option nopic
+	.attribute arch, "rv32i2p0"
+	.attribute unaligned_access, 0
+	.attribute stack_align, 16
 	.text
 	.align	2
 	.globl	draw_char
@@ -750,52 +753,14 @@ print_hello:
 	addi	sp,sp,32
 	jr	ra
 	.size	print_hello, .-print_hello
-	.section	.rodata
-	.align	2
-.LC0:
-	.word	72
-	.word	69
-	.word	76
-	.word	76
-	.word	79
-	.word	32
-	.word	80
-	.word	82
-	.word	73
-	.word	78
-	.word	84
-	.word	44
-	.word	10
-	.word	0
-	.align	2
-.LC1:
-	.word	48
-	.word	10
-	.word	0
-	.align	2
-.LC2:
-	.word	49
-	.word	10
-	.word	0
-	.align	2
-.LC3:
-	.word	50
-	.word	10
-	.word	0
-	.align	2
-.LC4:
-	.word	51
-	.word	10
-	.word	0
-	.text
 	.align	2
 	.globl	main
 	.type	main, @function
 main:
-	addi	sp,sp,-144
-	sw	ra,140(sp)
-	sw	s0,136(sp)
-	addi	s0,sp,144
+	addi	sp,sp,-96
+	sw	ra,92(sp)
+	sw	s0,88(sp)
+	addi	s0,sp,96
 	li	a5,12582912
 	addi	a5,a5,4
 	lw	a5,0(a5)
@@ -804,47 +769,31 @@ main:
 	lw	a5,0(a5)
 	sw	a5,-24(s0)
 	sw	zero,-28(s0)
-	lui	a5,%hi(.LC0)
-	addi	a4,a5,%lo(.LC0)
-	addi	a5,s0,-84
-	mv	a3,a4
-	li	a4,56
-	mv	a2,a4
-	mv	a1,a3
-	mv	a0,a5
-	call	memcpy
-	lui	a5,%hi(.LC1)
-	addi	a5,a5,%lo(.LC1)
-	lw	a3,0(a5)
-	lw	a4,4(a5)
-	lw	a5,8(a5)
-	sw	a3,-96(s0)
-	sw	a4,-92(s0)
+	li	a5,72
+	sw	a5,-40(s0)
+	li	a5,73
+	sw	a5,-36(s0)
+	sw	zero,-32(s0)
+	li	a5,32
+	sw	a5,-52(s0)
+	li	a5,10
+	sw	a5,-48(s0)
+	sw	zero,-44(s0)
+	li	a5,49
+	sw	a5,-64(s0)
+	li	a5,10
+	sw	a5,-60(s0)
+	sw	zero,-56(s0)
+	li	a5,50
+	sw	a5,-76(s0)
+	li	a5,10
+	sw	a5,-72(s0)
+	sw	zero,-68(s0)
+	li	a5,51
 	sw	a5,-88(s0)
-	lui	a5,%hi(.LC2)
-	addi	a5,a5,%lo(.LC2)
-	lw	a3,0(a5)
-	lw	a4,4(a5)
-	lw	a5,8(a5)
-	sw	a3,-108(s0)
-	sw	a4,-104(s0)
-	sw	a5,-100(s0)
-	lui	a5,%hi(.LC3)
-	addi	a5,a5,%lo(.LC3)
-	lw	a3,0(a5)
-	lw	a4,4(a5)
-	lw	a5,8(a5)
-	sw	a3,-120(s0)
-	sw	a4,-116(s0)
-	sw	a5,-112(s0)
-	lui	a5,%hi(.LC4)
-	addi	a5,a5,%lo(.LC4)
-	lw	a3,0(a5)
-	lw	a4,4(a5)
-	lw	a5,8(a5)
-	sw	a3,-132(s0)
-	sw	a4,-128(s0)
-	sw	a5,-124(s0)
+	li	a5,10
+	sw	a5,-84(s0)
+	sw	zero,-80(s0)
 	call	set_table
 	lw	a4,-24(s0)
 	li	a5,7
@@ -868,19 +817,22 @@ main:
 .L23:
 	li	a0,0
 	call	print_hello
-	addi	a5,s0,-84
+	addi	a5,s0,-40
 	mv	a0,a5
 	call	rvc_printf
-	addi	a5,s0,-96
+	addi	a5,s0,-52
 	mv	a0,a5
 	call	rvc_printf
-	addi	a5,s0,-108
+	addi	a5,s0,-64
 	mv	a0,a5
 	call	rvc_printf
-	addi	a5,s0,-120
+	addi	a5,s0,-76
 	mv	a0,a5
 	call	rvc_printf
-	addi	a5,s0,-132
+	addi	a5,s0,-88
+	mv	a0,a5
+	call	rvc_printf
+	addi	a5,s0,-88
 	mv	a0,a5
 	call	rvc_printf
 	j	.L31
@@ -905,9 +857,9 @@ main:
 .L31:
 	li	a5,0
 	mv	a0,a5
-	lw	ra,140(sp)
-	lw	s0,136(sp)
-	addi	sp,sp,144
+	lw	ra,92(sp)
+	lw	s0,88(sp)
+	addi	sp,sp,96
 	jr	ra
 	.size	main, .-main
-	.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"
