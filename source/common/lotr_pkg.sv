@@ -100,7 +100,7 @@ parameter SIZE_SHRD_MEM    = 2**(MSB_D_MEM );
 
 // For test bench use
 parameter SIZE_MEM         = D_MEM_OFFSET + SIZE_D_MEM ;
-parameter MSB_CR                      = 11;
+parameter MSB_CR           = 11;
 
 // CR Address Offsets
 parameter CR_WHO_AM_I                 = 12'h0  ;

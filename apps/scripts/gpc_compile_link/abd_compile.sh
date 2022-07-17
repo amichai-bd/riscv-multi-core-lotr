@@ -4,10 +4,10 @@ shopt -s expand_aliases
 source ~/.aliases
 
 #create assembly file from c file
-rv_gcc -S -ffreestanding -march=rv32i $1.c -o $1_rv32i.c.s
+rv_gcc -S -ffreestanding -mno-strict-align -march=rv32i $1.c -o $1_rv32i.c.s
  #link new ams file with gpc initializer and creates elf file
 echo "ABD Linker with RV32i"
-rv_gcc  -O3  -march=rv32i -T./gpc_link.common.ld -nostartfiles -D__riscv__ $1_rv32i.c.s ./crt0_gpc.S -o $1_rv32i.elf
+rv_gcc  -O3  -march=rv32i -T./gpc_link.common.ld -mno-strict-align -nostartfiles -D__riscv__ $1_rv32i.c.s ./crt0_gpc.S -o $1_rv32i.elf
 #creates readable elf file
 rv_objdump -gd $1_rv32i.elf > $1_rv32i_elf_txt.txt
 #creates the instruction file 

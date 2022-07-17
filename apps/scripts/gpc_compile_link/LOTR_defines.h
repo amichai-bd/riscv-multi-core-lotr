@@ -36,9 +36,13 @@ Created : 1/07/2022
 #define CR_ID22_PC_EN  ((volatile int *)  (0x02C00158))
 #define CR_ID23_PC_EN  ((volatile int *)  (0x02C0015c))
 
-#define CR_WHO_AM_I ((volatile int *) (0x00C00000))
-#define CR_THREAD  ((volatile int *) (0x00C00004))
-#define CR_CORE_ID ((volatile int *) (0x00C00008))
+#define CR_WHO_AM_I    ((volatile int *) (0x00C00000))
+#define CR_THREAD      ((volatile int *) (0x00C00004))
+#define CR_CORE_ID     ((volatile int *) (0x00C00008))
+#define CR_SCRATCHPAD0 ((volatile int *) (0x00C00200))
+#define CR_SCRATCHPAD1 ((volatile int *) (0x00C00204))
+#define CR_SCRATCHPAD2 ((volatile int *) (0x00C00208))
+#define CR_SCRATCHPAD3 ((volatile int *) (0x00C0020C))
 
 //FPGA
 #define SEG0_FGPA  ((volatile int *) (0x03002000))
