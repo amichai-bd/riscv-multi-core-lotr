@@ -168,40 +168,40 @@ void set_table() {
     ASCII_BOTTOM_BASE['Z'] = 0x007E0408;
 }
 void print_hello(int offset) {
-        draw_char('H', offset, 0);
-        draw_char('E', offset, 1);
-        draw_char('L', offset, 2);
-        draw_char('L', offset, 3);
-        draw_char('O', offset, 4);
-        draw_char(' ', offset, 5);
-        draw_char('W', offset, 6);
-        draw_char('O', offset, 7);
-        draw_char('R', offset, 8);
-        draw_char('L', offset, 9);
-        draw_char('D', offset, 10);
-        draw_char('.', offset, 11);
-        draw_char(' ', offset, 12);
-        draw_char('F', offset, 13);
-        draw_char('R', offset, 14);
-        draw_char('O', offset, 15);
-        draw_char('M', offset, 16);
-        draw_char(' ', offset, 17);
-        draw_char(' ', offset, 18);
-        draw_char('T', offset, 19);
-        draw_char('H', offset, 20);
-        draw_char('R', offset, 21);
-        draw_char('E', offset, 22);
-        draw_char('A', offset, 23);
-        draw_char('D', offset, 24);
-        draw_char(' ', offset, 25);
-        if(CR_WHO_AM_I[0] ==4) draw_char('0', offset, 26);
-        if(CR_WHO_AM_I[0] ==5) draw_char('1', offset, 26);
-        if(CR_WHO_AM_I[0] ==6) draw_char('2', offset, 26);
-        if(CR_WHO_AM_I[0] ==7) draw_char('3', offset, 26);
-        if(CR_WHO_AM_I[0] ==8) draw_char('4', offset, 26);
-        if(CR_WHO_AM_I[0] ==9) draw_char('5', offset, 26);
-        if(CR_WHO_AM_I[0] ==10) draw_char('6', offset, 26);
-        if(CR_WHO_AM_I[0] ==11) draw_char('7', offset, 26);
+        draw_char('H', offset, 15+0);
+        draw_char('E', offset, 15+1);
+        draw_char('L', offset, 15+2);
+        draw_char('L', offset, 15+3);
+        draw_char('O', offset, 15+4);
+        draw_char(' ', offset, 15+5);
+        draw_char('W', offset, 15+6);
+        draw_char('O', offset, 15+7);
+        draw_char('R', offset, 15+8);
+        draw_char('L', offset, 15+9);
+        draw_char('D', offset, 15+10);
+        draw_char('.', offset, 15+11);
+        draw_char(' ', offset, 15+12);
+        draw_char('F', offset, 15+13);
+        draw_char('R', offset, 15+14);
+        draw_char('O', offset, 15+15);
+        draw_char('M', offset, 15+16);
+        draw_char(' ', offset, 15+17);
+        draw_char(' ', offset, 15+18);
+        draw_char('T', offset, 15+19);
+        draw_char('H', offset, 15+20);
+        draw_char('R', offset, 15+21);
+        draw_char('E', offset, 15+22);
+        draw_char('A', offset, 15+23);
+        draw_char('D', offset, 15+24);
+        draw_char(' ', offset, 15+25);
+        if(CR_WHO_AM_I[0] ==4)  draw_char('0', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==5)  draw_char('1', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==6)  draw_char('2', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==7)  draw_char('3', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==8)  draw_char('4', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==9)  draw_char('5', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==10) draw_char('6', offset, 15+26);
+        if(CR_WHO_AM_I[0] ==11) draw_char('7', offset, 15+26);
 
         }
 int main() {
@@ -209,35 +209,46 @@ int main() {
     int UniqeId = CR_WHO_AM_I[0];
     int counter = 0 ;
     int i;
-    int * string = {'T','E','S','T'};
+    int hello []  = {'H','E','L','L','O',' ','P','R','I','N','T',',','\n','\0'};
+    int zero  []  = {'0','\n','\0'};
+    int one   []  = {'1','\n','\0'};
+    int two   []  = {'2','\n','\0'};
+    int three []  = {'3','\n','\0'};
     set_table();
     switch (UniqeId) //the CR Address
     {
         case 0x4 : // 
         print_hello(0);
-        rvc_printf(string);
+        rvc_printf(hello); //courer updates automatacly
+        rvc_printf(zero);
+        rvc_printf(one);
+        rvc_printf(two);
+        rvc_printf(three);
         break;
         case 0x5 : // 
         print_hello(2);
+                while(1); 
         break;
         case 0x6 : // 
         print_hello(4);
+                while(1); 
         break;
         case 0x7 : // 
         print_hello(6);
+                while(1); 
         break;
-        case 0x8 : // 
-        print_hello(8);
-        break;
-        case 0x9 : // 
-        print_hello(10);
-        break;
-        case 0xA : // 
-        print_hello(12);
-        break;
-        case 0xB : // 
-        print_hello(14);
-        break;
+        //case 0x8 : // 
+        //print_hello(8);
+        //break;
+        //case 0x9 : // 
+        //print_hello(10);
+        //break;
+        //case 0xA : // 
+        //print_hello(12);
+        //break;
+        //case 0xB : // 
+        //print_hello(14);
+        //break;
         default :
                 while(1); 
                 break;
