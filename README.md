@@ -73,6 +73,7 @@ see under documentation
 
 - Ring Controler - RC - RTL Deisgn:     
 HAS (High-Level-Architecture-Specification):      
+see under documentation
 <TODO>  
 MAS (Micro-Level-Architecture-Specification):  
 <TODO>  
