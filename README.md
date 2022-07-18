@@ -68,6 +68,7 @@ HAS (High-Level-Architecture-Specification):
 RISCV Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf   
 HW Spec - <TODO>  
 MAS (Micro-Level-Architecture-Specification):  
+see under documentation
 <TODO>  
 
 - Ring Controler - RC - RTL Deisgn:     
