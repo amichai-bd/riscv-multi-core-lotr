@@ -242,6 +242,8 @@ set_global_assignment -name IP_SEARCH_PATHS ../source/common
 set_global_assignment -name ENABLE_SIGNALTAP ON
 set_global_assignment -name USE_SIGNALTAP_FILE output_files/stp1.stp
 set_global_assignment -name SEARCH_PATH ../source/common
+
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/adc_qsys.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/vga_sync_gen.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/lotr/rtl/vga_ctrl.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/common/lotr_defines.sv
@@ -273,6 +275,19 @@ set_global_assignment -name QIP_FILE sv/i_mem_byte_4k.qip
 set_global_assignment -name QIP_FILE sv/pll_50Khz.qip
 set_global_assignment -name QIP_FILE sv/pll_25.qip
 set_global_assignment -name QIP_FILE sv/vga_mem_fpga.qip
-
-set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/fiftyfivenm_adcblock_top_wrapper.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/fiftyfivenm_adcblock_primitive_wrapper.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/DE10_Lite_ADC_Core_modular_adc_0.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/chsel_code_converter_sw_to_hw.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_up_avalon_adv_adc.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer_ctrl.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer_csr.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_sample_store_ram.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_sample_store.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_control_fsm.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_control_avrg_fifo.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/altera_modular_adc_control.v
+set_global_assignment -name VERILOG_FILE adc/adc_qsys/synthesis/submodules/adc_qsys_adc_mega_0.v
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp

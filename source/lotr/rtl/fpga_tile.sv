@@ -171,7 +171,7 @@ DE10Lite_MMIO DE10Lite_MMIO(
     //        General Interface
     //================================================
     .QClk                   (QClk)                   ,//input
-    .CLK_50                   (CLK_50)                   ,//input
+    .CLK_50                 (CLK_50)                 ,//input
     .RstQnnnH               (RstQnnnH)               ,//input
     .CoreID                 (CoreID)                 ,//input
     //================================================
@@ -192,7 +192,7 @@ DE10Lite_MMIO DE10Lite_MMIO(
     .Button_1    (Button_1),
     .Switch      (Switch),
 
-    //utputs
+    //outputs
     .SEG7_0  (SEG7_0),
     .SEG7_1  (SEG7_1),
     .SEG7_2  (SEG7_2),
@@ -204,7 +204,7 @@ DE10Lite_MMIO DE10Lite_MMIO(
     .BLUE    (BLUE  ),//output logic [3:0] 
     .v_sync  (v_sync),//output logic       
     .h_sync  (h_sync),//output logic       
-    .LED     (LED)
+    .LED     (LED   )
 
 
 

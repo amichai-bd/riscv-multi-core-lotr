@@ -71,10 +71,12 @@ assign SampleReset[0] = Reset;
 `ifdef SIMULATION_ON
     `LOTR_RST_MSFF(CLK_25, !CLK_25, CLK_50, Reset)
 `elsif FPGA_ON
-pll_25 pll_25 (
-    .inclk0 (CLK_50),    // input
-    .c0     (CLK_25)     // output
-); 
+// The VGA works without the PLL - SImulation clock devider version works just fine.
+//pll_25 pll_25 (
+//    .inclk0 (CLK_50),    // input
+//    .c0     (CLK_25)     // output
+//); 
+    `LOTR_RST_MSFF(CLK_25, !CLK_25, CLK_50, Reset)
 `endif // FPGA_ON
 
 //=========================

@@ -21,18 +21,6 @@ import lotr_pkg::*;
     input  logic       RstQnnnH,
     input  logic [7:0]    CoreID              ,
 
-    // input logic C2F_RspValidQ502H      ,//input
-    // input t_opcode C2F_RspOpcodeQ502H     ,//input
-    // input logic [1:0] C2F_RspThreadIDQ502H  ,//input
-    // input logic [31:0] C2F_RspDataQ502H      ,//input
-    // input logic        C2F_RspStall           ,//input
-    
-    // output logic C2F_ReqValidQ500H      ,//output
-    // output t_opcode C2F_ReqOpcodeQ500H     ,//output
-    // output logic [1:0]   C2F_ReqThreadIDQ500H   ,//output
-    // output logic [31:0]  C2F_ReqAddressQ500H    ,//output
-    // output logic [31:0]  C2F_ReqDataQ500H       ,//output
-
     input logic        F2C_ReqValidQ502H      ,//input
     input t_opcode     F2C_ReqOpcodeQ502H     ,//input
     input logic [31:0] F2C_ReqAddressQ502H    ,//input
@@ -74,6 +62,7 @@ logic  F2C_ReqValidQ503H;
 t_opcode F2C_ReqOpcodeQ503H;
 logic [31:0] F2C_ReqAddressQ503H;
 logic [31:0] F2C_RspAddressQ504H;
+logic        F2C_RspValidQ504H;
 logic [31:0] F2C_ReqDataQ503H;
 logic [31:0] F2C_RspDataQ503H;
 logic [31:0] F2C_RspDataQ504H;
@@ -88,7 +77,6 @@ logic CtrlVgaMemRdEnQ503;
 logic CtrlVgaMemWrEnQ503;
 logic CtrlVgaMemRdEnQ504; 
 logic CtrlVgaMemWrEnQ504;
-
 //Sample input 502 -> 503
 `LOTR_MSFF(F2C_ReqValidQ503H   , F2C_ReqValidQ502H   , QClk)
 `LOTR_MSFF(F2C_ReqOpcodeQ503H  , F2C_ReqOpcodeQ502H  , QClk)
@@ -226,4 +214,23 @@ assign F2C_RspDataQ504H  = CtrlCRMemRdEnQ504  ? CrRspDataQ504H  :
 `LOTR_RST_MSFF(SEG7_5 , cr_rw_next.SEG7_5 , QClk, RstQnnnH)
 `LOTR_RST_MSFF(LED    , cr_rw_next.LED    , QClk, RstQnnnH)
 
+
+// This logic is to get data from the DE10lite Analog pins
+// currently "Can’t route signal" when using both ADC & othe DE10 lite IP such as VGA, 7SEG
+/*
+logic [11:0] adc_digital_output;
+`LOTR_RST_MSFF(LED    , adc_digital_output[11:2], QClk, RstQnnnH)
+	 adc_qsys adc_qsys (
+		.CLOCK(CLK_50),//input  wire        CLOCK, //      clk.clk
+		.CH0(),  //output wire [11:0] CH0,   // readings.CH0
+		.CH1(),  //output wire [11:0] CH1,   //         .CH1
+		.CH2(),  //output wire [11:0] CH2,   //         .CH2
+		.CH3(),  //output wire [11:0] CH3,   //         .CH3
+		.CH4(),  //output wire [11:0] CH4,   //         .CH4
+		.CH5(),  //output wire [11:0] CH5,   //         .CH5
+		.CH6(),  //output wire [11:0] CH6,   //         .CH6
+		.CH7(),  //output wire [11:0] CH7,   //         .CH7
+		.RESET(RstQnnnH) //input  wire        RESET  //    reset.reset
+	);
+*/
 endmodule // Module rvc_asap_5pl_cr_mem

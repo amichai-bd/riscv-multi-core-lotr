@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy
+ date="2022.07.20.10:39:43"
+ outputDirectory="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/">
+ <perimeter>
+  <parameter
+     name="AUTO_GENERATION_ID"
+     type="Integer"
+     defaultValue="0"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_UNIQUE_ID"
+     type="String"
+     defaultValue=""
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_FAMILY"
+     type="String"
+     defaultValue="MAX 10"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE"
+     type="String"
+     defaultValue="10M50DAF484C7G"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_SPEEDGRADE"
+     type="String"
+     defaultValue="7"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_CLOCK_RATE"
+     type="Long"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_CLOCK_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_RESET_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <interface name="clk" kind="clock" start="0">
+   <property name="clockRate" value="0" />
+   <property name="externallyDriven" value="false" />
+   <property name="ptfSchematicName" value="" />
+   <port name="CLOCK" direction="input" role="clk" width="1" />
+  </interface>
+  <interface name="readings" kind="conduit" start="0">
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="CH0" direction="output" role="CH0" width="12" />
+   <port name="CH1" direction="output" role="CH1" width="12" />
+   <port name="CH2" direction="output" role="CH2" width="12" />
+   <port name="CH3" direction="output" role="CH3" width="12" />
+   <port name="CH4" direction="output" role="CH4" width="12" />
+   <port name="CH5" direction="output" role="CH5" width="12" />
+   <port name="CH6" direction="output" role="CH6" width="12" />
+   <port name="CH7" direction="output" role="CH7" width="12" />
+  </interface>
+  <interface name="reset" kind="reset" start="0">
+   <property name="associatedClock" value="clk" />
+   <property name="synchronousEdges" value="DEASSERT" />
+   <port name="RESET" direction="input" role="reset" width="1" />
+  </interface>
+ </perimeter>
+ <entity
+   path=""
+   parameterizationKey="adc_qsys:1.0:AUTO_CLK_CLOCK_DOMAIN=-1,AUTO_CLK_CLOCK_RATE=-1,AUTO_CLK_RESET_DOMAIN=-1,AUTO_DEVICE=10M50DAF484C7G,AUTO_DEVICE_FAMILY=MAX 10,AUTO_DEVICE_SPEEDGRADE=7,AUTO_GENERATION_ID=1658302779,AUTO_UNIQUE_ID=(altera_up_avalon_adc_mega:18.0:AUTO_CLK_CLOCK_RATE=0,AUTO_DEVICE_FAMILY=MAX 10,board=DE10-Lite,board_rev=Autodetect,max10plldivby=5,max10pllmultby=1,numch=5,numch_=6,sclk_freq=10.0,sys_clk_freq=50,tsclk=5)"
+   instancePathKey="adc_qsys"
+   kind="adc_qsys"
+   version="1.0"
+   name="adc_qsys">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_GENERATION_ID" value="1658302779" />
+  <parameter name="AUTO_DEVICE" value="10M50DAF484C7G" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_UNIQUE_ID" value="" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
+  <generatedFiles>
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/adc_qsys.v"
+       type="VERILOG" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_up_avalon_adv_adc.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_control.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_control_avrg_fifo.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_control_fsm.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sample_store.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sample_store_ram.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer_csr.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer_ctrl.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/chsel_code_converter_sw_to_hw.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/DE10_Lite_ADC_Core_modular_adc_0.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/fiftyfivenm_adcblock_primitive_wrapper.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/fiftyfivenm_adcblock_top_wrapper.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/adc_qsys_adc_mega_0.v"
+       type="VERILOG" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys.qsys" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/altera_up_avalon_adc_mega_hw.tcl" />
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/altera_up_avalon_adv_adc.v" />
+  </childSourceFiles>
+  <messages>
+   <message level="Debug" culprit="adc_qsys">queue size: 0 starting:adc_qsys "adc_qsys"</message>
+   <message level="Progress" culprit="min"></message>
+   <message level="Progress" culprit="max"></message>
+   <message level="Progress" culprit="current"></message>
+   <message level="Progress" culprit="current"></message>
+   <message level="Debug">Transform: CustomInstructionTransform</message>
+   <message level="Debug">No custom instruction connections, skipping transform </message>
+   <message level="Debug" culprit="merlin_custom_instruction_transform"><![CDATA[After transform: <b>1</b> modules, <b>0</b> connections]]></message>
+   <message level="Debug">Transform: MMTransform</message>
+   <message level="Debug">Transform: InterruptMapperTransform</message>
+   <message level="Debug">Transform: InterruptSyncTransform</message>
+   <message level="Debug">Transform: InterruptFanoutTransform</message>
+   <message level="Debug">Transform: AvalonStreamingTransform</message>
+   <message level="Debug">Transform: ResetAdaptation</message>
+   <message level="Debug" culprit="adc_qsys"><![CDATA["<b>adc_qsys</b>" reuses <b>altera_up_avalon_adc_mega</b> "<b>submodules/adc_qsys_adc_mega_0</b>"]]></message>
+   <message level="Debug" culprit="adc_qsys">queue size: 0 starting:altera_up_avalon_adc_mega "submodules/adc_qsys_adc_mega_0"</message>
+   <message level="Info" culprit="adc_mega_0">Starting Generation of ADC Controller for DE-series Board</message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_control.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_control_avrg_fifo.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_avrg_fifo.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_control_fsm.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_fsm.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sample_store.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sample_store_ram.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store_ram.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sequencer.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sequencer_csr.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_csr.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sequencer_ctrl.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_ctrl.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>chsel_code_converter_sw_to_hw.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/chsel_code_converter_sw_to_hw.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>DE10_Lite_ADC_Core_modular_adc_0.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/DE10_Lite_ADC_Core_modular_adc_0.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>fiftyfivenm_adcblock_primitive_wrapper.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_primitive_wrapper.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>fiftyfivenm_adcblock_top_wrapper.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_top_wrapper.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Info" culprit="adc_mega_0">C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/altera_up_avalon_adv_adc.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_avrg_fifo.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_fsm.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store_ram.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_csr.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_ctrl.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/chsel_code_converter_sw_to_hw.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/DE10_Lite_ADC_Core_modular_adc_0.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_primitive_wrapper.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_top_wrapper.v C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0002_sopcgen/adc_qsys_adc_mega_0.v</message>
+   <message level="Debug">set ALTERA_HW_TCL_KEEP_TEMP_FILES=1 to retain temp files</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_sh.exe -t C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0003_sopcqmap/not_a_project_setup.tcl</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_map.exe not_a_project --generate_hdl_interface=C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0002_sopcgen/adc_qsys_adc_mega_0.v --set=HDL_INTERFACE_OUTPUT_PATH=C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0003_sopcqmap/ --ini=disable_check_quartus_compatibility_qsys_only=on</message>
+   <message level="Debug">Command took 0.616s</message>
+   <message level="Debug">Command took 0.664s</message>
+   <message level="Debug">set ALTERA_HW_TCL_KEEP_TEMP_FILES=1 to retain temp files</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_sh.exe -t C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0004_sopcqmap/not_a_project_setup.tcl</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_map.exe not_a_project --generate_hdl_interface=C:\Users\amich\AppData\Local\Temp\alt9193_8330253317313154278.dir\0002_sopcgen\adc_qsys_adc_mega_0.v --set=HDL_INTERFACE_OUTPUT_PATH=C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0004_sopcqmap/ --set=HDL_INTERFACE_INSTANCE_NAME=inst --set=HDL_INTERFACE_INSTANCE_ENTITY=adc_qsys_adc_mega_0 "--set=HDL_INTERFACE_INSTANCE_PARAMETERS=board=S\"DE10-Lite\";board_rev=S\"Autodetect\";tsclk=D\"5\";numch=D\"5\";max10pllmultby=D\"1\";max10plldivby=D\"5\";" --ini=disable_check_quartus_compatibility_qsys_only=on</message>
+   <message level="Debug">Command took 0.672s</message>
+   <message level="Debug">Command took 0.510s</message>
+   <message level="Info" culprit="adc_mega_0"><![CDATA["<b>adc_qsys</b>" instantiated <b>altera_up_avalon_adc_mega</b> "<b>adc_mega_0</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="altera_up_avalon_adc_mega:18.0:AUTO_CLK_CLOCK_RATE=0,AUTO_DEVICE_FAMILY=MAX 10,board=DE10-Lite,board_rev=Autodetect,max10plldivby=5,max10pllmultby=1,numch=5,numch_=6,sclk_freq=10.0,sys_clk_freq=50,tsclk=5"
+   instancePathKey="adc_qsys:.:adc_mega_0"
+   kind="altera_up_avalon_adc_mega"
+   version="18.0"
+   name="adc_qsys_adc_mega_0">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="max10plldivby" value="5" />
+  <parameter name="sys_clk_freq" value="50" />
+  <parameter name="tsclk" value="5" />
+  <parameter name="sclk_freq" value="10.0" />
+  <parameter name="numch_" value="6" />
+  <parameter name="board_rev" value="Autodetect" />
+  <parameter name="max10pllmultby" value="1" />
+  <parameter name="board" value="DE10-Lite" />
+  <parameter name="numch" value="5" />
+  <generatedFiles>
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_up_avalon_adv_adc.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_control.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_control_avrg_fifo.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_control_fsm.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sample_store.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sample_store_ram.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer_csr.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/altera_modular_adc_sequencer_ctrl.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/chsel_code_converter_sw_to_hw.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/DE10_Lite_ADC_Core_modular_adc_0.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/fiftyfivenm_adcblock_primitive_wrapper.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/fiftyfivenm_adcblock_top_wrapper.v"
+       type="VERILOG" />
+   <file
+       path="C:/Users/amich/OneDrive/Desktop/project/riscv-multi-core-lotr/FPGA/adc/adc_qsys/synthesis/submodules/adc_qsys_adc_mega_0.v"
+       type="VERILOG" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/altera_up_avalon_adc_mega_hw.tcl" />
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/altera_up_avalon_adv_adc.v" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="adc_qsys" as="adc_mega_0" />
+  <messages>
+   <message level="Debug" culprit="adc_qsys">queue size: 0 starting:altera_up_avalon_adc_mega "submodules/adc_qsys_adc_mega_0"</message>
+   <message level="Info" culprit="adc_mega_0">Starting Generation of ADC Controller for DE-series Board</message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_control.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_control_avrg_fifo.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_avrg_fifo.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_control_fsm.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_fsm.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sample_store.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sample_store_ram.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store_ram.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sequencer.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sequencer_csr.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_csr.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>altera_modular_adc_sequencer_ctrl.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_ctrl.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>chsel_code_converter_sw_to_hw.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/chsel_code_converter_sw_to_hw.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>DE10_Lite_ADC_Core_modular_adc_0.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/DE10_Lite_ADC_Core_modular_adc_0.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>fiftyfivenm_adcblock_primitive_wrapper.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_primitive_wrapper.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> from generate callback added file <b>fiftyfivenm_adcblock_top_wrapper.v</b> with wrong prefix; use [get_generation_property output_name] to get correct prefix]]></message>
+   <message level="Warning" culprit="adc_mega_0"><![CDATA[<b>add_file</b> on static file <b>C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_top_wrapper.v</b> from generate callback is unsafe; add static files from main program]]></message>
+   <message level="Info" culprit="adc_mega_0">C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/altera_up_avalon_adv_adc.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_avrg_fifo.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_control_fsm.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sample_store_ram.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_csr.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/altera_modular_adc_sequencer_ctrl.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/chsel_code_converter_sw_to_hw.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/DE10_Lite_ADC_Core_modular_adc_0.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_primitive_wrapper.v C:/intelfpga_lite/20.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/de10/fiftyfivenm_adcblock_top_wrapper.v C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0002_sopcgen/adc_qsys_adc_mega_0.v</message>
+   <message level="Debug">set ALTERA_HW_TCL_KEEP_TEMP_FILES=1 to retain temp files</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_sh.exe -t C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0003_sopcqmap/not_a_project_setup.tcl</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_map.exe not_a_project --generate_hdl_interface=C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0002_sopcgen/adc_qsys_adc_mega_0.v --set=HDL_INTERFACE_OUTPUT_PATH=C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0003_sopcqmap/ --ini=disable_check_quartus_compatibility_qsys_only=on</message>
+   <message level="Debug">Command took 0.616s</message>
+   <message level="Debug">Command took 0.664s</message>
+   <message level="Debug">set ALTERA_HW_TCL_KEEP_TEMP_FILES=1 to retain temp files</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_sh.exe -t C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0004_sopcqmap/not_a_project_setup.tcl</message>
+   <message level="Debug">Command: C:/intelfpga_lite/20.1/quartus\bin64/quartus_map.exe not_a_project --generate_hdl_interface=C:\Users\amich\AppData\Local\Temp\alt9193_8330253317313154278.dir\0002_sopcgen\adc_qsys_adc_mega_0.v --set=HDL_INTERFACE_OUTPUT_PATH=C:/Users/amich/AppData/Local/Temp/alt9193_8330253317313154278.dir/0004_sopcqmap/ --set=HDL_INTERFACE_INSTANCE_NAME=inst --set=HDL_INTERFACE_INSTANCE_ENTITY=adc_qsys_adc_mega_0 "--set=HDL_INTERFACE_INSTANCE_PARAMETERS=board=S\"DE10-Lite\";board_rev=S\"Autodetect\";tsclk=D\"5\";numch=D\"5\";max10pllmultby=D\"1\";max10plldivby=D\"5\";" --ini=disable_check_quartus_compatibility_qsys_only=on</message>
+   <message level="Debug">Command took 0.672s</message>
+   <message level="Debug">Command took 0.510s</message>
+   <message level="Info" culprit="adc_mega_0"><![CDATA["<b>adc_qsys</b>" instantiated <b>altera_up_avalon_adc_mega</b> "<b>adc_mega_0</b>"]]></message>
+  </messages>
+ </entity>
+</deploy>

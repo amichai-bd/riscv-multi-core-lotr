@@ -149,6 +149,9 @@ gpc_4t_tile gpc_4t_tile_1
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [2]),//output
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [2]) //output
 );
+
+//FIXME - currently use a single gpc_4t_tile
+/*
 gpc_4t_tile gpc_4t_tile_2
 (
     //General Interface
@@ -183,12 +186,34 @@ gpc_4t_tile gpc_4t_tile_2
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [3]),//output
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [3]) //output
 );
+*/
+//=======================
+//		TEMP
+//=======================
+// bypass gpc_4t_tile_2
+//=======================
+
+assign RingReqValidQnnnH     [3] = RingReqValidQnnnH     [2];
+assign RingReqRequestorQnnnH [3] = RingReqRequestorQnnnH [2];
+assign RingReqOpcodeQnnnH    [3] = RingReqOpcodeQnnnH    [2];
+assign RingReqAddressQnnnH   [3] = RingReqAddressQnnnH   [2];
+assign RingReqDataQnnnH      [3] = RingReqDataQnnnH      [2];
+assign RingRspValidQnnnH     [3] = RingRspValidQnnnH     [2];
+assign RingRspRequestorQnnnH [3] = RingRspRequestorQnnnH [2];
+assign RingRspOpcodeQnnnH    [3] = RingRspOpcodeQnnnH    [2];
+assign RingRspAddressQnnnH   [3] = RingRspAddressQnnnH   [2];
+assign RingRspDataQnnnH      [3] = RingRspDataQnnnH      [2];
+
+//=======================
+
+
+
 
 fpga_tile fpga_tile
 (
     //General Interface
     .QClk       (QClk)         , //input  logic        
-    .CLK_50       (CLK_50)         , //input  logic        
+    .CLK_50     (CLK_50)         , //input  logic        
     .RstQnnnH   (RstQnnnH)     , //input  logic        
     .CoreID     (8'd3) , //input  logic  [7:0] 
     //================================================
@@ -200,7 +225,7 @@ fpga_tile fpga_tile
     .RingReqInOpcodeQ500H       (RingReqOpcodeQnnnH    [3])  ,//input
     .RingReqInAddressQ500H      (RingReqAddressQnnnH   [3])  ,//input
     .RingReqInDataQ500H         (RingReqDataQnnnH      [3])  ,//input
-    //Ring ---> RC , RingRspIn                          3
+    //Ring ---> RC , RingRspIn                          
     .RingRspInValidQ500H        (RingRspValidQnnnH     [3])  ,//input
     .RingRspInRequestorQ500H    (RingRspRequestorQnnnH [3])  ,//input
     .RingRspInOpcodeQ500H       (RingRspOpcodeQnnnH    [3])  ,//input
@@ -212,7 +237,7 @@ fpga_tile fpga_tile
     .RingReqOutOpcodeQ502H      (RingReqOpcodeQnnnH   [4]),//output
     .RingReqOutAddressQ502H     (RingReqAddressQnnnH  [4]),//output
     .RingReqOutDataQ502H        (RingReqDataQnnnH     [4]),//output
-     //RC   ---> Ring , RingRspOut                     4
+     //RC   ---> Ring , RingRspOut                     
     .RingRspOutValidQ502H       (RingRspValidQnnnH    [4]),//output
     .RingRspOutRequestorQ502H   (RingRspRequestorQnnnH[4]),//output
     .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [4]),//output
@@ -226,19 +251,19 @@ fpga_tile fpga_tile
     .Button_1    (1'b0),
     .Switch      (Switch),
 
-    //utputs
-    .SEG7_0  (SEG7_0),
-    .SEG7_1  (SEG7_1),
-    .SEG7_2  (SEG7_2),
-    .SEG7_3  (SEG7_3),
-    .SEG7_4  (SEG7_4),
-    .SEG7_5  (SEG7_5),
-    .RED     (RED   ),//output logic [3:0] 
-    .GREEN   (GREEN ),//output logic [3:0] 
-    .BLUE    (BLUE  ),//output logic [3:0] 
-    .v_sync  (v_sync),//output logic       
-    .h_sync  (h_sync),//output logic      
-    .LED     (LED)
+    //outputs
+    .SEG7_0  (SEG7_0),//(SEG7_0),
+    .SEG7_1  (SEG7_1),//(SEG7_1),
+    .SEG7_2  (SEG7_2),//(SEG7_2),
+    .SEG7_3  (SEG7_3),//(SEG7_3),
+    .SEG7_4  (SEG7_4),//(SEG7_4),
+    .SEG7_5  (SEG7_5),//(SEG7_5),
+    .RED     (RED),//(RED),//output logic [3:0] 
+    .GREEN   (GREEN),//(GREEN),//output logic [3:0] 
+    .BLUE    (BLUE),//(BLUE),//output logic [3:0] 
+    .v_sync  (v_sync),//(v_sync),//output logic       
+    .h_sync  (h_sync),//(h_sync),//output logic      
+    .LED     (LED)//(LED)
 );
 
 

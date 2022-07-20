@@ -1,0 +1,127 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2020  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.1"))
+(symbol
+	(rect 0 0 176 296)
+	(text "adc_qsys" (rect 60 -1 100 11)(font "Arial" (font_size 10)))
+	(text "inst" (rect 8 280 20 292)(font "Arial" ))
+	(port
+		(pt 0 72)
+		(input)
+		(text "CLOCK" (rect 0 0 34 12)(font "Arial" (font_size 8)))
+		(text "CLOCK" (rect 4 61 34 72)(font "Arial" (font_size 8)))
+		(line (pt 0 72)(pt 64 72)(line_width 1))
+	)
+	(port
+		(pt 0 264)
+		(input)
+		(text "RESET" (rect 0 0 34 12)(font "Arial" (font_size 8)))
+		(text "RESET" (rect 4 253 34 264)(font "Arial" (font_size 8)))
+		(line (pt 0 264)(pt 64 264)(line_width 1))
+	)
+	(port
+		(pt 0 112)
+		(output)
+		(text "CH0[11..0]" (rect 0 0 41 12)(font "Arial" (font_size 8)))
+		(text "CH0[11..0]" (rect 4 101 64 112)(font "Arial" (font_size 8)))
+		(line (pt 0 112)(pt 64 112)(line_width 3))
+	)
+	(port
+		(pt 0 128)
+		(output)
+		(text "CH1[11..0]" (rect 0 0 40 12)(font "Arial" (font_size 8)))
+		(text "CH1[11..0]" (rect 4 117 64 128)(font "Arial" (font_size 8)))
+		(line (pt 0 128)(pt 64 128)(line_width 3))
+	)
+	(port
+		(pt 0 144)
+		(output)
+		(text "CH2[11..0]" (rect 0 0 41 12)(font "Arial" (font_size 8)))
+		(text "CH2[11..0]" (rect 4 133 64 144)(font "Arial" (font_size 8)))
+		(line (pt 0 144)(pt 64 144)(line_width 3))
+	)
+	(port
+		(pt 0 160)
+		(output)
+		(text "CH3[11..0]" (rect 0 0 41 12)(font "Arial" (font_size 8)))
+		(text "CH3[11..0]" (rect 4 149 64 160)(font "Arial" (font_size 8)))
+		(line (pt 0 160)(pt 64 160)(line_width 3))
+	)
+	(port
+		(pt 0 176)
+		(output)
+		(text "CH4[11..0]" (rect 0 0 42 12)(font "Arial" (font_size 8)))
+		(text "CH4[11..0]" (rect 4 165 64 176)(font "Arial" (font_size 8)))
+		(line (pt 0 176)(pt 64 176)(line_width 3))
+	)
+	(port
+		(pt 0 192)
+		(output)
+		(text "CH5[11..0]" (rect 0 0 41 12)(font "Arial" (font_size 8)))
+		(text "CH5[11..0]" (rect 4 181 64 192)(font "Arial" (font_size 8)))
+		(line (pt 0 192)(pt 64 192)(line_width 3))
+	)
+	(port
+		(pt 0 208)
+		(output)
+		(text "CH6[11..0]" (rect 0 0 41 12)(font "Arial" (font_size 8)))
+		(text "CH6[11..0]" (rect 4 197 64 208)(font "Arial" (font_size 8)))
+		(line (pt 0 208)(pt 64 208)(line_width 3))
+	)
+	(port
+		(pt 0 224)
+		(output)
+		(text "CH7[11..0]" (rect 0 0 41 12)(font "Arial" (font_size 8)))
+		(text "CH7[11..0]" (rect 4 213 64 224)(font "Arial" (font_size 8)))
+		(line (pt 0 224)(pt 64 224)(line_width 3))
+	)
+	(drawing
+		(text "clk" (rect 49 43 116 99)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "clk" (rect 69 67 156 144)(font "Arial" (color 0 0 0)))
+		(text "readings" (rect 15 83 78 179)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "CH0" (rect 69 107 156 224)(font "Arial" (color 0 0 0)))
+		(text "CH1" (rect 69 123 156 256)(font "Arial" (color 0 0 0)))
+		(text "CH2" (rect 69 139 156 288)(font "Arial" (color 0 0 0)))
+		(text "CH3" (rect 69 155 156 320)(font "Arial" (color 0 0 0)))
+		(text "CH4" (rect 69 171 156 352)(font "Arial" (color 0 0 0)))
+		(text "CH5" (rect 69 187 156 384)(font "Arial" (color 0 0 0)))
+		(text "CH6" (rect 69 203 156 416)(font "Arial" (color 0 0 0)))
+		(text "CH7" (rect 69 219 156 448)(font "Arial" (color 0 0 0)))
+		(text "reset" (rect 35 235 100 483)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "reset" (rect 69 259 168 528)(font "Arial" (color 0 0 0)))
+		(text " adc_qsys " (rect 131 280 322 570)(font "Arial" ))
+		(line (pt 64 32)(pt 112 32)(line_width 1))
+		(line (pt 112 32)(pt 112 280)(line_width 1))
+		(line (pt 64 280)(pt 112 280)(line_width 1))
+		(line (pt 64 32)(pt 64 280)(line_width 1))
+		(line (pt 65 52)(pt 65 76)(line_width 1))
+		(line (pt 66 52)(pt 66 76)(line_width 1))
+		(line (pt 65 92)(pt 65 228)(line_width 1))
+		(line (pt 66 92)(pt 66 228)(line_width 1))
+		(line (pt 65 244)(pt 65 268)(line_width 1))
+		(line (pt 66 244)(pt 66 268)(line_width 1))
+		(line (pt 0 0)(pt 176 0)(line_width 1))
+		(line (pt 176 0)(pt 176 296)(line_width 1))
+		(line (pt 0 296)(pt 176 296)(line_width 1))
+		(line (pt 0 0)(pt 0 296)(line_width 1))
+	)
+)

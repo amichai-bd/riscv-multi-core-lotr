@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags="INTERNAL_COMPONENT=true"
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element adc_mega_0
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10M50DAF484C7G" />
+ <parameter name="deviceFamily" value="MAX 10" />
+ <parameter name="deviceSpeedGrade" value="7" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="true" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface name="clk" internal="adc_mega_0.clk" type="clock" dir="end">
+  <port name="CLOCK" internal="CLOCK" />
+ </interface>
+ <interface name="external_interface" internal="adc_mega_0.external_interface" />
+ <interface
+   name="readings"
+   internal="adc_mega_0.readings"
+   type="conduit"
+   dir="end">
+  <port name="CH0" internal="CH0" />
+  <port name="CH1" internal="CH1" />
+  <port name="CH2" internal="CH2" />
+  <port name="CH3" internal="CH3" />
+  <port name="CH4" internal="CH4" />
+  <port name="CH5" internal="CH5" />
+  <port name="CH6" internal="CH6" />
+  <port name="CH7" internal="CH7" />
+ </interface>
+ <interface name="reset" internal="adc_mega_0.reset" type="reset" dir="end">
+  <port name="RESET" internal="RESET" />
+ </interface>
+ <module
+   name="adc_mega_0"
+   kind="altera_up_avalon_adc_mega"
+   version="18.0"
+   enabled="1"
+   autoexport="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="board" value="DE10-Lite" />
+  <parameter name="board_rev" value="Autodetect" />
+  <parameter name="numch_" value="6" />
+  <parameter name="sclk_freq" value="10.0" />
+  <parameter name="sys_clk_freq" value="50" />
+ </module>
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>

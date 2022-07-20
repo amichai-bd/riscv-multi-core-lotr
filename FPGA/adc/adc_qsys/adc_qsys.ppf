@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pinplan
+ variation_name="adc_mega_0"
+ megafunction_name="ALTERA_UP_AVALON_ADC_MEGA"
+ intended_family="MAX 10"
+ specifies="all_ports">
+ <global>
+  <pin name="CLOCK" direction="input" scope="external" />
+  <pin name="RESET" direction="input" scope="external" />
+  <pin name="CH0[11..0]" direction="output" scope="external" />
+  <pin name="CH1[11..0]" direction="output" scope="external" />
+  <pin name="CH2[11..0]" direction="output" scope="external" />
+  <pin name="CH3[11..0]" direction="output" scope="external" />
+  <pin name="CH4[11..0]" direction="output" scope="external" />
+  <pin name="CH5[11..0]" direction="output" scope="external" />
+  <pin name="CH6[11..0]" direction="output" scope="external" />
+  <pin name="CH7[11..0]" direction="output" scope="external" />
+ </global>
+</pinplan>

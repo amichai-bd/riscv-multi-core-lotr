@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ip>
+ <presets version="12.1">
+  <preset
+     name="ADC_NewPreset 1"
+     kind="altera_up_avalon_adc_mega"
+     version="All"
+     description="">
+   <parameter name="sys_clk_freq" value="50" />
+   <parameter name="sclk_freq" value="10.0" />
+   <parameter name="numch_" value="6" />
+   <parameter name="board" value="DE10-Lite" />
+  </preset>
+ </presets>
+</ip>

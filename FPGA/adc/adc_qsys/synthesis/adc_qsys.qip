@@ -1,0 +1,56 @@
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_TOOL_NAME "Qsys"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_TOOL_VERSION "20.1"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_TOOL_ENV "Qsys"
+set_global_assignment -library "adc_qsys" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../adc_qsys.sopcinfo"]
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name SLD_INFO "QSYS_NAME adc_qsys HAS_SOPCINFO 1 GENERATION_ID 1658302779"
+set_global_assignment -library "adc_qsys" -name MISC_FILE [file join $::quartus(qip_path) "../adc_qsys.cmp"]
+set_global_assignment -library "adc_qsys" -name SLD_FILE [file join $::quartus(qip_path) "adc_qsys.debuginfo"]
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_TARGETED_DEVICE_FAMILY "MAX 10"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_GENERATED_DEVICE_FAMILY "{MAX 10}"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_QSYS_MODE "STANDALONE"
+set_global_assignment -name SYNTHESIS_ONLY_QIP ON
+set_global_assignment -library "adc_qsys" -name MISC_FILE [file join $::quartus(qip_path) "../../adc_qsys.qsys"]
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_NAME "YWRjX3FzeXM="
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_DISPLAY_NAME "YWRjX3FzeXM="
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_REPORT_HIERARCHY "On"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_VERSION "MS4w"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTY1ODMwMjc3OQ==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::TUFYIDEw::QXV0byBERVZJQ0VfRkFNSUxZ"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::MTBNNTBEQUY0ODRDN0c=::QXV0byBERVZJQ0U="
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::Nw==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtfQ0xPQ0tfUkFURQ==::LTE=::QXV0byBDTE9DS19SQVRF"
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtfQ0xPQ0tfRE9NQUlO::LTE=::QXV0byBDTE9DS19ET01BSU4="
+set_global_assignment -entity "adc_qsys" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtfUkVTRVRfRE9NQUlO::LTE=::QXV0byBSRVNFVF9ET01BSU4="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_NAME "YWRjX3FzeXNfYWRjX21lZ2FfMA=="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_DISPLAY_NAME "QURDIENvbnRyb2xsZXIgZm9yIERFLXNlcmllcyBCb2FyZHM="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_REPORT_HIERARCHY "Off"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_AUTHOR "SW50ZWwgRlBHQSBVbml2ZXJzaXR5IFByb2dyYW0="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_VERSION "MTguMA=="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_DESCRIPTION "QURDIENvbnRyb2xsZXIgZm9yIEFsdGVyYSBERS1zZXJpZXMgQm9hcmRz"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "Ym9hcmQ=::REUxMC1MaXRl::REUtU2VyaWVzIEJvYXJk"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "dHNjbGs=::NQ==::QURDX1NDTEsgU2NhbGluZyBGYWN0b3I="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "bnVtY2hf::Ng==::TnVtYmVyIG9mIENoYW5uZWxzIFVzZWQ="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "bnVtY2g=::NQ==::TnVtYmVyIG9mIENoYW5uZWxzIFVzZWQgLSAx"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "bWF4MTBwbGxtdWx0Ynk=::MQ==::TUFYMTAgQURDIFBsbCBtdWx0aXBseSBieSBmYWN0b3I="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "bWF4MTBwbGxkaXZieQ==::NQ==::TUFYMTAgQURDIFBsbCBkaXZpZGUgYnkgZmFjdG9y"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "c3lzX2Nsa19mcmVx::NTA=::U3lzdGVtIENsb2NrIEZyZXF1ZW5jeSAoTUh6KQ=="
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::TUFYIDEw::QXV0byBERVZJQ0VfRkFNSUxZ"
+set_global_assignment -entity "adc_qsys_adc_mega_0" -library "adc_qsys" -name IP_COMPONENT_PARAMETER "QVVUT19DTEtfQ0xPQ0tfUkFURQ==::MA==::QXV0byBDTE9DS19SQVRF"
+
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "adc_qsys.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_up_avalon_adv_adc.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_control.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_control_avrg_fifo.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_control_fsm.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_sample_store.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_sample_store_ram.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_sequencer.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_sequencer_csr.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_modular_adc_sequencer_ctrl.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/chsel_code_converter_sw_to_hw.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/DE10_Lite_ADC_Core_modular_adc_0.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/fiftyfivenm_adcblock_primitive_wrapper.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/fiftyfivenm_adcblock_top_wrapper.v"]
+set_global_assignment -library "adc_qsys" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/adc_qsys_adc_mega_0.v"]
