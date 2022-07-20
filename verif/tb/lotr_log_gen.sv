@@ -73,8 +73,8 @@ logic        AssertEBREAK       ;
 
 string opCode;
 
-assign AssertEBREAK = (lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011) ||
-                      (lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
+assign AssertEBREAK = (lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
+ //||                      (lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
 
 assign C2F_ReqValidQ500H       [1] = lotr_tb.lotr.gpc_4t_tile_1.C2F_ReqValidQ500H         ;
 assign C2F_ReqOpcodeQ500H      [1] = lotr_tb.lotr.gpc_4t_tile_1.C2F_ReqOpcodeQ500H        ;

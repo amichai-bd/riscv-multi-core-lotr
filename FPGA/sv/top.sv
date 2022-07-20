@@ -18,10 +18,10 @@ module top(
         output logic        v_sync
     );
 	 
-logic CLK_5;
-	pll_5Mhz pll_5Mhz (
-	.inclk0 ( CLK_50),
-	.c0		(CLK_5));
+//logic CLK_5;
+//	pll_5Mhz pll_5Mhz (
+//	.inclk0 ( CLK_50),
+//	.c0		(CLK_5));
 	 
 logic CLK_50Khz;
 	pll_50Khz pll_5Khz (

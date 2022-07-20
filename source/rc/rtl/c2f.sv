@@ -76,7 +76,6 @@ t_state                   C2F_NextBufferStateQnnnH [C2F_MSB:0]   ;
 //=========================================
 // === F2C ===
 logic [C2F_MSB:0]     C2F_EnAllocEntryQ501H ;
-logic [C2F_MSB:0]     C2F_EnWrDataQnnnH     ;
 logic [C2F_MSB:0]     C2F_SelDataSrcQnnnH   ;
 // F2C data out
 logic [C2F_ENC_MSB:0] C2F_Sel2RingQ501H    ;
@@ -137,11 +136,6 @@ always_comb begin : set_enalloc_c2f
     end //for
 end //always_comb
 
-always_comb begin : set_enwritedata_c2f
-    for (int i=0 ; i < C2F_ENTRIESNUM ; i++ ) begin
-        C2F_EnWrDataQnnnH[i]  = (C2F_EnAllocEntryQ500H[i] || C2F_RspMatchQ501H); 
-    end //for
-end //always_comb
 
 // ===== C2F Buffer Input =========
 assign C2F_EnRingWrQ501H = C2F_RspMatchQ501H; 

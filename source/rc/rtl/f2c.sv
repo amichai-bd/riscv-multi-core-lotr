@@ -79,7 +79,6 @@ logic [F2C_ENC_MSB:0] F2C_SelRdCoreQ502H    ;
 logic [F2C_MSB:0]     F2C_FirstFreeEntryQ501H          ; 
 logic [F2C_MSB:0]     F2C_FreeEntriesQ501H             ; 
 logic [F2C_MSB:0]     F2C_RspMatchQ500H                ;  
-logic [F2C_MSB:0]     F2C_FirstReadResponseMatcesQ500H ; 
 // ==== init F2C MRO ==========
 logic [F2C_MSB:0]     F2C_DeallocMroQnnnH ;
 logic [F2C_MSB:0]     F2C_Mask0MroQnnnH   ;
@@ -110,8 +109,6 @@ always_comb begin : find_read_response_match_F2C
     end //for
 end //always_comb
 
-// in case read respones matches to entry, we want one entry to alloc
-`FIND_FIRST(F2C_FirstReadResponseMatcesQ500H ,F2C_RspMatchQ500H)
 
 always_comb begin : check_if_request_from_the_ring_to_the_rc
     F2C_MatchIdQ501H = ((RingReqInValidQ501H)                 && 

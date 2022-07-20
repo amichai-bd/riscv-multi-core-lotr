@@ -61,12 +61,12 @@ import lotr_pkg::*;
     input logic [9:0] Switch                        ,
 
     // Top ----> Tile
-    output logic [6:0] SEG7_0                       ,
-    output logic [6:0] SEG7_1                       ,
-    output logic [6:0] SEG7_2                       ,
-    output logic [6:0] SEG7_3                       ,
-    output logic [6:0] SEG7_4                       ,
-    output logic [6:0] SEG7_5                       ,
+    output logic [7:0] SEG7_0                       ,
+    output logic [7:0] SEG7_1                       ,
+    output logic [7:0] SEG7_2                       ,
+    output logic [7:0] SEG7_3                       ,
+    output logic [7:0] SEG7_4                       ,
+    output logic [7:0] SEG7_5                       ,
     output logic [3:0] RED,
     output logic [3:0] GREEN,
     output logic [3:0] BLUE,
@@ -76,21 +76,8 @@ import lotr_pkg::*;
 );
 
 //================================================
-// Core <-> RC interface
+// DE10Lite_MMIO <-> RC interface
 //================================================
-// Core To Fabric(C2F) logic
-// C2F_Rsp
-logic        C2F_RspValidQ502H   ;  
-t_opcode     C2F_RspOpcodeQ502H  ;  
-logic [9:0]  C2F_RspThreadIDQ502H;  
-logic [31:0] C2F_RspDataQ502H    ;
-logic        C2F_RspStall        ;
-// C2F_Req
-logic        C2F_ReqValidQ500H   ;
-t_opcode     C2F_ReqOpcodeQ500H  ;
-logic [9:0]  C2F_ReqThreadIDQ500H;
-logic [31:0] C2F_ReqAddressQ500H ;
-logic [31:0] C2F_ReqDataQ500H    ;
 //Fabric To Core(F2C) logic
 logic        F2C_ReqValidQ502H   ;
 t_opcode     F2C_ReqOpcodeQ502H  ;
@@ -102,9 +89,6 @@ logic [31:0] F2C_RspAddressQ500H ;
 logic [31:0] F2C_RspDataQ500H    ;
 
 
-
-assign C2F_ReqThreadIDQ500H[9:2] = CoreID;
-assign C2F_RspThreadIDQ502H[9:2] = CoreID;
 rc rc(	  
     //================================================
     //        General Interface
@@ -140,20 +124,20 @@ rc rc(
     .RingRspOutAddressQ502H     (RingRspOutAddressQ502H)   ,//output
     .RingRspOutDataQ502H        (RingRspOutDataQ502H)      ,//output
     //================================================
-    //        Core Interface
+    //        DE10Lite_MMIO Interface
     //================================================
     // input - Req from Core
-    .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)      ,//input
-    .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)     ,//input
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0])   ,//input
-    .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//input
-    .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//input
+    .C2F_ReqValidQ500H      ('0)   ,//input
+    .C2F_ReqOpcodeQ500H     (t_opcode'('0))   ,//input
+    .C2F_ReqThreadIDQ500H   ('0)   ,//input
+    .C2F_ReqAddressQ500H    ('0)   ,//input
+    .C2F_ReqDataQ500H       ('0)   ,//input
     // output - Rsp to Core
-    .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//output
-    .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)     ,//output
-    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H[1:0])   ,//output
-    .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//output
-    .C2F_RspStall           (C2F_RspStall)           ,//output
+    .C2F_RspValidQ502H      ()   ,//output
+    .C2F_RspOpcodeQ502H     ()   ,//output
+    .C2F_RspThreadIDQ502H   ()   ,//output
+    .C2F_RspDataQ502H       ()   ,//output
+    .C2F_RspStall           ()   ,//output
     // input - Rsp from Local Memory -> to Ring/Fabric
     .F2C_RspValidQ500H      (F2C_RspValidQ500H)      ,//input
     .F2C_RspOpcodeQ500H     (F2C_RspOpcodeQ500H)     ,//input

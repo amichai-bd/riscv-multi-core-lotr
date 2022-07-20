@@ -32,12 +32,12 @@ import lotr_pkg::*;
     input logic [9:0] Switch,
 
     // Top ----> LOTR
-    output logic [6:0] SEG7_0,
-    output logic [6:0] SEG7_1,
-    output logic [6:0] SEG7_2,
-    output logic [6:0] SEG7_3,
-    output logic [6:0] SEG7_4,
-    output logic [6:0] SEG7_5,
+    output logic [7:0] SEG7_0,
+    output logic [7:0] SEG7_1,
+    output logic [7:0] SEG7_2,
+    output logic [7:0] SEG7_3,
+    output logic [7:0] SEG7_4,
+    output logic [7:0] SEG7_5,
     output logic [3:0] RED,
     output logic [3:0] GREEN,
     output logic [3:0] BLUE,
@@ -150,8 +150,6 @@ gpc_4t_tile gpc_4t_tile_1
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [2]) //output
 );
 
-//FIXME - currently use a single gpc_4t_tile
-/*
 gpc_4t_tile gpc_4t_tile_2
 (
     //General Interface
@@ -186,23 +184,22 @@ gpc_4t_tile gpc_4t_tile_2
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [3]),//output
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [3]) //output
 );
-*/
 //=======================
 //		TEMP
 //=======================
 // bypass gpc_4t_tile_2
 //=======================
 
-assign RingReqValidQnnnH     [3] = RingReqValidQnnnH     [2];
-assign RingReqRequestorQnnnH [3] = RingReqRequestorQnnnH [2];
-assign RingReqOpcodeQnnnH    [3] = RingReqOpcodeQnnnH    [2];
-assign RingReqAddressQnnnH   [3] = RingReqAddressQnnnH   [2];
-assign RingReqDataQnnnH      [3] = RingReqDataQnnnH      [2];
-assign RingRspValidQnnnH     [3] = RingRspValidQnnnH     [2];
-assign RingRspRequestorQnnnH [3] = RingRspRequestorQnnnH [2];
-assign RingRspOpcodeQnnnH    [3] = RingRspOpcodeQnnnH    [2];
-assign RingRspAddressQnnnH   [3] = RingRspAddressQnnnH   [2];
-assign RingRspDataQnnnH      [3] = RingRspDataQnnnH      [2];
+//assign RingReqValidQnnnH     [3] = RingReqValidQnnnH     [2];
+//assign RingReqRequestorQnnnH [3] = RingReqRequestorQnnnH [2];
+//assign RingReqOpcodeQnnnH    [3] = RingReqOpcodeQnnnH    [2];
+//assign RingReqAddressQnnnH   [3] = RingReqAddressQnnnH   [2];
+//assign RingReqDataQnnnH      [3] = RingReqDataQnnnH      [2];
+//assign RingRspValidQnnnH     [3] = RingRspValidQnnnH     [2];
+//assign RingRspRequestorQnnnH [3] = RingRspRequestorQnnnH [2];
+//assign RingRspOpcodeQnnnH    [3] = RingRspOpcodeQnnnH    [2];
+//assign RingRspAddressQnnnH   [3] = RingRspAddressQnnnH   [2];
+//assign RingRspDataQnnnH      [3] = RingRspDataQnnnH      [2];
 
 //=======================
 
@@ -247,8 +244,8 @@ fpga_tile fpga_tile
     // Tile <-> FPGA TOP
     //==============================
     // FPGA interface inputs
-    .Button_0    (1'b0),
-    .Button_1    (1'b0),
+    .Button_0    (Button_0),
+    .Button_1    (Button_1),
     .Switch      (Switch),
 
     //outputs

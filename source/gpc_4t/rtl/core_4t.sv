@@ -73,7 +73,6 @@ logic [4:0]         RegRdPtr1Q101H;
 logic [4:0]         RegRdPtr2Q101H;
 logic [31:0]        RegRdData1Q101H;
 logic [31:0]        RegRdData1Q102H;
-logic [31:0]        RegRdData1Q103H;
 logic [31:0]        RegRdData2Q101H;
 logic [31:0]        RegRdData2Q102H;
 logic [31:0]        RegRdData2Q103H;
@@ -470,7 +469,6 @@ end
 `LOTR_MSFF   ( AluOutQ103H       , AluOutQ102H       , QClk)
 `LOTR_MSFF   ( Funct3Q103H       , Funct3Q102H       , QClk) 
 `LOTR_MSFF   ( RegWrPtrQ103H     , RegWrPtrQ102H     , QClk)
-`LOTR_MSFF   ( RegRdData1Q103H   , RegRdData1Q102H   , QClk)
 `LOTR_MSFF   ( RegRdData2Q103H   , RegRdData2Q102H   , QClk)
 `LOTR_MSFF   ( CtrlMemRdQ103H    , CtrlMemRdQ102H    , QClk) // output to DMEM
 `LOTR_MSFF   ( CtrlMemWrQ103H    , CtrlMemWrQ102H    , QClk) // output to DMEM
@@ -584,6 +582,7 @@ assign T3EnRegWrPtrQnnnH =(ThreadQ103H[3] && (!SampT3RcAccess));
 `LOTR_EN_MSFF( T2RegWrPtrQnnnH   , RegWrPtrQ103H  , QClk , T2EnRegWrPtrQnnnH)
 `LOTR_EN_MSFF( T3RegWrPtrQnnnH   , RegWrPtrQ103H  , QClk , T3EnRegWrPtrQnnnH)
 
+`ifdef SIMULATION_ON
 ////////////////////////////////////////////////////////////////////////////////////////
 //          assertions
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -601,4 +600,5 @@ always_comb begin : assertion
     AssertIllegalRegister  = 1'b0;//(CtrlRegWrQ104H && (RegWrPtrQ104H > 16 )); //currently using the RV32I with 32 registers
     AssertIllegalPC = (PcQ100H > 32'hfff);
 end
+`endif // SIMULATION_ON
 endmodule

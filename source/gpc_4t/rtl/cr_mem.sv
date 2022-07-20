@@ -195,10 +195,10 @@ assign SelWrDataQ103H = cr_en[1];
 `LOTR_EN_RST_MSFF    (cr_ro.pc_1      , PcQ103H,             QClk  ,  CrEnQ103H.pc_1       , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_2      , PcQ103H,             QClk  ,  CrEnQ103H.pc_2       , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_3      , PcQ103H,             QClk  ,  CrEnQ103H.pc_3       , RstQnnnH )
-`LOTR_EN_RST_MSFF    (cr_ro.sts_0     , 8'b0,               QClk  ,  CrEnQ103H.sts_0      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
-`LOTR_EN_RST_MSFF    (cr_ro.sts_1     , 8'b0,               QClk  ,  CrEnQ103H.sts_1      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
-`LOTR_EN_RST_MSFF    (cr_ro.sts_2     , 8'b0,               QClk  ,  CrEnQ103H.sts_2      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
-`LOTR_EN_RST_MSFF    (cr_ro.sts_3     , 8'b0,               QClk  ,  CrEnQ103H.sts_3      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_0     , 8'b0,                QClk  ,  CrEnQ103H.sts_0      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_1     , 8'b0,                QClk  ,  CrEnQ103H.sts_1      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_2     , 8'b0,                QClk  ,  CrEnQ103H.sts_2      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
+`LOTR_EN_RST_MSFF    (cr_ro.sts_3     , 8'b0,                QClk  ,  CrEnQ103H.sts_3      , RstQnnnH )//FIXME assign logic that will indicate the Threads Status. (Freeze,Running,Reset,Exception,Stall(LoadFromFarMem))
 `LOTR_EN_RST_MSFF    (cr_ro.expt_0    , 32'b0,               QClk  ,  CrEnQ103H.expt_0     , RstQnnnH )//FIXME assign exception code logic.
 `LOTR_EN_RST_MSFF    (cr_ro.expt_1    , 32'b0,               QClk  ,  CrEnQ103H.expt_1     , RstQnnnH )//FIXME assign exception code logic.
 `LOTR_EN_RST_MSFF    (cr_ro.expt_2    , 32'b0,               QClk  ,  CrEnQ103H.expt_2     , RstQnnnH )//FIXME assign exception code logic.
@@ -207,8 +207,8 @@ assign SelWrDataQ103H = cr_en[1];
 `LOTR_EN_RST_MSFF    (dfd_data_1      , '0,                  QClk  ,  CrEnQ103H.dfd_data_1 , RstQnnnH )//FIXME connect to the register file read port
 `LOTR_EN_RST_MSFF    (dfd_data_2      , '0,                  QClk  ,  CrEnQ103H.dfd_data_2 , RstQnnnH )//FIXME connect to the register file read port
 `LOTR_EN_RST_MSFF    (dfd_data_3      , '0,                  QClk  ,  CrEnQ103H.dfd_data_3 , RstQnnnH )//FIXME connect to the register file read port
-`LOTR_EN_MSFF        (cr_ro.i_mem_msb , MSB_I_MEM,           QClk  ,  CrEnQ103H.i_mem_msb)
-`LOTR_EN_MSFF        (cr_ro.d_mem_msb , MSB_D_MEM,           QClk  ,  CrEnQ103H.d_mem_msb)
+`LOTR_EN_MSFF        (cr_ro.i_mem_msb , MSB_I_MEM[7:0],      QClk  ,  CrEnQ103H.i_mem_msb)
+`LOTR_EN_MSFF        (cr_ro.d_mem_msb , MSB_D_MEM[7:0],      QClk  ,  CrEnQ103H.d_mem_msb)
 `LOTR_EN_MSFF        (cr_ro.core      , CoreIdStrap,         QClk  ,  CrEnQ103H.core     )
 
 //=======================================================
@@ -228,12 +228,12 @@ always_comb begin
                  CR_STACK_BASE_OFFSET       : CrRdDataQn03H[IO_NUM]  = cr_ro.stk_ofst ;
                  CR_TLS_BASE_OFFSET         : CrRdDataQn03H[IO_NUM]  = cr_ro.tls_ofst ;
                  CR_SHARED_BASE_OFFSET      : CrRdDataQn03H[IO_NUM]  = cr_rw.shrd_ofst;
-                 CR_I_MEM_MSB               : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.i_mem_msb};
-                 CR_D_MEM_MSB               : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.d_mem_msb};
-                 CR_THREAD0_STATUS          : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.sts_0};
-                 CR_THREAD1_STATUS          : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.sts_1};
-                 CR_THREAD2_STATUS          : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.sts_2};
-                 CR_THREAD3_STATUS          : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.sts_3};
+                 CR_I_MEM_MSB               : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.i_mem_msb};
+                 CR_D_MEM_MSB               : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.d_mem_msb};
+                 CR_THREAD0_STATUS          : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.sts_0};
+                 CR_THREAD1_STATUS          : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.sts_1};
+                 CR_THREAD2_STATUS          : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.sts_2};
+                 CR_THREAD3_STATUS          : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.sts_3};
                  CR_THREAD0_EXCEPTION_CODE  : CrRdDataQn03H[IO_NUM]  = cr_ro.expt_0;
                  CR_THREAD1_EXCEPTION_CODE  : CrRdDataQn03H[IO_NUM]  = cr_ro.expt_1;
                  CR_THREAD2_EXCEPTION_CODE  : CrRdDataQn03H[IO_NUM]  = cr_ro.expt_2;

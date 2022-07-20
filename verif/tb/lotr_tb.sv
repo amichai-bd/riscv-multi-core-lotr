@@ -8,12 +8,12 @@ import lotr_pkg::*;
     logic Button_0      ;     
     logic Button_1     ;
     logic [9:0] Switch ;
-    logic [6:0] SEG7_0;
-    logic [6:0] SEG7_1;
-    logic [6:0] SEG7_2;
-    logic [6:0] SEG7_3;
-    logic [6:0] SEG7_4;
-    logic [6:0] SEG7_5;
+    logic [7:0] SEG7_0;
+    logic [7:0] SEG7_1;
+    logic [7:0] SEG7_2;
+    logic [7:0] SEG7_3;
+    logic [7:0] SEG7_4;
+    logic [7:0] SEG7_5;
     logic [9:0] LED ;    
 	// clock generation
 	initial begin: clock_gen
@@ -58,14 +58,14 @@ initial begin: test_seq
     //======================================
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, IMemQnnnH);
     $readmemh({"../verif/Tests/",hpath,"/",hpath,"_data_mem_rv32i.sv"}, DMemQnnnH);
-    ////TILE 0    
+    ////TILE 1    
         // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         // Backdoor load the Inst1uction memory
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-    ////TILE 1    
+    ////TILE 2    
         // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
         lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];

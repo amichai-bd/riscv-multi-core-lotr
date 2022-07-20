@@ -57,9 +57,9 @@
 `define  ONE_HOT_TO_ENC(number , one_hot_vec )\
 	always_comb begin\
 		number = '0 ;\
-		for (int i = 0 ; i <$bits(one_hot_vec) ;i++) begin\
+		for (logic [$bits(number):0] i = 0 ; i <$bits(one_hot_vec) ;i++) begin\
 			if (one_hot_vec[i])\
-				number = i ;\
+				number = i[$bits(number)-1:0] ;\
 		end\
 	end
 

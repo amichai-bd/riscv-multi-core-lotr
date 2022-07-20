@@ -37,12 +37,12 @@ import lotr_pkg::*;
     input  logic [9:0] Switch,
 
     // FPGA interface outputs
-    output logic [6:0] SEG7_0,
-    output logic [6:0] SEG7_1,
-    output logic [6:0] SEG7_2,
-    output logic [6:0] SEG7_3,
-    output logic [6:0] SEG7_4,
-    output logic [6:0] SEG7_5,
+    output logic [7:0] SEG7_0,
+    output logic [7:0] SEG7_1,
+    output logic [7:0] SEG7_2,
+    output logic [7:0] SEG7_3,
+    output logic [7:0] SEG7_4,
+    output logic [7:0] SEG7_5,
     output logic [3:0] RED,
     output logic [3:0] GREEN,
     output logic [3:0] BLUE,
@@ -128,7 +128,7 @@ vga_ctrl vga_ctrl (
 //==============================
 // Memory Access
 //------------------------------
-// 1. Access CR_MEM for Wrote (STORE) and Reads (LOAD)
+// 1. Access CR_MEM for Write (STORE) and Reads (LOAD)
 //==============================
 always_comb begin
     cr_ro_next = cr_ro;
@@ -136,12 +136,12 @@ always_comb begin
     if(CtrlCRMemWrEnQ503) begin
         unique casez (F2C_ReqAddressQ503H[19:0]) // AluOut holds the offset
             // ---- RW memory ----
-            CR_SEG7_0 : cr_rw_next.SEG7_0 = F2C_ReqDataQ503H[6:0];
-            CR_SEG7_1 : cr_rw_next.SEG7_1 = F2C_ReqDataQ503H[6:0];
-            CR_SEG7_2 : cr_rw_next.SEG7_2 = F2C_ReqDataQ503H[6:0];
-            CR_SEG7_3 : cr_rw_next.SEG7_3 = F2C_ReqDataQ503H[6:0];
-            CR_SEG7_4 : cr_rw_next.SEG7_4 = F2C_ReqDataQ503H[6:0];
-            CR_SEG7_5 : cr_rw_next.SEG7_5 = F2C_ReqDataQ503H[6:0];
+            CR_SEG7_0 : cr_rw_next.SEG7_0 = F2C_ReqDataQ503H[7:0];
+            CR_SEG7_1 : cr_rw_next.SEG7_1 = F2C_ReqDataQ503H[7:0];
+            CR_SEG7_2 : cr_rw_next.SEG7_2 = F2C_ReqDataQ503H[7:0];
+            CR_SEG7_3 : cr_rw_next.SEG7_3 = F2C_ReqDataQ503H[7:0];
+            CR_SEG7_4 : cr_rw_next.SEG7_4 = F2C_ReqDataQ503H[7:0];
+            CR_SEG7_5 : cr_rw_next.SEG7_5 = F2C_ReqDataQ503H[7:0];
             CR_LED    : cr_rw_next.LED    = F2C_ReqDataQ503H[9:0];
             // ---- Other ----
             default   : /* Do nothing */;
@@ -161,17 +161,17 @@ always_comb begin
     if(CtrlCRMemRdEnQ503) begin
         unique casez (F2C_ReqAddressQ503H[19:0]) // AluOut holds the offset
             // ---- RW memory ----
-            CR_SEG7_0   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_0}   ; 
-            CR_SEG7_1   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_1}   ;
-            CR_SEG7_2   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_2}   ;
-            CR_SEG7_3   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_3}   ;
-            CR_SEG7_4   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_4}   ;
-            CR_SEG7_5   : F2C_RspDataQ503H = {25'b0 , cr_rw_next.SEG7_5}   ;
-            CR_LED      : F2C_RspDataQ503H = {22'b0 , cr_rw_next.LED}      ;
+            CR_SEG7_0   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_0}   ; 
+            CR_SEG7_1   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_1}   ;
+            CR_SEG7_2   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_2}   ;
+            CR_SEG7_3   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_3}   ;
+            CR_SEG7_4   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_4}   ;
+            CR_SEG7_5   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_5}   ;
+            CR_LED      : F2C_RspDataQ503H = {22'b0 , cr_rw.LED}      ;
             // ---- RO memory ----
-            CR_Button_0 : F2C_RspDataQ503H = {31'b0 , cr_ro_next.Button_0} ;
-            CR_Button_1 : F2C_RspDataQ503H = {31'b0 , cr_ro_next.Button_1} ;
-            CR_Switch   : F2C_RspDataQ503H = {22'b0 , cr_ro_next.Switch}   ;
+            CR_Button_0 : F2C_RspDataQ503H = {31'b0 , cr_ro.Button_0} ;
+            CR_Button_1 : F2C_RspDataQ503H = {31'b0 , cr_ro.Button_1} ;
+            CR_Switch   : F2C_RspDataQ503H = {22'b0 , cr_ro.Switch}   ;
             // ---- Other ----
             default     : F2C_RspDataQ503H = 32'b0                         ;
         endcase
@@ -202,17 +202,17 @@ assign F2C_RspDataQ504H  = CtrlCRMemRdEnQ504  ? CrRspDataQ504H  :
 
 
 
-`LOTR_MSFF(cr_rw, cr_rw_next, QClk)
-`LOTR_MSFF(cr_ro, cr_ro_next, QClk)
+`LOTR_RST_MSFF(cr_rw, cr_rw_next, QClk, RstQnnnH)
+`LOTR_RST_MSFF(cr_ro, cr_ro_next, QClk, RstQnnnH)
 
 // Reflects outputs to the FPGA - synchorus reflects
-`LOTR_RST_MSFF(SEG7_0 , cr_rw_next.SEG7_0 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_1 , cr_rw_next.SEG7_1 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_2 , cr_rw_next.SEG7_2 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_3 , cr_rw_next.SEG7_3 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_4 , cr_rw_next.SEG7_4 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_5 , cr_rw_next.SEG7_5 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(LED    , cr_rw_next.LED    , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_0 , cr_rw.SEG7_0 , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_1 , cr_rw.SEG7_1 , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_2 , cr_rw.SEG7_2 , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_3 , cr_rw.SEG7_3 , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_4 , cr_rw.SEG7_4 , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_5 , cr_rw.SEG7_5 , QClk, RstQnnnH)
+`LOTR_RST_MSFF(LED    , cr_rw.LED    , QClk, RstQnnnH)
 
 
 // This logic is to get data from the DE10lite Analog pins
