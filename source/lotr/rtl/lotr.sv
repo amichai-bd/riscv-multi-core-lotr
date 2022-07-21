@@ -30,6 +30,7 @@ import lotr_pkg::*;
     input logic Button_0,
     input logic Button_1,
     input logic [9:0] Switch,
+    input logic [13:0] Arduino_dg_io,
 
     // Top ----> LOTR
     output logic [7:0] SEG7_0,
@@ -247,6 +248,7 @@ fpga_tile fpga_tile
     .Button_0    (Button_0),
     .Button_1    (Button_1),
     .Switch      (Switch),
+    .Arduino_dg_io (Arduino_dg_io),
 
     //outputs
     .SEG7_0  (SEG7_0),//(SEG7_0),

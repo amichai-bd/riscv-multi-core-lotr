@@ -48,7 +48,7 @@ for ( $i = 0; $i -lt $tests.count; $i++ ) {
      } else {
          mkdir ..\target\$($tests[$i])
      }
-     vlog.exe +define+HPATH=$($tests[$i]) -f ..\source\gpc_4t\gpc_4t_list.f
+     vlog.exe +define+HPATH=$($tests[$i]) +define+SIMULATION_ON -f ..\source\gpc_4t\gpc_4t_list.f
      write-host "."`n"."`n""  
      write-host "Compilation Ended. Details above  "`n" "`n" "
      write-host "***********Simulating Test: $($tests[$i])***********"`n""

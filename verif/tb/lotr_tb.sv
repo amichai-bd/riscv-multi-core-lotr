@@ -5,8 +5,9 @@ module lotr_tb ();
 import lotr_pkg::*;
 	logic         clk      ;
 	logic         RstQnnnH  ;
-    logic Button_0      ;     
+    logic Button_0     ;     
     logic Button_1     ;
+    logic [13:0]Arduino_dg_io     ;
     logic [9:0] Switch ;
     logic [7:0] SEG7_0;
     logic [7:0] SEG7_1;
@@ -93,12 +94,13 @@ end: test_seq
 lotr lotr(
     //general signals input
     .QClk  		(clk),   //input
-    .CLK_50  		(clk),   //input
-    .Button_0    (~RstQnnnH),
-    .Button_1    (1'b0),
-    .Switch      (10'b0),
+    .CLK_50  	(clk),   //input
+    .Button_0   (~RstQnnnH),
+    .Button_1   (1'b0),
+    .Switch     (10'h04),
+    .Arduino_dg_io (14'b0),
 
-    //utputs
+    //outputs
     .SEG7_0  (SEG7_0),
     .SEG7_1  (SEG7_1),
     .SEG7_2  (SEG7_2),

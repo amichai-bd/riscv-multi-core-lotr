@@ -1,7 +1,10 @@
+`include "lotr_defines.sv"
 module top(
         input  logic        CLK_50,
         input  logic [9:0]  SW,
         input  logic [1:0]  BUTTON,
+        input  logic [15:0] Arduino_IO,
+
 
         output logic [7:0]  HEX0,
         output logic [7:0]  HEX1,
@@ -18,10 +21,10 @@ module top(
         output logic        v_sync
     );
 	 
-//logic CLK_5;
-//	pll_5Mhz pll_5Mhz (
-//	.inclk0 ( CLK_50),
-//	.c0		(CLK_5));
+logic CLK_5;
+	pll_5Mhz pll_5Mhz (
+	.inclk0 ( CLK_50),
+	.c0		(CLK_5));
 	 
 logic CLK_50Khz;
 	pll_50Khz pll_5Khz (
@@ -31,28 +34,31 @@ logic CLK_50Khz;
 lotr lotr(
     //general signals input
 	 //TO ease the compilation time we are using a slow clock. it works also with the 50MHz
-    .QClk  	(CLK_50Khz),   //input
+    //.QClk  	(CLK_50Khz),   //input
+	 .QClk  	(CLK_5),   //input ->5MHz
 	 //.QClk  	(CLK_50),   //input ->50MHz
     .CLK_50 (CLK_50),   //input
     //.RstQnnnH  	(BUTTON[0])
     .Button_0    (BUTTON[0]),
     .Button_1    (BUTTON[1]),
     .Switch      (SW),//,(SW),
+	 .Arduino_dg_io (Arduino_IO),
 
     //outputs
-    .SEG7_0  (HEX0),//(HEX0),
-    .SEG7_1  (HEX1),//(HEX1),
-    .SEG7_2  (HEX2),//(HEX2),
-    .SEG7_3  (HEX3),//(HEX3),
-    .SEG7_4  (HEX4),//(HEX4),
-    .SEG7_5  (HEX5),//(HEX5),
-    .RED     (RED),//(RED   ),//output logic [3:0] 
-    .GREEN   (GREEN),//(GREEN ),//output logic [3:0] 
-    .BLUE    (BLUE),//(BLUE  ),//output logic [3:0] 
+    .SEG7_0  (HEX0),  //(HEX0),
+    .SEG7_1  (HEX1),  //(HEX1),
+    .SEG7_2  (HEX2),  //(HEX2),
+    .SEG7_3  (HEX3),  //(HEX3),
+    .SEG7_4  (HEX4),  //(HEX4),
+    .SEG7_5  (HEX5),  //(HEX5),
+    .RED     (RED),   //(RED   ),//output logic [3:0] 
+    .GREEN   (GREEN), //(GREEN ),//output logic [3:0] 
+    .BLUE    (BLUE),  //(BLUE  ),//output logic [3:0] 
     .v_sync  (v_sync),//(v_sync),//output logic       
     .h_sync  (h_sync),//(h_sync),//output logic      
-    .LED     (LED)//(LED)
+    .LED     ()//(LED)
     );
+	 `LOTR_MSFF(LED    , Arduino_IO[9:0] , CLK_5)
 	 
 
 // This logic is to get data from the Analog pin in the DE10lite 

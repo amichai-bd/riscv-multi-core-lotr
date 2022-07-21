@@ -557,6 +557,14 @@ set_table:
 	li	a4,8257536
 	addi	a4,a4,1032
 	sw	a4,0(a5)
+	li	a5,4198400
+	addi	a5,a5,-1620
+	li	a4,-1
+	sw	a4,0(a5)
+	li	a5,4198400
+	addi	a5,a5,-1364
+	li	a4,-1
+	sw	a4,0(a5)
 	nop
 	lw	s0,12(sp)
 	addi	sp,sp,16
@@ -571,107 +579,107 @@ print_hello:
 	sw	s0,24(sp)
 	addi	s0,sp,32
 	sw	a0,-20(s0)
-	li	a2,15
+	li	a2,5
 	lw	a1,-20(s0)
 	li	a0,72
 	call	draw_char
-	li	a2,16
+	li	a2,6
 	lw	a1,-20(s0)
 	li	a0,69
 	call	draw_char
-	li	a2,17
+	li	a2,7
 	lw	a1,-20(s0)
 	li	a0,76
 	call	draw_char
-	li	a2,18
+	li	a2,8
 	lw	a1,-20(s0)
 	li	a0,76
 	call	draw_char
-	li	a2,19
+	li	a2,9
 	lw	a1,-20(s0)
 	li	a0,79
 	call	draw_char
-	li	a2,20
+	li	a2,10
 	lw	a1,-20(s0)
 	li	a0,32
 	call	draw_char
-	li	a2,21
+	li	a2,11
 	lw	a1,-20(s0)
 	li	a0,87
 	call	draw_char
-	li	a2,22
+	li	a2,12
 	lw	a1,-20(s0)
 	li	a0,79
 	call	draw_char
-	li	a2,23
+	li	a2,13
 	lw	a1,-20(s0)
 	li	a0,82
 	call	draw_char
-	li	a2,24
+	li	a2,14
 	lw	a1,-20(s0)
 	li	a0,76
 	call	draw_char
-	li	a2,25
+	li	a2,15
 	lw	a1,-20(s0)
 	li	a0,68
 	call	draw_char
-	li	a2,26
+	li	a2,16
 	lw	a1,-20(s0)
 	li	a0,46
 	call	draw_char
-	li	a2,27
+	li	a2,17
 	lw	a1,-20(s0)
 	li	a0,32
 	call	draw_char
-	li	a2,28
+	li	a2,18
 	lw	a1,-20(s0)
 	li	a0,70
 	call	draw_char
-	li	a2,29
+	li	a2,19
 	lw	a1,-20(s0)
 	li	a0,82
 	call	draw_char
-	li	a2,30
+	li	a2,20
 	lw	a1,-20(s0)
 	li	a0,79
 	call	draw_char
-	li	a2,31
+	li	a2,21
 	lw	a1,-20(s0)
 	li	a0,77
 	call	draw_char
-	li	a2,32
+	li	a2,22
 	lw	a1,-20(s0)
 	li	a0,32
 	call	draw_char
-	li	a2,33
+	li	a2,23
 	lw	a1,-20(s0)
 	li	a0,32
 	call	draw_char
-	li	a2,34
+	li	a2,24
 	lw	a1,-20(s0)
 	li	a0,84
 	call	draw_char
-	li	a2,35
+	li	a2,25
 	lw	a1,-20(s0)
 	li	a0,72
 	call	draw_char
-	li	a2,36
+	li	a2,26
 	lw	a1,-20(s0)
 	li	a0,82
 	call	draw_char
-	li	a2,37
+	li	a2,27
 	lw	a1,-20(s0)
 	li	a0,69
 	call	draw_char
-	li	a2,38
+	li	a2,28
 	lw	a1,-20(s0)
 	li	a0,65
 	call	draw_char
-	li	a2,39
+	li	a2,29
 	lw	a1,-20(s0)
 	li	a0,68
 	call	draw_char
-	li	a2,40
+	li	a2,30
 	lw	a1,-20(s0)
 	li	a0,32
 	call	draw_char
@@ -679,7 +687,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,4
 	bne	a4,a5,.L10
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,48
 	call	draw_char
@@ -688,7 +696,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,5
 	bne	a4,a5,.L11
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,49
 	call	draw_char
@@ -697,7 +705,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,6
 	bne	a4,a5,.L12
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,50
 	call	draw_char
@@ -706,7 +714,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,7
 	bne	a4,a5,.L13
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,51
 	call	draw_char
@@ -715,7 +723,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,8
 	bne	a4,a5,.L14
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,52
 	call	draw_char
@@ -724,7 +732,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,9
 	bne	a4,a5,.L15
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,53
 	call	draw_char
@@ -733,7 +741,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,10
 	bne	a4,a5,.L16
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,54
 	call	draw_char
@@ -742,7 +750,7 @@ print_hello:
 	lw	a4,0(a5)
 	li	a5,11
 	bne	a4,a5,.L18
-	li	a2,41
+	li	a2,31
 	lw	a1,-20(s0)
 	li	a0,55
 	call	draw_char
@@ -754,112 +762,268 @@ print_hello:
 	jr	ra
 	.size	print_hello, .-print_hello
 	.align	2
+	.globl	clear_screen
+	.type	clear_screen, @function
+clear_screen:
+	addi	sp,sp,-32
+	sw	ra,28(sp)
+	sw	s0,24(sp)
+	addi	s0,sp,32
+	sw	zero,-20(s0)
+	j	.L20
+.L23:
+	sw	zero,-24(s0)
+	j	.L21
+.L22:
+	lw	a2,-20(s0)
+	lw	a1,-24(s0)
+	li	a0,32
+	call	draw_char
+	lw	a5,-24(s0)
+	addi	a5,a5,1
+	sw	a5,-24(s0)
+.L21:
+	lw	a4,-24(s0)
+	li	a5,119
+	ble	a4,a5,.L22
+	lw	a5,-20(s0)
+	addi	a5,a5,1
+	sw	a5,-20(s0)
+.L20:
+	lw	a4,-20(s0)
+	li	a5,79
+	ble	a4,a5,.L23
+	nop
+	nop
+	lw	ra,28(sp)
+	lw	s0,24(sp)
+	addi	sp,sp,32
+	jr	ra
+	.size	clear_screen, .-clear_screen
+	.align	2
 	.globl	main
 	.type	main, @function
 main:
-	addi	sp,sp,-96
-	sw	ra,92(sp)
-	sw	s0,88(sp)
-	addi	s0,sp,96
+	addi	sp,sp,-128
+	sw	ra,124(sp)
+	sw	s0,120(sp)
+	addi	s0,sp,128
 	li	a5,12582912
 	addi	a5,a5,4
 	lw	a5,0(a5)
-	sw	a5,-20(s0)
+	sw	a5,-52(s0)
 	li	a5,12582912
 	lw	a5,0(a5)
-	sw	a5,-24(s0)
-	sw	zero,-28(s0)
+	sw	a5,-56(s0)
+	sw	zero,-20(s0)
+	sw	zero,-60(s0)
 	li	a5,72
-	sw	a5,-40(s0)
-	li	a5,73
-	sw	a5,-36(s0)
-	sw	zero,-32(s0)
-	li	a5,32
-	sw	a5,-52(s0)
-	li	a5,10
-	sw	a5,-48(s0)
-	sw	zero,-44(s0)
-	li	a5,49
-	sw	a5,-64(s0)
-	li	a5,10
-	sw	a5,-60(s0)
-	sw	zero,-56(s0)
-	li	a5,50
 	sw	a5,-76(s0)
-	li	a5,10
+	li	a5,73
 	sw	a5,-72(s0)
 	sw	zero,-68(s0)
-	li	a5,51
+	li	a5,32
 	sw	a5,-88(s0)
 	li	a5,10
 	sw	a5,-84(s0)
 	sw	zero,-80(s0)
+	li	a5,49
+	sw	a5,-100(s0)
+	li	a5,10
+	sw	a5,-96(s0)
+	sw	zero,-92(s0)
+	li	a5,50
+	sw	a5,-112(s0)
+	li	a5,10
+	sw	a5,-108(s0)
+	sw	zero,-104(s0)
+	li	a5,51
+	sw	a5,-124(s0)
+	li	a5,10
+	sw	a5,-120(s0)
+	sw	zero,-116(s0)
+	sw	zero,-64(s0)
+	sw	zero,-24(s0)
+	sw	zero,-28(s0)
+	sw	zero,-32(s0)
+	sw	zero,-36(s0)
+	sw	zero,-40(s0)
+	sw	zero,-44(s0)
+	sw	zero,-48(s0)
 	call	set_table
-	lw	a4,-24(s0)
-	li	a5,7
-	beq	a4,a5,.L20
-	lw	a4,-24(s0)
-	li	a5,7
-	bgt	a4,a5,.L21
-	lw	a4,-24(s0)
-	li	a5,6
-	beq	a4,a5,.L22
-	lw	a4,-24(s0)
-	li	a5,6
-	bgt	a4,a5,.L21
-	lw	a4,-24(s0)
+	call	clear_screen
+	li	a0,20
+	call	print_hello
+	lw	a4,-56(s0)
 	li	a5,4
-	beq	a4,a5,.L23
-	lw	a4,-24(s0)
+	bne	a4,a5,.L25
+.L43:
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,1
+	beq	a4,a5,.L26
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
 	li	a5,5
-	beq	a4,a5,.L24
-	j	.L21
-.L23:
+	bne	a4,a5,.L27
+.L26:
 	li	a0,0
 	call	print_hello
-	addi	a5,s0,-40
-	mv	a0,a5
-	call	rvc_printf
-	addi	a5,s0,-52
-	mv	a0,a5
-	call	rvc_printf
-	addi	a5,s0,-64
-	mv	a0,a5
-	call	rvc_printf
-	addi	a5,s0,-76
-	mv	a0,a5
-	call	rvc_printf
-	addi	a5,s0,-88
-	mv	a0,a5
-	call	rvc_printf
-	addi	a5,s0,-88
-	mv	a0,a5
-	call	rvc_printf
-	j	.L31
-.L24:
+.L27:
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,2
+	beq	a4,a5,.L28
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,5
+	bne	a4,a5,.L29
+.L28:
 	li	a0,2
 	call	print_hello
-.L26:
-	j	.L26
-.L22:
+.L29:
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,3
+	beq	a4,a5,.L30
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,5
+	bne	a4,a5,.L31
+.L30:
 	li	a0,4
 	call	print_hello
-.L27:
-	j	.L27
-.L20:
+.L31:
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,4
+	beq	a4,a5,.L32
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,5
+	bne	a4,a5,.L33
+.L32:
 	li	a0,6
 	call	print_hello
-.L28:
-	j	.L28
-.L21:
-.L29:
-	j	.L29
-.L31:
-	li	a5,0
-	mv	a0,a5
-	lw	ra,92(sp)
-	lw	s0,88(sp)
-	addi	sp,sp,96
-	jr	ra
+.L33:
+	li	a5,62922752
+	addi	a5,a5,32
+	lw	a5,0(a5)
+	bne	a5,zero,.L34
+	lw	a5,-24(s0)
+	bne	a5,zero,.L34
+	li	a5,1
+	sw	a5,-64(s0)
+	lw	a5,-20(s0)
+	addi	a5,a5,1
+	sw	a5,-20(s0)
+	li	a5,1
+	sw	a5,-24(s0)
+	lw	a5,-20(s0)
+	addi	a5,a5,1
+	mv	a2,a5
+	li	a1,15
+	li	a0,43
+	call	draw_char
+	lw	a2,-20(s0)
+	li	a1,15
+	li	a0,32
+	call	draw_char
+	j	.L35
+.L34:
+	li	a5,62922752
+	addi	a5,a5,32
+	lw	a4,0(a5)
+	li	a5,1
+	bne	a4,a5,.L36
+	sw	zero,-64(s0)
+	sw	zero,-24(s0)
+.L35:
+	j	.L36
+.L37:
+	call	clear_screen
+.L36:
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a4,0(a5)
+	li	a5,5
+	bgt	a4,a5,.L37
+	li	a5,62922752
+	addi	a5,a5,40
+	lw	a4,0(a5)
+	li	a5,14
+	bne	a4,a5,.L38
+	lw	a5,-48(s0)
+	bne	a5,zero,.L38
+	lw	a5,-28(s0)
+	addi	a5,a5,1
+	sw	a5,-28(s0)
+	li	a5,1
+	sw	a5,-48(s0)
+.L38:
+	li	a5,62922752
+	addi	a5,a5,40
+	lw	a4,0(a5)
+	li	a5,13
+	bne	a4,a5,.L39
+	lw	a5,-36(s0)
+	bne	a5,zero,.L39
+	lw	a5,-32(s0)
+	addi	a5,a5,1
+	sw	a5,-32(s0)
+	li	a5,1
+	sw	a5,-36(s0)
+.L39:
+	li	a5,62922752
+	addi	a5,a5,40
+	lw	a4,0(a5)
+	li	a5,11
+	bne	a4,a5,.L40
+	lw	a5,-40(s0)
+	bne	a5,zero,.L40
+	lw	a5,-32(s0)
+	addi	a5,a5,-1
+	sw	a5,-32(s0)
+	li	a5,1
+	sw	a5,-40(s0)
+.L40:
+	li	a5,62922752
+	addi	a5,a5,40
+	lw	a4,0(a5)
+	li	a5,7
+	bne	a4,a5,.L41
+	lw	a5,-44(s0)
+	bne	a5,zero,.L41
+	lw	a5,-28(s0)
+	addi	a5,a5,-1
+	sw	a5,-28(s0)
+	li	a5,1
+	sw	a5,-44(s0)
+.L41:
+	li	a5,62922752
+	addi	a5,a5,40
+	lw	a4,0(a5)
+	li	a5,15
+	bne	a4,a5,.L42
+	sw	zero,-48(s0)
+	sw	zero,-36(s0)
+	sw	zero,-40(s0)
+	sw	zero,-44(s0)
+.L42:
+	lw	a2,-28(s0)
+	lw	a1,-32(s0)
+	li	a0,43
+	call	draw_char
+	j	.L43
+.L25:
+	j	.L25
 	.size	main, .-main
 	.ident	"GCC: (GNU) 11.1.0"

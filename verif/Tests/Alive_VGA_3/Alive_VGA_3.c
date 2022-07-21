@@ -166,80 +166,147 @@ void set_table() {
     ASCII_BOTTOM_BASE['Y'] = 0x00181818;
     ASCII_TOP_BASE   ['Z'] = 0x10207E00;
     ASCII_BOTTOM_BASE['Z'] = 0x007E0408;
+    ASCII_TOP_BASE   ['+'] = 0xFFFFFFFF;
+    ASCII_BOTTOM_BASE['+'] = 0xFFFFFFFF;//temp for fill squre
 }
 void print_hello(int offset) {
-        draw_char('H', offset, 15+0);
-        draw_char('E', offset, 15+1);
-        draw_char('L', offset, 15+2);
-        draw_char('L', offset, 15+3);
-        draw_char('O', offset, 15+4);
-        draw_char(' ', offset, 15+5);
-        draw_char('W', offset, 15+6);
-        draw_char('O', offset, 15+7);
-        draw_char('R', offset, 15+8);
-        draw_char('L', offset, 15+9);
-        draw_char('D', offset, 15+10);
-        draw_char('.', offset, 15+11);
-        draw_char(' ', offset, 15+12);
-        draw_char('F', offset, 15+13);
-        draw_char('R', offset, 15+14);
-        draw_char('O', offset, 15+15);
-        draw_char('M', offset, 15+16);
-        draw_char(' ', offset, 15+17);
-        draw_char(' ', offset, 15+18);
-        draw_char('T', offset, 15+19);
-        draw_char('H', offset, 15+20);
-        draw_char('R', offset, 15+21);
-        draw_char('E', offset, 15+22);
-        draw_char('A', offset, 15+23);
-        draw_char('D', offset, 15+24);
-        draw_char(' ', offset, 15+25);
-        if(CR_WHO_AM_I[0] ==4)  draw_char('0', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==5)  draw_char('1', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==6)  draw_char('2', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==7)  draw_char('3', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==8)  draw_char('4', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==9)  draw_char('5', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==10) draw_char('6', offset, 15+26);
-        if(CR_WHO_AM_I[0] ==11) draw_char('7', offset, 15+26);
+        draw_char('H', offset, 5+0);
+        draw_char('E', offset, 5+1);
+        draw_char('L', offset, 5+2);
+        draw_char('L', offset, 5+3);
+        draw_char('O', offset, 5+4);
+        draw_char(' ', offset, 5+5);
+        draw_char('W', offset, 5+6);
+        draw_char('O', offset, 5+7);
+        draw_char('R', offset, 5+8);
+        draw_char('L', offset, 5+9);
+        draw_char('D', offset, 5+10);
+        draw_char('.', offset, 5+11);
+        draw_char(' ', offset, 5+12);
+        draw_char('F', offset, 5+13);
+        draw_char('R', offset, 5+14);
+        draw_char('O', offset, 5+15);
+        draw_char('M', offset, 5+16);
+        draw_char(' ', offset, 5+17);
+        draw_char(' ', offset, 5+18);
+        draw_char('T', offset, 5+19);
+        draw_char('H', offset, 5+20);
+        draw_char('R', offset, 5+21);
+        draw_char('E', offset, 5+22);
+        draw_char('A', offset, 5+23);
+        draw_char('D', offset, 5+24);
+        draw_char(' ', offset, 5+25);
+        if(CR_WHO_AM_I[0] ==4)  draw_char('0', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==5)  draw_char('1', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==6)  draw_char('2', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==7)  draw_char('3', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==8)  draw_char('4', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==9)  draw_char('5', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==10) draw_char('6', offset, 5+26);
+        if(CR_WHO_AM_I[0] ==11) draw_char('7', offset, 5+26);
 
         }
+void clear_screen () {
+    for(int x = 0; x<80; x++) {
+        for(int y = 0; y<120 ; y++){
+            draw_char(' ', y, x);
+        }
+    }
+}
+
 int main() {
     int ThreadId = CR_THREAD[0];
     int UniqeId = CR_WHO_AM_I[0];
     int counter = 0 ;
-    int i;
-    //This works in simulation! - but adds data to the D_MEM which we dont 
+    int round = 0 ;
+    //This works in simulation! - but adds data to the D_MEM which we dont support yet in FPGA
     //int hello []  = {'H','E','L','L','O',' ','P','R','I','N','T',',','\n','\0'};
     int hello []  = {'H','I','\0'};
     int zero  []  = {' ','\n','\0'};
     int one   []  = {'1','\n','\0'};
     int two   []  = {'2','\n','\0'};
     int three []  = {'3','\n','\0'};
-    set_table();
+    int new_press = 0;
+    int old_press = 0;
+    int x_pos = 0;
+    int y_pos = 0;
+    int up_old_press = 0;
+    int down_old_press = 0;
+    int left_old_press = 0;
+    int right_old_press = 0;
+    set_table(); //temp - untill we can load backdoor the D_MEM the ascii table in FPGA
+    clear_screen();
+    print_hello(20); //just to make sure things are working
+
     switch (UniqeId) //the CR Address
     {
         case 0x4 : // 
-        print_hello(0);
-        rvc_printf(hello); //couser updates automatacly -> can only work from a single thread (unliss we enable multiple courser per thread)
-        rvc_printf(zero);
-        rvc_printf(one);
-        rvc_printf(two);
-        rvc_printf(three);
-        rvc_printf(three);
-        break;
-        case 0x5 : // 
-        print_hello(2);
-                while(1); 
-        break;
-        case 0x6 : // 
-        print_hello(4);
-                while(1); 
-        break;
-        case 0x7 : // 
-        print_hello(6);
-                while(1); 
-        break;
+            //print hello from thread 0
+            while (1) { // loop forever            
+                if((SWITCH_FGPA[0] == 1) || (SWITCH_FGPA[0] == 5)) print_hello(0);
+                if((SWITCH_FGPA[0] == 2) || (SWITCH_FGPA[0] == 5)) print_hello(2);
+                if((SWITCH_FGPA[0] == 3) || (SWITCH_FGPA[0] == 5)) print_hello(4);
+                if((SWITCH_FGPA[0] == 4) || (SWITCH_FGPA[0] == 5)) print_hello(6);
+                //new butten press
+                if ((BUTTON2_FGPA[0] == 0) && (old_press == 0)) { //new press
+                    new_press = 1;
+                    counter ++;
+                    old_press = 1;
+                    draw_char('+', 15, (counter+1));// draw a squere on screen - every press should add a new squere to the right
+                    draw_char(' ', 15, (counter));
+                } else  if(BUTTON2_FGPA[0] == 1) { //button is not pressed
+                    new_press = 0;
+                    old_press = 0;
+                }
+                while ( SWITCH_FGPA[0] > 5) {  //Just a hack to clear the screen with a switch
+                    clear_screen();
+                } 
+
+                if ((ARDUINO_IO_FGPA[0] == 14) && (right_old_press == 0)){ //4'b1110
+                    x_pos++;
+                    right_old_press = 1;
+                }
+                if ((ARDUINO_IO_FGPA[0] == 13) && (up_old_press == 0))  { //4'b1101
+                    y_pos++;
+                    up_old_press = 1;
+                }
+                if ((ARDUINO_IO_FGPA[0] == 11) && (down_old_press == 0))  { //4'b1011
+                    y_pos--;
+                    down_old_press = 1;
+                }
+                if ((ARDUINO_IO_FGPA[0] == 7) && (left_old_press == 0)) { //4'b0111
+                    x_pos--;
+                    left_old_press = 1;
+                }
+                if(ARDUINO_IO_FGPA[0] == 15) { //button is not pressed
+                    right_old_press = 0;
+                    up_old_press    = 0;
+                    down_old_press  = 0;
+                    left_old_press  = 0;
+                }
+                draw_char('+', y_pos, x_pos);// draw a squere on screen
+            }
+        //draw_char('+', 15, counter);
+        //counter++;
+        //rvc_printf(hello); //couser updates automatacly -> can only work from a single thread (unliss we enable multiple courser per thread)
+        //rvc_printf(zero);
+        //rvc_printf(one);
+        //rvc_printf(two);
+        //rvc_printf(three);
+        //rvc_printf(three);
+        //break;
+        //case 0x5 : // 
+        //    if((SWITCH_FGPA[0] == 2) || (SWITCH_FGPA[0] == 5)) print_hello(2);
+        //    if((SWITCH_FGPA[0] == 2) || (SWITCH_FGPA[0] == 5)) print_hello(2);
+        //break;
+        //case 0x6 : // 
+        //    if((SWITCH_FGPA[0] == 3) || (SWITCH_FGPA[0] == 5)) print_hello(4);
+        //    if((SWITCH_FGPA[0] == 3) || (SWITCH_FGPA[0] == 5)) print_hello(4);
+        //break;
+        //case 0x7 : // 
+        //    if((SWITCH_FGPA[0] == 4) || (SWITCH_FGPA[0] == 5)) print_hello(6);
+        //    if((SWITCH_FGPA[0] == 4) || (SWITCH_FGPA[0] == 5)) print_hello(6);
+        //break;
         //case 0x8 : // 
         //print_hello(8);
         //break;
@@ -253,11 +320,12 @@ int main() {
         //print_hello(14);
         //break;
         default :
-                while(1); 
-                break;
+            while(1); 
+        break;
        
-    }   
-    
-    return 0;
+    }// case
+    round++ ;
+
+return 0;
 
 }

@@ -282,11 +282,13 @@ parameter CR_LED       = 20'h2018 ; // RW 7 bit
 parameter CR_Button_0  = 20'h201c ; // RO 1 bit
 parameter CR_Button_1  = 20'h2020 ; // RO 1 bit
 parameter CR_Switch    = 20'h2024 ; // RO 10 bit
+parameter CR_Arduino_dg_io = 20'h2028 ; // RO 14 bit
 
 typedef struct packed { // RO
     logic       Button_0;
     logic       Button_1;
     logic [9:0] Switch;
+    logic [13:0] Arduino_dg_io;
 } t_cr_ro_fpga ;
 
 typedef struct packed { // RW
