@@ -968,58 +968,64 @@ main:
 	sw	a5,-28(s0)
 	li	a5,1
 	sw	a5,-48(s0)
+	j	.L39
 .L38:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
 	li	a5,13
-	bne	a4,a5,.L39
+	bne	a4,a5,.L40
 	lw	a5,-36(s0)
-	bne	a5,zero,.L39
+	bne	a5,zero,.L40
 	lw	a5,-32(s0)
 	addi	a5,a5,1
 	sw	a5,-32(s0)
 	li	a5,1
 	sw	a5,-36(s0)
-.L39:
+	j	.L39
+.L40:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
 	li	a5,11
-	bne	a4,a5,.L40
+	bne	a4,a5,.L41
 	lw	a5,-40(s0)
-	bne	a5,zero,.L40
+	bne	a5,zero,.L41
 	lw	a5,-32(s0)
 	addi	a5,a5,-1
 	sw	a5,-32(s0)
 	li	a5,1
 	sw	a5,-40(s0)
-.L40:
+	j	.L39
+.L41:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
 	li	a5,7
-	bne	a4,a5,.L41
+	bne	a4,a5,.L42
 	lw	a5,-44(s0)
-	bne	a5,zero,.L41
+	bne	a5,zero,.L42
 	lw	a5,-28(s0)
 	addi	a5,a5,-1
 	sw	a5,-28(s0)
 	li	a5,1
 	sw	a5,-44(s0)
-.L41:
+	j	.L39
+.L42:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
 	li	a5,15
-	bne	a4,a5,.L42
+	bne	a4,a5,.L39
 	sw	zero,-48(s0)
 	sw	zero,-36(s0)
 	sw	zero,-40(s0)
 	sw	zero,-44(s0)
-.L42:
+.L39:
+	lw	a5,-32(s0)
+	slli	a5,a5,1
 	lw	a2,-28(s0)
-	lw	a1,-32(s0)
+	mv	a1,a5
 	li	a0,43
 	call	draw_char
 	j	.L43

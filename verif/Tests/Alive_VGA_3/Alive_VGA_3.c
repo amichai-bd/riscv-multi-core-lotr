@@ -265,26 +265,22 @@ int main() {
                 if ((ARDUINO_IO_FGPA[0] == 14) && (right_old_press == 0)){ //4'b1110
                     x_pos++;
                     right_old_press = 1;
-                }
-                if ((ARDUINO_IO_FGPA[0] == 13) && (up_old_press == 0))  { //4'b1101
+                } else if ((ARDUINO_IO_FGPA[0] == 13) && (up_old_press == 0))  { //4'b1101
                     y_pos++;
                     up_old_press = 1;
-                }
-                if ((ARDUINO_IO_FGPA[0] == 11) && (down_old_press == 0))  { //4'b1011
+                } else if ((ARDUINO_IO_FGPA[0] == 11) && (down_old_press == 0))  { //4'b1011
                     y_pos--;
                     down_old_press = 1;
-                }
-                if ((ARDUINO_IO_FGPA[0] == 7) && (left_old_press == 0)) { //4'b0111
+                } else if ((ARDUINO_IO_FGPA[0] == 7) && (left_old_press == 0)) { //4'b0111
                     x_pos--;
                     left_old_press = 1;
-                }
-                if(ARDUINO_IO_FGPA[0] == 15) { //button is not pressed
+                } else if(ARDUINO_IO_FGPA[0] == 15) { //button is not pressed
                     right_old_press = 0;
                     up_old_press    = 0;
                     down_old_press  = 0;
                     left_old_press  = 0;
                 }
-                draw_char('+', y_pos, x_pos);// draw a squere on screen
+                draw_char('+', (2*y_pos), x_pos);// draw a squere on screen
             }
         //draw_char('+', 15, counter);
         //counter++;
