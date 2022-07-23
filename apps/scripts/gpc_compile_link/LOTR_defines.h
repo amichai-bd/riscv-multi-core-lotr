@@ -45,6 +45,7 @@ Created : 1/07/2022
 #define CR_SCRATCHPAD3 ((volatile int *) (0x00C0020C))
 
 //FPGA
+//CR
 #define SEG0_FGPA    ((volatile int *) (0x03C02000))
 #define SEG1_FGPA    ((volatile int *) (0x03C02004))
 #define SEG2_FGPA    ((volatile int *) (0x03C02008))
@@ -56,4 +57,6 @@ Created : 1/07/2022
 #define BUTTON2_FGPA ((volatile int *) (0x03C02020))
 #define SWITCH_FGPA  ((volatile int *) (0x03C02024))
 #define ARDUINO_IO_FGPA  ((volatile int *) (0x03C02028))
+#define ARDUINO_IO_FGPA_STICKY  ((volatile int *) (0x03C0202C))
+
 #define VGA_FPGA     ((volatile int *) (0x03400000))

@@ -35,7 +35,7 @@ import lotr_pkg::*;
     input  logic       Button_0,
     input  logic       Button_1,
     input  logic [9:0] Switch,
-    input logic [13:0] Arduino_dg_io,
+    input logic [15:0] Arduino_dg_io,
 
     // FPGA interface outputs
     output logic [7:0] SEG7_0,
@@ -153,6 +153,8 @@ always_comb begin
     cr_ro_next.Button_1 = Button_1;
     cr_ro_next.Switch   = Switch;
     cr_ro_next.Arduino_dg_io = Arduino_dg_io;
+    // update only when a valid read from Arduino_dg_io
+    if(|cr_ro.Arduino_dg_io) cr_ro_next.Sticky_Arduino_dg_io = cr_ro.Arduino_dg_io; 
 end
 
 
@@ -174,7 +176,8 @@ always_comb begin
             CR_Button_0 : F2C_RspDataQ503H = {31'b0 , cr_ro.Button_0} ;
             CR_Button_1 : F2C_RspDataQ503H = {31'b0 , cr_ro.Button_1} ;
             CR_Switch   : F2C_RspDataQ503H = {22'b0 , cr_ro.Switch}   ;
-            CR_Arduino_dg_io : F2C_RspDataQ503H = {28'b0 , cr_ro.Arduino_dg_io[3:0]}   ;
+            CR_Arduino_dg_io : F2C_RspDataQ503H = {16'b0 , cr_ro.Arduino_dg_io[15:0]}   ;
+            CR_Sticky_Arduino_dg_io : F2C_RspDataQ503H = {16'b0 , cr_ro.Sticky_Arduino_dg_io[15:0]}   ;
             // ---- Other ----
             default     : F2C_RspDataQ503H = 32'b0                         ;
         endcase

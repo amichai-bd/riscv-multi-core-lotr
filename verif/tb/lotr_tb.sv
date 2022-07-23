@@ -7,7 +7,7 @@ import lotr_pkg::*;
 	logic         RstQnnnH  ;
     logic Button_0     ;     
     logic Button_1     ;
-    logic [13:0]Arduino_dg_io     ;
+    logic [15:0]Arduino_dg_io     ;
     logic [9:0] Switch ;
     logic [7:0] SEG7_0;
     logic [7:0] SEG7_1;
@@ -98,7 +98,7 @@ lotr lotr(
     .Button_0   (~RstQnnnH),
     .Button_1   (1'b0),
     .Switch     (10'h04),
-    .Arduino_dg_io (14'b0),
+    .Arduino_dg_io (16'b0),
 
     //outputs
     .SEG7_0  (SEG7_0),

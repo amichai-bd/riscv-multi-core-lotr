@@ -26,10 +26,10 @@ logic CLK_5;
 	.inclk0 ( CLK_50),
 	.c0		(CLK_5));
 	 
-logic CLK_50Khz;
-	pll_50Khz pll_5Khz (
-	.inclk0 ( CLK_50),
-	.c0		(CLK_50Khz));
+//logic CLK_50Khz;
+//	pll_50Khz pll_5Khz (
+//	.inclk0 ( CLK_50),
+//	.c0		(CLK_50Khz));
 	
 lotr lotr(
     //general signals input

@@ -959,7 +959,7 @@ main:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
-	li	a5,14
+	li	a5,1
 	bne	a4,a5,.L38
 	lw	a5,-48(s0)
 	bne	a5,zero,.L38
@@ -973,7 +973,7 @@ main:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
-	li	a5,13
+	li	a5,2
 	bne	a4,a5,.L40
 	lw	a5,-36(s0)
 	bne	a5,zero,.L40
@@ -987,7 +987,7 @@ main:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
-	li	a5,11
+	li	a5,4
 	bne	a4,a5,.L41
 	lw	a5,-40(s0)
 	bne	a5,zero,.L41
@@ -1001,7 +1001,7 @@ main:
 	li	a5,62922752
 	addi	a5,a5,40
 	lw	a4,0(a5)
-	li	a5,7
+	li	a5,8
 	bne	a4,a5,.L42
 	lw	a5,-44(s0)
 	bne	a5,zero,.L42
@@ -1014,9 +1014,8 @@ main:
 .L42:
 	li	a5,62922752
 	addi	a5,a5,40
-	lw	a4,0(a5)
-	li	a5,15
-	bne	a4,a5,.L39
+	lw	a5,0(a5)
+	bne	a5,zero,.L39
 	sw	zero,-48(s0)
 	sw	zero,-36(s0)
 	sw	zero,-40(s0)
