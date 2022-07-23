@@ -266,11 +266,11 @@ void snake_game (){
             new_apple(&apple_x, &apple_y);
             score++;
         }
+        print_header(3,20);
         //print_apple
         draw_char('O', 2*apple_y,  apple_x);
         print_snake(hit_apple, snk_valid, snk_x_pos, snk_y_pos, SNK_SIZE);   
         //print_score
-        print_header(3,20);
         draw_char((score+'0'), 3,  39);
         kill = check_hit(snk_x_pos[0], snk_y_pos[0]);
         hit_apple =0;

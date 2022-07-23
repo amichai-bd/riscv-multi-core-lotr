@@ -937,23 +937,23 @@ Disassembly of section .text:
  e0c:	fe842783          	lw	a5,-24(s0)
  e10:	00178793          	addi	a5,a5,1
  e14:	fef42423          	sw	a5,-24(s0)
- e18:	f2042783          	lw	a5,-224(s0)
- e1c:	00179793          	slli	a5,a5,0x1
- e20:	f2442703          	lw	a4,-220(s0)
- e24:	00070613          	mv	a2,a4
- e28:	00078593          	mv	a1,a5
- e2c:	04f00513          	li	a0,79
- e30:	a78ff0ef          	jal	ra,a8 <draw_char>
- e34:	f6440693          	addi	a3,s0,-156
- e38:	fa040613          	addi	a2,s0,-96
- e3c:	f2840793          	addi	a5,s0,-216
- e40:	00f00713          	li	a4,15
- e44:	00078593          	mv	a1,a5
- e48:	fdc42503          	lw	a0,-36(s0)
- e4c:	b99ff0ef          	jal	ra,9e4 <print_snake>
- e50:	01400593          	li	a1,20
- e54:	00300513          	li	a0,3
- e58:	e58ff0ef          	jal	ra,4b0 <print_header>
+ e18:	01400593          	li	a1,20
+ e1c:	00300513          	li	a0,3
+ e20:	e90ff0ef          	jal	ra,4b0 <print_header>
+ e24:	f2042783          	lw	a5,-224(s0)
+ e28:	00179793          	slli	a5,a5,0x1
+ e2c:	f2442703          	lw	a4,-220(s0)
+ e30:	00070613          	mv	a2,a4
+ e34:	00078593          	mv	a1,a5
+ e38:	04f00513          	li	a0,79
+ e3c:	a6cff0ef          	jal	ra,a8 <draw_char>
+ e40:	f6440693          	addi	a3,s0,-156
+ e44:	fa040613          	addi	a2,s0,-96
+ e48:	f2840793          	addi	a5,s0,-216
+ e4c:	00f00713          	li	a4,15
+ e50:	00078593          	mv	a1,a5
+ e54:	fdc42503          	lw	a0,-36(s0)
+ e58:	b8dff0ef          	jal	ra,9e4 <print_snake>
  e5c:	fe842783          	lw	a5,-24(s0)
  e60:	03078793          	addi	a5,a5,48
  e64:	02700613          	li	a2,39

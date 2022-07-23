@@ -968,6 +968,9 @@ snake_game:
 	addi	a5,a5,1
 	sw	a5,-24(s0)
 .L54:
+	li	a1,20
+	li	a0,3
+	call	print_header
 	lw	a5,-224(s0)
 	slli	a5,a5,1
 	lw	a4,-220(s0)
@@ -982,9 +985,6 @@ snake_game:
 	mv	a1,a5
 	lw	a0,-36(s0)
 	call	print_snake
-	li	a1,20
-	li	a0,3
-	call	print_header
 	lw	a5,-24(s0)
 	addi	a5,a5,48
 	li	a2,39
