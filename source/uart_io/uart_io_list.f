@@ -1,11 +1,24 @@
-./src/uart_defines.v
-./src/timescale.v
-./src/raminfr.v
-./src/uart_sync_flops.v
-./src/uart_rfifo.v
-./src/uart_tfifo.v
-./src/uart_receiver.v
-./src/uart_transmitter.v
-./src/uart_regs.v
-./src/uart_wb.v
-./src/uart_top.v
+// Includes
++incdir+../source/common/
++incdir+../verif/tb/
+
+//PARAM PACAKGE
+../source/common/lotr_pkg.sv
+
+//RTL
+../source/uart_io/rtl/uart_defines.v
+../source/uart_io/rtl/timescale.v
+../source/uart_io/rtl/raminfr.v
+../source/uart_io/rtl/uart_sync_flops.v
+../source/uart_io/rtl/uart_rfifo.v
+../source/uart_io/rtl/uart_tfifo.v
+../source/uart_io/rtl/uart_receiver.v
+../source/uart_io/rtl/uart_transmitter.v
+../source/uart_io/rtl/uart_regs.v
+../source/uart_io/rtl/uart_wb.v
+../source/uart_io/rtl/uart_top.v
+
+
+//Simulation - tectbench
+../verif/tb/uart_io_tb.sv
+      
