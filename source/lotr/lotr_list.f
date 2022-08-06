@@ -46,5 +46,4 @@
 //====================================
 ../verif/tb/gpc_4t_tile_tb.sv
 ../verif/tb/lotr_tb.sv
-../verif/tb/lotr_fpga_tb.sv
 

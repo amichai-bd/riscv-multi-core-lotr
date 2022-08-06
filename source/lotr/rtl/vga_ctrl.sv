@@ -19,13 +19,13 @@ module vga_ctrl (
     input  logic        QClk,
     input  logic        Reset,
     // VGA memory Access
-    input  logic [31:0] RegRdData2,
-    input  logic [31:0] AluOut,
+    input  logic [31:0] F2C_ReqDataQ503H,
+    input  logic [31:0] F2C_ReqAddressQ503H,
     input  logic [3:0]  CtrlVGAMemByteEn,
-    input  logic        CtrlVGAMemWrEn,
+    input  logic        CtrlVgaMemWrEnQ503,
     // Read core
-    input  logic        SelVGAMemWb,
-    output logic [31:0] VGAMemRdDataQ104H,
+    input  logic        CtrlVgaMemRdEnQ503,
+    output logic [31:0] VgaRspDataQ504H,
     // VGA output
     output logic [3:0]  RED,
     output logic [3:0]  GREEN,
@@ -126,13 +126,13 @@ vga_mem vga_mem (
     .clock_a        (QClk),
     .clock_b        (CLK_25),
     // Write
-    .data_a         (RegRdData2),
-    .address_a      (AluOut[31:2]),
+    .data_a         (F2C_ReqDataQ503H),
+    .address_a      (F2C_ReqAddressQ503H[31:2]),
     .byteena_a      (CtrlVGAMemByteEn),
-    .wren_a         (CtrlVGAMemWrEn),
+    .wren_a         (CtrlVgaMemWrEnQ503),
     // Read from core
-    .rden_a         (SelVGAMemWb),
-    .q_a            (VGAMemRdDataQ104H),
+    .rden_a         (CtrlVgaMemRdEnQ503),
+    .q_a            (VgaRspDataQ504H),
     // Read from vga controller
     .address_b      (WordOffsetQ1), // Word offset (not Byte)
     .q_b            (RdDataQ2)
@@ -141,12 +141,12 @@ vga_mem vga_mem (
 vga_mem_fpga vga_mem(
 	//CORE interface
     .clock_a        (QClk),
-    .wren_a         (CtrlVGAMemWrEn),
+    .wren_a         (CtrlVgaMemWrEnQ503),
     .byteena_a      (CtrlVGAMemByteEn),
-    .address_a      (AluOut[31:2]),
-    .data_a         (RegRdData2),
-    .rden_a         (SelVGAMemWb),	
-    .q_a            (VGAMemRdDataQ104H),
+    .address_a      (F2C_ReqAddressQ503H[31:2]),
+    .data_a         (F2C_ReqDataQ503H),
+    .rden_a         (CtrlVgaMemRdEnQ503),	
+    .q_a            (VgaRspDataQ504H),
     //VGA interface
     .clock_b        (CLK_25),
     .wren_b         (1'b0),
