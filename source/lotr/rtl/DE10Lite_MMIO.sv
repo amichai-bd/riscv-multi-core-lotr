@@ -106,23 +106,23 @@ assign CtrlVgaMemWrEnQ503 = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && (
 `LOTR_MSFF(CtrlVgaMemRdEnQ504    , CtrlVgaMemRdEnQ503    , QClk)
 `LOTR_MSFF(CtrlVgaMemWrEnQ504    , CtrlVgaMemWrEnQ503    , QClk)
 vga_ctrl vga_ctrl (
-    .CLK_50           (CLK_50           ),  //input  logic        
-    .QClk             (QClk             ),  //input  logic        
-    .Reset            (RstQnnnH         ),  //input  logic        
+    .CLK_50             (CLK_50           ),  //input  logic        
+    .QClk               (QClk             ),  //input  logic        
+    .Reset              (RstQnnnH         ),  //input  logic        
     //// VGA memory 
-    .RegRdData2       (F2C_ReqDataQ503H   ),//input  logic [31:0] 
-    .AluOut           (F2C_ReqAddressQ503H),//input  logic [31:0] 
-    .CtrlVGAMemByteEn (4'b1111 ),           //input  logic [3:0]  
-    .CtrlVGAMemWrEn   (CtrlVgaMemWrEnQ503),  //input  logic        
+    .F2C_ReqDataQ503H   (F2C_ReqDataQ503H   ),//input  logic [31:0] 
+    .F2C_ReqAddressQ503H(F2C_ReqAddressQ503H),//input  logic [31:0] 
+    .CtrlVGAMemByteEn   (4'b1111 ),           //input  logic [3:0]  
+    .CtrlVgaMemWrEnQ503 (CtrlVgaMemWrEnQ503),  //input  logic        
     //// Read core  
-    .SelVGAMemWb      (CtrlVgaMemRdEnQ503),  //input  logic        
-    .VGAMemRdDataQ104H(VgaRspDataQ504H),    //output logic [31:0] 
+    .CtrlVgaMemRdEnQ503 (CtrlVgaMemRdEnQ503),  //input  logic        
+    .VgaRspDataQ504H    (VgaRspDataQ504H),    //output logic [31:0] 
     //// VGA output  
-    .RED              (RED              ),  //output logic [3:0]  
-    .GREEN            (GREEN            ),  //output logic [3:0]  
-    .BLUE             (BLUE             ),  //output logic [3:0]  
-    .h_sync           (h_sync           ),  //output logic        
-    .v_sync           (v_sync           )   //output logic        
+    .RED                (RED              ),  //output logic [3:0]  
+    .GREEN              (GREEN            ),  //output logic [3:0]  
+    .BLUE               (BLUE             ),  //output logic [3:0]  
+    .h_sync             (h_sync           ),  //output logic        
+    .v_sync             (v_sync           )   //output logic        
 );
 
 
