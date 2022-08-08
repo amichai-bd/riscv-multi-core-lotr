@@ -8,8 +8,8 @@ Based on a Ring architecture to share all memory regions between threads and cor
 The Design is loaded to the DE10Lite FPGA | Writing to Display - accessable with LOAD/STORE from any Thread.  
 <img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="300">
 <img src="https://user-images.githubusercontent.com/81047407/178192931-b3714594-96ae-46d2-856a-4d72668a098f.jpeg" width="300">
-
-
+<img src="https://user-images.githubusercontent.com/81047407/183402390-398c9438-2080-494d-9e31-2f1f98b5255e.png" width="300">
+<img src="https://user-images.githubusercontent.com/81047407/183402370-438cc503-4065-4fd7-b9e2-d2f81aa5d5fb.png" width="300">
 
 *** 
 ## The reposetory has 4 main projects:
