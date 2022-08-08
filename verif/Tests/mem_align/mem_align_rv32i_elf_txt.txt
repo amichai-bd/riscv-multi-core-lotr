@@ -1,0 +1,109 @@
+
+mem_align_rv32i.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_stext>:
+   0:	00000013          	nop
+   4:	00000013          	nop
+   8:	00000013          	nop
+   c:	00000013          	nop
+  10:	00000093          	li	ra,0
+  14:	00000113          	li	sp,0
+  18:	00000193          	li	gp,0
+  1c:	00000213          	li	tp,0
+  20:	00000293          	li	t0,0
+  24:	00000313          	li	t1,0
+  28:	00000393          	li	t2,0
+  2c:	00000413          	li	s0,0
+  30:	00000493          	li	s1,0
+  34:	00000513          	li	a0,0
+  38:	00000593          	li	a1,0
+  3c:	00000613          	li	a2,0
+  40:	00000693          	li	a3,0
+  44:	00000713          	li	a4,0
+  48:	00000793          	li	a5,0
+  4c:	00008813          	mv	a6,ra
+  50:	00000893          	li	a7,0
+  54:	00000913          	li	s2,0
+  58:	00000993          	li	s3,0
+  5c:	00000a13          	li	s4,0
+  60:	00000a93          	li	s5,0
+  64:	00000b13          	li	s6,0
+  68:	00000b93          	li	s7,0
+  6c:	00000c13          	li	s8,0
+  70:	00000c93          	li	s9,0
+  74:	00000d13          	li	s10,0
+  78:	00000d93          	li	s11,0
+  7c:	00000e13          	li	t3,0
+  80:	00000e93          	li	t4,0
+  84:	00000f13          	li	t5,0
+  88:	00000f93          	li	t6,0
+
+0000008c <main>:
+  8c:	004000b7          	lui	ra,0x400
+  90:	04030137          	lui	sp,0x4030
+  94:	20110113          	addi	sp,sp,513 # 4030201 <_bss_end+0x3c2fa01>
+  98:	f0e0d1b7          	lui	gp,0xf0e0d
+  9c:	0b018193          	addi	gp,gp,176 # f0e0d0b0 <_bss_end+0xf0a0c8b0>
+  a0:	00400237          	lui	tp,0x400
+  a4:	00420213          	addi	tp,tp,4 # 400004 <_stack_len+0x3ffe04>
+  a8:	0020a023          	sw	sp,0(ra) # 400000 <_stack_len+0x3ffe00>
+  ac:	0000a503          	lw	a0,0(ra)
+  b0:	00009583          	lh	a1,0(ra)
+  b4:	00008603          	lb	a2,0(ra)
+  b8:	0000d683          	lhu	a3,0(ra)
+  bc:	0000c703          	lbu	a4,0(ra)
+  c0:	00a22023          	sw	a0,0(tp) # 0 <_stext>
+  c4:	00b22223          	sw	a1,4(tp) # 4 <_stext+0x4>
+  c8:	00c22423          	sw	a2,8(tp) # 8 <_stext+0x8>
+  cc:	00d22623          	sw	a3,12(tp) # c <_stext+0xc>
+  d0:	00e22823          	sw	a4,16(tp) # 10 <_stext+0x10>
+  d4:	00109583          	lh	a1,1(ra)
+  d8:	00108603          	lb	a2,1(ra)
+  dc:	0010d683          	lhu	a3,1(ra)
+  e0:	0010c703          	lbu	a4,1(ra)
+  e4:	00b22a23          	sw	a1,20(tp) # 14 <_stext+0x14>
+  e8:	00c22c23          	sw	a2,24(tp) # 18 <_stext+0x18>
+  ec:	00d22e23          	sw	a3,28(tp) # 1c <_stext+0x1c>
+  f0:	02e22023          	sw	a4,32(tp) # 20 <_stext+0x20>
+  f4:	00209583          	lh	a1,2(ra)
+  f8:	00208603          	lb	a2,2(ra)
+  fc:	0020d683          	lhu	a3,2(ra)
+ 100:	0020c703          	lbu	a4,2(ra)
+ 104:	02b22223          	sw	a1,36(tp) # 24 <_stext+0x24>
+ 108:	02c22423          	sw	a2,40(tp) # 28 <_stext+0x28>
+ 10c:	02d22623          	sw	a3,44(tp) # 2c <_stext+0x2c>
+ 110:	02e22823          	sw	a4,48(tp) # 30 <_stext+0x30>
+ 114:	00309583          	lh	a1,3(ra)
+ 118:	00308603          	lb	a2,3(ra)
+ 11c:	0030d683          	lhu	a3,3(ra)
+ 120:	0030c703          	lbu	a4,3(ra)
+ 124:	02b22a23          	sw	a1,52(tp) # 34 <_stext+0x34>
+ 128:	02c22c23          	sw	a2,56(tp) # 38 <_stext+0x38>
+ 12c:	02d22e23          	sw	a3,60(tp) # 3c <_stext+0x3c>
+ 130:	04e22023          	sw	a4,64(tp) # 40 <_stext+0x40>
+ 134:	deadc0b7          	lui	ra,0xdeadc
+ 138:	eef08093          	addi	ra,ra,-273 # deadbeef <_bss_end+0xde6db6ef>
+ 13c:	00400137          	lui	sp,0x400
+ 140:	04810113          	addi	sp,sp,72 # 400048 <_stack_len+0x3ffe48>
+ 144:	00110023          	sb	ra,0(sp)
+ 148:	001100a3          	sb	ra,1(sp)
+ 14c:	00110123          	sb	ra,2(sp)
+ 150:	001101a3          	sb	ra,3(sp)
+ 154:	004001b7          	lui	gp,0x400
+ 158:	04c18193          	addi	gp,gp,76 # 40004c <_stack_len+0x3ffe4c>
+ 15c:	00119023          	sh	ra,0(gp)
+ 160:	00119123          	sh	ra,2(gp)
+
+00000164 <eot>:
+ 164:	00000013          	nop
+ 168:	00000013          	nop
+ 16c:	00000013          	nop
+ 170:	00000013          	nop
+ 174:	00100073          	ebreak
+ 178:	00000013          	nop
+ 17c:	00000013          	nop
+ 180:	00000013          	nop
+ 184:	00000013          	nop

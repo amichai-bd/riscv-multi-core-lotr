@@ -132,6 +132,8 @@ logic               CtrlMemToRegQ101H , CtrlMemToRegQ102H , CtrlMemToRegQ103H , 
 logic               CtrlPcToRegQ101H  , CtrlPcToRegQ102H  , CtrlPcToRegQ103H  , CtrlPcToRegQ104H;
 logic               CtrlInsertNopQ102H, CtrlInsertNopQ101H, CtrlInsertNopQ100H;
 logic               BranchCondMetQ102H;
+logic [3:0]         MemByteEnQ104H  ;
+logic               CtrlSignExtQ102H, CtrlSignExtQ103H, CtrlSignExtQ104H;
 //Multi Core - Ring Controler (Fabric) access - Read Response
 logic SampT0RcAccess;
 logic SampT1RcAccess;
@@ -254,6 +256,7 @@ assign RegRdPtr2Q101H     = InstructionQ101H[24:20];  // rs2 register for R/S/B 
 assign OpcodeQ101H        = InstructionQ101H[6:0];    // opcode       for each possible Type  
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Control
 //////////////////////////////////////////////////S//////////////////////////////////////
@@ -272,7 +275,6 @@ always_comb begin : decode_opcode
     CtrlMemRdQ101H      =   (OpcodeQ101H == OP_LOAD);
     CtrlMemWrQ101H      =   (OpcodeQ101H == OP_STORE);
     CtrlStoreQ101H      =   (OpcodeQ101H == OP_STORE);
-
 end
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -362,6 +364,7 @@ assign J_ImmediateQ102H = { {12{InstructionQ102H[31]}} , InstructionQ102H[19:12]
 assign RegWrPtrQ102H    = InstructionQ102H[11:7];   // rd register  for R/I/U/J Type
 assign Funct3Q102H      = InstructionQ102H[14:12];  // function3    for R/S/I/B Type
 assign Funct7Q102H      = InstructionQ102H[31:25];  // function7    for R Type
+assign CtrlSignExtQ102H = (OpcodeQ102H == OP_LOAD) && (!Funct3Q102H[2]); // Sign extend the LOAD from memory read.
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //          ALU controller
@@ -375,7 +378,7 @@ always_comb begin : alu_ctrl
         begin
             CtrlAluOpQ102H  = {1'b0,Funct3Q102H};
             if (OpcodeQ102H == OP_STORE || OpcodeQ102H == OP_LOAD) begin 
-                CtrlAluOpQ102H[3] = 1'b1;
+                CtrlAluOpQ102H = 4'b1010;
             end
             if( (OpcodeQ102H == OP_OP) || ((OpcodeQ102H == OP_OPIMM) && (Funct3Q102H[1:0]==2'b01))) begin
                CtrlAluOpQ102H[3] = Funct7Q102H[5];
@@ -476,7 +479,7 @@ end
 `LOTR_MSFF   ( CtrlPcToRegQ103H  , CtrlPcToRegQ102H  , QClk)
 `LOTR_MSFF   ( CtrlRegWrQ103H    , CtrlRegWrQ102H    , QClk)
 `LOTR_MSFF   ( PcQ103H           , NextPcQ102H       , QClk) //FIXME - need to review nad understand - why not use PcQ102H?
-
+`LOTR_MSFF   ( CtrlSignExtQ103H  , CtrlSignExtQ102H  , QClk) //FIXME - need to review nad understand - why not use PcQ102H?
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //   _____  __     __   _____   _        ______          ____    __    ___    ____    _    _ 
@@ -491,15 +494,25 @@ end
 ////////////////////////////////////////////////////////////////////////////////////////
 //          Data Memory
 ////////////////////////////////////////////////////////////////////////////////////////
-//Byte Enable acording to Funct3 of the Opcode.
-assign MemByteEnQ103H   = (Funct3Q103H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
-                          (Funct3Q103H[1:0] == 2'b01 ) ? 4'b0011 : // LH/SH
-                          (Funct3Q103H[1:0] == 2'b10 ) ? 4'b1111 : // LW/SW
-                                                         4'b0000 ; // 2'b11 is an illegal Funct3 //FIXME - ADD assetion 
-// The value read from register assign to the output signal MemWrDataQ103H that goes right into the D_MEM module
-assign  MemWrDataQ103H = RegRdData2Q103H;
+// Outputs to memory
 // the address from ALU assign to the output signal MemAdrsQ103H that goes right into the D_MEM module
 assign  MemAdrsQ103H = AluOutQ103H;
+//Byte Enable acording to Funct3 of the Opcode.
+logic [3:0]  PreMemByteEnQ103H;
+assign PreMemByteEnQ103H   = (Funct3Q103H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
+                             (Funct3Q103H[1:0] == 2'b01 ) ? 4'b0011 : // LH/SH
+                             (Funct3Q103H[1:0] == 2'b10 ) ? 4'b1111 : // LW/SW
+                                                            4'b0000 ; // 2'b11 is an illegal Funct3 //FIXME - ADD assetion 
+assign MemByteEnQ103H = (MemAdrsQ103H[1:0] == 2'b01 ) ? { PreMemByteEnQ103H[2:0],1'b0 } :
+                        (MemAdrsQ103H[1:0] == 2'b10 ) ? { PreMemByteEnQ103H[1:0],2'b0 } :
+                        (MemAdrsQ103H[1:0] == 2'b11 ) ? { PreMemByteEnQ103H[0]  ,3'b0 } :
+                                                          PreMemByteEnQ103H;
+// The value read from register assign to the output signal MemWrDataQ103H that goes right into the D_MEM module
+assign MemWrDataQ103H = (MemAdrsQ103H[1:0] == 2'b01 ) ? { RegRdData2Q103H[23:0],8'b0  } :
+                        (MemAdrsQ103H[1:0] == 2'b10 ) ? { RegRdData2Q103H[15:0],16'b0 } :
+                        (MemAdrsQ103H[1:0] == 2'b11 ) ? { RegRdData2Q103H[7:0] ,24'b0 } :
+                                                          RegRdData2Q103H;
+
 
 
 `LOTR_MSFF   ( PcPlus4Q104H      , PcPlus4Q103H      , QClk) 
@@ -508,10 +521,12 @@ assign  MemAdrsQ103H = AluOutQ103H;
 `LOTR_MSFF   ( CtrlPcToRegQ104H  , CtrlPcToRegQ103H  , QClk)
 `LOTR_MSFF   ( CtrlRegWrQ104H    , CtrlRegWrQ103H    , QClk)
 `LOTR_MSFF   ( PreRegWrPtrQ104H  , RegWrPtrQ103H     , QClk)
-`LOTR_MSFF   ( SampT0RcAccess,    T0RcAccess,    QClk ) 
-`LOTR_MSFF   ( SampT1RcAccess,    T1RcAccess,    QClk ) 
-`LOTR_MSFF   ( SampT2RcAccess,    T2RcAccess,    QClk ) 
-`LOTR_MSFF   ( SampT3RcAccess,    T3RcAccess,    QClk ) 
+`LOTR_MSFF   ( MemByteEnQ104H    , PreMemByteEnQ103H , QClk)
+`LOTR_MSFF   ( CtrlSignExtQ104H  , CtrlSignExtQ103H  , QClk)
+`LOTR_MSFF   ( SampT0RcAccess    , T0RcAccess        , QClk) 
+`LOTR_MSFF   ( SampT1RcAccess    , T1RcAccess        , QClk) 
+`LOTR_MSFF   ( SampT2RcAccess    , T2RcAccess        , QClk) 
+`LOTR_MSFF   ( SampT3RcAccess    , T3RcAccess        , QClk) 
 
 //This logic is used to remember the WrPtr when the LOAD request is not Local (Latecy is unknown)
 // RcAccess -> Ring Controller Access
@@ -540,12 +555,29 @@ end
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
  
+logic [31:0] PostBeMemRdData104H;
+logic [31:0] PostShiftMemRdDataQ104H;
+logic [1:0]  ByteOffsetQ104H;
+assign ByteOffsetQ104H = AluOutQ104H[1:0]; 
+assign PostShiftMemRdDataQ104H = (ByteOffsetQ104H == 2'b01) ? { 8'b0,MemRdDataQ104H[31:8]}  :
+                                 (ByteOffsetQ104H == 2'b10) ? {16'b0,MemRdDataQ104H[31:16]} :
+                                 (ByteOffsetQ104H == 2'b11) ? {24'b0,MemRdDataQ104H[31:24]} :
+                                                                     MemRdDataQ104H         ;
+
+// Sign extend taking care of
+assign PostBeMemRdData104H[7:0]   =  MemByteEnQ104H[0] ? PostShiftMemRdDataQ104H[7:0]    : 8'b0;
+assign PostBeMemRdData104H[15:8]  =  MemByteEnQ104H[1] ? PostShiftMemRdDataQ104H[15:8]   :
+                                     CtrlSignExtQ104H  ? {8{PostBeMemRdData104H[7]}}     : 8'b0;
+assign PostBeMemRdData104H[23:16] =  MemByteEnQ104H[2] ? PostShiftMemRdDataQ104H[23:16]  :
+                                     CtrlSignExtQ104H  ? {8{PostBeMemRdData104H[15]}}    : 8'b0;
+assign PostBeMemRdData104H[31:24] =  MemByteEnQ104H[3] ? PostShiftMemRdDataQ104H[31:24]  :
+                                     CtrlSignExtQ104H  ? {8{PostBeMemRdData104H[23]}}    : 8'b0;
 
 always_comb begin : candidates_for_register_write_data
     unique casez ({CtrlMemToRegQ104H , CtrlPcToRegQ104H , C2F_RspMatchQ104H}) 
         3'b010   : RegWrDataQ104H = PcPlus4Q104H   ; //Data from PC - for JAL?
-        3'b100   : RegWrDataQ104H = MemRdDataQ104H ; //Data from Memory
-        3'b001   : RegWrDataQ104H = MemRdDataQ104H ; //Data from Memory- C2F Response 
+        3'b100   : RegWrDataQ104H = PostBeMemRdData104H ; //Data from Memory
+        3'b001   : RegWrDataQ104H = PostBeMemRdData104H ; //Data from Memory- C2F Response 
         default  : RegWrDataQ104H = AluOutQ104H    ; //Data from ALU (Common case)
     endcase         
 end // always_comb
