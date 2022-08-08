@@ -503,6 +503,8 @@ assign PreMemByteEnQ103H   = (Funct3Q103H[1:0] == 2'b00 ) ? 4'b0001 : // LB/SB
                              (Funct3Q103H[1:0] == 2'b01 ) ? 4'b0011 : // LH/SH
                              (Funct3Q103H[1:0] == 2'b10 ) ? 4'b1111 : // LW/SW
                                                             4'b0000 ; // 2'b11 is an illegal Funct3 //FIXME - ADD assetion 
+// incase of of non-aligned word write access, need to shift left the Byte Enable & the write data.
+//FIXME - perhaps this shift should be in the mem_wrap
 assign MemByteEnQ103H = (MemAdrsQ103H[1:0] == 2'b01 ) ? { PreMemByteEnQ103H[2:0],1'b0 } :
                         (MemAdrsQ103H[1:0] == 2'b10 ) ? { PreMemByteEnQ103H[1:0],2'b0 } :
                         (MemAdrsQ103H[1:0] == 2'b11 ) ? { PreMemByteEnQ103H[0]  ,3'b0 } :
@@ -559,12 +561,15 @@ logic [31:0] PostBeMemRdData104H;
 logic [31:0] PostShiftMemRdDataQ104H;
 logic [1:0]  ByteOffsetQ104H;
 assign ByteOffsetQ104H = AluOutQ104H[1:0]; 
+
+// incase of of non-aligned read access, need to shift right the data.
+//FIXME - perhaps this shift should be in the mem_wrap
 assign PostShiftMemRdDataQ104H = (ByteOffsetQ104H == 2'b01) ? { 8'b0,MemRdDataQ104H[31:8]}  :
                                  (ByteOffsetQ104H == 2'b10) ? {16'b0,MemRdDataQ104H[31:16]} :
                                  (ByteOffsetQ104H == 2'b11) ? {24'b0,MemRdDataQ104H[31:24]} :
                                                                      MemRdDataQ104H         ;
 
-// Sign extend taking care of
+// taking care of Sign extend  & Byte Enable
 assign PostBeMemRdData104H[7:0]   =  MemByteEnQ104H[0] ? PostShiftMemRdDataQ104H[7:0]    : 8'b0;
 assign PostBeMemRdData104H[15:8]  =  MemByteEnQ104H[1] ? PostShiftMemRdDataQ104H[15:8]   :
                                      CtrlSignExtQ104H  ? {8{PostBeMemRdData104H[7]}}     : 8'b0;
