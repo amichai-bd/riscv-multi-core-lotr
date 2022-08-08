@@ -1,7 +1,8 @@
 `timescale 1ns/1ns
 
 `include "lotr_defines.sv"
-module uart_io_tb ();
+
+module uart_io_tb;
    import lotr_pkg::*;
 
    // CLK PARAMETERS 20MHz CLK
@@ -26,17 +27,17 @@ module uart_io_tb ();
    always #HALF_CLK
      clk = (clk_en) ? ~clk : 0;
 
-
    uart_io
-     #()
-   uart_io_DUT
-     (
-      // clk, rst
-      
-      // RC interface
-
-      // UART RX/TX signals 
-      );
+     uart_io_DUT
+       (
+	// clk, rst
+	.clk           (clk),
+	.rstn          (rstn),
+	// RC interface
+	// uart RX/TX signals
+	.uart_master_tx(uart_master_tx), 
+	.uart_master_rx(uart_master_rx)
+	);
    
    task print(string str);
       $display("-I- time=%0t[ns]: %s",
@@ -50,6 +51,14 @@ module uart_io_tb ();
    task delay(int cycles);
       #(cycles*CLK_PERIOD);
    endtask // delay
+
+   task init();
+      print("Initializing TB signals");
+      clk_en=1'b0;
+      clk=1'b0;
+      rstn=1'b1;
+      uart_master_tx=1'b1;
+   endtask // init
    
    task reset();
       print("Asserting reset");
@@ -59,6 +68,7 @@ module uart_io_tb ();
    endtask // reset
 
    task enable_clk();
+      print("Enabling main TB clock");
       clk_en=1'b1;
    endtask // enable_clk
 
@@ -91,7 +101,7 @@ module uart_io_tb ();
       delay(10); reset();
       delay(10); enable_clk();
       
-      $finish();
+      $finish(1);
    end
    
 endmodule
