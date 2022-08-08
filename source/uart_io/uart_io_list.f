@@ -2,23 +2,32 @@
 +incdir+../source/common/
 +incdir+../verif/tb/
 
-//PARAM PACAKGE
+// PARAM PACAKGE
 ../source/common/lotr_pkg.sv
 
-//RTL
-../source/uart_io/rtl/uart_defines.v
-../source/uart_io/rtl/timescale.v
-../source/uart_io/rtl/raminfr.v
-../source/uart_io/rtl/uart_sync_flops.v
-../source/uart_io/rtl/uart_rfifo.v
-../source/uart_io/rtl/uart_tfifo.v
-../source/uart_io/rtl/uart_receiver.v
-../source/uart_io/rtl/uart_transmitter.v
-../source/uart_io/rtl/uart_regs.v
-../source/uart_io/rtl/uart_wb.v
-../source/uart_io/rtl/uart_top.v
+// WISHBONE
+../source/uart_io/rtl/wishbone/wishbone.sv
+      
+// UART design      
+../source/uart_io/rtl/uart/uart_defines.v
+../source/uart_io/rtl/uart/timescale.v
+../source/uart_io/rtl/uart/raminfr.v
+../source/uart_io/rtl/uart/uart_sync_flops.v
+../source/uart_io/rtl/uart/uart_rfifo.v
+../source/uart_io/rtl/uart/uart_tfifo.v
+../source/uart_io/rtl/uart/uart_receiver.v
+../source/uart_io/rtl/uart/uart_transmitter.v
+../source/uart_io/rtl/uart/uart_regs.v
+../source/uart_io/rtl/uart/uart_wb.v
+../source/uart_io/rtl/uart/uart_top.v
+../source/uart_io/rtl/uart/uart_wrapper.sv
 
+// GATEWAY
+../source/uart_io/rtl/gateway/gateway.sv
 
-//Simulation - tectbench
+// UART_IO
+../source/uart_io/rtl/uart_io.sv
+      
+//Simulation - testbench
 ../verif/tb/uart_io_tb.sv
       
