@@ -9,14 +9,16 @@ The Design is loaded to the DE10Lite FPGA.
 <img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="300">  
   
 Writing to Display - accessable with LOAD/STORE from any Thread.  
-<img src="https://user-images.githubusercontent.com/81047407/178192931-b3714594-96ae-46d2-856a-4d72668a098f.jpeg" width="300">
-<img src="https://user-images.githubusercontent.com/81047407/183402390-398c9438-2080-494d-9e31-2f1f98b5255e.png" width="300">
-<img src="https://user-images.githubusercontent.com/81047407/183402370-438cc503-4065-4fd7-b9e2-d2f81aa5d5fb.png" width="300">
+<img src="https://user-images.githubusercontent.com/81047407/178192931-b3714594-96ae-46d2-856a-4d72668a098f.jpeg" width="200">
+<img src="https://user-images.githubusercontent.com/81047407/183402390-398c9438-2080-494d-9e31-2f1f98b5255e.png" width="200">
+<img src="https://user-images.githubusercontent.com/81047407/183402370-438cc503-4065-4fd7-b9e2-d2f81aa5d5fb.png" width="200">
 
 *** 
 ## The reposetory has 4 main projects:  
 ### *1) GPC_4T - RISCV core RV32I/E.*  
-Written in System verilog.   
+<img src="https://user-images.githubusercontent.com/81047407/183592644-405f9afd-e804-4680-8908-1f82b70eb6db.png" width="500">
+
+Written in System verilog.   
 Main Blocks:  
 1. Core - 4 HW thread. Compatible with RV32I/E.  
 2. I_MEM (Instruction Memory). 4KB of SRAM memory with dual access (core & Fabric).  
@@ -24,7 +26,9 @@ Main Blocks:
 Devided to: Compiler Scratchpad(.data.bss.rodata) + Shared MEM Space + CR Space (Control Registers)
 
 ### *2) RC - Ring Controller*  
-Written  in SystemVerilog.  
+<img src="https://user-images.githubusercontent.com/81047407/183592568-2adeb30d-494d-4e04-934f-d326eb28b096.png" width="500">
+
+Written  in SystemVerilog.  
 Ring EP (EndPoint) to Manage the cores & ring RD/WR traffic.
 Main logic:
 1. A2F buffer (Agent2Fabric).
