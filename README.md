@@ -2,24 +2,26 @@
 # riscv-multi-core-lotr
 Accelerator for multi-thread processing IP.     
 LOTR:  Lord-Of-The-Ring  
-Based on a Ring architecture to share all memory regions between threads and cores.  
-<img src="https://user-images.githubusercontent.com/81047407/173294229-dec18c7b-75c9-429f-b922-b4633fe54678.png" width="500">
+Based on a Ring architecture to share all memory regions between threads, cores & other devices.  
+![image](https://user-images.githubusercontent.com/81047407/183586818-3f5a700d-85d8-4f3c-91e2-4090b58ed9d7.png)
 
-The Design is loaded to the DE10Lite FPGA | Writing to Display - accessable with LOAD/STORE from any Thread.  
-<img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="300">
+The Design is loaded to the DE10Lite FPGA.  
+<img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="300">  
+  
+Writing to Display - accessable with LOAD/STORE from any Thread.  
 <img src="https://user-images.githubusercontent.com/81047407/178192931-b3714594-96ae-46d2-856a-4d72668a098f.jpeg" width="300">
 <img src="https://user-images.githubusercontent.com/81047407/183402390-398c9438-2080-494d-9e31-2f1f98b5255e.png" width="300">
 <img src="https://user-images.githubusercontent.com/81047407/183402370-438cc503-4065-4fd7-b9e2-d2f81aa5d5fb.png" width="300">
 
 *** 
-## The reposetory has 4 main projects:
+## The reposetory has 4 main projects:  
 ### *1) GPC_4T - RISCV core RV32I/E.*  
-Written  in System verilog.  
-Main Blocks:
-1. Core - 4 HW thread. Compatible with RV32I/E.
-2. I_MEM (Instruction Memory). 4KB of SRAM memory with dual access (core & Fabric).
-3. D_MEM (Data Memory) - 4KB of SRAM memory with duel access (core & Fabric).    
-Devided to: Cmpiler Scratchpad + Shared MEM Space + CR Space (Control Registers)
+Written in System verilog.   
+Main Blocks:  
+1. Core - 4 HW thread. Compatible with RV32I/E.  
+2. I_MEM (Instruction Memory). 4KB of SRAM memory with dual access (core & Fabric).  
+3. D_MEM (Data Memory) - 4KB of SRAM memory with duel access (core & Fabric).      
+Devided to: Compiler Scratchpad(.data.bss.rodata) + Shared MEM Space + CR Space (Control Registers)
 
 ### *2) RC - Ring Controller*  
 Written  in SystemVerilog.  
@@ -48,7 +50,6 @@ Proof of concept for multi-thread applications for the multi-core design.
 
 ***
 
-
 # Pointers To Get Started
 - WSL (Windows subsystem Linux):  
 https://docs.microsoft.com/en-us/windows/wsl/install-win10  
@@ -62,7 +63,6 @@ C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog
 - Compilation and Simulation:  
 Using Modelsim - https://fpgasoftware.intel.com/
 
-
 - Core - GPC_4T - RTL Design:   
 HAS (High-Level-Architecture-Specification):     
 RISCV Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf   
@@ -71,16 +71,14 @@ MAS (Micro-Level-Architecture-Specification):
 see under documentation
 <TODO>  
 
-- Ring Controler - RC - RTL Deisgn:     
-HAS (High-Level-Architecture-Specification):      
-see under documentation
-<TODO>  
-MAS (Micro-Level-Architecture-Specification):  
-<TODO>  
+- Ring Controler - RC - RTL Deisgn:     
+HAS (High-Level-Architecture-Specification):        
+see under documentation     
+MAS (Micro-Level-Architecture-Specification):     
+<TODO>     
 
-- Fabric - LOTR - (Integration Model) - RTL Deisgn:     
+- Fabric - LOTR - (Integration Model) - RTL Deisgn:  
 HAS (High-Level-Architecture-Specification):  
-<TODO>  
 MAS (Micro-Level-Architecture-Specification):  
 <TODO>  
 
