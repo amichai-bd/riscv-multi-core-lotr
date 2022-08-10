@@ -88,19 +88,23 @@ parameter NOP          = 32'b0000000000_00000_000_00000_0010011; //addi x0 , x0 
 // Instruction Memory 4KB 
 parameter I_MEM_OFFSET     = 'h0000_0000;   // See I_MEM_REGION
 parameter LSB_I_MEM        = 0 ;
-parameter MSB_I_MEM        = 11;
+parameter MSB_I_MEM        = 12;
 parameter SIZE_I_MEM       = 2**(MSB_I_MEM + 1);
 
 // Data Memory 4KB 
 parameter D_MEM_OFFSET     = 'h0040_0000;   // See D_MEM_REGION
 parameter LSB_D_MEM        = 0 ;
-parameter MSB_D_MEM        = 11;
+parameter MSB_D_MEM        = 12;
 parameter SIZE_D_MEM       = 2**(MSB_D_MEM + 1);
 parameter SIZE_SHRD_MEM    = 2**(MSB_D_MEM );
-
+parameter T0_STK_OFFSET      = 32'h0040_1400;
+parameter T1_STK_OFFSET =   32'h0040_1800;
+parameter T2_STK_OFFSET =   32'h0040_1C00;
+parameter T3_STK_OFFSET =  32'h0040_2000;
+parameter MEM_SHARD_OFFSET = 32'h0040_0f00;
 // For test bench use
 parameter SIZE_MEM         = D_MEM_OFFSET + SIZE_D_MEM ;
-parameter MSB_CR           = 11;
+parameter MSB_CR           = 12;
 
 // CR Address Offsets
 parameter CR_WHO_AM_I                 = 14'h0  ;
