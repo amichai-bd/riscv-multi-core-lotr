@@ -6,10 +6,10 @@ Created : 05/2021
 // 4KB of D_MEM
 // 0x400800 - 0x400fff - Shared
 //
-// 0x400600 - 0x400800 - Thread 3
-// 0x400400 - 0x400600 - Thread 2
-// 0x400200 - 0x400400 - Thread 1
-// 0x400000 - 0x400200 - Thread 0
+// 0x400600 - 0x40_0800 - Thread 3
+// 0x400400 - 0x40_0600 - Thread 2
+// 0x400200 - 0x40_0400 - Thread 1
+// 0x400000 - 0x40_0200 - Thread 0
 
 // REGION == 2'b01;
 

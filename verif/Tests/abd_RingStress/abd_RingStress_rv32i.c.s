@@ -1,5 +1,8 @@
 	.file	"abd_RingStress.c"
 	.option nopic
+	.attribute arch, "rv32i2p0"
+	.attribute unaligned_access, 0
+	.attribute stack_align, 16
 	.text
 	.align	2
 	.globl	swap
@@ -142,8 +145,8 @@ main:
 	add	a4,a4,a5
 	lw	a5,-20(s0)
 	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a5,-32(a5)
 	sw	a5,0(a4)
 	lw	a5,-20(s0)
@@ -202,4 +205,4 @@ main:
 .L17:
 	j	.L17
 	.size	main, .-main
-	.ident	"GCC: (xPack GNU RISC-V Embedded GCC, 64-bit) 10.1.0"
+	.ident	"GCC: (GNU) 11.1.0"

@@ -600,13 +600,15 @@ merge:
 	sb	a3,-87(s0)
 	mv	a3,sp
 	mv	s1,a3
-	lbu	a2,-86(s0)
+	lbu	a3,-86(s0)
+	mv	a2,a3
 	lbu	a3,-85(s0)
 	sub	a3,a2,a3
 	andi	a3,a3,0xff
 	addi	a3,a3,1
 	sb	a3,-52(s0)
-	lbu	a2,-87(s0)
+	lbu	a3,-87(s0)
+	mv	a2,a3
 	lbu	a3,-86(s0)
 	sub	a3,a2,a3
 	sb	a3,-53(s0)
@@ -1026,8 +1028,8 @@ main:
 	j	.L60
 .L61:
 	lw	a5,-24(s0)
-	addi	a4,s0,-16
-	add	a5,a4,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lbu	a5,-60(a5)
 	li	a2,0
 	lw	a1,-24(s0)
@@ -1097,8 +1099,8 @@ main:
 .L63:
 	lw	a5,-28(s0)
 	slli	a5,a5,2
-	addi	a4,s0,-16
-	add	a5,a4,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a4,-172(a5)
 	li	a5,4096
 	addi	a2,a5,744
@@ -1239,8 +1241,8 @@ main:
 	j	.L68
 .L69:
 	lw	a5,-32(s0)
-	addi	a4,s0,-16
-	add	a5,a4,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lbu	a5,-80(a5)
 	li	a2,40
 	lw	a1,-32(s0)
@@ -1304,8 +1306,8 @@ main:
 	j	.L71
 .L72:
 	lw	a5,-36(s0)
-	addi	a4,s0,-16
-	add	a5,a4,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lbu	a5,-100(a5)
 	mv	a4,a5
 	li	a5,4096
@@ -1331,4 +1333,4 @@ main:
 .L73:
 	j	.L73
 	.size	main, .-main
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"

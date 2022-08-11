@@ -45,7 +45,7 @@ Disassembly of section .vectors:
   8c:	00008f13          	mv	t5,ra
   90:	00008f93          	mv	t6,ra
   94:	00c002b7          	lui	t0,0xc00
-  98:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff7f8>
+  98:	00c28293          	addi	t0,t0,12 # c0000c <_stack_start+0x7fec0c>
   9c:	0002a103          	lw	sp,0(t0)
   a0:	0cc000ef          	jal	ra,16c <main>
   a4:	00100073          	ebreak
@@ -60,7 +60,7 @@ Disassembly of section .text:
   b8:	fcb42c23          	sw	a1,-40(s0)
   bc:	fcc42a23          	sw	a2,-44(s0)
   c0:	fcd42823          	sw	a3,-48(s0)
-  c4:	0880006f          	j	14c <_min_stack+0x4c>
+  c4:	0880006f          	j	14c <binarySearch+0xa4>
   c8:	fd442703          	lw	a4,-44(s0)
   cc:	fd842783          	lw	a5,-40(s0)
   d0:	40f707b3          	sub	a5,a4,a5
@@ -77,20 +77,20 @@ Disassembly of section .text:
   fc:	00f707b3          	add	a5,a4,a5
  100:	0007a783          	lw	a5,0(a5)
  104:	fd042703          	lw	a4,-48(s0)
- 108:	00f71663          	bne	a4,a5,114 <_min_stack+0x14>
+ 108:	00f71663          	bne	a4,a5,114 <binarySearch+0x6c>
  10c:	fec42783          	lw	a5,-20(s0)
- 110:	04c0006f          	j	15c <_min_stack+0x5c>
+ 110:	04c0006f          	j	15c <binarySearch+0xb4>
  114:	fec42783          	lw	a5,-20(s0)
  118:	00279793          	slli	a5,a5,0x2
  11c:	fdc42703          	lw	a4,-36(s0)
  120:	00f707b3          	add	a5,a4,a5
  124:	0007a783          	lw	a5,0(a5)
  128:	fd042703          	lw	a4,-48(s0)
- 12c:	00e7da63          	bge	a5,a4,140 <_min_stack+0x40>
+ 12c:	00e7da63          	bge	a5,a4,140 <binarySearch+0x98>
  130:	fec42783          	lw	a5,-20(s0)
  134:	00178793          	addi	a5,a5,1
  138:	fcf42c23          	sw	a5,-40(s0)
- 13c:	0100006f          	j	14c <_min_stack+0x4c>
+ 13c:	0100006f          	j	14c <binarySearch+0xa4>
  140:	fec42783          	lw	a5,-20(s0)
  144:	fff78793          	addi	a5,a5,-1
  148:	fcf42a23          	sw	a5,-44(s0)
@@ -108,9 +108,9 @@ Disassembly of section .text:
  170:	02112623          	sw	ra,44(sp)
  174:	02812423          	sw	s0,40(sp)
  178:	03010413          	addi	s0,sp,48
- 17c:	004017b7          	lui	a5,0x401
- 180:	80078793          	addi	a5,a5,-2048 # 400800 <_stack_start+0x600>
- 184:	0007a583          	lw	a1,0(a5)
+ 17c:	004007b7          	lui	a5,0x400
+ 180:	00078793          	mv	a5,a5
+ 184:	0007a583          	lw	a1,0(a5) # 400000 <_min_stack+0x3ffc00>
  188:	0047a603          	lw	a2,4(a5)
  18c:	0087a683          	lw	a3,8(a5)
  190:	00c7a703          	lw	a4,12(a5)
@@ -137,11 +137,11 @@ Disassembly of section .text:
  1e4:	fff00793          	li	a5,-1
  1e8:	00f71a63          	bne	a4,a5,1fc <main+0x90>
  1ec:	004017b7          	lui	a5,0x401
- 1f0:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x6ec>
+ 1f0:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0xeec>
  1f4:	0007a023          	sw	zero,0(a5)
- 1f8:	0140006f          	j	20c <_stack_len+0xc>
+ 1f8:	0140006f          	j	20c <main+0xa0>
  1fc:	004017b7          	lui	a5,0x401
- 200:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x6ec>
+ 200:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0xeec>
  204:	00100713          	li	a4,1
  208:	00e7a023          	sw	a4,0(a5)
  20c:	00000793          	li	a5,0

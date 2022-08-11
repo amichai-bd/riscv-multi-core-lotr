@@ -112,7 +112,7 @@ task end_tb;
     
     out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");   
 
-    for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
+    for (i = 0 ; i < SIZE_SHRD_MEM; i = i+4) begin  
         $fwrite(out2,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+3],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+2],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+1],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
     end    
     

@@ -193,8 +193,8 @@ main:
 	lw	a4,-24(s0)
 	add	a5,a5,a4
 	slli	a5,a5,2
-	addi	a4,s0,-16
-	add	a5,a4,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a5,-120(a5)
 	sw	a5,0(a3)
 	lw	a5,-24(s0)
@@ -218,4 +218,4 @@ main:
 	addi	sp,sp,144
 	jr	ra
 	.size	main, .-main
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"

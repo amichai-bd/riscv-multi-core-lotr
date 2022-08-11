@@ -1,5 +1,8 @@
 	.file	"Alive_VGA_2.c"
 	.option nopic
+	.attribute arch, "rv32i2p0"
+	.attribute unaligned_access, 0
+	.attribute stack_align, 16
 	.text
 	.align	2
 	.globl	draw_hi
@@ -477,4 +480,4 @@ main:
 	addi	sp,sp,32
 	jr	ra
 	.size	main, .-main
-	.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"
