@@ -45,7 +45,7 @@ Disassembly of section .vectors:
   8c:	00008f13          	mv	t5,ra
   90:	00008f93          	mv	t6,ra
   94:	00c002b7          	lui	t0,0xc00
-  98:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff7bc>
+  98:	00c28293          	addi	t0,t0,12 # c0000c <_stack_start+0x7fec0c>
   9c:	0002a103          	lw	sp,0(t0)
   a0:	008000ef          	jal	ra,a8 <main>
   a4:	00100073          	ebreak
@@ -57,8 +57,8 @@ Disassembly of section .text:
   ac:	04112e23          	sw	ra,92(sp)
   b0:	04812c23          	sw	s0,88(sp)
   b4:	06010413          	addi	s0,sp,96
-  b8:	004017b7          	lui	a5,0x401
-  bc:	80078713          	addi	a4,a5,-2048 # 400800 <_stack_start+0x600>
+  b8:	004007b7          	lui	a5,0x400
+  bc:	00078713          	mv	a4,a5
   c0:	fa040793          	addi	a5,s0,-96
   c4:	00070693          	mv	a3,a4
   c8:	05000713          	li	a4,80
@@ -67,7 +67,7 @@ Disassembly of section .text:
   d4:	00078513          	mv	a0,a5
   d8:	02c000ef          	jal	ra,104 <memcpy>
   dc:	004017b7          	lui	a5,0x401
-  e0:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0x6b0>
+  e0:	f0078793          	addi	a5,a5,-256 # 400f00 <_bss_end+0xeb0>
   e4:	fe042703          	lw	a4,-32(s0)
   e8:	00e7a023          	sw	a4,0(a5)
   ec:	00000793          	li	a5,0
@@ -78,7 +78,7 @@ Disassembly of section .text:
  100:	00008067          	ret
 
 00000104 <memcpy>:
- 104:	00a5c7b3          	xor	a5,a1,a0
+ 104:	00b547b3          	xor	a5,a0,a1
  108:	0037f793          	andi	a5,a5,3
  10c:	00c508b3          	add	a7,a0,a2
  110:	06079663          	bnez	a5,17c <memcpy+0x78>
