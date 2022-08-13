@@ -7,6 +7,7 @@
 
 // WISHBONE
 ../source/uart_io/rtl/wishbone/wishbone.sv
+../source/uart_io/rtl/wishbone/wishbone_mux3to1.sv
       
 // UART design      
 ../source/uart_io/rtl/uart/uart_defines.v
@@ -23,11 +24,14 @@
 ../source/uart_io/rtl/uart/uart_wrapper.sv
 
 // GATEWAY
+../source/uart_io/rtl/gateway/uart_config/uart_config.sv
+../source/uart_io/rtl/gateway/handshake/handshake.sv
+../source/uart_io/rtl/gateway/xmodem/xmodem.sv
 ../source/uart_io/rtl/gateway/gateway.sv
 
 // UART_IO
 ../source/uart_io/rtl/uart_io.sv
       
-//Simulation - testbench
+// Simulation - testbench
 ../verif/tb/uart_io_tb.sv
       
