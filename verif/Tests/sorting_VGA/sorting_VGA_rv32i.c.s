@@ -600,15 +600,13 @@ merge:
 	sb	a3,-87(s0)
 	mv	a3,sp
 	mv	s1,a3
-	lbu	a3,-86(s0)
-	mv	a2,a3
+	lbu	a2,-86(s0)
 	lbu	a3,-85(s0)
 	sub	a3,a2,a3
 	andi	a3,a3,0xff
 	addi	a3,a3,1
 	sb	a3,-52(s0)
-	lbu	a3,-87(s0)
-	mv	a2,a3
+	lbu	a2,-87(s0)
 	lbu	a3,-86(s0)
 	sub	a3,a2,a3
 	sb	a3,-53(s0)
@@ -954,6 +952,31 @@ insertionSort:
 	addi	sp,sp,48
 	jr	ra
 	.size	insertionSort, .-insertionSort
+	.section	.rodata
+	.align	2
+.LC1:
+	.ascii	"\013\005\t\r\022\007\001\002\f\n\004\003\016\006\017\021\b\020"
+	.align	2
+.LC0:
+	.word	11
+	.word	5
+	.word	9
+	.word	13
+	.word	18
+	.word	7
+	.word	1
+	.word	2
+	.word	12
+	.word	10
+	.word	4
+	.word	3
+	.word	14
+	.word	6
+	.word	15
+	.word	17
+	.word	8
+	.word	16
+	.text
 	.align	2
 	.globl	main
 	.type	main, @function
@@ -986,50 +1009,26 @@ main:
 	j	.L56
 .L58:
 	call	delay
-	li	a5,11
-	sb	a5,-76(s0)
-	li	a5,5
-	sb	a5,-75(s0)
-	li	a5,9
-	sb	a5,-74(s0)
-	li	a5,13
-	sb	a5,-73(s0)
-	li	a5,18
-	sb	a5,-72(s0)
-	li	a5,7
-	sb	a5,-71(s0)
-	li	a5,1
-	sb	a5,-70(s0)
-	li	a5,2
-	sb	a5,-69(s0)
-	li	a5,12
-	sb	a5,-68(s0)
-	li	a5,10
-	sb	a5,-67(s0)
-	li	a5,4
-	sb	a5,-66(s0)
-	li	a5,3
-	sb	a5,-65(s0)
-	li	a5,14
-	sb	a5,-64(s0)
-	li	a5,6
-	sb	a5,-63(s0)
-	li	a5,15
-	sb	a5,-62(s0)
-	li	a5,17
-	sb	a5,-61(s0)
-	li	a5,8
-	sb	a5,-60(s0)
-	li	a5,16
-	sb	a5,-59(s0)
+	lui	a5,%hi(.LC1)
+	addi	a5,a5,%lo(.LC1)
+	lw	a1,0(a5)
+	lw	a2,4(a5)
+	lw	a3,8(a5)
+	lw	a4,12(a5)
+	sw	a1,-76(s0)
+	sw	a2,-72(s0)
+	sw	a3,-68(s0)
+	sw	a4,-64(s0)
+	lhu	a5,16(a5)
+	sh	a5,-60(s0)
 	li	a5,18
 	sw	a5,-56(s0)
 	sw	zero,-24(s0)
 	j	.L60
 .L61:
 	lw	a5,-24(s0)
-	addi	a5,a5,-16
-	add	a5,a5,s0
+	addi	a4,s0,-16
+	add	a5,a4,a5
 	lbu	a5,-60(a5)
 	li	a2,0
 	lw	a1,-24(s0)
@@ -1056,42 +1055,15 @@ main:
 	j	.L58
 .L59:
 	call	delay
-	li	a5,11
-	sw	a5,-188(s0)
-	li	a5,5
-	sw	a5,-184(s0)
-	li	a5,9
-	sw	a5,-180(s0)
-	li	a5,13
-	sw	a5,-176(s0)
-	li	a5,18
-	sw	a5,-172(s0)
-	li	a5,7
-	sw	a5,-168(s0)
-	li	a5,1
-	sw	a5,-164(s0)
-	li	a5,2
-	sw	a5,-160(s0)
-	li	a5,12
-	sw	a5,-156(s0)
-	li	a5,10
-	sw	a5,-152(s0)
-	li	a5,4
-	sw	a5,-148(s0)
-	li	a5,3
-	sw	a5,-144(s0)
-	li	a5,14
-	sw	a5,-140(s0)
-	li	a5,6
-	sw	a5,-136(s0)
-	li	a5,15
-	sw	a5,-132(s0)
-	li	a5,17
-	sw	a5,-128(s0)
-	li	a5,8
-	sw	a5,-124(s0)
-	li	a5,16
-	sw	a5,-120(s0)
+	lui	a5,%hi(.LC0)
+	addi	a4,a5,%lo(.LC0)
+	addi	a5,s0,-188
+	mv	a3,a4
+	li	a4,72
+	mv	a2,a4
+	mv	a1,a3
+	mv	a0,a5
+	call	memcpy
 	li	a5,18
 	sw	a5,-52(s0)
 	sw	zero,-28(s0)
@@ -1099,8 +1071,8 @@ main:
 .L63:
 	lw	a5,-28(s0)
 	slli	a5,a5,2
-	addi	a5,a5,-16
-	add	a5,a5,s0
+	addi	a4,s0,-16
+	add	a5,a4,a5
 	lw	a4,-172(a5)
 	li	a5,4096
 	addi	a2,a5,744
@@ -1199,50 +1171,26 @@ main:
 	ble	a4,a5,.L67
 .L70:
 	call	delay
-	li	a5,11
-	sb	a5,-96(s0)
-	li	a5,5
-	sb	a5,-95(s0)
-	li	a5,9
-	sb	a5,-94(s0)
-	li	a5,13
-	sb	a5,-93(s0)
-	li	a5,18
-	sb	a5,-92(s0)
-	li	a5,7
-	sb	a5,-91(s0)
-	li	a5,1
-	sb	a5,-90(s0)
-	li	a5,2
-	sb	a5,-89(s0)
-	li	a5,12
-	sb	a5,-88(s0)
-	li	a5,10
-	sb	a5,-87(s0)
-	li	a5,4
-	sb	a5,-86(s0)
-	li	a5,3
-	sb	a5,-85(s0)
-	li	a5,14
-	sb	a5,-84(s0)
-	li	a5,6
-	sb	a5,-83(s0)
-	li	a5,15
-	sb	a5,-82(s0)
-	li	a5,17
-	sb	a5,-81(s0)
-	li	a5,8
-	sb	a5,-80(s0)
-	li	a5,16
-	sb	a5,-79(s0)
+	lui	a5,%hi(.LC1)
+	addi	a5,a5,%lo(.LC1)
+	lw	a1,0(a5)
+	lw	a2,4(a5)
+	lw	a3,8(a5)
+	lw	a4,12(a5)
+	sw	a1,-96(s0)
+	sw	a2,-92(s0)
+	sw	a3,-88(s0)
+	sw	a4,-84(s0)
+	lhu	a5,16(a5)
+	sh	a5,-80(s0)
 	li	a5,18
 	sw	a5,-48(s0)
 	sw	zero,-32(s0)
 	j	.L68
 .L69:
 	lw	a5,-32(s0)
-	addi	a5,a5,-16
-	add	a5,a5,s0
+	addi	a4,s0,-16
+	add	a5,a4,a5
 	lbu	a5,-80(a5)
 	li	a2,40
 	lw	a1,-32(s0)
@@ -1264,50 +1212,26 @@ main:
 	j	.L70
 .L55:
 	call	delay
-	li	a5,11
-	sb	a5,-116(s0)
-	li	a5,5
-	sb	a5,-115(s0)
-	li	a5,9
-	sb	a5,-114(s0)
-	li	a5,13
-	sb	a5,-113(s0)
-	li	a5,18
-	sb	a5,-112(s0)
-	li	a5,7
-	sb	a5,-111(s0)
-	li	a5,1
-	sb	a5,-110(s0)
-	li	a5,2
-	sb	a5,-109(s0)
-	li	a5,12
-	sb	a5,-108(s0)
-	li	a5,10
-	sb	a5,-107(s0)
-	li	a5,4
-	sb	a5,-106(s0)
-	li	a5,3
-	sb	a5,-105(s0)
-	li	a5,14
-	sb	a5,-104(s0)
-	li	a5,6
-	sb	a5,-103(s0)
-	li	a5,15
-	sb	a5,-102(s0)
-	li	a5,17
-	sb	a5,-101(s0)
-	li	a5,8
-	sb	a5,-100(s0)
-	li	a5,16
-	sb	a5,-99(s0)
+	lui	a5,%hi(.LC1)
+	addi	a5,a5,%lo(.LC1)
+	lw	a1,0(a5)
+	lw	a2,4(a5)
+	lw	a3,8(a5)
+	lw	a4,12(a5)
+	sw	a1,-116(s0)
+	sw	a2,-112(s0)
+	sw	a3,-108(s0)
+	sw	a4,-104(s0)
+	lhu	a5,16(a5)
+	sh	a5,-100(s0)
 	li	a5,18
 	sw	a5,-44(s0)
 	sw	zero,-36(s0)
 	j	.L71
 .L72:
 	lw	a5,-36(s0)
-	addi	a5,a5,-16
-	add	a5,a5,s0
+	addi	a4,s0,-16
+	add	a5,a4,a5
 	lbu	a5,-100(a5)
 	mv	a4,a5
 	li	a5,4096
@@ -1333,4 +1257,4 @@ main:
 .L73:
 	j	.L73
 	.size	main, .-main
-	.ident	"GCC: (GNU) 11.1.0"
+	.ident	"GCC: (GNU) 10.2.0"

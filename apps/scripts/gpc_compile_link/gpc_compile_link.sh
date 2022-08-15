@@ -63,7 +63,9 @@ if [ "$#" != "3" ];then
         y=`cat $1_inst_mem_rv32$mod.sv | grep -n @00400000 | cut -d ':' -f 1 |tail -n 1`
         (( y-- ))
         cat $1_inst_mem_rv32$mod.sv | tail -n $(( c-y )) > $1_data_mem_rv32$mod.sv
-        cat $1_inst_mem_rv32$mod.sv | head -n $(( y )) > $1_inst_mem_rv32$mod.sv
+        # echo $y
+        cat $1_inst_mem_rv32$mod.sv | head -n $y > $1_instt_mem_rv32$mod.sv
+        mv $1_instt_mem_rv32$mod.sv $1_inst_mem_rv32$mod.sv
     else
         echo "@00400000" > $1_data_mem_rv32$mod.sv
     fi  

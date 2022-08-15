@@ -240,25 +240,7 @@ int main() {
         {
             while(1){
                 delay();                    
-                char arr[18];
-                arr[0]=11;
-                arr[1]=5;
-                arr[2]=9;
-                arr[3]=13;
-                arr[4]=18;
-                arr[5]=7;
-                arr[6]=1;
-                arr[7]=2;
-                arr[8]=12;
-                arr[9]=10;
-                arr[10]=4;
-                arr[11]=3;
-                arr[12]=14;
-                arr[13]=6;
-                arr[14]=15;
-                arr[15]=17;
-                arr[16]=8;
-                arr[17]=16;
+                char arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i < n; i++){
                     draw_stick(arr[i] , i,0);
@@ -273,25 +255,7 @@ int main() {
         case 0x5 : //inse
             while(1){
                 delay();
-                int arr[18];
-                arr[0]=11;
-                arr[1]=5;
-                arr[2]=9;
-                arr[3]=13;
-                arr[4]=18;
-                arr[5]=7;
-                arr[6]=1;
-                arr[7]=2;
-                arr[8]=12;
-                arr[9]=10;
-                arr[10]=4;
-                arr[11]=3;
-                arr[12]=14;
-                arr[13]=6;
-                arr[14]=15;
-                arr[15]=17;
-                arr[16]=8;
-                arr[17]=16;
+                int arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
                     draw_stick(arr[i] , i ,4800 + 40);
@@ -314,25 +278,7 @@ int main() {
             }
             while(1){
                 delay();                    
-                char arr[18];
-                arr[0]=11;
-                arr[1]=5;
-                arr[2]=9;
-                arr[3]=13;
-                arr[4]=18;
-                arr[5]=7;
-                arr[6]=1;
-                arr[7]=2;
-                arr[8]=12;
-                arr[9]=10;
-                arr[10]=4;
-                arr[11]=3;
-                arr[12]=14;
-                arr[13]=6;
-                arr[14]=15;
-                arr[15]=17;
-                arr[16]=8;
-                arr[17]=16;
+                char arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i < n; i++){
                     draw_stick(arr[i] , i,40);
@@ -346,25 +292,7 @@ int main() {
         case 0x7 :  //merge
             while(1){
                 delay();
-                char arr[18];
-                arr[0]=11;
-                arr[1]=5;
-                arr[2]=9;
-                arr[3]=13;
-                arr[4]=18;
-                arr[5]=7;
-                arr[6]=1;
-                arr[7]=2;
-                arr[8]=12;
-                arr[9]=10;
-                arr[10]=4;
-                arr[11]=3;
-                arr[12]=14;
-                arr[13]=6;
-                arr[14]=15;
-                arr[15]=17;
-                arr[16]=8;
-                arr[17]=16;
+                char arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
                     draw_stick(arr[i] , i ,4800 );
