@@ -44,6 +44,10 @@ Created : 1/07/2022
 #define CR_SCRATCHPAD2 ((volatile int *) (0x00C00208))
 #define CR_SCRATCHPAD3 ((volatile int *) (0x00C0020C))
 
+/* Control registers addresses */
+#define CR_CURSOR_H (volatile int *) (0x00C00220)
+#define CR_CURSOR_V (volatile int *) (0x00C00234)
+
 //FPGA
 //CR
 #define SEG0_FGPA    ((volatile int *) (0x03C02000))
@@ -60,3 +64,11 @@ Created : 1/07/2022
 #define ARDUINO_IO_FGPA_STICKY  ((volatile int *) (0x03C0202C))
 
 #define VGA_FPGA     ((volatile int *) (0x03400000))
+#define VGA_MEM_BASE 0x03400000
+
+#define CR_MEM_BASE  0x00007000
+
+#define WRITE_REG(REG,VAL) (*REG) = VAL
+#define READ_REG(VAL,REG)  VAL    = (*REG)
+#define MEM_SCRATCH_PAD    ((volatile int *) (D_MEM_BASE))
+#define MEM_SCRATCH_PAD_FP  ((volatile float *) (FP_RESULTS))

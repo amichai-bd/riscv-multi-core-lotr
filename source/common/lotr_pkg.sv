@@ -156,6 +156,16 @@ parameter CR_SCRATCHPAD0              = 14'h200;
 parameter CR_SCRATCHPAD1              = 14'h204;
 parameter CR_SCRATCHPAD2              = 14'h208;
 parameter CR_SCRATCHPAD3              = 14'h20C;
+parameter CR_CURSOR_H                 = 14'h220;
+parameter CR_CURSOR_H0                = 14'h224;
+parameter CR_CURSOR_H1                = 14'h228;
+parameter CR_CURSOR_H2                = 14'h22C;
+parameter CR_CURSOR_H3                = 14'h230;
+parameter CR_CURSOR_V                 = 14'h234;
+parameter CR_CURSOR_V0                = 14'h238;
+parameter CR_CURSOR_V1                = 14'h23C;
+parameter CR_CURSOR_V2                = 14'h240;
+parameter CR_CURSOR_V3                = 14'h244;
 
 // Region Bits
 parameter LSB_REGION    = 22;
@@ -195,7 +205,8 @@ typedef struct packed { // RO\V
     logic [31:0] pc_1;
     logic [31:0] pc_2;
     logic [31:0] pc_3;
-        
+    logic [31:0] cursor_h;
+    logic [31:0] cursor_v;
 } t_cr_ro;
 
 typedef struct packed { //RW
@@ -212,6 +223,14 @@ typedef struct packed { //RW
     logic [31:0] tls_ofst_2;
     logic [31:0] tls_ofst_3;    
     logic [31:0] shrd_ofst;
+    logic [31:0] cursor_v_0;
+    logic [31:0] cursor_v_1;
+    logic [31:0] cursor_v_2;
+    logic [31:0] cursor_v_3;
+    logic [31:0] cursor_h_0;
+    logic [31:0] cursor_h_1;
+    logic [31:0] cursor_h_2;
+    logic [31:0] cursor_h_3;
 } t_cr_rw;
 
 typedef struct packed { //RW
@@ -274,6 +293,16 @@ typedef struct packed {
     logic scratch_pad_1;
     logic scratch_pad_2;
     logic scratch_pad_3;
+    logic cursor_h;
+    logic cursor_h_0;
+    logic cursor_h_1;
+    logic cursor_h_2;
+    logic cursor_h_3;
+    logic cursor_v;
+    logic cursor_v_0;
+    logic cursor_v_1;
+    logic cursor_v_2;
+    logic cursor_v_3;
 } t_cr_en;
 
 parameter CR_SEG7_0    = 20'h2000 ; // RW 7 bit
