@@ -45,7 +45,7 @@ Disassembly of section .vectors:
   8c:	00008f13          	mv	t5,ra
   90:	00008f93          	mv	t6,ra
   94:	00c002b7          	lui	t0,0xc00
-  98:	00c28293          	addi	t0,t0,12 # c0000c <_bss_end+0x7ff80c>
+  98:	00c28293          	addi	t0,t0,12 # c0000c <_stack_start+0x7fec0c>
   9c:	0002a103          	lw	sp,0(t0)
   a0:	138000ef          	jal	ra,1d8 <main>
   a4:	00100073          	ebreak
@@ -143,80 +143,80 @@ Disassembly of section .text:
  1e4:	00912a23          	sw	s1,20(sp)
  1e8:	02010413          	addi	s0,sp,32
  1ec:	00c007b7          	lui	a5,0xc00
- 1f0:	00478793          	addi	a5,a5,4 # c00004 <_bss_end+0x7ff804>
+ 1f0:	00478793          	addi	a5,a5,4 # c00004 <_stack+0x7fec04>
  1f4:	0007a783          	lw	a5,0(a5)
  1f8:	fef42623          	sw	a5,-20(s0)
  1fc:	fec42703          	lw	a4,-20(s0)
  200:	00300793          	li	a5,3
- 204:	0ef70663          	beq	a4,a5,2f0 <_stack_len+0xf0>
+ 204:	0ef70663          	beq	a4,a5,2f0 <main+0x118>
  208:	fec42703          	lw	a4,-20(s0)
  20c:	00300793          	li	a5,3
- 210:	10e7c463          	blt	a5,a4,318 <_stack_len+0x118>
+ 210:	10e7c463          	blt	a5,a4,318 <main+0x140>
  214:	fec42703          	lw	a4,-20(s0)
  218:	00200793          	li	a5,2
- 21c:	0af70663          	beq	a4,a5,2c8 <_stack_len+0xc8>
+ 21c:	0af70663          	beq	a4,a5,2c8 <main+0xf0>
  220:	fec42703          	lw	a4,-20(s0)
  224:	00200793          	li	a5,2
- 228:	0ee7c863          	blt	a5,a4,318 <_stack_len+0x118>
+ 228:	0ee7c863          	blt	a5,a4,318 <main+0x140>
  22c:	fec42783          	lw	a5,-20(s0)
- 230:	00078a63          	beqz	a5,244 <_stack_len+0x44>
+ 230:	00078a63          	beqz	a5,244 <main+0x6c>
  234:	fec42703          	lw	a4,-20(s0)
  238:	00100793          	li	a5,1
- 23c:	06f70263          	beq	a4,a5,2a0 <_stack_len+0xa0>
- 240:	0d80006f          	j	318 <_stack_len+0x118>
+ 23c:	06f70263          	beq	a4,a5,2a0 <main+0xc8>
+ 240:	0d80006f          	j	318 <main+0x140>
  244:	004017b7          	lui	a5,0x401
- 248:	f0078493          	addi	s1,a5,-256 # 400f00 <_bss_end+0x700>
+ 248:	f0078493          	addi	s1,a5,-256 # 400f00 <_bss_end+0xf00>
  24c:	e5dff0ef          	jal	ra,a8 <Thread0>
  250:	00050793          	mv	a5,a0
  254:	00f4a023          	sw	a5,0(s1)
  258:	00c007b7          	lui	a5,0xc00
- 25c:	20078793          	addi	a5,a5,512 # c00200 <_bss_end+0x7ffa00>
+ 25c:	20078793          	addi	a5,a5,512 # c00200 <_stack+0x7fee00>
  260:	00100713          	li	a4,1
  264:	00e7a023          	sw	a4,0(a5)
  268:	00000013          	nop
  26c:	00c007b7          	lui	a5,0xc00
- 270:	20478793          	addi	a5,a5,516 # c00204 <_bss_end+0x7ffa04>
+ 270:	20478793          	addi	a5,a5,516 # c00204 <_stack+0x7fee04>
  274:	0007a783          	lw	a5,0(a5)
- 278:	fe078ae3          	beqz	a5,26c <_stack_len+0x6c>
+ 278:	fe078ae3          	beqz	a5,26c <main+0x94>
  27c:	00c007b7          	lui	a5,0xc00
- 280:	20878793          	addi	a5,a5,520 # c00208 <_bss_end+0x7ffa08>
+ 280:	20878793          	addi	a5,a5,520 # c00208 <_stack+0x7fee08>
  284:	0007a783          	lw	a5,0(a5)
- 288:	fe0782e3          	beqz	a5,26c <_stack_len+0x6c>
+ 288:	fe0782e3          	beqz	a5,26c <main+0x94>
  28c:	00c007b7          	lui	a5,0xc00
- 290:	20c78793          	addi	a5,a5,524 # c0020c <_bss_end+0x7ffa0c>
+ 290:	20c78793          	addi	a5,a5,524 # c0020c <_stack+0x7fee0c>
  294:	0007a783          	lw	a5,0(a5)
- 298:	fc078ae3          	beqz	a5,26c <_stack_len+0x6c>
- 29c:	07c0006f          	j	318 <_stack_len+0x118>
+ 298:	fc078ae3          	beqz	a5,26c <main+0x94>
+ 29c:	07c0006f          	j	318 <main+0x140>
  2a0:	004017b7          	lui	a5,0x401
- 2a4:	f0478493          	addi	s1,a5,-252 # 400f04 <_bss_end+0x704>
+ 2a4:	f0478493          	addi	s1,a5,-252 # 400f04 <_bss_end+0xf04>
  2a8:	e4dff0ef          	jal	ra,f4 <Thread1>
  2ac:	00050793          	mv	a5,a0
  2b0:	00f4a023          	sw	a5,0(s1)
  2b4:	00c007b7          	lui	a5,0xc00
- 2b8:	20478793          	addi	a5,a5,516 # c00204 <_bss_end+0x7ffa04>
+ 2b8:	20478793          	addi	a5,a5,516 # c00204 <_stack+0x7fee04>
  2bc:	00100713          	li	a4,1
  2c0:	00e7a023          	sw	a4,0(a5)
- 2c4:	0000006f          	j	2c4 <_stack_len+0xc4>
+ 2c4:	0000006f          	j	2c4 <main+0xec>
  2c8:	004017b7          	lui	a5,0x401
- 2cc:	f0878493          	addi	s1,a5,-248 # 400f08 <_bss_end+0x708>
+ 2cc:	f0878493          	addi	s1,a5,-248 # 400f08 <_bss_end+0xf08>
  2d0:	e71ff0ef          	jal	ra,140 <Thread2>
  2d4:	00050793          	mv	a5,a0
  2d8:	00f4a023          	sw	a5,0(s1)
  2dc:	00c007b7          	lui	a5,0xc00
- 2e0:	20878793          	addi	a5,a5,520 # c00208 <_bss_end+0x7ffa08>
+ 2e0:	20878793          	addi	a5,a5,520 # c00208 <_stack+0x7fee08>
  2e4:	00100713          	li	a4,1
  2e8:	00e7a023          	sw	a4,0(a5)
- 2ec:	0000006f          	j	2ec <_stack_len+0xec>
+ 2ec:	0000006f          	j	2ec <main+0x114>
  2f0:	004017b7          	lui	a5,0x401
- 2f4:	f0c78493          	addi	s1,a5,-244 # 400f0c <_bss_end+0x70c>
+ 2f4:	f0c78493          	addi	s1,a5,-244 # 400f0c <_bss_end+0xf0c>
  2f8:	e95ff0ef          	jal	ra,18c <Thread3>
  2fc:	00050793          	mv	a5,a0
  300:	00f4a023          	sw	a5,0(s1)
  304:	00c007b7          	lui	a5,0xc00
- 308:	20c78793          	addi	a5,a5,524 # c0020c <_bss_end+0x7ffa0c>
+ 308:	20c78793          	addi	a5,a5,524 # c0020c <_stack+0x7fee0c>
  30c:	00100713          	li	a4,1
  310:	00e7a023          	sw	a4,0(a5)
- 314:	0000006f          	j	314 <_stack_len+0x114>
+ 314:	0000006f          	j	314 <main+0x13c>
  318:	00000013          	nop
  31c:	00078513          	mv	a0,a5
  320:	01c12083          	lw	ra,28(sp)
@@ -238,10 +238,13 @@ Disassembly of section .text:
 Raw dump of debug contents of section .debug_line (loaded from MulThread_rv32i.elf):
 
   Offset:                      0x0
-  Length:                      142
-  DWARF Version:               3
-  Prologue Length:             72
+  Length:                      118
+  DWARF Version:               5
+  Address size (bytes):        4
+  Segment selector (bytes):    0
+  Prologue Length:             46
   Minimum Instruction Length:  1
+  Maximum Ops per Instruction: 1
   Initial value of 'is_stmt':  1
   Line Base:                   -5
   Line Range:                  14
@@ -261,68 +264,79 @@ Raw dump of debug contents of section .debug_line (loaded from MulThread_rv32i.e
   Opcode 11 has 0 args
   Opcode 12 has 1 arg
 
- The Directory Table (offset 0x1b):
-  1	../../.././riscv-gcc/libgcc/config/riscv
+ The Directory Table (offset 0x22, lines 2, columns 1):
+  Entry	Name
+  0	(indirect line string, offset: 0x0): ../../.././riscv-gcc/libgcc/config/riscv
+  1	(indirect line string, offset: 0x0): ../../.././riscv-gcc/libgcc/config/riscv
 
- The File Name Table (offset 0x45):
-  Entry	Dir	Time	Size	Name
-  1	1	0	0	muldi3.S
+ The File Name Table (offset 0x30, lines 2, columns 2):
+  Entry	Dir	Name
+  0	0	(indirect line string, offset: 0x29): muldi3.S
+  1	1	(indirect line string, offset: 0x29): muldi3.S
 
  Line Number Statements:
-  [0x00000052]  Extended opcode 2: set Address to 0x334
-  [0x00000059]  Advance Line by 36 to 37
-  [0x0000005b]  Copy
-  [0x0000005c]  Advance Line by 1 to 38
-  [0x0000005e]  Advance PC by fixed size amount 4 to 0x338
-  [0x00000061]  Copy (view 1)
-  [0x00000062]  Advance Line by 2 to 40
-  [0x00000064]  Advance PC by fixed size amount 4 to 0x33c
-  [0x00000067]  Copy (view 2)
-  [0x00000068]  Advance Line by 1 to 41
-  [0x0000006a]  Advance PC by fixed size amount 4 to 0x340
-  [0x0000006d]  Copy (view 3)
-  [0x0000006e]  Advance Line by 1 to 42
-  [0x00000070]  Advance PC by fixed size amount 4 to 0x344
-  [0x00000073]  Copy (view 4)
-  [0x00000074]  Advance Line by 2 to 44
-  [0x00000076]  Advance PC by fixed size amount 4 to 0x348
-  [0x00000079]  Copy (view 5)
-  [0x0000007a]  Advance Line by 1 to 45
-  [0x0000007c]  Advance PC by fixed size amount 4 to 0x34c
-  [0x0000007f]  Copy (view 6)
-  [0x00000080]  Advance Line by 1 to 46
-  [0x00000082]  Advance PC by fixed size amount 4 to 0x350
-  [0x00000085]  Copy (view 7)
-  [0x00000086]  Advance Line by 1 to 47
-  [0x00000088]  Advance PC by fixed size amount 4 to 0x354
-  [0x0000008b]  Copy (view 8)
-  [0x0000008c]  Advance PC by fixed size amount 4 to 0x358
-  [0x0000008f]  Extended opcode 1: End of Sequence
+  [0x0000003a]  Extended opcode 2: set Address to 0x334
+  [0x00000041]  Advance Line by 36 to 37
+  [0x00000043]  Copy
+  [0x00000044]  Advance Line by 1 to 38
+  [0x00000046]  Advance PC by fixed size amount 4 to 0x338
+  [0x00000049]  Copy (view 1)
+  [0x0000004a]  Advance Line by 2 to 40
+  [0x0000004c]  Advance PC by fixed size amount 4 to 0x33c
+  [0x0000004f]  Copy (view 2)
+  [0x00000050]  Advance Line by 1 to 41
+  [0x00000052]  Advance PC by fixed size amount 4 to 0x340
+  [0x00000055]  Copy (view 3)
+  [0x00000056]  Advance Line by 1 to 42
+  [0x00000058]  Advance PC by fixed size amount 4 to 0x344
+  [0x0000005b]  Copy (view 4)
+  [0x0000005c]  Advance Line by 2 to 44
+  [0x0000005e]  Advance PC by fixed size amount 4 to 0x348
+  [0x00000061]  Copy (view 5)
+  [0x00000062]  Advance Line by 1 to 45
+  [0x00000064]  Advance PC by fixed size amount 4 to 0x34c
+  [0x00000067]  Copy (view 6)
+  [0x00000068]  Advance Line by 1 to 46
+  [0x0000006a]  Advance PC by fixed size amount 4 to 0x350
+  [0x0000006d]  Copy (view 7)
+  [0x0000006e]  Advance Line by 1 to 47
+  [0x00000070]  Advance PC by fixed size amount 4 to 0x354
+  [0x00000073]  Copy (view 8)
+  [0x00000074]  Advance PC by fixed size amount 4 to 0x358
+  [0x00000077]  Extended opcode 1: End of Sequence
 
+
+Contents of the .debug_line_str section (loaded from MulThread_rv32i.elf):
+
+  0x00000000 2e2e2f2e 2e2f2e2e 2f2e2f72 69736376 ../../.././riscv
+  0x00000010 2d676363 2f6c6962 6763632f 636f6e66 -gcc/libgcc/conf
+  0x00000020 69672f72 69736376 006d756c 6469332e ig/riscv.muldi3.
+  0x00000030 5300                                S.
 
 Contents of the .debug_info section (loaded from MulThread_rv32i.elf):
 
   Compilation Unit @ offset 0x0:
-   Length:        0x22 (32-bit)
-   Version:       2
+   Length:        0x20 (32-bit)
+   Version:       5
+   Unit Type:     DW_UT_compile (1)
    Abbrev Offset: 0x0
    Pointer Size:  4
- <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
-    <c>   DW_AT_stmt_list   : 0x0
-    <10>   DW_AT_low_pc      : 0x334
-    <14>   DW_AT_high_pc     : 0x358
-    <18>   DW_AT_name        : (indirect string, offset: 0x0): ../../.././riscv-gcc/libgcc/config/riscv/muldi3.S
-    <1c>   DW_AT_comp_dir    : (indirect string, offset: 0x32): /home/adlv/projects/riscv/riscv-gnu-toolchain/build-gcc-newlib-stage2/riscv32-unknown-elf/libgcc
-    <20>   DW_AT_producer    : (indirect string, offset: 0x93): GNU AS 2.35
-    <24>   DW_AT_language    : 32769	(MIPS assembler)
+ <0><c>: Abbrev Number: 1 (DW_TAG_compile_unit)
+    <d>   DW_AT_stmt_list   : 0x0
+    <11>   DW_AT_low_pc      : 0x334
+    <15>   DW_AT_high_pc     : 36
+    <16>   DW_AT_name        : (indirect string, offset: 0x0): muldi3.S
+    <1a>   DW_AT_comp_dir    : (indirect string, offset: 0x9): /root/riscv_local_repo/riscv-toolchain-install-guide/riscv-gnu-toolchain/build-gcc-newlib-stage2/riscv32-unknown-elf/libgcc
+    <1e>   DW_AT_producer    : (indirect string, offset: 0x85): GNU AS 2.36.1
+    <22>   DW_AT_language    : 32769	(MIPS assembler)
 
 Contents of the .debug_abbrev section (loaded from MulThread_rv32i.elf):
 
   Number TAG (0x0)
    1      DW_TAG_compile_unit    [no children]
-    DW_AT_stmt_list    DW_FORM_data4
+    DW_AT_stmt_list    DW_FORM_sec_offset
     DW_AT_low_pc       DW_FORM_addr
-    DW_AT_high_pc      DW_FORM_addr
+    DW_AT_high_pc      DW_FORM_udata
     DW_AT_name         DW_FORM_strp
     DW_AT_comp_dir     DW_FORM_strp
     DW_AT_producer     DW_FORM_strp
@@ -343,14 +357,14 @@ Contents of the .debug_aranges section (loaded from MulThread_rv32i.elf):
 
 Contents of the .debug_str section (loaded from MulThread_rv32i.elf):
 
-  0x00000000 2e2e2f2e 2e2f2e2e 2f2e2f72 69736376 ../../.././riscv
-  0x00000010 2d676363 2f6c6962 6763632f 636f6e66 -gcc/libgcc/conf
-  0x00000020 69672f72 69736376 2f6d756c 6469332e ig/riscv/muldi3.
-  0x00000030 53002f68 6f6d652f 61646c76 2f70726f S./home/adlv/pro
-  0x00000040 6a656374 732f7269 7363762f 72697363 jects/riscv/risc
-  0x00000050 762d676e 752d746f 6f6c6368 61696e2f v-gnu-toolchain/
-  0x00000060 6275696c 642d6763 632d6e65 776c6962 build-gcc-newlib
-  0x00000070 2d737461 6765322f 72697363 7633322d -stage2/riscv32-
-  0x00000080 756e6b6e 6f776e2d 656c662f 6c696267 unknown-elf/libg
-  0x00000090 63630047 4e552041 5320322e 333500   cc.GNU AS 2.35.
+  0x00000000 6d756c64 69332e53 002f726f 6f742f72 muldi3.S./root/r
+  0x00000010 69736376 5f6c6f63 616c5f72 65706f2f iscv_local_repo/
+  0x00000020 72697363 762d746f 6f6c6368 61696e2d riscv-toolchain-
+  0x00000030 696e7374 616c6c2d 67756964 652f7269 install-guide/ri
+  0x00000040 7363762d 676e752d 746f6f6c 63686169 scv-gnu-toolchai
+  0x00000050 6e2f6275 696c642d 6763632d 6e65776c n/build-gcc-newl
+  0x00000060 69622d73 74616765 322f7269 73637633 ib-stage2/riscv3
+  0x00000070 322d756e 6b6e6f77 6e2d656c 662f6c69 2-unknown-elf/li
+  0x00000080 62676363 00474e55 20415320 322e3336 bgcc.GNU AS 2.36
+  0x00000090 2e3100                              .1.
 

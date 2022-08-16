@@ -85,11 +85,11 @@ main:
 	lw	a5,-24(s0)
 	addi	a4,a5,1
 	sw	a4,-24(s0)
-	li	a4,50339840
+	li	a4,62922752
 	addi	a4,a4,16
 	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a5,-96(a5)
 	sw	a5,0(a4)
 	lw	a4,-24(s0)
@@ -110,11 +110,11 @@ main:
 	lw	a5,-28(s0)
 	addi	a4,a5,1
 	sw	a4,-28(s0)
-	li	a4,50339840
+	li	a4,62922752
 	addi	a4,a4,4
 	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a5,-96(a5)
 	sw	a5,0(a4)
 	lw	a4,-28(s0)
@@ -135,11 +135,11 @@ main:
 	lw	a5,-32(s0)
 	addi	a4,a5,1
 	sw	a4,-32(s0)
-	li	a4,50339840
+	li	a4,62922752
 	addi	a4,a4,8
 	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a5,-96(a5)
 	sw	a5,0(a4)
 	lw	a4,-32(s0)
@@ -160,11 +160,11 @@ main:
 	lw	a5,-36(s0)
 	addi	a4,a5,1
 	sw	a4,-36(s0)
-	li	a4,50339840
+	li	a4,62922752
 	addi	a4,a4,12
 	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
+	addi	a5,a5,-16
+	add	a5,a5,s0
 	lw	a5,-96(a5)
 	sw	a5,0(a4)
 	lw	a4,-36(s0)
@@ -178,4 +178,4 @@ main:
 .L19:
 	j	.L19
 	.size	main, .-main
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"

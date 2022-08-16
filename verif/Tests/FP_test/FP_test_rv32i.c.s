@@ -68,4 +68,4 @@ main:
 	.align	2
 .LC1:
 	.word	1074580685
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"

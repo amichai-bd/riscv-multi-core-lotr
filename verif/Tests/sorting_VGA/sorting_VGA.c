@@ -7,9 +7,9 @@ Created : 01/08/2022
 // REGION == 2'b01;
 #include "LOTR_defines.h"
 #define QUICK
-// #define BUBBLE
+#define BUBBLE
 #define MERGE
-// #define INSERTION
+#define INSERTION
 
    
 
@@ -35,15 +35,15 @@ void draw_stick (int num, int x , int bias) {
 }
 
 
-void swap(int *xp, int *yp)
+void swap(char *xp, char *yp)
 {
-    int temp = *xp;
+    char temp = *xp;
     *xp = *yp;
     *yp = temp;
 }
 
 #ifdef BUBBLE
-void bubbleSort(int arr[], int n)
+void bubbleSort(char arr[], int n)
 {
 
     int i, j;
@@ -51,8 +51,8 @@ void bubbleSort(int arr[], int n)
         for (j = 0; j < n-i-1; j++)
             if (arr[j] > arr[j+1]){
                 swap(&arr[j], &arr[j+1]);
-                draw_stick(arr[j] , j , 20 );
-                draw_stick(arr[j+1] , j+1 , 20 );                
+                draw_stick(arr[j] , j , 40 );
+                draw_stick(arr[j+1] , j+1 , 40 );                
                 delay();
             }
 }
@@ -62,18 +62,18 @@ void bubbleSort(int arr[], int n)
 #endif
 
 #ifdef QUICK
-int partition(int arr[], int l, int h)
+int partition(char arr[], char l, char h)
 {
-    int x = arr[h];
-    int i = (l - 1);
+    char x = arr[h];
+    char i = (l - 1);
  
     for (int j = l; j <= h - 1; j++) {
         if (arr[j] <= x) {
             i++;
 
             swap(&arr[i], &arr[j]);
-            draw_stick(arr[i],i,20);
-            draw_stick(arr[j],j,20);
+            draw_stick(arr[i],i,0);
+            draw_stick(arr[j],j,0);
             if(arr[i]!=arr[j]){
                 delay();
 
@@ -83,8 +83,8 @@ int partition(int arr[], int l, int h)
     }
 
     swap(&arr[i + 1], &arr[h]);
-    draw_stick(arr[i +1 ],i+1,20);
-    draw_stick(arr[h],h,20);  
+    draw_stick(arr[i +1 ],i+1,0);
+    draw_stick(arr[h],h,0);  
     if(arr[i + 1]!=arr[h]){
         delay();
 
@@ -95,9 +95,9 @@ int partition(int arr[], int l, int h)
 }
  
 
-void quickSortIterative(int arr[], int l, int h)
+void quickSortIterative(char arr[], char l, char h)
 {
-    int stack[h - l + 1];
+    char stack[h - l + 1];
  
     int top = -1;
  
@@ -108,7 +108,7 @@ void quickSortIterative(int arr[], int l, int h)
         h = stack[top--];
         l = stack[top--];
  
-        int p = partition(arr, l, h);
+        char p = partition(arr, l, h);
 
         if (p - 1 > l) {
             stack[++top] = l;
@@ -126,12 +126,12 @@ void quickSortIterative(int arr[], int l, int h)
 #endif
 
 #ifdef MERGE
-void merge(int arr[], int l, int m, int r);
+void merge(char arr[], char l, char m, char r);
   
 int min(int x, int y) { return (x<y)? x :y; }
   
   
-void mergeSort(int arr[], int n)
+void mergeSort(char arr[], int n)
 {
    int curr_size;  
    int left_start; 
@@ -150,13 +150,13 @@ void mergeSort(int arr[], int n)
    }
 }
   
-void merge(int arr[], int l, int m, int r)
+void merge(char arr[], char l, char m, char r)
 {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 =  r - m;
+    char i, j, k;
+    char n1 = m - l + 1;
+    char n2 =  r - m;
   
-    int L[n1], R[n2];
+    char L[n1], R[n2];
   
     for (i = 0; i < n1; i++)
         L[i] = arr[l + i];
@@ -171,14 +171,14 @@ void merge(int arr[], int l, int m, int r)
         if (L[i] <= R[j])
         {
             arr[k] = L[i];
-            draw_stick(arr[k],k,4800 + 20);
+            draw_stick(arr[k],k,4800 + 0);
             delay();
             i++;
         }
         else
         {
             arr[k] = R[j];
-            draw_stick(arr[k],k,4800 + 20);
+            draw_stick(arr[k],k,4800 + 0);
             delay();
             j++;
         }
@@ -188,7 +188,7 @@ void merge(int arr[], int l, int m, int r)
     while (i < n1)
     {
         arr[k] = L[i];
-        draw_stick(arr[k],k,4800 + 20);
+        draw_stick(arr[k],k,4800 + 0);
         delay();        
         i++;
         k++;
@@ -197,7 +197,7 @@ void merge(int arr[], int l, int m, int r)
     while (j < n2)
     {
         arr[k] = R[j];
-        draw_stick(arr[k],k,4800 + 20);
+        draw_stick(arr[k],k,4800 + 0);
         delay();         
         j++;
         k++;
@@ -217,12 +217,12 @@ void insertionSort(int arr[], int n)
   
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
-            draw_stick(arr[j + 1], j+1 ,4800 + 20);
+            draw_stick(arr[j + 1], j+1 ,4800 + 40);
             delay(); 
             j = j - 1;
         }
         arr[j + 1] = key;
-        draw_stick(arr[j + 1], j+1 ,4800 + 20);
+        draw_stick(arr[j + 1], j+1 ,4800 + 40);
         delay(); 
     }
 }
@@ -236,55 +236,36 @@ int main() {
     int i;
     switch (UniqeId)
     {
-        case 0x4 : 
+        case 0x4 : //quick
         {
             while(1){
-                #if defined QUICK || defined BUBBLE
-                delay();
-                delay();
-                delay();
                 delay();                    
-                int arr[18];
-                arr[0]=11;
-                arr[1]=5;
-                arr[2]=9;
-                arr[3]=13;
-                arr[4]=18;
-                arr[5]=7;
-                arr[6]=1;
-                arr[7]=2;
-                arr[8]=12;
-                arr[9]=10;
-                arr[10]=4;
-                arr[11]=3;
-                arr[12]=14;
-                arr[13]=6;
-                arr[14]=15;
-                arr[15]=17;
-                arr[16]=8;
-                arr[17]=16;
+                char arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i < n; i++){
-                    draw_stick(arr[i] , i,20);
+                    draw_stick(arr[i] , i,0);
                 }
                 delay();   
-                #ifdef QUICK    
                 quickSortIterative(arr, 0, n - 1);
-                #elif defined BUBBLE
-                bubbleSort(arr,n);
-                #endif
                 delay();
-                #endif                       
             }
                     
         }
         break;
-        case 0x5 : 
+        case 0x5 : //inse
             while(1){
-
-            }  
+                delay();
+                int arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
+                int n = 18;
+                for (int i = 0; i <n ; i++){
+                    draw_stick(arr[i] , i ,4800 + 40);
+                }      
+                delay();
+                insertionSort(arr,n);
+                delay();  
+            } //busy wait 
         break;
-        case 0x6 : 
+        case 0x6 : //bubble
             for ( i = 0 ; i < 80 ; i++) {
                 VGA_FPGA[i]           = 0xffffffff; //First row
                 VGA_FPGA[i + 4800 -80]= 0xffffffff; //middle row
@@ -292,49 +273,33 @@ int main() {
             }
             for ( i = 0 ; i < 120 ; i++) {
                 VGA_FPGA[i*80]        = 0xffffffff; // first Line
-                // VGA_FPGA[i*80 + 39]   = 0xffffffff; // middle Line
+                VGA_FPGA[i*80 + 39]   = 0xffffffff; // middle Line
                 VGA_FPGA[i*80 + 79]   = 0xffffffff; // last  Line
             }
-            while(1){} //busy wait
-        break;
-        case 0x7 :
             while(1){
-                #if defined MERGE || defined INSERTION
+                delay();                    
+                char arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
+                int n = 18;
+                for (int i = 0; i < n; i++){
+                    draw_stick(arr[i] , i,40);
+                }
+                delay();   
+                bubbleSort(arr,n);
                 delay();
+            }
+
+        break;
+        case 0x7 :  //merge
+            while(1){
                 delay();
-                delay();
-                delay(); 
-                int arr[18];
-                arr[0]=11;
-                arr[1]=5;
-                arr[2]=9;
-                arr[3]=13;
-                arr[4]=18;
-                arr[5]=7;
-                arr[6]=1;
-                arr[7]=2;
-                arr[8]=12;
-                arr[9]=10;
-                arr[10]=4;
-                arr[11]=3;
-                arr[12]=14;
-                arr[13]=6;
-                arr[14]=15;
-                arr[15]=17;
-                arr[16]=8;
-                arr[17]=16;
+                char arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
-                    draw_stick(arr[i] , i ,4800 + 20);
+                    draw_stick(arr[i] , i ,4800 );
                 }      
                 delay();
-                #ifdef MERGE
                 mergeSort(arr,n);
-                #elif defined INSERTION
-                insertionSort(arr,n);
-                #endif
                 delay();  
-                #endif                        
             } //busy wait
         break;
         default :

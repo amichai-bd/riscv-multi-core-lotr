@@ -99,14 +99,36 @@ always_comb begin : cr_write_en
                CR_SCRATCHPAD1                : cr_en[IO_NUM].scratch_pad_1  = 1'b1 ;
                CR_SCRATCHPAD2                : cr_en[IO_NUM].scratch_pad_2  = 1'b1 ;
                CR_SCRATCHPAD3                : cr_en[IO_NUM].scratch_pad_3  = 1'b1 ;   
+               CR_CURSOR_H0                  : cr_en[IO_NUM].cursor_h_0     = 1'b1 ;   
+               CR_CURSOR_H1                  : cr_en[IO_NUM].cursor_h_1     = 1'b1 ;   
+               CR_CURSOR_H2                  : cr_en[IO_NUM].cursor_h_2     = 1'b1 ;   
+               CR_CURSOR_H3                  : cr_en[IO_NUM].cursor_h_3     = 1'b1 ;   
+               CR_CURSOR_V0                  : cr_en[IO_NUM].cursor_v_0     = 1'b1 ;   
+               CR_CURSOR_V1                  : cr_en[IO_NUM].cursor_v_1     = 1'b1 ;   
+               CR_CURSOR_V2                  : cr_en[IO_NUM].cursor_v_2     = 1'b1 ;   
+               CR_CURSOR_V3                  : cr_en[IO_NUM].cursor_v_3     = 1'b1 ;   
                CR_SHARED_BASE_OFFSET         : cr_en[IO_NUM].shrd_ofst      = 1'b1 ;
                default                       : /*do nothing - TODO add assertion*/;
             endcase
+            if(AddressQn03H[IO_NUM] == CR_CURSOR_H) begin
+                if(ThreadQ103H == 4'b0001) cr_en[IO_NUM].cursor_h_0 = 1'b1;
+                if(ThreadQ103H == 4'b0010) cr_en[IO_NUM].cursor_h_1 = 1'b1;
+                if(ThreadQ103H == 4'b0100) cr_en[IO_NUM].cursor_h_2 = 1'b1;
+                if(ThreadQ103H == 4'b1000) cr_en[IO_NUM].cursor_h_3 = 1'b1;
+            end
+            if(AddressQn03H[IO_NUM] == CR_CURSOR_V) begin
+                if(ThreadQ103H == 4'b0001) cr_en[IO_NUM].cursor_v_0 = 1'b1;
+                if(ThreadQ103H == 4'b0010) cr_en[IO_NUM].cursor_v_1 = 1'b1;
+                if(ThreadQ103H == 4'b0100) cr_en[IO_NUM].cursor_v_2 = 1'b1;
+                if(ThreadQ103H == 4'b1000) cr_en[IO_NUM].cursor_v_3 = 1'b1;
+            end
         end //if (WrEnQn03H[IO_NUM])
         cr_en[IO_NUM].thread     = 1'b1;//always update the thread id register (changes every cycle)
         cr_en[IO_NUM].core       = 1'b1;//this will always expose the coreID strap
         cr_en[IO_NUM].stk_ofst   = 1'b1;//always update the Stack offset  (changes every cycle)
         cr_en[IO_NUM].tls_ofst   = 1'b1;//always update the Stack offset  (changes every cycle)
+        cr_en[IO_NUM].cursor_h   = 1'b1;
+        cr_en[IO_NUM].cursor_v   = 1'b1;
         cr_en[IO_NUM].i_mem_msb  = 1'b1;//Static input
         cr_en[IO_NUM].d_mem_msb  = 1'b1;//Static input
         cr_en[IO_NUM].sts_0      = 1'b1;//always update the thread Status
@@ -140,13 +162,24 @@ assign ThreadIdQ102H =  (ThreadQ102H == 4'b0001) ? 2'b00 :
 assign StkOffsetQ102H = (ThreadQ102H == 4'b0001) ? cr_rw.stk_ofst_0 :
                         (ThreadQ102H == 4'b0010) ? cr_rw.stk_ofst_1 :
                         (ThreadQ102H == 4'b0100) ? cr_rw.stk_ofst_2 :
-                                                   cr_rw.stk_ofst_3 ;    
+                                                   cr_rw.stk_ofst_3 ;
                                                    
 assign TlsOffsetQ102H = (ThreadQ102H == 4'b0001) ? cr_rw.tls_ofst_0 :
-                        (ThreadQ102H == 4'b0010) ? cr_rw.tls_ofst_1 :                           
+                        (ThreadQ102H == 4'b0010) ? cr_rw.tls_ofst_1 :
                         (ThreadQ102H == 4'b0100) ? cr_rw.tls_ofst_2 :
-                                                   cr_rw.tls_ofst_3 ;    
-                                                   
+                                                   cr_rw.tls_ofst_3 ;
+
+logic [31:0] CursorHQ102H;
+logic [31:0] CursorVQ102H;
+assign CursorHQ102H   = (ThreadQ102H == 4'b0001) ? cr_rw.cursor_h_0 :
+                        (ThreadQ102H == 4'b0010) ? cr_rw.cursor_h_1 :
+                        (ThreadQ102H == 4'b0100) ? cr_rw.cursor_h_2 :
+                                                   cr_rw.cursor_h_3 ;                                                 
+
+assign CursorVQ102H   = (ThreadQ102H == 4'b0001) ? cr_rw.cursor_v_0 :
+                        (ThreadQ102H == 4'b0010) ? cr_rw.cursor_v_1 :
+                        (ThreadQ102H == 4'b0100) ? cr_rw.cursor_v_2 :
+                                                   cr_rw.cursor_v_3 ;   
 //=======================================================
 //================CR memory flops======================
 //=======================================================
@@ -172,15 +205,23 @@ assign SelWrDataQ103H = cr_en[1];
 `LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_1  , WrDataQ103H[SelWrDataQ103H.dfd_id_1][4:0]        , QClk  ,  CrEnQ103H.dfd_id_1     , RstQnnnH  ,  5'b0)
 `LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_2  , WrDataQ103H[SelWrDataQ103H.dfd_id_2][4:0]        , QClk  ,  CrEnQ103H.dfd_id_2     , RstQnnnH  ,  5'b0)
 `LOTR_EN_RST_VAL_MSFF(cr_rw.dfd_id_3  , WrDataQ103H[SelWrDataQ103H.dfd_id_3][4:0]        , QClk  ,  CrEnQ103H.dfd_id_3     , RstQnnnH  ,  5'b0)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_0, WrDataQ103H[SelWrDataQ103H.stk_ofst_0][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_0   , RstQnnnH  ,  32'h400200)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_1, WrDataQ103H[SelWrDataQ103H.stk_ofst_1][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_1   , RstQnnnH  ,  32'h400400)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_2, WrDataQ103H[SelWrDataQ103H.stk_ofst_2][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_2   , RstQnnnH  ,  32'h400600)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_3, WrDataQ103H[SelWrDataQ103H.stk_ofst_3][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_3   , RstQnnnH  ,  32'h400800)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_0, WrDataQ103H[SelWrDataQ103H.tls_ofst_0][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_0   , RstQnnnH  ,  32'h400200)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_1, WrDataQ103H[SelWrDataQ103H.tls_ofst_1][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_1   , RstQnnnH  ,  32'h400400)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_2, WrDataQ103H[SelWrDataQ103H.tls_ofst_2][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_2   , RstQnnnH  ,  32'h400600)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_3, WrDataQ103H[SelWrDataQ103H.tls_ofst_3][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_3   , RstQnnnH  ,  32'h400800)
-`LOTR_EN_RST_VAL_MSFF(cr_rw.shrd_ofst , WrDataQ103H[SelWrDataQ103H.shrd_ofst][31:0]      , QClk  ,  CrEnQ103H.shrd_ofst    , RstQnnnH  ,  32'h400f00)
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_0, WrDataQ103H[SelWrDataQ103H.stk_ofst_0][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_0   , RstQnnnH  , T0_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_1, WrDataQ103H[SelWrDataQ103H.stk_ofst_1][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_1   , RstQnnnH  , T1_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_2, WrDataQ103H[SelWrDataQ103H.stk_ofst_2][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_2   , RstQnnnH  , T2_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.stk_ofst_3, WrDataQ103H[SelWrDataQ103H.stk_ofst_3][31:0]     , QClk  ,  CrEnQ103H.stk_ofst_3   , RstQnnnH  , T3_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_0, WrDataQ103H[SelWrDataQ103H.tls_ofst_0][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_0   , RstQnnnH  , T0_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_1, WrDataQ103H[SelWrDataQ103H.tls_ofst_1][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_1   , RstQnnnH  , T1_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_2, WrDataQ103H[SelWrDataQ103H.tls_ofst_2][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_2   , RstQnnnH  , T2_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.tls_ofst_3, WrDataQ103H[SelWrDataQ103H.tls_ofst_3][31:0]     , QClk  ,  CrEnQ103H.tls_ofst_3   , RstQnnnH  , T3_STK_OFFSET )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_v_0, WrDataQ103H[SelWrDataQ103H.cursor_v_0][31:0]     , QClk  ,  CrEnQ103H.cursor_v_0   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_v_1, WrDataQ103H[SelWrDataQ103H.cursor_v_1][31:0]     , QClk  ,  CrEnQ103H.cursor_v_1   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_v_2, WrDataQ103H[SelWrDataQ103H.cursor_v_2][31:0]     , QClk  ,  CrEnQ103H.cursor_v_2   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_v_3, WrDataQ103H[SelWrDataQ103H.cursor_v_3][31:0]     , QClk  ,  CrEnQ103H.cursor_v_3   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_h_0, WrDataQ103H[SelWrDataQ103H.cursor_h_0][31:0]     , QClk  ,  CrEnQ103H.cursor_h_0   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_h_1, WrDataQ103H[SelWrDataQ103H.cursor_h_1][31:0]     , QClk  ,  CrEnQ103H.cursor_h_1   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_h_2, WrDataQ103H[SelWrDataQ103H.cursor_h_2][31:0]     , QClk  ,  CrEnQ103H.cursor_h_2   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.cursor_h_3, WrDataQ103H[SelWrDataQ103H.cursor_h_3][31:0]     , QClk  ,  CrEnQ103H.cursor_h_3   , RstQnnnH  , '0 )
+`LOTR_EN_RST_VAL_MSFF(cr_rw.shrd_ofst , WrDataQ103H[SelWrDataQ103H.shrd_ofst][31:0]      , QClk  ,  CrEnQ103H.shrd_ofst    , RstQnnnH  , MEM_SHARD_OFFSET )
 `LOTR_EN_RST_MSFF    (scratch_pad_0   , WrDataQ103H[SelWrDataQ103H.scratch_pad_0][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_0, RstQnnnH )//Note: Reset Value is '0
 `LOTR_EN_RST_MSFF    (scratch_pad_1   , WrDataQ103H[SelWrDataQ103H.scratch_pad_1][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_1, RstQnnnH )//Note: Reset Value is '0
 `LOTR_EN_RST_MSFF    (scratch_pad_2   , WrDataQ103H[SelWrDataQ103H.scratch_pad_2][31:0]  , QClk  ,  CrEnQ103H.scratch_pad_2, RstQnnnH )//Note: Reset Value is '0
@@ -191,6 +232,8 @@ assign SelWrDataQ103H = cr_en[1];
 `LOTR_EN_RST_MSFF    (cr_ro.thread    , ThreadIdQ102H,       QClk  ,  CrEnQ103H.thread     , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.stk_ofst  , StkOffsetQ102H,      QClk  ,  CrEnQ103H.stk_ofst   , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.tls_ofst  , TlsOffsetQ102H,      QClk  ,  CrEnQ103H.tls_ofst   , RstQnnnH )
+`LOTR_EN_RST_MSFF    (cr_ro.cursor_h  , CursorHQ102H,        QClk  ,  CrEnQ103H.cursor_h   , RstQnnnH )
+`LOTR_EN_RST_MSFF    (cr_ro.cursor_v  , CursorVQ102H,        QClk  ,  CrEnQ103H.cursor_v   , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_0      , PcQ103H,             QClk  ,  CrEnQ103H.pc_0       , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_1      , PcQ103H,             QClk  ,  CrEnQ103H.pc_1       , RstQnnnH )
 `LOTR_EN_RST_MSFF    (cr_ro.pc_2      , PcQ103H,             QClk  ,  CrEnQ103H.pc_2       , RstQnnnH )
@@ -227,6 +270,8 @@ always_comb begin
                  CR_CORE_ID                 : CrRdDataQn03H[IO_NUM]  = {24'b0,cr_ro.core};
                  CR_STACK_BASE_OFFSET       : CrRdDataQn03H[IO_NUM]  = cr_ro.stk_ofst ;
                  CR_TLS_BASE_OFFSET         : CrRdDataQn03H[IO_NUM]  = cr_ro.tls_ofst ;
+                 CR_CURSOR_H                : CrRdDataQn03H[IO_NUM]  = cr_ro.cursor_h ;
+                 CR_CURSOR_V                : CrRdDataQn03H[IO_NUM]  = cr_ro.cursor_v ;
                  CR_SHARED_BASE_OFFSET      : CrRdDataQn03H[IO_NUM]  = cr_rw.shrd_ofst;
                  CR_I_MEM_MSB               : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.i_mem_msb};
                  CR_D_MEM_MSB               : CrRdDataQn03H[IO_NUM]  = {18'b0,cr_ro.d_mem_msb};

@@ -226,8 +226,12 @@ assign F2C_CrWrEnQ503H   = F2C_ReqValidQ503H && (F2C_ReqOpcodeQ503H == WR) && F2
 //================   D_MEM Access  ======================
 //=======================================================
 `ifdef DE10_LITE
-d_mem_4k d_mem ( //FIXME - point to altera Memory
-`else
+	`ifdef DMEM_8K
+		d_mem_8k i_mem (
+	`else
+		d_mem_4k d_mem (
+	`endif //IMEM_8K
+`else 
 d_mem d_mem (                                                             
 `endif
     .clock    (QClk),

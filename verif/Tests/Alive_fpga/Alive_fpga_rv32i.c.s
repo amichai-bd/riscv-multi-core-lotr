@@ -34,4 +34,4 @@ main:
 .L2:
 	j	.L2
 	.size	main, .-main
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"

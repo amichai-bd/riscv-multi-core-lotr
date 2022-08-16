@@ -19,7 +19,6 @@ main:
 	sw	zero,-24(s0)
 	li	a5,1023
 	sw	a5,-28(s0)
-	sw	zero,-52(s0)
 	sw	zero,-32(s0)
 	li	a5,1
 	sw	a5,-36(s0)
@@ -27,85 +26,79 @@ main:
 	sw	a5,-40(s0)
 	sw	zero,-44(s0)
 	li	a5,126
-	sw	a5,-76(s0)
-	li	a5,125
 	sw	a5,-72(s0)
-	li	a5,123
+	li	a5,125
 	sw	a5,-68(s0)
-	li	a5,119
+	li	a5,123
 	sw	a5,-64(s0)
-	li	a5,111
+	li	a5,119
 	sw	a5,-60(s0)
-	li	a5,95
+	li	a5,111
 	sw	a5,-56(s0)
+	li	a5,95
+	sw	a5,-52(s0)
 	lw	a4,-48(s0)
 	li	a5,4
-	beq	a4,a5,.L2
-	lw	a4,-48(s0)
-	li	a5,8
-	beq	a4,a5,.L30
-	j	.L4
-.L2:
+	bne	a4,a5,.L2
+.L28:
 	li	a5,50339840
 	addi	a5,a5,36
 	lw	a5,0(a5)
-	bne	a5,zero,.L5
+	bne	a5,zero,.L3
 	li	a5,1
 	sw	a5,-20(s0)
 	li	a5,1023
 	sw	a5,-28(s0)
-	sw	zero,-52(s0)
 	li	a5,1
 	sw	a5,-36(s0)
 	li	a5,512
 	sw	a5,-40(s0)
-	j	.L6
-.L7:
+	j	.L4
+.L5:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
 	sw	a5,-24(s0)
-.L6:
+.L4:
 	lw	a4,-24(s0)
 	li	a5,1665
-	ble	a4,a5,.L7
+	ble	a4,a5,.L5
 	li	a5,50339840
 	addi	a5,a5,24
 	lw	a4,-32(s0)
 	sw	a4,0(a5)
 	lw	a4,-32(s0)
 	li	a5,1023
-	bne	a4,a5,.L8
+	bne	a4,a5,.L6
 	sw	zero,-32(s0)
-	j	.L9
-.L8:
+	j	.L7
+.L6:
 	li	a5,1023
 	sw	a5,-32(s0)
-.L9:
+.L7:
 	sw	zero,-24(s0)
-	j	.L2
-.L5:
+	j	.L28
+.L3:
 	li	a5,50339840
 	addi	a5,a5,36
 	lw	a4,0(a5)
 	li	a5,1
-	bne	a4,a5,.L11
+	bne	a4,a5,.L9
 	li	a5,1023
 	sw	a5,-28(s0)
-	sw	zero,-52(s0)
 	sw	zero,-32(s0)
 	li	a5,1
 	sw	a5,-36(s0)
 	li	a5,512
 	sw	a5,-40(s0)
-	j	.L12
-.L13:
+	j	.L10
+.L11:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
 	sw	a5,-24(s0)
-.L12:
+.L10:
 	lw	a4,-24(s0)
 	li	a5,1665
-	ble	a4,a5,.L13
+	ble	a4,a5,.L11
 	li	a5,50339840
 	addi	a5,a5,24
 	lw	a4,-20(s0)
@@ -115,35 +108,34 @@ main:
 	sw	a5,-20(s0)
 	lw	a4,-20(s0)
 	li	a5,1023
-	bne	a4,a5,.L14
+	bne	a4,a5,.L12
 	li	a5,1
 	sw	a5,-20(s0)
-.L14:
+.L12:
 	sw	zero,-24(s0)
-	j	.L2
-.L11:
+	j	.L28
+.L9:
 	li	a5,50339840
 	addi	a5,a5,36
 	lw	a4,0(a5)
 	li	a5,2
-	bne	a4,a5,.L15
+	bne	a4,a5,.L13
 	li	a5,1
 	sw	a5,-20(s0)
 	li	a5,1023
 	sw	a5,-28(s0)
-	sw	zero,-52(s0)
 	sw	zero,-32(s0)
 	li	a5,512
 	sw	a5,-40(s0)
-	j	.L16
-.L17:
+	j	.L14
+.L15:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
 	sw	a5,-24(s0)
-.L16:
+.L14:
 	lw	a4,-24(s0)
 	li	a5,1665
-	ble	a4,a5,.L17
+	ble	a4,a5,.L15
 	li	a5,50339840
 	addi	a5,a5,24
 	lw	a4,-36(s0)
@@ -153,35 +145,34 @@ main:
 	sw	a5,-36(s0)
 	lw	a4,-36(s0)
 	li	a5,512
-	ble	a4,a5,.L18
+	ble	a4,a5,.L16
 	li	a5,1
 	sw	a5,-36(s0)
-.L18:
+.L16:
 	sw	zero,-24(s0)
-	j	.L2
-.L15:
+	j	.L28
+.L13:
 	li	a5,50339840
 	addi	a5,a5,36
 	lw	a4,0(a5)
 	li	a5,3
-	bne	a4,a5,.L19
+	bne	a4,a5,.L17
 	li	a5,1
 	sw	a5,-20(s0)
-	sw	zero,-52(s0)
 	sw	zero,-32(s0)
 	li	a5,1
 	sw	a5,-36(s0)
 	li	a5,512
 	sw	a5,-40(s0)
-	j	.L20
-.L21:
+	j	.L18
+.L19:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
 	sw	a5,-24(s0)
-.L20:
+.L18:
 	lw	a4,-24(s0)
 	li	a5,1665
-	ble	a4,a5,.L21
+	ble	a4,a5,.L19
 	li	a5,50339840
 	addi	a5,a5,24
 	lw	a4,-28(s0)
@@ -190,35 +181,34 @@ main:
 	addi	a5,a5,-1
 	sw	a5,-28(s0)
 	lw	a5,-28(s0)
-	bne	a5,zero,.L22
+	bne	a5,zero,.L20
 	li	a5,1023
 	sw	a5,-28(s0)
-.L22:
+.L20:
 	sw	zero,-24(s0)
-	j	.L2
-.L19:
+	j	.L28
+.L17:
 	li	a5,50339840
 	addi	a5,a5,36
 	lw	a4,0(a5)
 	li	a5,4
-	bne	a4,a5,.L23
+	bne	a4,a5,.L21
 	li	a5,1
 	sw	a5,-20(s0)
 	li	a5,1023
 	sw	a5,-28(s0)
-	sw	zero,-52(s0)
 	sw	zero,-32(s0)
 	li	a5,1
 	sw	a5,-36(s0)
-	j	.L24
-.L25:
+	j	.L22
+.L23:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
 	sw	a5,-24(s0)
-.L24:
+.L22:
 	lw	a4,-24(s0)
 	li	a5,1665
-	ble	a4,a5,.L25
+	ble	a4,a5,.L23
 	li	a5,50339840
 	addi	a5,a5,24
 	lw	a4,-40(s0)
@@ -229,18 +219,18 @@ main:
 	srai	a5,a5,1
 	sw	a5,-40(s0)
 	lw	a5,-40(s0)
-	bne	a5,zero,.L26
+	bne	a5,zero,.L24
 	li	a5,512
 	sw	a5,-40(s0)
-.L26:
+.L24:
 	sw	zero,-24(s0)
-	j	.L2
-.L23:
+	j	.L28
+.L21:
 	li	a5,50339840
 	addi	a5,a5,36
 	lw	a4,0(a5)
 	li	a5,5
-	bne	a4,a5,.L2
+	bne	a4,a5,.L28
 	li	a5,1
 	sw	a5,-20(s0)
 	li	a5,1023
@@ -250,74 +240,32 @@ main:
 	sw	a5,-36(s0)
 	li	a5,512
 	sw	a5,-40(s0)
-	j	.L27
-.L28:
+	j	.L25
+.L26:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
 	sw	a5,-24(s0)
-.L27:
+.L25:
 	lw	a4,-24(s0)
 	li	a5,499
-	ble	a4,a5,.L28
+	ble	a4,a5,.L26
 	lw	a5,-44(s0)
 	addi	a4,a5,1
 	sw	a4,-44(s0)
 	li	a4,50339840
 	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
-	lw	a5,-60(a5)
+	addi	a5,a5,-16
+	add	a5,a5,s0
+	lw	a5,-56(a5)
 	sw	a5,0(a4)
 	lw	a4,-44(s0)
 	li	a5,5
-	ble	a4,a5,.L29
+	ble	a4,a5,.L27
 	sw	zero,-44(s0)
-.L29:
+.L27:
 	sw	zero,-24(s0)
+	j	.L28
+.L2:
 	j	.L2
-.L31:
-	lw	a5,-24(s0)
-	addi	a5,a5,1
-	sw	a5,-24(s0)
-.L30:
-	lw	a4,-24(s0)
-	li	a5,249
-	ble	a4,a5,.L31
-	li	a5,50339840
-	addi	a4,a5,4
-	lw	a5,-44(s0)
-	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
-	lw	a5,-60(a5)
-	sw	a5,0(a4)
-	li	a5,50339840
-	addi	a4,a5,8
-	lw	a5,-44(s0)
-	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
-	lw	a5,-60(a5)
-	sw	a5,0(a4)
-	li	a5,50339840
-	addi	a4,a5,12
-	lw	a5,-44(s0)
-	slli	a5,a5,2
-	addi	a3,s0,-16
-	add	a5,a3,a5
-	lw	a5,-60(a5)
-	sw	a5,0(a4)
-	lw	a5,-44(s0)
-	addi	a5,a5,1
-	sw	a5,-44(s0)
-	lw	a4,-44(s0)
-	li	a5,5
-	ble	a4,a5,.L32
-	sw	zero,-44(s0)
-.L32:
-	sw	zero,-24(s0)
-	j	.L30
-.L4:
-	j	.L4
 	.size	main, .-main
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (GNU) 11.1.0"

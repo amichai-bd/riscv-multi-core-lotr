@@ -3,13 +3,13 @@ __DYNAMIC  =  0;
 
 MEMORY
 {
-    instrram    : ORIGIN = 0x00000000, LENGTH = 0x1000
-    dataram     : ORIGIN = 0x00400800, LENGTH = 0x1000
-    stack       : ORIGIN = 0x00400000, LENGTH = 0x0200
+    instrram    : ORIGIN = 0x00000000, LENGTH = 0x2000
+    dataram     : ORIGIN = 0x00400000, LENGTH = 0x1000
+    stack       : ORIGIN = 0x00401000, LENGTH = 0x0400
 }
 
 /* Stack information variables */
-_min_stack      = 0x0100;   /* 4K - minimum stack space to reserve */
+_min_stack      = 0x0400;   /* 4K - minimum stack space to reserve */
 _stack_len     = LENGTH(stack);
 _stack_start   = ORIGIN(stack) + LENGTH(stack);
 
