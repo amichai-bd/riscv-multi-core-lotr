@@ -19,15 +19,6 @@ module gateway
    // TBD...  
    );
 
-   assign wb_master.clk = clk;
-   assign wb_master.rstn = rstn;
-   assign wb_master.address = '0;
-   assign wb_master.data_out = '0;
-   assign wb_master.we = '0;
-   assign wb_master.stb = '0;
-   assign wb_master.cyc = '0;
-   assign wb_master.sel = '0;
-
    // wishbone interface
    wishbone 
      #(
