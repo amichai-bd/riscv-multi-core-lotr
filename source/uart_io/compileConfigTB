@@ -1,0 +1,1 @@
+vlog.exe  -f /c/Users/97250/Desktop/ProjectB/Lotr/source/uart_io/config_tb_list.f  -work /c/Users/97250/Desktop/ProjectB/Lotr/source/uart_io/work  -skipsynthoffregion -lint -source -warning [] -fatal [] -note [] -error [] -suppress 2275
