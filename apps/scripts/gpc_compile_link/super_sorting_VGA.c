@@ -6,9 +6,9 @@ Created : 01/08/2022
 
 // REGION == 2'b01;
 #include "LOTR_defines.h"
-#define QUICK
+#include "graphic.h"
+
 #define BUBBLE
-#define MERGE
 #define INSERTION
 
    
@@ -92,10 +92,12 @@ int main() {
     int i;
     switch (UniqeId)
     {
-        case 0x4 : //quick
+        case 0x4 : //Bubble sort - random
         {
             while(1){
-                delay();                    
+                delay();
+                set_cursor(30,1);
+                rvc_printf("BUBBLE SORT RANDOM\n");                  
                 int arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i < n; i++){
@@ -108,10 +110,12 @@ int main() {
                     
         }
         break;
-        case 0x5 : //inse
+        case 0x5 : //bubble sort - 3 unique
             while(1){
                 delay();
-                int arr[18] = {1,2,3,4,5,6,13,14,15,16,17,18,7,8,9,10,11,12};
+                set_cursor(90,40);
+                rvc_printf("BUBBLE SORT 3 UNIQUE\n");                  
+                int arr[18] = {6,18,12,12,6,18,18,6,6,12,12,18,6,18,6,12,18,12};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
                     draw_stick(arr[i] , i ,4800 + 40 , 3600);
@@ -121,7 +125,7 @@ int main() {
                 delay();  
             } //busy wait 
         break;
-        case 0x6 : //bubble
+        case 0x6 : //bubble sort - reverse
             for ( i = 0 ; i < 80 ; i++) {
                 VGA_FPGA[i]           = 0xffffffff; //First row
                 VGA_FPGA[i + 2400 - 80 ]= 0xffffffff; //middle row
@@ -134,8 +138,10 @@ int main() {
                 VGA_FPGA[i*80 + 39]   = 0xffffffff; // middle Line
                 VGA_FPGA[i*80 + 79]   = 0xffffffff; // last  Line
             }
-            while(1){
-                delay();                    
+            while(1){  
+                delay();        
+                set_cursor(30,40);
+                rvc_printf("BUBBLE SORT REVERSE\n");                              
                 int arr[18] = {18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
                 int n = 18;
                 for (int i = 0; i < n; i++){
@@ -147,9 +153,12 @@ int main() {
             }
 
         break;
-        case 0x7 :  //merge
+        case 0x7 :  //bubble sort - almost sorted
             while(1){
                 delay();
+                delay();
+                set_cursor(90,1);
+                rvc_printf("BUBBLE SORT ALMOST SORTED\n");                      
                 int arr[18] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
@@ -161,9 +170,11 @@ int main() {
             } //busy wait
         break;
 
-        case 0x8 :  //merge
+        case 0x8 :  //insertion sort - random
             while(1){
                 delay();
+                set_cursor(1,1);
+                rvc_printf("INSERTION SORT RANDOM\n");                    
                 int arr[18] = {11,5,9,13,18,7,1,2,12,10,4,3,14,6,15,17,8,16};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
@@ -175,10 +186,12 @@ int main() {
             } //busy wait
         break;
 
-        case 0x9 :  //merge
+        case 0x9 :  //insertion - 3 unique
             while(1){
                 delay();
-                int arr[18] = {1,2,3,4,5,6,13,14,15,16,17,18,7,8,9,10,11,12};
+                set_cursor(60,40);
+                rvc_printf("INSERTION SORT 3 UNIQUE\n");                  
+                int arr[18] = {6,18,12,12,6,18,18,6,6,12,12,18,6,18,6,12,18,12};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
                     draw_stick(arr[i] , i ,4800 + 40, 1200 );
@@ -189,9 +202,11 @@ int main() {
             } //busy wait
         break;
 
-        case 0xa :  //merge
+        case 0xa :  //insertion reverse
             while(1){
                 delay();
+                set_cursor(1,40);
+                rvc_printf("INSERTION SORT REVERSE\n");                        
                 int arr[18] = {18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
                 int n = 18;
                 for (int i = 0; i <n ; i++){
@@ -203,9 +218,11 @@ int main() {
             } //busy wait
         break;
 
-        case 0xb :  //merge
+        case 0xb :  //insertion almost sorted
             while(1){
                 delay();
+                set_cursor(60,1);
+                rvc_printf("INSERTION SORT ALMOST SORTED.\n");                      
                 int arr[18] = {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1};
                 int n = 18;
                 for (int i = 0; i <n ; i++){

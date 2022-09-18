@@ -100,7 +100,9 @@
 #define WALK_MAN_TOP_3    0x7c381030             
 #define WALK_MAN_BOTTOM_3 0x281038ba             
 #define WALK_MAN_TOP_4    0x38381030             
-#define WALK_MAN_BOTTOM_4 0x4848387c             
+#define WALK_MAN_BOTTOM_4 0x4848387c    
+#define CLEAR_TOP         0x0             
+#define CLEAR_BOTTOM      0x0           
 
 /* ASCII tabels */
 unsigned int ASCII_TOP[97] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SPACE_TOP,
@@ -117,9 +119,9 @@ unsigned int ASCII_BOTTOM[97] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
                                  U_BOTTOM,V_BOTTOM,W_BOTTOM,X_BOTTOM,Y_BOTTOM,Z_BOTTOM};
 
 /* ANIME tabels */
-unsigned int ANIME_TOP[5] = {WALK_MAN_TOP_0,WALK_MAN_TOP_1,WALK_MAN_TOP_2,WALK_MAN_TOP_3,WALK_MAN_TOP_4};
-unsigned int ANIME_BOTTOM[5] = {WALK_MAN_BOTTOM_0,WALK_MAN_BOTTOM_1,WALK_MAN_BOTTOM_2,WALK_MAN_BOTTOM_3,
-                                WALK_MAN_BOTTOM_4};
+unsigned int ANIME_TOP[6] = {WALK_MAN_TOP_0,WALK_MAN_TOP_1,WALK_MAN_TOP_2,WALK_MAN_TOP_3,WALK_MAN_TOP_4,CLEAR_TOP};
+unsigned int ANIME_BOTTOM[6] = {WALK_MAN_BOTTOM_0,WALK_MAN_BOTTOM_1,WALK_MAN_BOTTOM_2,WALK_MAN_BOTTOM_3,
+                                WALK_MAN_BOTTOM_4,CLEAR_BOTTOM};
 
 /* This function print a char note on the screen in (raw,col) position */
 void draw_char(char note, int raw, int col)
