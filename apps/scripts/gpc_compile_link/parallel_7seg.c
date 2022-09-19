@@ -7,6 +7,12 @@ Created : 22/08/2021
 
 #include "LOTR_defines.h"
 
+void delay(){
+    int timer = 0;       
+    while(timer < 200000){
+        timer++;
+    }      
+}
 
 int main() {
     int UniqeId = CR_WHO_AM_I[0];
@@ -43,59 +49,54 @@ int main() {
         case 0x5 : 
             while (1){
 
-                while(timer < 250){
-                    timer++;
-                }                   
+               delay();  
                 *SEG4_FGPA = segCounter[i++];
                 if (i > 16)
                     i = 0;
-                timer = 0;
+            }
+            break;
+
+        // case 0x4 : 
+        //     while (1){
+
+        //         while(timer < 250){
+        //             timer++;
+        //         }                   
+        //         *SEG1_FGPA = segCounter[j++];
+        //         if (j > 16)
+        //             j = 0;
+        //         timer = 0;
                 
 
-            }
-            break;
+        //     }
+        //     break;
 
-        case 0x4 : 
-            while (1){
+        // case 0x6 : 
+        //     while (1){
 
-                while(timer < 250){
-                    timer++;
-                }                   
-                *SEG1_FGPA = segCounter[j++];
-                if (j > 16)
-                    j = 0;
-                timer = 0;
-                
+        //         while(timer < 250){
+        //             timer++;
+        //         }                   
+        //         *SEG2_FGPA = segCounter[k++];
+        //         if (k > 16)
+        //             k = 0;
+        //         timer = 0;
 
-            }
-            break;
+        //     }
+        //     break;
 
-        case 0x6 : 
-            while (1){
+        // case 0x7 : 
+        //     while (1){
 
-                while(timer < 250){
-                    timer++;
-                }                   
-                *SEG2_FGPA = segCounter[k++];
-                if (k > 16)
-                    k = 0;
-                timer = 0;
-
-            }
-            break;
-
-        case 0x7 : 
-            while (1){
-
-                while(timer < 250){
-                    timer++;
-                }                   
-                *SEG3_FGPA = segCounter[l++];
-                if (l > 16)
-                    l = 0;
-                timer = 0;
-            }
-            break;
+        //         while(timer < 250){
+        //             timer++;
+        //         }                   
+        //         *SEG3_FGPA = segCounter[l++];
+        //         if (l > 16)
+        //             l = 0;
+        //         timer = 0;
+        //     }
+        //     break;
 
         // case 0x8 : 
         //     while (1){

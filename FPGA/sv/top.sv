@@ -56,9 +56,8 @@ lotr lotr(
     .BLUE    (BLUE),  //(BLUE  ),//output logic [3:0] 
     .v_sync  (v_sync),//(v_sync),//output logic       
     .h_sync  (h_sync),//(h_sync),//output logic      
-    .LED     ()//(LED)
+    .LED     (LED)
     );
-	 `LOTR_MSFF(LED    , Arduino_IO[9:0] , CLK_5)
 	 
 
 // This logic is to get data from the Analog pin in the DE10lite 
