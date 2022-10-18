@@ -26,7 +26,7 @@ Main Blocks:
 Devided to: Compiler Scratchpad(.data.bss.rodata) + Shared MEM Space + CR Space (Control Registers)
 
 ### *2) RC - Ring Controller*  
-<img src="https://user-images.githubusercontent.com/81047407/183592568-2adeb30d-494d-4e04-934f-d326eb28b096.png" width="500">
+<img src="https://user-images.githubusercontent.com/81047407/196517501-b4e99028-2fa7-4d6b-aeeb-f4c5391df47b.png" width="600">
 
 Written  in SystemVerilog.  
 Ring EP (EndPoint) to Manage the cores & ring RD/WR traffic.
