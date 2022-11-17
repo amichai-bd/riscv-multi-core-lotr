@@ -33,6 +33,11 @@ module uart_io_tb;
    localparam integer NANOSECOND=1e+9;
    localparam         UART_BIT_PERIOD=(NANOSECOND/BUADRATE);
 
+   localparam bit     ADDR = 0;
+   localparam bit     DATA = 0; 
+   localparam bit     N_WRITE_TRANSFERS = 10;
+   logic [31:0]       Write_transfer_buffer [N_WRITE_TRANSFERS-1:0][1:0]; 
+   
    logic 	      clk;
    logic 	      rstn;
    logic 	      clk_en;
@@ -201,6 +206,26 @@ module uart_io_tb;
    task C2F_request_monitor();
    endtask // C2F_request_monitor
 
+   
+   task Terminal_Write;
+      input logic [3:0][7:0] address;
+      input logic [3:0][7:0] data;
+      UART_H2D_transmit(32'd87); //W in Ascci
+      for(int i=4; i>0; --i)
+	UART_H2D_transmit(address[i]);
+      for(int i=4; i>0; --i)
+	UART_H2D_transmit(data[i]);
+   endtask // Terminal_Write
+
+   
+   task Terminal_Read;
+      input logic [3:0][7:0] address;
+      UART_H2D_transmit(32'd82); //R in Ascci
+      for(int i=4; i>0; --i)
+	UART_H2D_transmit(address[i]);
+   endtask // Terminal_Read
+   //    
+   
 /*/////////////////////////////////
    ___  _    _              _  _ 
   / __|| |_ (_) _ __  _  _ | |(_)
@@ -214,7 +239,15 @@ module uart_io_tb;
       delay(10); init();
       delay(10); reset();
       delay(10); enable_clk();
+
+      for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
+	 Write_transfer_buffer[i][ADDR] = $random();
+	 Write_transfer_buffer[i][DATA] = $random();
+      end
       
+      for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
+	 Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+      end	
       $finish(1);
    end
    
