@@ -237,18 +237,19 @@ module uart_io_tb;
    
    initial begin
       $display("%s", {50{"*"}});
-      $display("UART playground testbench");      
+      $display("*** UART playground testbench");      
+      $display("%s", {50{"*"}});
       delay(10); init();
       delay(10); reset();
       delay(10); enable_clk();
 
       for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
-	 Write_transfer_buffer[i][ADDR] = $random();
-	 Write_transfer_buffer[i][DATA] = $random();
+	      Write_transfer_buffer[i][ADDR] = $random();
+	      Write_transfer_buffer[i][DATA] = $random();
       end
       
       for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
-	 Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+	      Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
       end	
       $display("%s", {50{"*"}});
       $finish(1);

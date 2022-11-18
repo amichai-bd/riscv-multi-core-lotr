@@ -1,1 +1,1 @@
-vlog.exe -f /home/christians/workspace/git/riscv-multi-core-lotr/source/uart_io/uart_io_list.f -work /home/christians/workspace/git/riscv-multi-core-lotr/source/uart_io/work -skipsynthoffregion -lint -source -warning [] -fatal [] -note [] -error [] -suppress 2275
+vlog.exe -f ./uart_io/uart_io_list.f -work ./uart_io/work -skipsynthoffregion -lint -source -warning [] -fatal [] -note [] -error [] -suppress 2275
