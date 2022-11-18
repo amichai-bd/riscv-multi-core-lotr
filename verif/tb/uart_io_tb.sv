@@ -35,7 +35,7 @@ module uart_io_tb;
 
    localparam bit     ADDR = 0;
    localparam bit     DATA = 0; 
-   localparam bit     N_WRITE_TRANSFERS = 10;
+   localparam integer N_WRITE_TRANSFERS = 1;
    logic [31:0]       Write_transfer_buffer [N_WRITE_TRANSFERS-1:0][1:0]; 
    
    logic 	      clk;
@@ -143,7 +143,7 @@ module uart_io_tb;
    //uart host to device transmit
    task UART_H2D_transmit;
       input logic [N_DATA_BITS-1:0] data;      
-      print($sformatf("UART transmiting Host to Device, %b", data));
+      print($sformatf("UART transmiting Host to Device, Bin:%b, Dec:%d, 0x%x", data, data, data));
       // start bit
       uart_master_tx=1'b0;
       uart_bit_wait(1);       
@@ -210,11 +210,12 @@ module uart_io_tb;
    task Terminal_Write;
       input logic [3:0][7:0] address;
       input logic [3:0][7:0] data;
+      print($sformatf("Terminal transmit opcode: %d address: 0x%x, data: 0x%x", "W", address, data));
       UART_H2D_transmit(32'd87); //W in Ascci
-      for(int i=4; i>0; --i)
-	UART_H2D_transmit(address[i]);
-      for(int i=4; i>0; --i)
-	UART_H2D_transmit(data[i]);
+      for(int i=4; i>0; i--)
+	UART_H2D_transmit(address[i-1]);
+      for(int i=4; i>0; i--)
+	UART_H2D_transmit(data[i-1]);
    endtask // Terminal_Write
 
    
@@ -235,6 +236,7 @@ module uart_io_tb;
  */////////////////////////////////
    
    initial begin
+      $display("%s", {50{"*"}});
       $display("UART playground testbench");      
       delay(10); init();
       delay(10); reset();
@@ -248,7 +250,7 @@ module uart_io_tb;
       for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
 	 Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
       end	
+      $display("%s", {50{"*"}});
       $finish(1);
-   end
-   
+   end   
 endmodule

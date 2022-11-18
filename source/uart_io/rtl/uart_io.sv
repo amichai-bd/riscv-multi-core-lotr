@@ -6,8 +6,10 @@
 `timescale 1ns/1ns
 
 `include "./uart/uart_defines.v"
+`include "./common/lotr_defines.sv"
 
 module uart_io
+  import lotr_pkg::*;
   (
    input logic 	       clk,
    input logic 	       rstn,
@@ -35,7 +37,7 @@ module uart_io
    output logic        F2C_RspValidQ500H,
    output 	       t_opcode F2C_RspOpcodeQ500H,
    output logic [31:0] F2C_RspAddressQ500H,
-   output logic [31:0] F2C_RspDataQ500H 
+   output logic [31:0] F2C_RspDataQ500H, 
    // uart RX/TX signals
    input logic 	       uart_master_tx, 
    output logic        uart_master_rx

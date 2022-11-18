@@ -1,1 +1,1 @@
-vsim.exe -Ldir "\home\christians\git\riscv-multi-core-lotr\source\uart_io" -t 1ns work.uart_io_tb -c -do "run -all" -checkvifacedrivers 1 -no_autoacc -keeploaded -suppress 8315,3584,8233,3408 +UART_SIMULATION
+vsim.exe -Ldir "\home\christians\workspace\git\riscv-multi-core-lotr\source\uart_io" -t 1ns work.uart_io_tb -c -do "run -all" -checkvifacedrivers 1 -no_autoacc -keeploaded -suppress 8315,3584,8233,3408 +UART_SIMULATION

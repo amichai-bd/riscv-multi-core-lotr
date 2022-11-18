@@ -3,6 +3,7 @@
 +incdir+../verif/tb/
 
 // PARAM PACAKGE
+../source/common/lotr_defines.sv
 ../source/common/lotr_pkg.sv
 
 // WISHBONE
