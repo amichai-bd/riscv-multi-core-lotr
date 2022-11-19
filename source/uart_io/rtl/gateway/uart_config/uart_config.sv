@@ -49,11 +49,12 @@ module uart_config
      parameter integer BUADRATE=9600      //[] bits per sec
      )
    (
-    input  logic start_config,	   
     input logic clk,
-    input logic rstn,		
-    wishbone.master wb_master,
-    output logic config_done     
+    input logic rstn,
+	input logic interrupt,		
+    input  logic start_config,	   
+    output logic config_done,     
+    wishbone.master wb_master
     );
 
 logic [7:0] data_i;

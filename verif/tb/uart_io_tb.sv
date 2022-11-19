@@ -33,6 +33,12 @@ module uart_io_tb;
    localparam integer NANOSECOND=1e+9;
    localparam         UART_BIT_PERIOD=(NANOSECOND/BUADRATE);
 
+   localparam bit     ADDR = 0;
+   localparam bit     DATA = 0; 
+   localparam integer N_WRITE_TRANSFERS = 1;
+   logic [31:0]       Write_transfer_buffer [N_WRITE_TRANSFERS-1:0][1:0]; 
+   
+   // GENERAL SIGNALS
    logic 	      clk;
    logic 	      rstn;
    logic 	      clk_en;
@@ -47,29 +53,29 @@ module uart_io_tb;
    //---------------------------------------
    // REQUEST
    logic 	      F2C_ReqValidQ502H;
-   t_opcode           F2C_ReqOpcodeQ502H;
-   logic [31:0]       F2C_ReqAddressQ502H;
-   logic [31:0]       F2C_ReqDataQ502H;
+   t_opcode       F2C_ReqOpcodeQ502H;
+   logic [31:0]   F2C_ReqAddressQ502H;
+   logic [31:0]   F2C_ReqDataQ502H;
    // RESPOSE
    logic 	      F2C_RspValidQ500H;
-   t_opcode           F2C_RspOpcodeQ500H;
-   logic [31:0]       F2C_RspAddressQ500H;
-   logic [31:0]       F2C_RspDataQ500H;
+   t_opcode       F2C_RspOpcodeQ500H;
+   logic [31:0]   F2C_RspAddressQ500H;
+   logic [31:0]   F2C_RspDataQ500H;
    //---------------------------------------
    //RC <---> Core C2F
    //---------------------------------------
    // REQUEST
    logic 	      C2F_ReqValidQ500H;
-   t_opcode           C2F_ReqOpcodeQ500H;
-   logic [31:0]       C2F_ReqAddressQ500H;
-   logic [31:0]       C2F_ReqDataQ500H;
-   logic [1:0] 	      C2F_ReqThreadIDQ500H;
+   t_opcode       C2F_ReqOpcodeQ500H;
+   logic [31:0]   C2F_ReqAddressQ500H;
+   logic [31:0]   C2F_ReqDataQ500H;
+   logic [1:0] 	C2F_ReqThreadIDQ500H;
    // RESPONSE
    logic 	      C2F_RspValidQ502H;
-   t_opcode           C2F_RspOpcodeQ502H;
-   logic [31:0]       C2F_RspDataQ502H;
+   t_opcode       C2F_RspOpcodeQ502H;
+   logic [31:0]   C2F_RspDataQ502H;
    logic 	      C2F_RspStall;
-   logic [1:0] 	      C2F_RspThreadIDQ502H;        
+   logic [1:0] 	C2F_RspThreadIDQ502H;        
    
    always #HALF_CLK
      clk = (clk_en) ? ~clk : 0;
@@ -85,13 +91,36 @@ module uart_io_tb;
    uart_io
      uart_io_DUT
        (
-	// clk, rst
-	.clk           (clk),
-	.rstn          (rstn),
-	// RC interface
-	// uart RX/TX signals
-	.uart_master_tx(uart_master_tx), 
-	.uart_master_rx(uart_master_rx)
+      // clk, rst
+      .clk           (clk),
+      .rstn          (rstn),
+      .core_id       (8'hac),
+      // RC interface
+      // uart RX/TX signals
+      .uart_master_tx(uart_master_tx), 
+      .uart_master_rx(uart_master_rx),
+      .C2F_RspValidQ502H(C2F_RspValidQ502H), 
+      .C2F_RspOpcodeQ502H(C2F_RspOpcodeQ502H), 
+      .C2F_RspThreadIDQ502H(C2F_RspThreadIDQ502H), 
+      .C2F_RspDataQ502H(C2F_RspDataQ502H),
+      .C2F_RspStall(C2F_RspStall),
+      // ----output----
+      .C2F_ReqValidQ500H(C2F_ReqValidQ500H),
+      .C2F_ReqOpcodeQ500H(C2F_ReqOpcodeQ500H),
+      .C2F_ReqThreadIDQ500H(C2F_ReqThreadIDQ500H),
+      .C2F_ReqAddressQ500H(C2F_ReqAddressQ500H),
+      .C2F_ReqDataQ500H(C2F_ReqDataQ500H),
+      // Fabric To Core(F2C)
+      //----input----
+      .F2C_ReqValidQ502H(F2C_ReqValidQ502H),
+      .F2C_ReqOpcodeQ502H(F2C_ReqOpcodeQ502H),
+      .F2C_ReqAddressQ502H(F2C_ReqAddressQ502H),
+      .F2C_ReqDataQ502H(F2C_ReqDataQ502H),
+      //----output----
+      .F2C_RspValidQ500H(F2C_RspValidQ500H),
+      .F2C_RspOpcodeQ500H(F2C_RspOpcodeQ500H),
+      .F2C_RspAddressQ500H(F2C_RspAddressQ500H),
+      .F2C_RspDataQ500H(F2C_RspDataQ500H)
 	);
 
 /*///////////////////////////
@@ -138,7 +167,7 @@ module uart_io_tb;
    //uart host to device transmit
    task UART_H2D_transmit;
       input logic [N_DATA_BITS-1:0] data;      
-      print($sformatf("UART transmiting Host to Device, %b", data));
+      print($sformatf("UART transmiting Host to Device, Bin:%b, Dec:%d, 0x%x", data, data, data));
       // start bit
       uart_master_tx=1'b0;
       uart_bit_wait(1);       
@@ -201,6 +230,27 @@ module uart_io_tb;
    task C2F_request_monitor();
    endtask // C2F_request_monitor
 
+   
+   task Terminal_Write;
+      input logic [3:0][7:0] address;
+      input logic [3:0][7:0] data;
+      print($sformatf("Terminal transmit opcode: %d address: 0x%x, data: 0x%x", "W", address, data));
+      UART_H2D_transmit(32'd87); //W in Ascci
+      for(int i=4; i>0; i--)
+	UART_H2D_transmit(address[i-1]);
+      for(int i=4; i>0; i--)
+	UART_H2D_transmit(data[i-1]);
+   endtask // Terminal_Write
+
+   
+   task Terminal_Read;
+      input logic [3:0][7:0] address;
+      UART_H2D_transmit(32'd82); //R in Ascci
+      for(int i=4; i>0; --i)
+	UART_H2D_transmit(address[i]);
+   endtask // Terminal_Read
+   //    
+   
 /*/////////////////////////////////
    ___  _    _              _  _ 
   / __|| |_ (_) _ __  _  _ | |(_)
@@ -210,12 +260,22 @@ module uart_io_tb;
  */////////////////////////////////
    
    initial begin
-      $display("UART playground testbench");      
+      $display("%s", {50{"*"}});
+      $display("*** UART playground testbench");      
+      $display("%s", {50{"*"}});
       delay(10); init();
       delay(10); reset();
       delay(10); enable_clk();
+
+      for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
+	      Write_transfer_buffer[i][ADDR] = $random();
+	      Write_transfer_buffer[i][DATA] = $random();
+      end
       
+      for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
+	      Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+      end	
+      $display("%s", {50{"*"}});
       $finish(1);
-   end
-   
+   end   
 endmodule

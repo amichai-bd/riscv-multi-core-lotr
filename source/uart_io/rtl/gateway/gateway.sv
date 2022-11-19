@@ -44,27 +44,22 @@ module gateway
      #()
    uart_config_inst
      (
-      .clk       (clk),
-      .rstn      (rstn),
-      .wb_master (wb_if[0])
+      .clk          (clk),
+      .rstn         (rstn),
+      .interrupt    (interrupt),
+      .start_config (1'b1),
+      .config_done  (),
+      .wb_master    (wb_if[0])
       );
    
-   handshake
+   transfer_handler_engine
      #()
-   handshake_inst
+   transfer_handler_engine_inst
      (
       .clk       (clk),
       .rstn      (rstn),
+      .interrupt (interrupt),
       .wb_master (wb_if[1])
-      );
-
-   xmodem
-     #()
-   xmodem_inst
-     (
-      .clk(clk),
-      .rstn(rstn),
-      .wb_master(wb_if[2])
       );
   
 endmodule // gateway
