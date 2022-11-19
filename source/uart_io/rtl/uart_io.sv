@@ -13,7 +13,7 @@ module uart_io
   (
    input  logic 	      clk,
    input  logic 	      rstn,
-   input  logic [7:0]   core_id
+   input  logic [7:0]   core_id,
    //RC <---> Core F2C
    // Response   
    output logic         F2C_RspValidQ500H      ,
@@ -72,6 +72,11 @@ module uart_io
         .rstn      (rstn),
         .interrupt (interrupt)
         );
+
+/*
+Reg-to-RC and RC-to-Reg
+to add module design...
+*/
 
 endmodule // uart_io
 
