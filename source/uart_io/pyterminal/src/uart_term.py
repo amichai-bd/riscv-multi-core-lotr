@@ -4,6 +4,7 @@
 https://pyserial.readthedocs.io/en/latest/pyserial_api.html#module-serial
 '''
 import argparse
+import os.path
 import string
 import serial
 import serial.tools.list_ports as list_ports
@@ -64,12 +65,32 @@ def serial_port_read(port, addr):
         print("-I- Data: 0x{} read from address: 0x{}".format(data, addr))
         return data
 
+def serial_port_write_burst(port, addr, size, file_name):
+    print('-I- Writing data from file "{}" to address: 0x{} with size 0x{}'.format(file_name, addr, size))
+    port.write(b'J')
+    port.write(bytearray.fromhex(addr))
+    port.write(bytearray.fromhex(size))
+    # TODO: HALT interface. wait for transfer to complete...
+    # TODO: return transfer status
+    # TODO: implement Timeout mechanisim
+    return None
+
+def serial_port_read_burst(port, addr, size, file_name):
+    print('-I- reading data from address: 0x{} with size 0x{} to file "{}" to'.format(addr, size, file_name))
+    port.write(b'K')
+    port.write(bytearray.fromhex(addr))
+    port.write(bytearray.fromhex(size))
+    # TODO: HALT interface. wait for transfer to complete...
+    # TODO: return transfer status
+    # TODO: implement Timeout mechanisim
+    return None
+
 def get_transaction_type():
     transfer = input("\n\n-I- Enter transfer Type {W, R, WB, RB, Q} : ")
     try:
         ["W", "R", "WB", "RB", "Q"].index(transfer)
         return transfer
-    except:      
+    except:
         return None
 
 def get_transfer_address():
@@ -114,6 +135,35 @@ def get_transfer_data():
         print("-I- Invalid data")
         return None
 
+def get_transfer_size():
+    size = input("-I- Enter transfer size 32bit Hex         : ")
+    if(size[:2]=="0x"):
+        length = len(size[2:])
+        if all(c in string.hexdigits for c in size[2:])==False:
+            print("-I- Invalid size")
+            return None
+        if(length<8): 
+            padded_data=''
+            for i in range(8-length):
+                padded_data = padded_data + '0'
+            padded_data = padded_data + size[2:]
+            return padded_data
+        elif(length>8):
+            print("-I- Invalid size")
+            return None
+        else: return size[2:]
+    else:
+        print("-I- Invalid size")
+        return None
+
+def get_transfer_file():
+    file_name = input("-I- Enter transfer file                   : ")
+    exists = os.path.isfile(file_name)
+    if not exists:
+        print('-I- Invalid path: "{}"'.format(file_name))
+        return None
+    return file_name
+
 def handle_write_transfer(port): 
     addr = get_transfer_address()
     if(addr==None): return None
@@ -129,8 +179,25 @@ def handle_read_transfer(port):
     if(data==None): return None
     return
 
-def handle_write_transfer_in_burst_mode(port): return
-def handle_read_transfer_in_burst_mode(port): return
+def handle_write_transfer_in_burst_mode(port): 
+    addr = get_transfer_address()
+    if(addr==None): return None
+    size = get_transfer_size()
+    if(size==None): return None
+    file_name = get_transfer_file()
+    if(file_name==None): return None
+    serial_port_write_burst(port, addr, size, file_name)
+    return
+
+def handle_read_transfer_in_burst_mode(port):
+    addr = get_transfer_address()
+    if(addr==None): return None
+    size = get_transfer_size()
+    if(size==None): return None
+    file_name = get_transfer_file()
+    if(file_name==None): return None
+    serial_port_read_burst(port, addr, size, file_name)
+    return
 
 def main():
     args = parse_args()
@@ -154,6 +221,7 @@ def main():
         exit(1)
 
     del port_list
+    #port = None
     port = open_serial_port(port_name)
     config_serial_port(port)
     #TODO: check transaction type first
