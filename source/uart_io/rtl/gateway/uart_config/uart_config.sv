@@ -59,6 +59,7 @@ module uart_config
 
 logic [7:0] data_i;
 logic ack_i;
+logic ack_sampled;
 logic  we_o;
 logic  [7:0] data_o;
 logic  [2:0] addr_o;
@@ -102,7 +103,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_1: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WRITE_1;
 				valid_data = 1'b1;
 			end else begin
@@ -119,7 +120,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_2: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WAIT_STATE_1;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_2;
@@ -139,7 +140,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_3: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WAIT_STATE_2;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_3;
@@ -159,7 +160,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_4: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WAIT_PRE_READ;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_4;
@@ -181,7 +182,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_5: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WRITE_4;
 				valid_data = 1'b1;
 			end else begin
@@ -191,14 +192,14 @@ begin
 		WRITE_4: begin
 			FSM_state_nxt = WAIT_ACK_6;
 			valid_data = 1'b0;
-			data_o = data & 8'b10000000;
+			data_o = data & 8'b01111111;
 			addr_o = `UART_REG_LC;			
 			we_o = 1'b1;
 			cyc_o = 1'b1;
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_6: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WAIT_STATE_3;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_6;
@@ -218,7 +219,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_7: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WAIT_PRE_READ_2;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_7;
@@ -240,7 +241,7 @@ begin
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_8: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = WRITE_6;
 				valid_data = 1'b1;
 			end else begin
@@ -251,13 +252,13 @@ begin
 			FSM_state_nxt = WAIT_ACK_9;
 			valid_data = 1'b0;
 			data_o = data | 8'b00000001;
-			addr_o = `UART_REG_LC;	
+			addr_o = `UART_REG_IE;	
 			we_o = 1'b1;
 			cyc_o = 1'b1;
 			stb_o = 1'b1;
 		end
 		WAIT_ACK_9: begin
-			if (ack_i) begin
+			if (ack_sampled) begin
 				FSM_state_nxt = CONF_DONE;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_9;
@@ -277,17 +278,20 @@ end
 
 always_ff@(posedge clk or negedge rstn)
 begin
-	if(!rstn) 
+	if(!rstn) begin 
 		FSM_state <= IDLE;
-	else
+		ack_sampled <= 1'b0;
+	end else begin
 		FSM_state <= FSM_state_nxt;
+		ack_sampled <= ack_i;
+	end
 end
 
 always_ff@(posedge clk or negedge rstn)
 begin
 	if(!rstn) 
 		data <= '0;
-	else if (valid_data)
+	else if (ack_i)
 		data <= data_i;
 end
 
