@@ -27,8 +27,6 @@
 // GATEWAY
 ../source/uart_io/rtl/gateway/uart_config/uart_config.sv
 ../source/uart_io/rtl/gateway/transfer_handler_engine/transfer_handler_engine.sv
-../source/uart_io/rtl/gateway/xmodem/xmodem_pkg.sv
-../source/uart_io/rtl/gateway/xmodem/xmodem.sv
 ../source/uart_io/rtl/gateway/gateway.sv
 
 // UART_IO
