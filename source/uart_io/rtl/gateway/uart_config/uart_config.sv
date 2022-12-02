@@ -73,6 +73,7 @@ assign wb_master.data_out = data_o;
 assign wb_master.we = we_o;
 assign wb_master.stb = stb_o;
 assign wb_master.cyc = cyc_o;
+assign wb_master.sel = '1;
 
 logic [STATE_BITS-1:0] FSM_state;
 logic [STATE_BITS-1:0] FSM_state_nxt;
@@ -86,6 +87,7 @@ begin
 	addr_o = '0;
 	cyc_o  = '0;
 	stb_o  = '0;
+	we_o   = '0;
 	config_done = '0;
 
 	case(FSM_state)

@@ -31,6 +31,8 @@ import lotr_pkg::*;
     input logic Button_1,
     input logic [9:0] Switch,
     input logic [15:0] Arduino_dg_io,
+    input logic uart_master_tx,
+    output logic uart_master_rx,
 
     // Top ----> LOTR
     output logic [7:0] SEG7_0,
@@ -265,5 +267,16 @@ fpga_tile fpga_tile
     .LED     (LED)//(LED)
 );
 
+// UART TILE
+uart_tile uart_tile
+	(
+    //General Interface
+    .QClk                     (QClk),
+    .RstQnnnH                 (RstQnnnH),
+    .CoreID                   (8'd4),
+    // RC interface to add later not ready yet.
+    .uart_master_tx           (uart_master_tx), 
+    .uart_master_rx           (uart_master_rx)
+    );
 
 endmodule // module lotr

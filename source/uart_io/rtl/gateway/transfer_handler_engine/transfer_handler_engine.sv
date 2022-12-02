@@ -8,7 +8,6 @@
 `timescale 1ns/1ns
 
 module transfer_handler_engine
-  #()
    (
     input logic clk,
     input logic rstn,

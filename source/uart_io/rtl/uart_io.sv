@@ -6,7 +6,7 @@
 `timescale 1ns/1ns
 
 `include "./uart/uart_defines.v"
-`include "./common/lotr_defines.sv"
+`include "../../common/lotr_defines.sv"
 
 module uart_io
   import lotr_pkg::*;
