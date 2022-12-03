@@ -40,10 +40,12 @@ module uart_io
    input  logic  [1:0]  C2F_RspThreadIDQ502H   ,     
    // uart RX/TX signals
    input   logic 	      uart_master_tx, 
-   output  logic        uart_master_rx
+   output  logic        uart_master_rx,
+   output  logic        interrupt
    );
    
-   logic 	interrupt;
+   logic 	uart_interrupt;
+  assign interrupt = uart_interrupt;
 
    // wishbone interface
    wishbone 
@@ -60,7 +62,7 @@ module uart_io
         .wb_slave       (wb_if),
         .uart_master_tx (uart_master_tx),
         .uart_master_rx (uart_master_rx),
-        .interrupt      (interrupt)
+        .interrupt      (uart_interrupt)
         );
    
    // Gateway
@@ -70,7 +72,7 @@ module uart_io
         .wb_master (wb_if),
         .clk       (clk),
         .rstn      (rstn),
-        .interrupt (interrupt)
+        .interrupt (uart_interrupt)
         );
 
 /*
