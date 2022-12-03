@@ -5,6 +5,8 @@ module top(
         input  logic [1:0]  BUTTON,
         input  logic [15:0] Arduino_IO,
 
+        input logic         UART_TXD,
+        output logic        UART_RXD,
 
         output logic [7:0]  HEX0,
         output logic [7:0]  HEX1,
@@ -44,6 +46,9 @@ lotr lotr(
     .Switch      (SW),//,(SW),
 	 .Arduino_dg_io (Arduino_IO),
 
+    // UART IO
+    .uart_master_tx  (UART_TXD),
+    .uart_master_rx  (UART_RXD),
     //outputs
     .SEG7_0  (HEX0),  //(HEX0),
     .SEG7_1  (HEX1),  //(HEX1),

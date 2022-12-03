@@ -28,7 +28,6 @@ module gateway
        ) wb_if[3]();
    
    wishbone_mux3to1
-     #()
    wishbone_mux3to1
      (
       .clk          (clk),
@@ -41,7 +40,6 @@ module gateway
       );
    
    uart_config
-     #()
    uart_config_inst
      (
       .clk          (clk),
@@ -53,7 +51,6 @@ module gateway
       );
    
    transfer_handler_engine
-     #()
    transfer_handler_engine_inst
      (
       .clk       (clk),

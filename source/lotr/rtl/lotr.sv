@@ -31,6 +31,8 @@ import lotr_pkg::*;
     input logic Button_1,
     input logic [9:0] Switch,
     input logic [15:0] Arduino_dg_io,
+    input logic uart_master_tx,
+    output logic uart_master_rx,
 
     // Top ----> LOTR
     output logic [7:0] SEG7_0,
@@ -46,6 +48,8 @@ import lotr_pkg::*;
     output logic       v_sync,
     output logic [9:0] LED 
 );
+
+logic [9:0] LED_aux;
 logic RstQnnnH;
 assign RstQnnnH = ~Button_0;
 //=========================================
@@ -262,8 +266,22 @@ fpga_tile fpga_tile
     .BLUE    (BLUE),//(BLUE),//output logic [3:0] 
     .v_sync  (v_sync),//(v_sync),//output logic       
     .h_sync  (h_sync),//(h_sync),//output logic      
-    .LED     (LED)//(LED)
+    .LED     (LED_aux)//(LED)
 );
 
+assign LED[8:0] = LED_aux[8:0];
+assign LED[9]   = interrupt;
+// UART TILE
+uart_tile uart_tile
+	(
+    //General Interface
+    .QClk                     (QClk),
+    .RstQnnnH                 (~RstQnnnH),
+    .CoreID                   (8'd4),
+    // RC interface to add later not ready yet.
+    .uart_master_tx           (uart_master_tx), 
+    .uart_master_rx           (uart_master_rx),
+    .interrupt                (interrupt)
+    );
 
 endmodule // module lotr

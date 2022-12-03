@@ -6,8 +6,9 @@
 `timescale 1ns/1ns
 
 module wishbone_mux3to1
-  #(localparam integer N_SLAVES=3,
-    localparam integer W_SLAVES=$clog2(N_SLAVES)
+  #(
+	 parameter integer N_SLAVES=3,
+    parameter integer W_SLAVES=$clog2(N_SLAVES)
     )
    (
     input logic 	       clk,
@@ -23,7 +24,26 @@ module wishbone_mux3to1
    assign wb_master.rstn = rstn;
    
    always_comb begin
+	
+	wb_slave_0.ack     = 1'b0;
+	wb_slave_0.data_in = '0;
+	
+	wb_slave_1.ack     = 1'b0;
+	wb_slave_1.data_in = '0;
+	
+	wb_slave_2.ack     = 1'b0;
+	wb_slave_2.data_in = '0;
+	
+	wb_master.address	 = '0;
+	wb_master.data_out = '0;
+	wb_master.we		 = 1'b0;
+	wb_master.stb	    = 1'b0;
+	wb_master.cyc	    = 1'b0;
+	wb_master.sel	    = 1'b0;   
+	
+	
       case(slave_select)
+	
 	2'd0: begin
 	   // request
 	   wb_master.address	= wb_slave_0.address;

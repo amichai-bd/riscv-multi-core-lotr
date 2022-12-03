@@ -52,7 +52,8 @@ import lotr_pkg::*;
     output  logic  [31:0] RingRspOutDataQ502H      ,
         // uart RX/TX signals
     input   logic 	      uart_master_tx, 
-    output  logic         uart_master_rx 
+    output  logic         uart_master_rx,
+    output  logic         interrupt 
 );
 
 //================================================
@@ -165,7 +166,7 @@ uart_io uart_io_inst(
     // output - Req from Core
     .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)      ,//output
     .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)     ,//output
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0])   ,//output
+    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0]),//output
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//output
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//output
     //================================================
@@ -182,7 +183,8 @@ uart_io uart_io_inst(
     .F2C_RspAddressQ500H    (F2C_RspAddressQ500H)    ,//output
     .F2C_RspDataQ500H       (F2C_RspDataQ500H)       ,//output
     .uart_master_tx         (uart_master_tx),
-    .uart_master_tx         (uart_master_tx)
+    .uart_master_rx         (uart_master_rx),
+    .interrupt              (interrupt)
     );
 
 endmodule // module uart_tile
