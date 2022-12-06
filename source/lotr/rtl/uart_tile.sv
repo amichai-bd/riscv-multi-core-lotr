@@ -147,41 +147,37 @@ rc rc(
     .F2C_ReqDataQ502H       (F2C_ReqDataQ502H)        //output
     );
 
-uart_io uart_io_inst(
-    //================================================
-    //        General Interface
-    //================================================
-    .clk                    (QClk)                   ,//input
-    .rstn                   (RstQnnnH)               ,//input
-    .core_id                (CoreID)                 ,//input
+
+// fabric to core path disabled, 
+// fabric cant request anything 
+// from the UART io module.
+assign F2C_RspValidQ500H   ='0;
+assign F2C_RspOpcodeQ500H  =RD;
+assign F2C_RspAddressQ500H ='0;
+assign F2C_RspDataQ500H    ='0;
+    
+uart_io 
+    uart_io_inst
+    (
+    .clk                    (QClk)                      ,//input
+    .rstn                   (RstQnnnH)                  ,//input
+    .core_id                (CoreID)                    ,//input
     //================================================
     //        Core to Fabric
     //================================================
     // input - Rsp to Core
-    .C2F_RspValidQ502H      (C2F_RspValidQ502H)      ,//input
-    .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)     ,//input
-    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H[1:0])   ,//input
-    .C2F_RspDataQ502H       (C2F_RspDataQ502H)       ,//input
-    .C2F_RspStall           (C2F_RspStall)           ,//input
+    .C2F_RspValidQ502H      (C2F_RspValidQ502H)         ,//input
+    .C2F_RspOpcodeQ502H     (C2F_RspOpcodeQ502H)        ,//input
+    .C2F_RspThreadIDQ502H   (C2F_RspThreadIDQ502H[1:0]) ,//input
+    .C2F_RspDataQ502H       (C2F_RspDataQ502H)          ,//input
+    .C2F_RspStall           (C2F_RspStall)              ,//input
     // output - Req from Core
-    .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)      ,//output
-    .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)     ,//output
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0]),//output
-    .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)    ,//output
-    .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)       ,//output
-    //================================================
-    //        Fabric to Core
-    //================================================
-    // input - Req from Ring/Fabric
-    .F2C_ReqValidQ502H      (F2C_ReqValidQ502H)      ,//input
-    .F2C_ReqOpcodeQ502H     (F2C_ReqOpcodeQ502H)     ,//input
-    .F2C_ReqAddressQ502H    (F2C_ReqAddressQ502H)    ,//input
-    .F2C_ReqDataQ502H       (F2C_ReqDataQ502H)       ,//input
-    // output - Rsp to Ring/Fabric
-    .F2C_RspValidQ500H      (F2C_RspValidQ500H)      ,//output
-    .F2C_RspOpcodeQ500H     (F2C_RspOpcodeQ500H)     ,//output
-    .F2C_RspAddressQ500H    (F2C_RspAddressQ500H)    ,//output
-    .F2C_RspDataQ500H       (F2C_RspDataQ500H)       ,//output
+    .C2F_ReqValidQ500H      (C2F_ReqValidQ500H)         ,//output
+    .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H)        ,//output
+    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H[1:0]) ,//output
+    .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H)       ,//output
+    .C2F_ReqDataQ500H       (C2F_ReqDataQ500H)          ,//output
+    // UART RX/TX
     .uart_master_tx         (uart_master_tx),
     .uart_master_rx         (uart_master_rx),
     .interrupt              (interrupt)

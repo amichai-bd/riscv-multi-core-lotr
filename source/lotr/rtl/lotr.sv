@@ -55,7 +55,7 @@ assign RstQnnnH = ~Button_0;
 //=========================================
 //=====    ===========
 //=========================================
-localparam    NUM_TILE = 3;
+localparam    NUM_TILE = 4;
 logic  [7:0]  CoreID               [NUM_TILE + 1 : 1];
 logic         RingReqValidQnnnH    [NUM_TILE + 1 : 1];
 logic  [9:0]  RingReqRequestorQnnnH[NUM_TILE + 1 : 1];
@@ -278,7 +278,34 @@ uart_tile uart_tile
     .QClk                     (QClk),
     .RstQnnnH                 (~RstQnnnH),
     .CoreID                   (8'd4),
-    // RC interface to add later not ready yet.
+    //================================================
+    //        RING Interface
+    //================================================
+    //Ring ---> RC , RingReqIn
+    .RingReqInValidQ500H        (RingReqValidQnnnH     [4])  ,//input
+    .RingReqInRequestorQ500H    (RingReqRequestorQnnnH [4])  ,//input
+    .RingReqInOpcodeQ500H       (RingReqOpcodeQnnnH    [4])  ,//input
+    .RingReqInAddressQ500H      (RingReqAddressQnnnH   [4])  ,//input
+    .RingReqInDataQ500H         (RingReqDataQnnnH      [4])  ,//input
+    //Ring ---> RC , RingRspIn                          
+    .RingRspInValidQ500H        (RingRspValidQnnnH     [4])  ,//input
+    .RingRspInRequestorQ500H    (RingRspRequestorQnnnH [4])  ,//input
+    .RingRspInOpcodeQ500H       (RingRspOpcodeQnnnH    [4])  ,//input
+    .RingRspInAddressQ500H      (RingRspAddressQnnnH   [4])  ,//input
+    .RingRspInDataQ500H         (RingRspDataQnnnH      [4])  ,//input
+    //RC   ---> Ring , RingReqOut
+    .RingReqOutValidQ502H       (RingReqValidQnnnH    [5]),//output
+    .RingReqOutRequestorQ502H   (RingReqRequestorQnnnH[5]),//output
+    .RingReqOutOpcodeQ502H      (RingReqOpcodeQnnnH   [5]),//output
+    .RingReqOutAddressQ502H     (RingReqAddressQnnnH  [5]),//output
+    .RingReqOutDataQ502H        (RingReqDataQnnnH     [5]),//output
+     //RC   ---> Ring , RingRspOut                     
+    .RingRspOutValidQ502H       (RingRspValidQnnnH    [5]),//output
+    .RingRspOutRequestorQ502H   (RingRspRequestorQnnnH[5]),//output
+    .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [5]),//output
+    .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [5]),//output
+    .RingRspOutDataQ502H        (RingRspDataQnnnH     [5]), //output
+    // UART RX/TX.
     .uart_master_tx           (uart_master_tx), 
     .uart_master_rx           (uart_master_rx),
     .interrupt                (interrupt)
