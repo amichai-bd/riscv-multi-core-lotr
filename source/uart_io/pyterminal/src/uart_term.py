@@ -179,6 +179,9 @@ def handle_read_transfer(port):
     if(data==None): return None
     return
 
+def parse_transfer_file():
+    return
+
 def handle_write_transfer_in_burst_mode(port): 
     addr = get_transfer_address()
     if(addr==None): return None
@@ -186,6 +189,7 @@ def handle_write_transfer_in_burst_mode(port):
     if(size==None): return None
     file_name = get_transfer_file()
     if(file_name==None): return None
+    parse_transfer_file(file_name)
     serial_port_write_burst(port, addr, size, file_name)
     return
 
