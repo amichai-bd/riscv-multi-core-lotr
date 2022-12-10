@@ -45,6 +45,7 @@ module uart_io_tb;
    logic 	      clk_en;
    logic 	      uart_master_tx; //pc side to uart
    logic 	      uart_master_rx; //pc side to uart
+   logic          interrupt;
 
    //===================================
    // Ring Controler <-> Core Interface
@@ -100,6 +101,8 @@ module uart_io_tb;
       // uart RX/TX signals
       .uart_master_tx(uart_master_tx), 
       .uart_master_rx(uart_master_rx),
+      .interrupt (interrupt),
+      // Fabric To Core(F2C)
       .C2F_RspValidQ502H(C2F_RspValidQ502H), 
       .C2F_RspOpcodeQ502H(C2F_RspOpcodeQ502H), 
       .C2F_RspThreadIDQ502H(C2F_RspThreadIDQ502H), 
@@ -110,18 +113,7 @@ module uart_io_tb;
       .C2F_ReqOpcodeQ500H(C2F_ReqOpcodeQ500H),
       .C2F_ReqThreadIDQ500H(C2F_ReqThreadIDQ500H),
       .C2F_ReqAddressQ500H(C2F_ReqAddressQ500H),
-      .C2F_ReqDataQ500H(C2F_ReqDataQ500H),
-      // Fabric To Core(F2C)
-      //----input----
-      .F2C_ReqValidQ502H(F2C_ReqValidQ502H),
-      .F2C_ReqOpcodeQ502H(F2C_ReqOpcodeQ502H),
-      .F2C_ReqAddressQ502H(F2C_ReqAddressQ502H),
-      .F2C_ReqDataQ502H(F2C_ReqDataQ502H),
-      //----output----
-      .F2C_RspValidQ500H(F2C_RspValidQ500H),
-      .F2C_RspOpcodeQ500H(F2C_RspOpcodeQ500H),
-      .F2C_RspAddressQ500H(F2C_RspAddressQ500H),
-      .F2C_RspDataQ500H(F2C_RspDataQ500H)
+      .C2F_ReqDataQ500H(C2F_ReqDataQ500H)
 	);
 
 /*///////////////////////////
@@ -273,7 +265,7 @@ module uart_io_tb;
          // PROCCESS-1
          begin
             forever begin
-               @(posedge uart_io_DUT.interrupt);
+               @(posedge interrupt);
                print("UART interrupt caught $$$$");
             end 
          end
