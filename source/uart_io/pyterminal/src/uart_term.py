@@ -52,7 +52,7 @@ def serial_port_write(port, addr, data):
     port.write(b'W')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(data))
-    ack = port.read(1)
+    ack = port.read(2)
     ack = str(ack, 'utf-8')  
     if(ack==''): 
         print("-E- Write response timeout occured, no acknowledge recieved")
