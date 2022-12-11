@@ -5,40 +5,55 @@
  between uart host(PC) and device lotr
  */
 
-parameter STATE_BITS = 3;
-typedef enum logic [STATE_BITS-1:0]
-   {
-		IDLE,
-		FIRST_READ,
-		WAIT_ACK_1,
-		DATA_UPDATE,
-		WRITE_1   } e_fsm_state;
-parameter STATE_BITS_2 = 5;
-
-typedef enum logic  [STATE_BITS_2-1:0]
-   {
-		IDLE_2,
-		READ_COMM,
-		WAIT_FOR_COMM,
-		WAIT_INTERRUPT,
-		WAIT_FOR_READ,
-		SEND_TO_LOTR,
-       		INVALID_COMM	} e_WB_fsm_state;
-
-
 
 `timescale 1ns/1ns
 
 module transfer_handler_engine
-  #()
    (
     input logic clk,
     input logic rstn,
     input logic interrupt,
     output logic invalid_comm,
+	
+	output [31:0] address,
+	output [31:0] data_out,
+	input [31:0] data_in,
+
+	output write_transfer_valid, // once address and data are ready, pulse for one cycle.
+	input  write_resp_valid,     // is ppulsed to indicate write_data is valid from RC.
+	input  write_resp_timeout,   // read timeout
+	
+	output read_transfer_valid,  // once address and data are ready, pulse for one cycle.
+	input  read_resp_valid,      // is ppulsed to indicate read_data is valid from RC.
+	input  read_resp_timeout,    // read timeout
+	
+	
     wishbone.master wb_master
     );
 
+parameter integer STATE_BITS = 3;
+typedef enum logic [STATE_BITS-1:0]
+   {
+	IDLE,
+	FIRST_READ,
+	WAIT_ACK_1,
+	DATA_UPDATE,
+	WRITE_1
+	} e_fsm_state;
+	
+parameter integer STATE_BITS_2 = 5;
+typedef enum logic  [STATE_BITS_2-1:0]
+   {
+	IDLE_2,
+	READ_COMM,
+	WAIT_FOR_COMM,
+	WAIT_INTERRUPT,
+	WAIT_FOR_READ,
+	SEND_TO_LOTR,
+	INVALID_COMM
+	} e_WB_fsm_state;
+
+	 
 logic [7:0] data_i;
 logic ack_i;
 logic ack_sampled;
@@ -203,7 +218,7 @@ begin
 			data_update = 1'b1;
 			FSM_state_nxt = IDLE;
 		end
-	endcase	
+	endcase
 end
 
 
