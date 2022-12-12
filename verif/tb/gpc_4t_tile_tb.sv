@@ -2,7 +2,7 @@
 
 `include "lotr_defines.sv"
 
-module gpc_4t_tile_tb ();
+module gpc_4t_tile_tb;
 import lotr_pkg::*;
 	logic         QClk                     ;
 	logic         RstQnnnH                 ;

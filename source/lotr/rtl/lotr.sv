@@ -49,6 +49,7 @@ import lotr_pkg::*;
     output logic [9:0] LED 
 );
 
+logic interrupt;
 logic [9:0] LED_aux;
 logic RstQnnnH;
 assign RstQnnnH = ~Button_0;

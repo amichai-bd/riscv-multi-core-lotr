@@ -1,7 +1,7 @@
 `timescale 1ns/1ns
 
 `include "lotr_defines.sv"
-module lotr_tb ();
+module lotr_tb;
 import lotr_pkg::*;
 	logic         clk      ;
 	logic         RstQnnnH  ;

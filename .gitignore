@@ -36,3 +36,7 @@ source/uart_io/work/_lib1_4.qpg
 source/uart_io/work/_lib1_4.qtl
 source/uart_io/work/_vmake
 source/vsim.wlf
+*.qpg
+*.qtl
+source/work/_info
+source/work/_vmake
