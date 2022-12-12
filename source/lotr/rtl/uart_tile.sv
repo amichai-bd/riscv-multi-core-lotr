@@ -91,7 +91,7 @@ rc rc(
     //        General Interface
     //================================================
     .QClk  		            (QClk)                   ,//input 
-    .RstQnnnH  	            (RstQnnnH)               ,//input 
+    .RstQnnnH  	            (~RstQnnnH)               ,//input 
     .CoreID       		    (CoreID)                 ,//input 
     //================================================
     //        RING Interface
