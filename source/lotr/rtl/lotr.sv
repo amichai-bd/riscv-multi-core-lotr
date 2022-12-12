@@ -49,6 +49,7 @@ import lotr_pkg::*;
     output logic [9:0] LED 
 );
 
+logic interrupt;
 logic [9:0] LED_aux;
 logic RstQnnnH;
 assign RstQnnnH = ~Button_0;
@@ -208,16 +209,15 @@ gpc_4t_tile gpc_4t_tile_2
 
 //=======================
 
-
-
-
-fpga_tile fpga_tile
-(
+assign LED[8:0] = LED_aux[8:0];
+assign LED[9]   = interrupt;
+// UART TILE
+uart_tile uart_tile
+	(
     //General Interface
-    .QClk       (QClk)         , //input  logic        
-    .CLK_50     (CLK_50)         , //input  logic        
-    .RstQnnnH   (RstQnnnH)     , //input  logic        
-    .CoreID     (8'd3) , //input  logic  [7:0] 
+    .QClk                     (QClk),
+    .RstQnnnH                 (~RstQnnnH),
+    .CoreID                   (8'd4),
     //================================================
     //        RING Interface
     //================================================
@@ -245,39 +245,19 @@ fpga_tile fpga_tile
     .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [4]),//output
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [4]),//output
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [4]), //output
-        //==============================
-    // Tile <-> FPGA TOP
-    //==============================
-    // FPGA interface inputs
-    .Button_0    (Button_0),
-    .Button_1    (Button_1),
-    .Switch      (Switch),
-    .Arduino_dg_io (~Arduino_dg_io), // active high
+    // UART RX/TX.
+    .uart_master_tx           (uart_master_tx), 
+    .uart_master_rx           (uart_master_rx),
+    .interrupt                (interrupt)
+    );
 
-    //outputs
-    .SEG7_0  (SEG7_0),//(SEG7_0),
-    .SEG7_1  (SEG7_1),//(SEG7_1),
-    .SEG7_2  (SEG7_2),//(SEG7_2),
-    .SEG7_3  (SEG7_3),//(SEG7_3),
-    .SEG7_4  (SEG7_4),//(SEG7_4),
-    .SEG7_5  (SEG7_5),//(SEG7_5),
-    .RED     (RED),//(RED),//output logic [3:0] 
-    .GREEN   (GREEN),//(GREEN),//output logic [3:0] 
-    .BLUE    (BLUE),//(BLUE),//output logic [3:0] 
-    .v_sync  (v_sync),//(v_sync),//output logic       
-    .h_sync  (h_sync),//(h_sync),//output logic      
-    .LED     (LED_aux)//(LED)
-);
-
-assign LED[8:0] = LED_aux[8:0];
-assign LED[9]   = interrupt;
-// UART TILE
-uart_tile uart_tile
-	(
+fpga_tile fpga_tile
+(
     //General Interface
-    .QClk                     (QClk),
-    .RstQnnnH                 (~RstQnnnH),
-    .CoreID                   (8'd4),
+    .QClk       (QClk)         , //input  logic        
+    .CLK_50     (CLK_50)         , //input  logic        
+    .RstQnnnH   (RstQnnnH)     , //input  logic        
+    .CoreID     (8'd3) , //input  logic  [7:0] 
     //================================================
     //        RING Interface
     //================================================
@@ -305,10 +285,28 @@ uart_tile uart_tile
     .RingRspOutOpcodeQ502H      (RingRspOpcodeQnnnH   [5]),//output
     .RingRspOutAddressQ502H     (RingRspAddressQnnnH  [5]),//output
     .RingRspOutDataQ502H        (RingRspDataQnnnH     [5]), //output
-    // UART RX/TX.
-    .uart_master_tx           (uart_master_tx), 
-    .uart_master_rx           (uart_master_rx),
-    .interrupt                (interrupt)
-    );
+        //==============================
+    // Tile <-> FPGA TOP
+    //==============================
+    // FPGA interface inputs
+    .Button_0    (Button_0),
+    .Button_1    (Button_1),
+    .Switch      (Switch),
+    .Arduino_dg_io (~Arduino_dg_io), // active high
+
+    //outputs
+    .SEG7_0  (SEG7_0),//(SEG7_0),
+    .SEG7_1  (SEG7_1),//(SEG7_1),
+    .SEG7_2  (SEG7_2),//(SEG7_2),
+    .SEG7_3  (SEG7_3),//(SEG7_3),
+    .SEG7_4  (SEG7_4),//(SEG7_4),
+    .SEG7_5  (SEG7_5),//(SEG7_5),
+    .RED     (RED),//(RED),//output logic [3:0] 
+    .GREEN   (GREEN),//(GREEN),//output logic [3:0] 
+    .BLUE    (BLUE),//(BLUE),//output logic [3:0] 
+    .v_sync  (v_sync),//(v_sync),//output logic       
+    .h_sync  (h_sync),//(h_sync),//output logic      
+    .LED     (LED_aux)//(LED)
+);
 
 endmodule // module lotr

@@ -84,14 +84,14 @@ logic [31:0] F2C_RspDataQ500H    ;
 
 
 
-assign C2F_ReqThreadIDQ500H[9:2] = CoreID;
-assign C2F_RspThreadIDQ502H[9:2] = CoreID;
+//assign C2F_ReqThreadIDQ500H[9:2] = CoreID;
+//assign C2F_RspThreadIDQ502H[9:2] = CoreID;
 rc rc(	  
     //================================================
     //        General Interface
     //================================================
     .QClk  		            (QClk)                   ,//input 
-    .RstQnnnH  	            (RstQnnnH)               ,//input 
+    .RstQnnnH  	            (~RstQnnnH)               ,//input 
     .CoreID       		    (CoreID)                 ,//input 
     //================================================
     //        RING Interface

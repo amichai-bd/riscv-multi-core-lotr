@@ -251,8 +251,9 @@ always_comb begin : select_C2F_from_buffer
 end //always_comb
     
 // ==== stall signal logic ==========
-logic [C2F_MSB:0] StallHelper = 0 ; 
+logic [C2F_MSB:0] StallHelper; 
 always_comb begin : raise_stall_signal
+    StallHelper = 0 ;
     for (int i=0 ; i< C2F_ENTRIESNUM ;i++) begin
           StallHelper[i]= (C2F_BufferStateQnnnH[i] == FREE ) ; 
     end //for
