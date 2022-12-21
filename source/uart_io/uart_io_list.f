@@ -26,6 +26,8 @@
 
 // GATEWAY
 ../source/uart_io/rtl/gateway/uart_config/uart_config.sv
+../source/uart_io/rtl/gateway/transfer_handler_engine/Counter.sv
+../source/uart_io/rtl/gateway/transfer_handler_engine/wishbone_transfer_fsm.sv
 ../source/uart_io/rtl/gateway/transfer_handler_engine/transfer_handler_engine.sv
 ../source/uart_io/rtl/gateway/gateway.sv
 
