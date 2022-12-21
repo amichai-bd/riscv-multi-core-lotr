@@ -282,7 +282,7 @@ module uart_io_tb;
             test_undone = 1'b0;
          end
       join_any
-
+      uart_bit_wait(10);
       $display("%s", {50{"*"}});
       $finish(1);
    end   

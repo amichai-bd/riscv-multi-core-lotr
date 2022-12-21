@@ -12,35 +12,20 @@ module transfer_handler_engine
    (
     input logic clk,
     input logic rstn,
-    input logic interrupt,
+    input logic interrupt,       // no use in this module
     output logic invalid_comm,
-	
 	output [31:0] address,
 	output [31:0] data_out,
 	input [31:0] data_in,
-
 	output write_transfer_valid, // once address and data are ready, pulse for one cycle.
 	input  write_resp_valid,     // is ppulsed to indicate write_data is valid from RC.
 	input  write_resp_timeout,   // read timeout
-	
 	output read_transfer_valid,  // once address and data are ready, pulse for one cycle.
 	input  read_resp_valid,      // is ppulsed to indicate read_data is valid from RC.
-	input  read_resp_timeout,    // read timeout
-	
-	
-    wishbone.master wb_master
+	input  read_resp_timeout,    // read timeout.
+    wishbone.master wb_master    // no use in this module.
     );
 
-parameter integer STATE_BITS = 3;
-typedef enum logic [STATE_BITS-1:0]
-   {
-	IDLE,
-	FIRST_READ,
-	WAIT_ACK_1,
-	DATA_UPDATE,
-	WRITE_1
-	} e_fsm_state;
-	
 parameter integer STATE_BITS_2 = 5;
 typedef enum logic  [STATE_BITS_2-1:0]
    {
@@ -53,7 +38,12 @@ typedef enum logic  [STATE_BITS_2-1:0]
 	INVALID_COMM
 	} e_WB_fsm_state;
 
-	 
+
+logic temp_read_ack;
+logic read_valid;
+logic [7:0] write_data;
+
+
 logic [7:0] data_i;
 logic ack_i;
 logic ack_sampled;
@@ -63,27 +53,16 @@ logic  [2:0] addr_o;
 logic  cyc_o;
 logic  stb_o;       
 
-assign ack_i  = wb_master.ack;
-assign data_i = wb_master.data_in;
-assign wb_master.address = addr_o;
-assign wb_master.data_out = data_o;
-assign wb_master.we = we_o;
-assign wb_master.stb = stb_o;
-assign wb_master.cyc = cyc_o;
-
 logic data_update;
 logic receive_interrupt;
 logic interrupt_s1;
 logic data_cap_en;
-logic [STATE_BITS-1:0] FSM_state;
-logic [STATE_BITS-1:0] FSM_state_nxt;
 logic [7:0] data;
 logic start_read;
 logic data_valid;
 logic [2:0] read_conter;
 logic [2:0] read_conter_nxt;
 assign receive_interrupt = interrupt & !interrupt_s1;
-//assign start_read = receive_interrupt;
 
 logic [63:0] uart_data_buffer_nxt;
 logic [63:0] uart_data_buffer;
@@ -101,6 +80,8 @@ logic read_num_update_en;
 always_comb
 begin	
 	invalid_comm = 0;
+	read_conter_nxt = read_conter;
+	uart_data_buffer_nxt = uart_data_buffer;
 	read_num_nxt = 3'd0;	
 	read_num_update_en = 0;	
 	WB_man_state_nxt=IDLE_2;
@@ -177,89 +158,48 @@ begin
 
 end
 
+wishbone_transfer_fsm
+	wishbone_transfer_fsm_inst
+	(
+		.clk			(clk),
+        .rstn			(rstn),
+        .interrupt		(interrupt),
+        .read_data  	(write_data),
+        .read_valid 	(read_valid),  		//level_based
+        .read_ack   	(read_valid),       //pulse based
+        .write_enable 	(read_valid), 		//pulse based
+        .write_ack		(),    				//pulse based
+        .write_busy		(),
+        .write_data		(write_data),
+        .wb_master		(wb_master)
+	);
 
-//#### READ 1 WORD
-always_comb
-begin
-	FSM_state_nxt = IDLE; 
-	data_o = '0;
-	addr_o = '0;
-	cyc_o  = '0;
-	stb_o  = '0;
-	we_o = '0;
-	data_cap_en ='0;
-	data_update = '0;	
-
-	case(FSM_state)
-		IDLE: begin
-			data_cap_en = 1'b0;
-			data_update = 1'b0;			
-			if (start_read) begin
-				FSM_state_nxt = FIRST_READ;
-			end							
-		end
-		FIRST_READ: begin
-			FSM_state_nxt = WAIT_ACK_1;
-			addr_o = 3'b000;
-			we_o = 1'b0;
-			cyc_o = 1'b1;
-			stb_o = 1'b1;
-		end
-		WAIT_ACK_1: begin
-			FSM_state_nxt = WAIT_ACK_1;			
-			if(ack_i) begin
-				data_cap_en = 1'b1;
-			end				
-			if (ack_sampled) begin
-				FSM_state_nxt = DATA_UPDATE;
-			end
-		end
-		DATA_UPDATE: begin			
-			data_update = 1'b1;
-			FSM_state_nxt = IDLE;
-		end
-	endcase
-end
-
-
-always_ff@(posedge clk or negedge rstn)
-begin
+always_ff@(posedge clk or negedge rstn) begin
 	if(!rstn) begin
 		uart_data_buffer <= '0;
-		FSM_state <= IDLE;
 		WB_man_state <= IDLE_2;		
 		ack_sampled <= 1'b0;	       	
 		interrupt_s1 <= 1'b0;
 		read_conter <= '0;
-	end else begin
+	end 
+	else begin
 		uart_data_buffer <= uart_data_buffer_nxt;
 		interrupt_s1 <= interrupt;
 		WB_man_state <= WB_man_state_nxt;				
-		FSM_state <= FSM_state_nxt;
 		ack_sampled <= ack_i;
 		read_conter <= read_conter_nxt;		
 	end
 end
 
-always_ff@(posedge clk or negedge rstn)
-begin
-	if(!rstn) 
-		read_num <= '0;		
-	else if (read_num_update_en)
-		read_num <= read_num_nxt;
+always_ff@(posedge clk or negedge rstn) begin
+	if(!rstn)                    read_num <= '0;		
+	else if (read_num_update_en) read_num <= read_num_nxt;
 end
 
 
-always_ff@(posedge clk or negedge rstn)
-begin
-	if(!rstn) 
-		data <= '0;
-	else if (data_cap_en)
-		data <= data_i;
+always_ff@(posedge clk or negedge rstn) begin
+	if(!rstn) 			  data <= '0;
+	else if (data_cap_en) data <= data_i;
 end
 
-
-endmodule // handshake
-
-   
-
+endmodule

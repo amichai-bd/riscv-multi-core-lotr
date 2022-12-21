@@ -321,6 +321,7 @@ uart_debug_if dbg(/*AUTOINST*/
 						.rstate					 (rstate[3:0]));
 `endif 
 
+/*
 initial
 begin
 	`ifdef DATA_BUS_WIDTH_8
@@ -334,7 +335,7 @@ begin
 		$display("(%m) UART INFO: Doesn't have baudrate output\n");
 	`endif
 end
-
+*/
 endmodule
 
 

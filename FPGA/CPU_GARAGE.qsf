@@ -259,6 +259,8 @@ set_global_assignment -name VERILOG_FILE ../source/uart_io/rtl/uart/uart_wb.v
 set_global_assignment -name VERILOG_FILE ../source/uart_io/rtl/uart/uart_top.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/uart/uart_wrapper.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/gateway/uart_config/uart_config.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/gateway/transfer_handler_engine/Counter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/gateway/transfer_handler_engine/wishbone_transfer_fsm.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/gateway/transfer_handler_engine/transfer_handler_engine.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/gateway/gateway.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../source/uart_io/rtl/uart_io.sv
