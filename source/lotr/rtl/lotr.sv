@@ -50,9 +50,16 @@ import lotr_pkg::*;
 );
 
 logic interrupt;
+logic interrupt_sampled;
+
 logic [9:0] LED_aux;
 logic RstQnnnH;
 assign RstQnnnH = ~Button_0;
+always_ff @(posedge QClk or posedge RstQnnnH) begin
+    if(RstQnnnH) interrupt_sampled <= '0;
+    else if(interrupt) interrupt_sampled <= 1'b1;
+end
+
 //=========================================
 //=====    ===========
 //=========================================
@@ -210,7 +217,7 @@ gpc_4t_tile gpc_4t_tile_2
 //=======================
 
 assign LED[8:0] = LED_aux[8:0];
-assign LED[9]   = interrupt;
+assign LED[9]   = interrupt_sampled;
 // UART TILE
 uart_tile uart_tile
 	(

@@ -34,7 +34,7 @@ module uart_io_tb;
    localparam         UART_BIT_PERIOD=(NANOSECOND/BUADRATE);
 
    localparam bit     ADDR = 0;
-   localparam bit     DATA = 0; 
+   localparam bit     DATA = 1; 
    localparam integer N_WRITE_TRANSFERS = 1;
    logic [31:0]       Write_transfer_buffer [N_WRITE_TRANSFERS-1:0][1:0]; 
    
@@ -51,19 +51,6 @@ module uart_io_tb;
    // Ring Controler <-> Core Interface
    //===================================
    //---------------------------------------
-   //RC <---> Core F2C 
-   //---------------------------------------
-   // REQUEST
-   logic 	      F2C_ReqValidQ502H;
-   t_opcode       F2C_ReqOpcodeQ502H;
-   logic [31:0]   F2C_ReqAddressQ502H;
-   logic [31:0]   F2C_ReqDataQ502H;
-   // RESPOSE
-   logic 	      F2C_RspValidQ500H;
-   t_opcode       F2C_RspOpcodeQ500H;
-   logic [31:0]   F2C_RspAddressQ500H;
-   logic [31:0]   F2C_RspDataQ500H;
-   //---------------------------------------
    //RC <---> Core C2F
    //---------------------------------------
    // REQUEST
@@ -77,8 +64,8 @@ module uart_io_tb;
    t_opcode       C2F_RspOpcodeQ502H;
    logic [31:0]   C2F_RspDataQ502H;
    logic 	      C2F_RspStall;
-   logic [1:0] 	C2F_RspThreadIDQ502H;        
-   
+   logic [1:0] 	C2F_RspThreadIDQ502H;
+
    always #HALF_CLK
      clk = (clk_en) ? ~clk : 0;
 
@@ -179,27 +166,6 @@ module uart_io_tb;
       uart_master_tx = 1'b1;
       uart_bit_wait((SINGLE_STOP_BIT) ? 1 : 2);
    endtask // UART_H2D_transmit
-
-   
-   task F2C_request;
-      input logic        valid;
-      input 		 t_opcode opcode;
-      input logic [31:0] address;
-      input logic [31:0] data;
-      @(negedge clk);
-      F2C_ReqValidQ502H   = valid;
-      F2C_ReqOpcodeQ502H  = opcode;
-      F2C_ReqAddressQ502H = address;
-      F2C_ReqDataQ502H    = data;
-      @(negedge clk);
-      F2C_ReqValidQ502H   = '0;
-      F2C_ReqAddressQ502H = '0;
-      F2C_ReqDataQ502H    = '0;
-   endtask // F2C_request
-
-   
-   task F2C_response_monitor();
-   endtask // F2C_response_monitor
    
    task C2F_response;
       input logic        valid;
@@ -238,9 +204,10 @@ module uart_io_tb;
    
    task Terminal_Read;
       input logic [3:0][7:0] address;
+      print($sformatf("Terminal transmit opcode: %d address: 0x%x", "R", address));
       UART_H2D_transmit(32'd82); //R in Ascci
       for(int i=4; i>0; --i)
-	      UART_H2D_transmit(address[i]);
+	      UART_H2D_transmit(address[i-1]);
    endtask // Terminal_Read
    //    
    
@@ -260,6 +227,7 @@ module uart_io_tb;
       delay(10); init();
       delay(10); reset();
       delay(10); enable_clk();
+      C2F_response('0, RD_RSP, '0, '0, '0);
 
       fork
          // PROCCESS-1
@@ -277,7 +245,10 @@ module uart_io_tb;
                Write_transfer_buffer[i][DATA] = $random();
             end
             for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
-               Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+               //Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+               Terminal_Write(32'h03002018,32'hffffffff);
+               uart_bit_wait(10);
+               Terminal_Read(32'h03002018);
             end
             test_undone = 1'b0;
          end

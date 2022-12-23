@@ -52,7 +52,7 @@ def serial_port_write(port, addr, data):
     port.write(b'W')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(data))
-    ack = port.read(2)
+    ack = port.read(1)
     ack = str(ack, 'utf-8')  
     if(ack==''): 
         print("-E- Write response timeout occured, no acknowledge recieved")
@@ -100,7 +100,7 @@ def serial_port_write_burst(port, addr, size, data_list):
 
 def serial_port_read_burst(port, addr, size, file_name):
     print('-I- reading data from address: 0x{} with size 0x{} to file "{}" to'.format(addr, size, file_name))
-    port.write(b'K')
+    port.write(b'M')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(size))
     # TODO: HALT interface. wait for transfer to complete...
