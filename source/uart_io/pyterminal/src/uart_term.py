@@ -39,11 +39,11 @@ def open_serial_port(port_name):
 
 
 def config_serial_port(port):
-    port.baudrate = 9600  # set Baud rate to 9600 from available list [9600, 19200, 38400, 57600, 115200]
-    port.bytesize = 8     # Number of data bits = 8
-    port.parity   ='N'    # No parity
-    port.stopbits = 1     # Number of Stop bits = 1
-    port.timeout  = 5     # Read timeput is 5 seconds
+    port.baudrate = 115200 # set Baud rate to 9600 from available list [9600, 19200, 38400, 57600, 115200]
+    port.bytesize = 8      # Number of data bits = 8
+    port.parity   ='N'     # No parity
+    port.stopbits = 1      # Number of Stop bits = 1
+    port.timeout  = 5      # Read timeput is 5 seconds
     return
 
 
