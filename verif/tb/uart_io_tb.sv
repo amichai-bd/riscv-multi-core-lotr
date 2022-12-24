@@ -20,8 +20,8 @@
 module uart_io_tb;
    import lotr_pkg::*;
 
-   // CLK PARAMETERS 20MHz CLK
-   localparam integer HALF_CLK=25; 
+   // CLK PARAMETERS 50MHz CLK
+   localparam integer HALF_CLK=10;
    localparam integer CLK_PERIOD=2*HALF_CLK;
 
    // UART PROTOCOL PARAMS
@@ -29,12 +29,12 @@ module uart_io_tb;
    localparam bit     PARITY_EN=0;        //[0/1] 0: disable,     1: enable
    localparam bit     SINGLE_STOP_BIT=1;  //[0/1] 0: 2 stop bits, 1: single
    localparam integer N_DATA_BITS=8;      //[5:8] can be any number between 5 and 8
-   localparam integer BUADRATE=9600;      //[] bits per sec
+   localparam integer BUADRATE=115200;    //[] bits per sec
    localparam integer NANOSECOND=1e+9;
    localparam         UART_BIT_PERIOD=(NANOSECOND/BUADRATE);
 
    localparam bit     ADDR = 0;
-   localparam bit     DATA = 0; 
+   localparam bit     DATA = 1; 
    localparam integer N_WRITE_TRANSFERS = 1;
    logic [31:0]       Write_transfer_buffer [N_WRITE_TRANSFERS-1:0][1:0]; 
    
@@ -51,19 +51,6 @@ module uart_io_tb;
    // Ring Controler <-> Core Interface
    //===================================
    //---------------------------------------
-   //RC <---> Core F2C 
-   //---------------------------------------
-   // REQUEST
-   logic 	      F2C_ReqValidQ502H;
-   t_opcode       F2C_ReqOpcodeQ502H;
-   logic [31:0]   F2C_ReqAddressQ502H;
-   logic [31:0]   F2C_ReqDataQ502H;
-   // RESPOSE
-   logic 	      F2C_RspValidQ500H;
-   t_opcode       F2C_RspOpcodeQ500H;
-   logic [31:0]   F2C_RspAddressQ500H;
-   logic [31:0]   F2C_RspDataQ500H;
-   //---------------------------------------
    //RC <---> Core C2F
    //---------------------------------------
    // REQUEST
@@ -77,8 +64,17 @@ module uart_io_tb;
    t_opcode       C2F_RspOpcodeQ502H;
    logic [31:0]   C2F_RspDataQ502H;
    logic 	      C2F_RspStall;
-   logic [1:0] 	C2F_RspThreadIDQ502H;        
-   
+   logic [1:0] 	C2F_RspThreadIDQ502H;
+
+   t_opcode      RingReqInOpcodeQ500H;
+   t_opcode      RingRspInOpcodeQ500H;
+
+   initial begin;
+      RingReqInOpcodeQ500H = WR;
+      RingRspInOpcodeQ500H = RD_RSP;
+   end
+
+
    always #HALF_CLK
      clk = (clk_en) ? ~clk : 0;
 
@@ -89,14 +85,14 @@ module uart_io_tb;
    |___/  \___/   |_|  
                        
   *//////////////////////
-   
+   /*
    uart_io
      uart_io_DUT
        (
       // clk, rst
       .clk           (clk),
       .rstn          (rstn),
-      .core_id       (8'hac),
+      .core_id       (8'h04),
       // RC interface
       // uart RX/TX signals
       .uart_master_tx(uart_master_tx), 
@@ -115,6 +111,48 @@ module uart_io_tb;
       .C2F_ReqAddressQ500H(C2F_ReqAddressQ500H),
       .C2F_ReqDataQ500H(C2F_ReqDataQ500H)
 	);
+*/
+
+// UART TILE
+uart_tile uart_tile_DUT
+	(
+    //General Interface
+    .QClk                     (clk),
+    .RstQnnnH                 (~rstn),
+    .CoreID                   (8'd4),
+    //================================================
+    //        RING Interface
+    //================================================
+    //Ring ---> RC , RingReqIn
+    .RingReqInValidQ500H        ('0)  ,//input
+    .RingReqInRequestorQ500H    ('0)  ,//input
+    .RingReqInOpcodeQ500H       (RingReqInOpcodeQ500H)  ,//input
+    .RingReqInAddressQ500H      ('0)  ,//input
+    .RingReqInDataQ500H         ('0)  ,//input
+    //Ring ---> RC , RingRspIn                          
+    .RingRspInValidQ500H        ('0)  ,//input
+    .RingRspInRequestorQ500H    ('0)  ,//input
+    .RingRspInOpcodeQ500H       (RingRspInOpcodeQ500H),//input
+    .RingRspInAddressQ500H      ('0)  ,//input
+    .RingRspInDataQ500H         ('0)  ,//input
+    //RC   ---> Ring , RingReqOut
+    .RingReqOutValidQ502H       (),//output
+    .RingReqOutRequestorQ502H   (),//output
+    .RingReqOutOpcodeQ502H      (),//output
+    .RingReqOutAddressQ502H     (),//output
+    .RingReqOutDataQ502H        (),//output
+     //RC   ---> Ring , RingRspOut                     
+    .RingRspOutValidQ502H       (),//output
+    .RingRspOutRequestorQ502H   (),//output
+    .RingRspOutOpcodeQ502H      (),//output
+    .RingRspOutAddressQ502H     (),//output
+    .RingRspOutDataQ502H        (), //output
+    // UART RX/TX.
+    .uart_master_tx           (uart_master_tx), 
+    .uart_master_rx           (uart_master_rx),
+    .interrupt                (interrupt)
+    );
+
 
 /*///////////////////////////
    _____           _       
@@ -179,27 +217,6 @@ module uart_io_tb;
       uart_master_tx = 1'b1;
       uart_bit_wait((SINGLE_STOP_BIT) ? 1 : 2);
    endtask // UART_H2D_transmit
-
-   
-   task F2C_request;
-      input logic        valid;
-      input 		 t_opcode opcode;
-      input logic [31:0] address;
-      input logic [31:0] data;
-      @(negedge clk);
-      F2C_ReqValidQ502H   = valid;
-      F2C_ReqOpcodeQ502H  = opcode;
-      F2C_ReqAddressQ502H = address;
-      F2C_ReqDataQ502H    = data;
-      @(negedge clk);
-      F2C_ReqValidQ502H   = '0;
-      F2C_ReqAddressQ502H = '0;
-      F2C_ReqDataQ502H    = '0;
-   endtask // F2C_request
-
-   
-   task F2C_response_monitor();
-   endtask // F2C_response_monitor
    
    task C2F_response;
       input logic        valid;
@@ -238,9 +255,10 @@ module uart_io_tb;
    
    task Terminal_Read;
       input logic [3:0][7:0] address;
+      print($sformatf("Terminal transmit opcode: %d address: 0x%x", "R", address));
       UART_H2D_transmit(32'd82); //R in Ascci
       for(int i=4; i>0; --i)
-	      UART_H2D_transmit(address[i]);
+	      UART_H2D_transmit(address[i-1]);
    endtask // Terminal_Read
    //    
    
@@ -260,6 +278,8 @@ module uart_io_tb;
       delay(10); init();
       delay(10); reset();
       delay(10); enable_clk();
+      delay(10); reset();
+      C2F_response('0, RD_RSP, '0, '0, '0);
 
       fork
          // PROCCESS-1
@@ -277,7 +297,10 @@ module uart_io_tb;
                Write_transfer_buffer[i][DATA] = $random();
             end
             for(int i=0; i<N_WRITE_TRANSFERS; i++) begin
-               Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+               //Terminal_Write(Write_transfer_buffer[i][ADDR], Write_transfer_buffer[i][DATA]);
+               Terminal_Write(32'h03002018,32'hffffffff);
+               uart_bit_wait(10);
+               Terminal_Read(32'h03002018);
             end
             test_undone = 1'b0;
          end

@@ -33,8 +33,18 @@ module uart_io
    output  logic        interrupt
    );
    
-   logic 	uart_interrupt;
-  assign interrupt = uart_interrupt;
+  logic uart_interrupt;
+  logic write_resp_valid;
+  logic read_resp_valid;
+  logic write_transfer_valid;
+  logic read_transfer_valid;
+
+  assign interrupt            = uart_interrupt;
+  assign C2F_ReqValidQ500H    = (write_transfer_valid | read_transfer_valid);
+  assign C2F_ReqOpcodeQ500H   = ((write_transfer_valid) ? WR : RD);
+  assign write_resp_valid     = (C2F_RspValidQ502H & (C2F_RspOpcodeQ502H==WR));
+  assign read_resp_valid      = (C2F_RspValidQ502H & (C2F_RspOpcodeQ502H==RD_RSP));
+  assign C2F_ReqThreadIDQ500H = '0;
 
    // wishbone interface
    wishbone 
@@ -58,15 +68,17 @@ module uart_io
    gateway
      gateway_inst
        (
-        .wb_master (wb_if),
-        .clk       (clk),
-        .rstn      (rstn),
-        .interrupt (uart_interrupt)
+        .wb_master            (wb_if),
+        .clk                  (clk),
+        .rstn                 (rstn),
+        .interrupt            (uart_interrupt),
+        .address              (C2F_ReqAddressQ500H),
+        .data_out             (C2F_ReqDataQ500H),
+        .data_in              (C2F_RspDataQ502H),
+        .write_transfer_valid (write_transfer_valid), // once address and data are ready, pulse for one cycle.
+        .write_resp_valid     (write_resp_valid),     // is pulsed to indicate write_data is valid from RC.
+        .read_transfer_valid  (read_transfer_valid),  // once address and data are ready, pulse for one cycle.
+        .read_resp_valid      (read_resp_valid)      // is pulsed to indicate read_data is valid from RC.
         );
-
-/*
-Reg-to-RC and RC-to-Reg
-to add module design...
-*/
 
 endmodule // uart_io

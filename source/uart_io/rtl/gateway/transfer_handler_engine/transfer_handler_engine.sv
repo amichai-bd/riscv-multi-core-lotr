@@ -10,196 +10,320 @@
 
 module transfer_handler_engine
    (
-    input logic clk,
-    input logic rstn,
-    input logic interrupt,       // no use in this module
-    output logic invalid_comm,
-	output [31:0] address,
-	output [31:0] data_out,
-	input [31:0] data_in,
-	output write_transfer_valid, // once address and data are ready, pulse for one cycle.
-	input  write_resp_valid,     // is ppulsed to indicate write_data is valid from RC.
-	input  write_resp_timeout,   // read timeout
-	output read_transfer_valid,  // once address and data are ready, pulse for one cycle.
-	input  read_resp_valid,      // is ppulsed to indicate read_data is valid from RC.
-	input  read_resp_timeout,    // read timeout.
-    wishbone.master wb_master    // no use in this module.
+    input logic 		clk,
+    input logic 		rstn,
+    input logic 		interrupt,      		// no use in this module
+    output logic 		invalid_comm,
+	output logic [31:0] address,
+	output logic [31:0] data_out,
+	input logic [31:0] 	data_in,
+	output logic 		write_transfer_valid, 	// once address and data are ready, pulse for one cycle.
+	input  logic 		write_resp_valid,     	// is ppulsed to indicate write_data is valid from RC.
+	output logic 		read_transfer_valid,  	// once address and data are ready, pulse for one cycle.
+	input  logic 		read_resp_valid,      	// is ppulsed to indicate read_data is valid from RC.
+	wishbone.master 	wb_master    			// no use in this module forwarded to wishbone fsm.
     );
 
-parameter integer STATE_BITS_2 = 5;
-typedef enum logic  [STATE_BITS_2-1:0]
-   {
-	IDLE_2,
-	READ_COMM,
-	WAIT_FOR_COMM,
-	WAIT_INTERRUPT,
-	WAIT_FOR_READ,
-	SEND_TO_LOTR,
-	INVALID_COMM
-	} e_WB_fsm_state;
+	parameter [7:0] TRANSFER_ACK_OPCODE  = 8'd55;
+	parameter [7:0] TRANSFER_NACK_OPCODE = 8'd66;
+	parameter [7:0] TRANSFER_R_OPCODE    = 8'd82;
+	parameter [7:0] TRANSFER_W_OPCODE    = 8'd87;
+	parameter [7:0] TRANSFER_WB_OPCODE   = 8'd74;
+	parameter [7:0] TRANSFER_RB_OPCODE   = 8'd77;
 
+	parameter integer N_TRANSFER_STATES=5;
+	parameter integer W_TRANSFER_STATES=$clog2(N_TRANSFER_STATES);
+    typedef enum logic [W_TRANSFER_STATES-1:0]
+    {
+        INVALID,
+		WRITE_TRANS,
+		READ_TRANS,
+		WRITE_BURST_TRANS,
+		READ_BURST_TRANS
+	}   trans_state;
+	trans_state transfer_state, next_transfer_state;
 
-logic temp_read_ack;
-logic read_valid;
-logic [7:0] write_data;
+	parameter integer N_FSM_STATES=10;
+    parameter integer W_FSM_STATES=$clog2(N_FSM_STATES);
+    typedef enum logic [W_FSM_STATES-1:0]
+    {
+        IDLE,
+		DECODING_PHASE,
+        ADDRESS_PHASE,
+        DATA_PHASE,
+        SIZE_PHASE,
+        ACK_RESP,
+		NACK_RESP,
+		READ_FROM_RC,
+		WRITE_TO_RC,
+		WRITE_TO_UART
+    }   fsm_state;
+    fsm_state curr_state, next_state;
 
+	logic write_resp_rc_timeout;   // write timeout
+	logic read_resp_rc_timeout;    // read timeout.
+    
+	// UART FSM SIGNALS.
+	logic 		read_valid_from_uart;
+	logic 		write_busy_from_uart;
+	logic 		write_ack_from_uart;
+	logic 		write_ack_timeout_from_uart;
+	logic 		write_enable_to_uart;
+	logic [7:0] read_data_from_uart;
+	logic [7:0] write_data_to_uart;
+	
+	// TRANSFER STATES SIGNALS
+	logic update_transfer_state;
 
-logic [7:0] data_i;
-logic ack_i;
-logic ack_sampled;
-logic  we_o;
-logic  [7:0] data_o;
-logic  [2:0] addr_o;
-logic  cyc_o;
-logic  stb_o;       
+	// ADDRESS SIGNALS
+	logic 				address_counter_enable;
+	logic 				address_counter_set_zero;
+	logic 				address_counter_last;
+	logic [31:0] 		address_counter_max_value;
+	logic [31:0] 		address_counter_value;
 
-logic data_update;
-logic receive_interrupt;
-logic interrupt_s1;
-logic data_cap_en;
-logic [7:0] data;
-logic start_read;
-logic data_valid;
-logic [2:0] read_conter;
-logic [2:0] read_conter_nxt;
-assign receive_interrupt = interrupt & !interrupt_s1;
+	// BYTE INDEX COUNTER SIGNALS
+	logic 		byte_index_counter_enable;
+	logic 		byte_index_counter_load;
+	logic 		byte_index_counter_last;
+	logic [1:0] byte_index_counter_value;
 
-logic [63:0] uart_data_buffer_nxt;
-logic [63:0] uart_data_buffer;
-logic [31:0] addr_from_uart;
-logic [31:0] data_from_uart;
-assign addr_from_uart = {uart_data_buffer[7:0],uart_data_buffer[15:8],uart_data_buffer[23:16],uart_data_buffer[31:24]};
-assign data_from_uart = {uart_data_buffer[39:32],uart_data_buffer[47:40],uart_data_buffer[55:48],uart_data_buffer[63:56]};
-logic [STATE_BITS_2-1:0] WB_man_state;
-logic [STATE_BITS_2-1:0] WB_man_state_nxt;
-logic [2:0] read_num;
-logic [2:0] read_num_nxt;
-logic read_num_update_en;
+	// DATA, ADDRESS, AND SIZE BUFFERS
+	logic  			 update_transfer_address;
+	logic [3:0][7:0] transfer_address;
+	logic  			 update_transfer_size;
+	logic [3:0][7:0] transfer_size;
+	logic  			 update_transfer_read_data;
+	logic [3:0][7:0] transfer_read_data;
+	logic  			 update_transfer_write_data;
+	logic [3:0][7:0] transfer_write_data;
+	
+	assign address = transfer_address + address_counter_value;
+	assign data_out = transfer_write_data; 
+	assign address_counter_max_value = transfer_size;
 
-//#### 
-always_comb
-begin	
-	invalid_comm = 0;
-	read_conter_nxt = read_conter;
-	uart_data_buffer_nxt = uart_data_buffer;
-	read_num_nxt = 3'd0;	
-	read_num_update_en = 0;	
-	WB_man_state_nxt=IDLE_2;
-	start_read = 0;
-	case(WB_man_state)
-			IDLE_2:begin
-				invalid_comm = 0;				
-				if (receive_interrupt)
-				begin
-					WB_man_state_nxt=READ_COMM;
-				end
+	always_comb begin
+		next_state 					= curr_state;
+
+		// TRANSFER STATE SIGNALS
+		next_transfer_state 		= transfer_state;
+		update_transfer_state 		= 1'b0;
+		
+		// BYTE INDEX SIGNALS
+		byte_index_counter_enable 	= 1'b0;
+		byte_index_counter_load     = 1'b0;
+		
+		// TRANSFER DATA, AIZE, and ADDRESS
+		update_transfer_size 		= 1'b0;
+		update_transfer_address 	= 1'b0;
+		update_transfer_read_data   = 1'b0;
+		update_transfer_write_data  = 1'b0;
+
+		// UART HANDLER SIGNALS
+		write_enable_to_uart        = 1'b0;
+		write_data_to_uart          = '0;   
+
+		// OUTPUT SIGNALS
+		invalid_comm            	= 1'b0;
+		write_transfer_valid        = 1'b0;
+		read_transfer_valid         = 1'b0;
+
+		case(curr_state)
+		// multi cycle state
+		IDLE: begin
+			if(read_valid_from_uart)
+				next_state = DECODING_PHASE;
+			/*else if(read_valid_from_rc)*/
+		end
+
+		// single cycle state
+		DECODING_PHASE: begin
+			next_state            	= ADDRESS_PHASE;
+			update_transfer_state 	= 1'b1;
+			byte_index_counter_load = 1'b1;
+			case(read_data_from_uart)
+			TRANSFER_W_OPCODE  : next_transfer_state = WRITE_TRANS;
+			TRANSFER_R_OPCODE  : next_transfer_state = READ_TRANS;
+			TRANSFER_WB_OPCODE : next_transfer_state = WRITE_BURST_TRANS;
+			TRANSFER_RB_OPCODE : next_transfer_state = READ_BURST_TRANS;
+			default	: begin
+				next_transfer_state = INVALID;
+				next_state          = IDLE;
+				invalid_comm        = 1'b1;
 			end
-			
-			READ_COMM:begin
-				start_read = 1'b1;
-				WB_man_state_nxt = WAIT_FOR_COMM;
-			end
-			WAIT_FOR_COMM:begin
-				WB_man_state_nxt = WAIT_FOR_COMM;				
-				start_read = 1'b0;
-				if (data_update) begin
-					case(data)
-						8'hea: begin
-						//8'd87:begi
-							read_num_update_en = 1;
-							read_num_nxt = 3'd7; // total 8
-						       	read_conter_nxt = 3'd0;
-							WB_man_state_nxt = WAIT_INTERRUPT;
-						end
-						8'd34:begin
-							read_num_update_en = 1;				
-							read_num_nxt = 3'h3; // total 4
-					       		read_conter_nxt = 3'd0;
-							WB_man_state_nxt = WAIT_INTERRUPT;
-						end							
-						default:begin
-							WB_man_state_nxt = INVALID_COMM;
-						end							
-					endcase
-				end
-			end
-			WAIT_INTERRUPT:begin
-				start_read = 0;
-				WB_man_state_nxt = WAIT_INTERRUPT; 				
-				if (receive_interrupt) begin
-					start_read = 1;
-					WB_man_state_nxt = WAIT_FOR_READ; 
-				end
-			end
-			WAIT_FOR_READ:begin
-				WB_man_state_nxt = WAIT_FOR_READ; 				
-				start_read = 0;				
-				if (data_update) begin
-					read_conter_nxt = read_conter + 3'b001;
-					uart_data_buffer_nxt[read_conter*8 +: 8] = data; //TODO check if it works well on FPGA
-					if(read_conter == read_num) begin
-						WB_man_state_nxt = SEND_TO_LOTR;
-					end else begin
-						WB_man_state_nxt = WAIT_INTERRUPT;
-					end
-				end
-			end
-			SEND_TO_LOTR:begin
-					WB_man_state_nxt = SEND_TO_LOTR;
-					/* TODO add lotr signals here
-					* add exstra states for LOTR trans */
-			
-			end
-			INVALID_COMM: begin
-					invalid_comm = 1;					
-					WB_man_state_nxt = INVALID_COMM;
-			end
-	endcase		
+			endcase
+		end
 
-end
+		// multi cycle state
+        ADDRESS_PHASE: begin
+			byte_index_counter_enable = read_valid_from_uart;
+			update_transfer_address   = read_valid_from_uart;
+			if(byte_index_counter_last & read_valid_from_uart) begin
+				case(transfer_state)
+				WRITE_TRANS		  : next_state = DATA_PHASE; 
+				READ_TRANS		  : next_state = ACK_RESP;
+				WRITE_BURST_TRANS : next_state = SIZE_PHASE;
+				READ_BURST_TRANS  : next_state = SIZE_PHASE;
+				default           : next_state = IDLE;
+				endcase
+			end
+		end	
 
-wishbone_transfer_fsm
-	wishbone_transfer_fsm_inst
-	(
-		.clk			(clk),
-        .rstn			(rstn),
-        .interrupt		(interrupt),
-        .read_data  	(write_data),
-        .read_valid 	(read_valid),  		//level_based
-        .read_ack   	(read_valid),       //pulse based
-        .write_enable 	(read_valid), 		//pulse based
-        .write_ack		(),    				//pulse based
-        .write_busy		(),
-        .write_data		(write_data),
-        .wb_master		(wb_master)
-	);
+        // multi cycle state
+        SIZE_PHASE: begin
+			byte_index_counter_enable = read_valid_from_uart;
+			update_transfer_size      = read_valid_from_uart;
+			if(byte_index_counter_last & read_valid_from_uart) begin
+				case(transfer_state)
+				WRITE_BURST_TRANS : next_state = DATA_PHASE;
+				READ_BURST_TRANS  : next_state = ACK_RESP;
+				default           : next_state = IDLE;
+				endcase
+			end
+		end
 
-always_ff@(posedge clk or negedge rstn) begin
-	if(!rstn) begin
-		uart_data_buffer <= '0;
-		WB_man_state <= IDLE_2;		
-		ack_sampled <= 1'b0;	       	
-		interrupt_s1 <= 1'b0;
-		read_conter <= '0;
-	end 
-	else begin
-		uart_data_buffer <= uart_data_buffer_nxt;
-		interrupt_s1 <= interrupt;
-		WB_man_state <= WB_man_state_nxt;				
-		ack_sampled <= ack_i;
-		read_conter <= read_conter_nxt;		
+        // multi cycle state
+        DATA_PHASE: begin
+			byte_index_counter_enable  = read_valid_from_uart;
+			update_transfer_write_data = read_valid_from_uart;
+			if(byte_index_counter_last & read_valid_from_uart)
+				next_state = WRITE_TO_RC;
+		end
+
+		// multi cycle state
+        ACK_RESP: begin
+			write_enable_to_uart = ~write_busy_from_uart;
+			write_data_to_uart   = TRANSFER_ACK_OPCODE; 
+			if(write_ack_from_uart) begin
+				case(transfer_state)
+				WRITE_TRANS		  : next_state = IDLE;
+				READ_TRANS		  : next_state = READ_FROM_RC;
+				WRITE_BURST_TRANS : next_state = IDLE;
+				READ_BURST_TRANS  : next_state = READ_FROM_RC;
+				default           : next_state = IDLE;
+				endcase
+			end
+			else if(write_ack_timeout_from_uart)
+				next_state = IDLE;
+		end
+
+		NACK_RESP: begin
+			write_enable_to_uart = ~write_busy_from_uart;
+			write_data_to_uart   = TRANSFER_ACK_OPCODE; 
+			next_state = IDLE;
+		end
+
+		// multi cycle state
+		READ_FROM_RC: begin
+		end
+
+		// single cycle state
+        WRITE_TO_RC: begin
+			write_transfer_valid = 1'b1;
+			if(transfer_state == WRITE_TRANS)
+				next_state = ACK_RESP;
+			else if(transfer_state == WRITE_BURST_TRANS)
+				next_state = ACK_RESP;
+		end
+
+		// multi cycle state
+		WRITE_TO_UART: begin
+			next_state = IDLE;
+		end
+
+		default: next_state = IDLE;
+		endcase
 	end
-end
 
-always_ff@(posedge clk or negedge rstn) begin
-	if(!rstn)                    read_num <= '0;		
-	else if (read_num_update_en) read_num <= read_num_nxt;
-end
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn)                      transfer_state <= INVALID;
+		else if(update_transfer_state) transfer_state <= next_transfer_state;
+	end
+
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn) curr_state <= IDLE;
+		else      curr_state <= next_state;
+	end
+
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn) transfer_address <= '0;
+		else if (update_transfer_address)
+		    transfer_address[byte_index_counter_value] <= read_data_from_uart;
+	end
+
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn) transfer_size <= '0;
+		else if (update_transfer_size)
+		    transfer_size[byte_index_counter_value] <= read_data_from_uart;
+	end
+
+	// write from uart to RC
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn) transfer_write_data <= '0;
+		else if (update_transfer_write_data)
+		    transfer_write_data[byte_index_counter_value] <= read_data_from_uart;
+	end
+	
+	// read from rc to uart
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn) transfer_read_data <= '0;
+		else if (update_transfer_read_data)
+		    transfer_read_data <= data_in;
+	end
+
+	// GENERAL PURPOSE COUNTER
+    Counter #(2)
+        byte_index_counter
+        (
+        .clk            (clk),
+        .rstn           (rstn),
+        .enable         (byte_index_counter_enable),
+        .inc_dec        (1'b0),
+        .scale          (2'd1),
+        .min_value      ('0),
+        .max_value      ('1),
+        .load           (byte_index_counter_load),
+        .load_value     ('1),
+        .first          (byte_index_counter_last), // floating
+        .last           (), // floating
+        .counter_value  (byte_index_counter_value)
+        );
 
 
-always_ff@(posedge clk or negedge rstn) begin
-	if(!rstn) 			  data <= '0;
-	else if (data_cap_en) data <= data_i;
-end
+	// ADDRESS INCREASE COUNTER
+    Counter #(32) 
+        address_generation_counter_inst
+        (
+        .clk            (clk),
+        .rstn           (rstn),
+        .enable         (address_counter_enable),
+        .inc_dec        (1'b1),
+        .scale          (32'd4),
+        .min_value      ('0),
+        .max_value      (address_counter_max_value),
+        .load           (address_counter_set_zero),
+        .load_value     ('0),
+        .first          (), // floating
+        .last           (address_counter_last), // floating
+        .counter_value  (address_counter_value)
+        );
+
+	// WISHBONE TRANSFER HANDLER
+	wishbone_transfer_fsm
+		wishbone_transfer_fsm_inst
+		(
+		.clk				(clk),
+		.rstn				(rstn),
+		.interrupt			(interrupt),
+		.read_data  		(read_data_from_uart),
+		.read_valid 		(read_valid_from_uart),  		//level_based
+		.read_ack   		(read_valid_from_uart),         //pulse based
+		.write_enable 		(write_enable_to_uart), 		//pulse based
+		.write_ack			(write_ack_from_uart),    		//pulse based
+		.write_busy			(write_busy_from_uart),
+		.write_ack_timeout 	(write_ack_timeout_from_uart),
+		.write_data			(write_data_to_uart),
+		.wb_master			(wb_master)
+		);
 
 endmodule

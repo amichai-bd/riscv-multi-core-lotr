@@ -155,7 +155,7 @@ begin
 
 		WRITE_3: begin
 			FSM_state_nxt = WAIT_ACK_4;
-			data_o =  8'h82;
+			data_o =  8'h1b;
 			addr_o = `UART_REG_DL1;			
 			we_o = 1'b1;
 			cyc_o = 1'b1;

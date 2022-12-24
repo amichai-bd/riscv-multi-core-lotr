@@ -39,11 +39,11 @@ def open_serial_port(port_name):
 
 
 def config_serial_port(port):
-    port.baudrate = 9600  # set Baud rate to 9600 from available list [9600, 19200, 38400, 57600, 115200]
-    port.bytesize = 8     # Number of data bits = 8
-    port.parity   ='N'    # No parity
-    port.stopbits = 1     # Number of Stop bits = 1
-    port.timeout  = 5     # Read timeput is 5 seconds
+    port.baudrate = 115200 # set Baud rate to 9600 from available list [9600, 19200, 38400, 57600, 115200]
+    port.bytesize = 8      # Number of data bits = 8
+    port.parity   ='N'     # No parity
+    port.stopbits = 1      # Number of Stop bits = 1
+    port.timeout  = 5      # Read timeput is 5 seconds
     return
 
 
@@ -52,7 +52,7 @@ def serial_port_write(port, addr, data):
     port.write(b'W')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(data))
-    ack = port.read(2)
+    ack = port.read(1)
     ack = str(ack, 'utf-8')  
     if(ack==''): 
         print("-E- Write response timeout occured, no acknowledge recieved")
@@ -100,7 +100,7 @@ def serial_port_write_burst(port, addr, size, data_list):
 
 def serial_port_read_burst(port, addr, size, file_name):
     print('-I- reading data from address: 0x{} with size 0x{} to file "{}" to'.format(addr, size, file_name))
-    port.write(b'K')
+    port.write(b'M')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(size))
     # TODO: HALT interface. wait for transfer to complete...
