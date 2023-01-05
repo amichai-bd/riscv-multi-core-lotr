@@ -78,7 +78,6 @@ assign wb_master.sel = '1;
 logic [STATE_BITS-1:0] FSM_state;
 logic [STATE_BITS-1:0] FSM_state_nxt;
 logic [7:0] data;
-logic valid_data;
 
 always_comb
 begin
@@ -107,14 +106,12 @@ begin
 		WAIT_ACK_1: begin
 			if (ack_sampled) begin
 				FSM_state_nxt = WRITE_1;
-				valid_data = 1'b1;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_1;
 			end
 		end
 		WRITE_1: begin
 			FSM_state_nxt = WAIT_ACK_2;
-			valid_data = 1'b0;
 			data_o = data | 8'b10000000;
 			addr_o = `UART_REG_LC;			
 			we_o = 1'b1;
@@ -155,7 +152,9 @@ begin
 
 		WRITE_3: begin
 			FSM_state_nxt = WAIT_ACK_4;
-			data_o =  8'h1b;
+			//data_o =  8'h1b; // 50Mhz - 115200BR
+			data_o =  8'h03; // 5MHz - 115200BR
+			//data_o =  8'h21; // 5MHz - 9600BR
 			addr_o = `UART_REG_DL1;			
 			we_o = 1'b1;
 			cyc_o = 1'b1;
@@ -186,14 +185,12 @@ begin
 		WAIT_ACK_5: begin
 			if (ack_sampled) begin
 				FSM_state_nxt = WRITE_4;
-				valid_data = 1'b1;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_5;
 			end
 		end
 		WRITE_4: begin
 			FSM_state_nxt = WAIT_ACK_6;
-			valid_data = 1'b0;
 			data_o = data & 8'b01111111;
 			addr_o = `UART_REG_LC;			
 			we_o = 1'b1;
@@ -245,14 +242,12 @@ begin
 		WAIT_ACK_8: begin
 			if (ack_sampled) begin
 				FSM_state_nxt = WRITE_6;
-				valid_data = 1'b1;
 			end else begin
 				FSM_state_nxt = WAIT_ACK_8;
 			end
 		end
 		WRITE_6: begin
 			FSM_state_nxt = WAIT_ACK_9;
-			valid_data = 1'b0;
 			data_o = data | 8'b00000001;
 			addr_o = `UART_REG_IE;	
 			we_o = 1'b1;

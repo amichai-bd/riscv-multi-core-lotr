@@ -9,6 +9,8 @@
 module uart_wrapper
   (
    // wishbone slave interface
+   input logic clk,
+   input logic rstn,
    wishbone.slave wb_slave,
    // uart RX/TX signals
    input logic  uart_master_tx, 
@@ -24,8 +26,8 @@ module uart_wrapper
    uart_top uart_top_DUT
      (
       // Wishbone signals
-      .wb_clk_i   (wb_slave.clk),
-      .wb_rst_i   (~wb_slave.rstn),
+      .wb_clk_i   (clk),
+      .wb_rst_i   (~rstn),
       .wb_adr_i   (wb_slave.address),
       .wb_dat_i   (wb_slave.data_out),
       .wb_dat_o   (wb_slave.data_in),

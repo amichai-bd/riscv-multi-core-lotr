@@ -33,6 +33,7 @@ import lotr_pkg::*;
     input logic [15:0] Arduino_dg_io,
     input logic uart_master_tx,
     output logic uart_master_rx,
+    output logic interrupt,
 
     // Top ----> LOTR
     output logic [7:0] SEG7_0,
@@ -49,7 +50,6 @@ import lotr_pkg::*;
     output logic [9:0] LED 
 );
 
-logic interrupt;
 logic interrupt_sampled;
 
 logic [9:0] LED_aux;
@@ -282,7 +282,8 @@ assign LED[9]   = interrupt_sampled;
 uart_tile uart_tile
 	(
     //General Interface
-    .QClk                     (CLK_50),
+    //.QClk                     (CLK_50),
+    .QClk                     (QClk),
     .RstQnnnH                 (RstQnnnH),
     .CoreID                   (8'd4),
     //================================================

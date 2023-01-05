@@ -88,6 +88,12 @@ module transfer_handler_engine
 	logic 		byte_index_counter_last;
 	logic [1:0] byte_index_counter_value;
 
+	// RC TIMEOUT COUNTER SIGNALS
+	logic rc_read_timeout_counter_enable;
+	logic rc_read_timeout_counter_set_zero;
+	logic rc_read_timeout_counter_last;
+	logic active_read_from_rc;
+	
 	// DATA, ADDRESS, AND SIZE BUFFERS
 	logic  			 update_transfer_address;
 	logic [3:0][7:0] transfer_address;
@@ -112,13 +118,16 @@ module transfer_handler_engine
 		// BYTE INDEX SIGNALS
 		byte_index_counter_enable 	= 1'b0;
 		byte_index_counter_load     = 1'b0;
-		
+
 		// TRANSFER DATA, AIZE, and ADDRESS
 		update_transfer_size 		= 1'b0;
 		update_transfer_address 	= 1'b0;
-		update_transfer_read_data   = 1'b0;
 		update_transfer_write_data  = 1'b0;
 
+		// ADDRESS COUNTER SIGNALS
+		address_counter_enable   = 1'b0;
+		address_counter_set_zero = 1'b0;
+		
 		// UART HANDLER SIGNALS
 		write_enable_to_uart        = 1'b0;
 		write_data_to_uart          = '0;   
@@ -203,11 +212,14 @@ module transfer_handler_engine
 				default           : next_state = IDLE;
 				endcase
 			end
-			else if(write_ack_timeout_from_uart)
+			else if(write_ack_timeout_from_uart) begin
 				next_state = IDLE;
+				invalid_comm = 1'b1;
+			end
 		end
 
 		NACK_RESP: begin
+			invalid_comm = 1'b1;
 			write_enable_to_uart = ~write_busy_from_uart;
 			write_data_to_uart   = TRANSFER_ACK_OPCODE; 
 			next_state = IDLE;
@@ -215,6 +227,12 @@ module transfer_handler_engine
 
 		// multi cycle state
 		READ_FROM_RC: begin
+			if(~active_read_from_rc)
+				read_transfer_valid = 1'b1;
+			if(read_resp_valid)
+				next_state = WRITE_TO_UART;
+			else if(read_resp_rc_timeout)
+				next_state = WRITE_TO_UART; // DUMMY WRITE
 		end
 
 		// single cycle state
@@ -228,7 +246,20 @@ module transfer_handler_engine
 
 		// multi cycle state
 		WRITE_TO_UART: begin
-			next_state = IDLE;
+			write_enable_to_uart 		= ~write_busy_from_uart;
+			write_data_to_uart   		= transfer_read_data[byte_index_counter_value];
+			byte_index_counter_enable 	= write_ack_from_uart;
+			if(write_ack_from_uart & byte_index_counter_last) begin
+				case(transfer_state)
+				READ_TRANS		  : next_state = IDLE;
+				READ_BURST_TRANS  : next_state = READ_FROM_RC;
+				default           : next_state = IDLE;
+				endcase
+			end
+			else if(write_ack_timeout_from_uart) begin
+				next_state = IDLE;
+				invalid_comm = 1'b1;
+			end
 		end
 
 		default: next_state = IDLE;
@@ -247,33 +278,63 @@ module transfer_handler_engine
 
 	always_ff @(posedge clk or negedge rstn) begin
 		if(~rstn) transfer_address <= '0;
-		else if (update_transfer_address)
+		else if(update_transfer_address)
 		    transfer_address[byte_index_counter_value] <= read_data_from_uart;
 	end
 
 	always_ff @(posedge clk or negedge rstn) begin
 		if(~rstn) transfer_size <= '0;
-		else if (update_transfer_size)
+		else if(update_transfer_size)
 		    transfer_size[byte_index_counter_value] <= read_data_from_uart;
 	end
 
 	// write from uart to RC
 	always_ff @(posedge clk or negedge rstn) begin
 		if(~rstn) transfer_write_data <= '0;
-		else if (update_transfer_write_data)
+		else if(update_transfer_write_data)
 		    transfer_write_data[byte_index_counter_value] <= read_data_from_uart;
 	end
 	
 	// read from rc to uart
 	always_ff @(posedge clk or negedge rstn) begin
 		if(~rstn) transfer_read_data <= '0;
-		else if (update_transfer_read_data)
+		else if(update_transfer_read_data)
 		    transfer_read_data <= data_in;
 	end
 
+	always_ff @(posedge clk or negedge rstn) begin
+		if(~rstn)                	                	active_read_from_rc <= 1'b0;
+		else if(read_resp_valid | read_resp_rc_timeout) active_read_from_rc <= 1'b0;
+		else if(read_transfer_valid)      				active_read_from_rc <= 1'b1;
+	end
+
+	assign rc_read_timeout_counter_enable   = active_read_from_rc;
+	assign rc_read_timeout_counter_set_zero = read_transfer_valid;
+	assign update_transfer_read_data        = read_resp_valid;
+	assign read_resp_rc_timeout 			= rc_read_timeout_counter_last;
+
+	// RC READ TIMEOUT COUNTER
+    Counter #(5)
+        rc_read_timeout_counter_inst
+        (
+        .clk            (clk),
+        .rstn           (rstn),
+        .enable         (rc_read_timeout_counter_enable),
+        .inc_dec        (1'b1),
+        .scale          (5'd1),
+        .min_value      ('0),
+        .max_value      ('1),
+        .load           (rc_read_timeout_counter_set_zero),
+        .load_value     ('0),
+        .first          (), // floating
+        .last           (rc_read_timeout_counter_last),
+        .counter_value  () // floating
+        );
+
+
 	// GENERAL PURPOSE COUNTER
     Counter #(2)
-        byte_index_counter
+        byte_index_counter_inst
         (
         .clk            (clk),
         .rstn           (rstn),
@@ -284,7 +345,7 @@ module transfer_handler_engine
         .max_value      ('1),
         .load           (byte_index_counter_load),
         .load_value     ('1),
-        .first          (byte_index_counter_last), // floating
+        .first          (byte_index_counter_last),
         .last           (), // floating
         .counter_value  (byte_index_counter_value)
         );

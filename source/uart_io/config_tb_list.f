@@ -30,6 +30,8 @@
 
 // UART_IO
 ../../source/uart_io/rtl/uart_io.sv
+../../source/lotr/rtl/uart_tile.sv
+
       
 // Simulation - testbench
 ../../verif/tb/uart_config_tb.sv

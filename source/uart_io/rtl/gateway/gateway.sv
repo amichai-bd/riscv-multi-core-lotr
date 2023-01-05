@@ -24,28 +24,22 @@ module gateway
    wishbone.master      wb_master
    );
 
-  logic config_done;
-  logic [1:0] wishbone_select;
-
-  assign wishbone_select = {1'b0,config_done};
-
+	logic config_done;
+	
    // wishbone interface
    wishbone 
      #(
        .ADDR_W   (`UART_ADDR_WIDTH),
        .DATA_W   (`UART_DATA_WIDTH),
        .SELECT_W (4)
-       ) wb_if[3]();
+       ) wb_if[2]();
    
    wishbone_mux3to1
    wishbone_mux3to1
      (
-      .clk          (clk),
-      .rstn         (rstn),
-      .slave_select (wishbone_select),
+      .slave_select (config_done),
       .wb_slave_0   (wb_if[0]),
       .wb_slave_1   (wb_if[1]),
-      .wb_slave_2   (wb_if[2]),
       .wb_master    (wb_master)
       );
    
