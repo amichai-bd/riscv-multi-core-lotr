@@ -152,8 +152,8 @@ begin
 
 		WRITE_3: begin
 			FSM_state_nxt = WAIT_ACK_4;
-			//data_o =  8'h1b; // 50Mhz - 115200BR
-			data_o =  8'h03; // 5MHz - 115200BR
+			data_o =  8'h1b; // 50Mhz - 115200BR
+			//data_o =  8'h03; // 5MHz - 115200BR
 			//data_o =  8'h21; // 5MHz - 9600BR
 			addr_o = `UART_REG_DL1;			
 			we_o = 1'b1;

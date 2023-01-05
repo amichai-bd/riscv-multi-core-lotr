@@ -106,7 +106,7 @@ module transfer_handler_engine
 	
 	assign address = transfer_address + address_counter_value;
 	assign data_out = transfer_write_data; 
-	assign address_counter_max_value = transfer_size;
+	assign address_counter_max_value = (transfer_size-32'd4);
 
 	always_comb begin
 		next_state 					= curr_state;
@@ -127,7 +127,7 @@ module transfer_handler_engine
 		// ADDRESS COUNTER SIGNALS
 		address_counter_enable   = 1'b0;
 		address_counter_set_zero = 1'b0;
-		
+
 		// UART HANDLER SIGNALS
 		write_enable_to_uart        = 1'b0;
 		write_data_to_uart          = '0;   
@@ -237,11 +237,15 @@ module transfer_handler_engine
 
 		// single cycle state
         WRITE_TO_RC: begin
-			write_transfer_valid = 1'b1;
+			next_state = DATA_PHASE;
+			write_transfer_valid 	= 1'b1;
+			address_counter_enable  = 1'b1;
 			if(transfer_state == WRITE_TRANS)
 				next_state = ACK_RESP;
-			else if(transfer_state == WRITE_BURST_TRANS)
+			else if((transfer_state == WRITE_BURST_TRANS) && address_counter_last) begin 
 				next_state = ACK_RESP;
+				address_counter_set_zero = 1'b1;
+			end
 		end
 
 		// multi cycle state
@@ -250,11 +254,16 @@ module transfer_handler_engine
 			write_data_to_uart   		= transfer_read_data[byte_index_counter_value];
 			byte_index_counter_enable 	= write_ack_from_uart;
 			if(write_ack_from_uart & byte_index_counter_last) begin
-				case(transfer_state)
-				READ_TRANS		  : next_state = IDLE;
-				READ_BURST_TRANS  : next_state = READ_FROM_RC;
-				default           : next_state = IDLE;
-				endcase
+				next_state = READ_FROM_RC;
+				if(transfer_state == READ_TRANS)
+					next_state = IDLE;
+				else if(transfer_state == READ_BURST_TRANS) begin
+					address_counter_enable = 1'b1;
+					if(address_counter_last) begin
+						address_counter_set_zero = 1'b1;
+						next_state = IDLE;
+					end
+				end
 			end
 			else if(write_ack_timeout_from_uart) begin
 				next_state = IDLE;
@@ -350,7 +359,6 @@ module transfer_handler_engine
         .counter_value  (byte_index_counter_value)
         );
 
-
 	// ADDRESS INCREASE COUNTER
     Counter #(32) 
         address_generation_counter_inst
@@ -365,7 +373,7 @@ module transfer_handler_engine
         .load           (address_counter_set_zero),
         .load_value     ('0),
         .first          (), // floating
-        .last           (address_counter_last), // floating
+        .last           (address_counter_last),
         .counter_value  (address_counter_value)
         );
 
