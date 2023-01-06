@@ -1,7 +1,7 @@
 `include "lotr_defines.sv"
 module top(
         input  logic        CLK_50,
-        output logic        CLK_50_OUTPUT,
+        //output logic        CLK_50_OUTPUT,
         input  logic [9:0]  SW,
         input  logic [1:0]  BUTTON,
         input  logic [15:0] Arduino_IO,
@@ -25,31 +25,35 @@ module top(
         output logic        v_sync
     );
 	 
-     assign CLK_50_OUTPUT = CLK_5;
+    //logic qclk_gen;
 
+    //assign CLK_50_OUTPUT = CLK_5;
+/*
 logic CLK_5;
 	pll_5Mhz pll_5Mhz (
 	.inclk0 ( CLK_50),
 	.c0		(CLK_5));
-	 
-//logic CLK_50Khz;
-//	pll_50Khz pll_5Khz (
-//	.inclk0 ( CLK_50),
-//	.c0		(CLK_50Khz));
-	
+*/
+
+/*
+logic CLK_50Khz;
+	pll_50Khz pll_5Khz (
+	.inclk0 ( CLK_50),
+	.c0		(CLK_50Khz));
+*/
+
 lotr lotr(
     //general signals input
 	 //TO ease the compilation time we are using a slow clock. it works also with the 50MHz
     //.QClk  	(CLK_50Khz),   //input
-	 .QClk  	(CLK_5),   //input ->5MHz
-	 //.QClk  	(CLK_50),   //input ->50MHz
+	//.QClk  	(CLK_5),   //input ->5MHz
+	.QClk  	(CLK_50),   //input ->50MHz
     .CLK_50 (CLK_50),   //input
     //.RstQnnnH  	(BUTTON[0])
     .Button_0    (BUTTON[0]),
     .Button_1    (BUTTON[1]),
     .Switch      (SW),//,(SW),
-	 .Arduino_dg_io (Arduino_IO),
-
+	.Arduino_dg_io (Arduino_IO),
     // UART IO
     .uart_master_tx  (UART_TXD),
     .uart_master_rx  (UART_RXD),
