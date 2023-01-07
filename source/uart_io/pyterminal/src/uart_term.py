@@ -239,7 +239,7 @@ def handle_read_transfer_in_burst_mode(port):
     if(size==None): return None
     file_name = get_transfer_file()
     if(file_name==None): return None
-    serial_port_read_burst(port, addr, size, file_name)
+    serial_port_read_burst(port, addr, size<<2, file_name)
     return
 
 

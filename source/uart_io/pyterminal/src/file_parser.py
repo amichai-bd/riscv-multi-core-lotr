@@ -33,7 +33,7 @@ def parse_sv_file(sv_file):
                 l = line.rstrip()
                 if(l[0]=='@'):
                     if len(section_data_packed) != 0:
-                        file_data.append((sec_address, f"{len(section_data_packed):08X}", list(section_data_packed)))
+                        file_data.append((sec_address, f"{len(section_data_packed)<<2:08X}", list(section_data_packed)))
                     section_data_packed.clear()
                     sec_address = l[1:]
                 else:
@@ -44,7 +44,7 @@ def parse_sv_file(sv_file):
                         data_l.reverse()
                         data_l = ''.join(data_l)
                         section_data_packed.append(data_l)
-        file_data.append((sec_address, f"{len(section_data_packed):08X}", list(section_data_packed)))
+        file_data.append((sec_address, f"{len(section_data_packed)<<2:08X}", list(section_data_packed)))
         return file_data
     else: return None
 
