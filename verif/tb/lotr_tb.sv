@@ -16,12 +16,12 @@ import lotr_pkg::*;
     logic [7:0] SEG7_4;
     logic [7:0] SEG7_5;
     logic [9:0] LED ;    
-	// clock generation
+	// clock generation 50MHz
 	initial begin: clock_gen
 		forever begin
-            #5 
+            #10 
             clk = 1'b0;
-            #5 
+            #10 
             clk = 1'b1;
 		end
 	end// clock_gen
@@ -32,6 +32,116 @@ import lotr_pkg::*;
 		#80 
         RstQnnnH = 1'b0;
 	end// reset_gen
+
+   // UART PROTOCOL PARAMS
+   localparam bit     LSB_FIRST=1;        //[0/1] 0: MSB first,   1: LSB first
+   localparam bit     PARITY_EN=0;        //[0/1] 0: disable,     1: enable
+   localparam bit     SINGLE_STOP_BIT=1;  //[0/1] 0: 2 stop bits, 1: single
+   localparam integer N_DATA_BITS=8;      //[5:8] can be any number between 5 and 8
+   localparam integer BUADRATE=115200;    //[] bits per sec
+   localparam integer NANOSECOND=1e+9;
+   localparam         UART_BIT_PERIOD=(NANOSECOND/BUADRATE);
+
+   logic 	      uart_master_tx; //pc side to uart
+   logic 	      uart_master_rx; //pc side to uart
+   
+   task print(string str);
+      $display("-I- time=%0t[ns]: %s",
+               $time, str);   
+   endtask // print
+
+   task uart_bit_wait(int bits);
+      #(bits*UART_BIT_PERIOD);
+   endtask // uart_bit_wait
+
+    //uart host to device transmit
+   task UART_H2D_transmit;
+      input logic [N_DATA_BITS-1:0] data;      
+      print($sformatf("UART transmiting Host to Device, Bin:%b, Dec:%d, 0x%x", data, data, data));
+      // start bit
+      uart_master_tx=1'b0;
+      uart_bit_wait(1);       
+      // data bits
+      for(int i=0; i<N_DATA_BITS; i++) begin
+        if(LSB_FIRST) uart_master_tx = data[i];
+        else 	      uart_master_tx = data[N_DATA_BITS-1-i] ; 
+	 uart_bit_wait(1);
+      end		     
+      // parity
+      if(PARITY_EN) begin 
+        uart_master_tx = ^data;
+        uart_bit_wait(1);
+      end
+      // end bits
+      uart_master_tx = 1'b1;
+      uart_bit_wait((SINGLE_STOP_BIT) ? 1 : 2);
+   endtask // UART_H2D_transmit
+
+    task Terminal_Write;
+      input logic [3:0][7:0] address;
+      input logic [3:0][7:0] data;
+      print($sformatf("Terminal transmit opcode: %d address: 0x%x, data: 0x%x", "W", address, data));
+      UART_H2D_transmit(32'd87); //W in Ascci
+      for(int i=4; i>0; i--)
+	      UART_H2D_transmit(address[i-1]);
+      for(int i=4; i>0; i--)
+	      UART_H2D_transmit(data[i-1]);
+   endtask // Terminal_Write
+   
+   task Terminal_Read;
+      input logic [3:0][7:0] address;
+      print($sformatf("Terminal transmit opcode: %d address: 0x%x", "R", address));
+      UART_H2D_transmit(32'd82); //R in Ascci
+      for(int i=4; i>0; --i)
+	      UART_H2D_transmit(address[i-1]);
+   endtask // Terminal_Read
+
+    task Terminal_Burst_Write;
+        input logic [3:0][7:0] address;
+        input logic [3:0][7:0] size;
+        logic [3:0][7:0] data;
+        print($sformatf("Terminal transmit opcode: %d address: 0x%x, size: 0x%x", "WB", address, size));
+        UART_H2D_transmit(32'd74);
+        for(int i=4; i>0; i--)
+            UART_H2D_transmit(address[i-1]);
+        for(int i=4; i>0; i--)
+            UART_H2D_transmit(size[i-1]);
+        repeat(3) begin
+            data = $random();
+            for(int i=4; i>0; i--)
+                UART_H2D_transmit(data[i-1]);
+        end
+    endtask // Terminal_Write
+
+    task Terminal_Burst_Read;
+        input logic [3:0][7:0] address;
+        input logic [3:0][7:0] size;
+        print($sformatf("Terminal transmit opcode: %d address: 0x%x, size: 0x%x", "RB", address, size));
+        UART_H2D_transmit(32'd77);
+        for(int i=4; i>0; i--)
+            UART_H2D_transmit(address[i-1]);
+        for(int i=4; i>0; i--)
+            UART_H2D_transmit(size[i-1]);
+        repeat(2) begin
+            uart_bit_wait(44);
+        end
+    endtask // Terminal_Write
+
+/*
+    initial begin
+        uart_master_tx=1'b1;
+        uart_bit_wait(1);
+        Terminal_Write(32'h03d02018,32'hDEADBEEF);
+        uart_bit_wait(10);
+        Terminal_Read(32'h03d02018);
+        uart_bit_wait(50);  
+        Terminal_Burst_Write(32'h03d02018, 32'd12);
+        uart_bit_wait(10);
+        Terminal_Burst_Read(32'h03d02018, 32'd8);
+        uart_bit_wait(10);
+        $finish;
+    end
+*/
 
 //================================================================================
 //==========================      test_seq      ==================================
@@ -99,6 +209,8 @@ lotr lotr(
     .Button_1   (1'b0),
     .Switch     (10'h04),
     .Arduino_dg_io (16'b0),
+    .uart_master_tx (uart_master_tx),
+    .uart_master_rx (uart_master_rx),
 
     //outputs
     .SEG7_0  (SEG7_0),

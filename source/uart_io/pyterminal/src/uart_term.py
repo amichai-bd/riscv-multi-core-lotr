@@ -103,9 +103,22 @@ def serial_port_read_burst(port, addr, size, file_name):
     port.write(b'M')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(size))
-    # TODO: HALT interface. wait for transfer to complete...
-    # TODO: return transfer status
-    # TODO: implement Timeout mechanisim
+    ack = port.read(1)
+    ack = str(ack, 'utf-8')  
+    if(ack==''):
+        print("-E- read response timeout occured, no acknowledge recieved")
+        return None
+    else:
+        print("-I- Write Acknowledge recieved ack: 0x{}".format(ack))
+    with open(file_name, 'w') as f:
+        for d in range(size>>2):
+            data = port.read(4)
+            data = str(data, 'utf-8')  
+            if(data==''): 
+                print("-E- Data timeout occured")
+                return None
+            print("-I- Data: 0x{} read from address: 0x{}".format(data, addr+d*4))
+            f.write("Data: 0x{} read from address: 0x{}".format(data, addr+d*4))
     return None
 
 
@@ -226,7 +239,7 @@ def handle_read_transfer_in_burst_mode(port):
     if(size==None): return None
     file_name = get_transfer_file()
     if(file_name==None): return None
-    serial_port_read_burst(port, addr, size, file_name)
+    serial_port_read_burst(port, addr, size<<2, file_name)
     return
 
 
