@@ -3,8 +3,6 @@ interface wishbone
   #(parameter integer ADDR_W=3,
     parameter integer DATA_W=8,
     parameter integer SELECT_W=4);   
-   logic 	      clk;
-   logic 	      rstn;
    logic [ADDR_W-1:0] address;
    logic [DATA_W-1:0] data_in;
    logic [DATA_W-1:0] data_out;
@@ -18,14 +16,14 @@ interface wishbone
    modport master
      (
       input  ack, data_in,
-      output clk, rstn, address, data_out, we, stb, cyc, sel
+      output address, data_out, we, stb, cyc, sel
       );
 
    // slave side
    modport slave
      (
       output ack, data_in,
-      input  clk, rstn, address, data_out, we, stb, cyc, sel
+      input  address, data_out, we, stb, cyc, sel
       );
    
 endinterface // wishbone

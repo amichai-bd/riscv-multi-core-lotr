@@ -58,6 +58,8 @@ module uart_io
    uart_wrapper
      uart_wrapper_inst
        (
+        .clk            (clk),
+        .rstn           (rstn),
         .wb_slave       (wb_if),
         .uart_master_tx (uart_master_tx),
         .uart_master_rx (uart_master_rx),

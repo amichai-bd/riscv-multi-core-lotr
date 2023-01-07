@@ -1,12 +1,14 @@
 `include "lotr_defines.sv"
 module top(
         input  logic        CLK_50,
+        output logic        CLK_50_OUTPUT,
         input  logic [9:0]  SW,
         input  logic [1:0]  BUTTON,
         input  logic [15:0] Arduino_IO,
 
         input logic         UART_TXD,
         output logic        UART_RXD,
+        output logic        INTERRUPT,
 
         output logic [7:0]  HEX0,
         output logic [7:0]  HEX1,
@@ -23,6 +25,8 @@ module top(
         output logic        v_sync
     );
 	 
+     assign CLK_50_OUTPUT = CLK_5;
+
 logic CLK_5;
 	pll_5Mhz pll_5Mhz (
 	.inclk0 ( CLK_50),
@@ -49,6 +53,7 @@ lotr lotr(
     // UART IO
     .uart_master_tx  (UART_TXD),
     .uart_master_rx  (UART_RXD),
+    .interrupt       (INTERRUPT),
     //outputs
     .SEG7_0  (HEX0),  //(HEX0),
     .SEG7_1  (HEX1),  //(HEX1),

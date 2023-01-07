@@ -5,9 +5,9 @@
 
 module wishbone_transfer_fsm
     #(
-        parameter bit      FLIP_BIT_ORDER=1,
+        parameter bit      FLIP_BIT_ORDER=0,
         parameter integer  N_ACK_TIMEOUT_CYCLES = 5,
-        parameter integer  N_WRITE_BUSY_CYCLES  = 100
+        parameter integer  N_WRITE_BUSY_CYCLES  = 4500
     )
     (
         input logic        clk,
@@ -28,8 +28,8 @@ module wishbone_transfer_fsm
     localparam integer  W_ACK_TIMEOUT_CYCLES = $clog2(N_ACK_TIMEOUT_CYCLES);
     localparam integer  W_WRITE_BUSY_CYCLES = $clog2(N_WRITE_BUSY_CYCLES);
 
-    parameter integer N_FSM_STATES=5;
-    parameter integer W_FSM_STATES=$clog2(N_FSM_STATES);
+    localparam integer N_FSM_STATES=5;
+    localparam integer W_FSM_STATES=$clog2(N_FSM_STATES);
     typedef enum logic [W_FSM_STATES-1:0]
     {
         IDLE = '0,
