@@ -127,6 +127,7 @@ import lotr_pkg::*;
         end
     endtask // Terminal_Write
 
+/*
     initial begin
         uart_master_tx=1'b1;
         uart_bit_wait(1);
@@ -140,6 +141,7 @@ import lotr_pkg::*;
         uart_bit_wait(10);
         $finish;
     end
+*/
 
 //================================================================================
 //==========================      test_seq      ==================================
@@ -284,7 +286,7 @@ task end_tb;
     $fclose(SHRD_2);
     $fclose(trk_rc_transactions);
     $display({"Test : ",hpath,msg});        
-    //$finish;
+    $finish;
 endtask
 endmodule // tb_top
 
