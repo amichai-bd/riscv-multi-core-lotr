@@ -73,7 +73,7 @@ def serial_port_read(port, addr):
         return None
     print("-I- Read Acknowledge recieved ack: 0x{}".format(ack))
     data = port.read(4)
-    data = str(data, 'utf-8')  
+    data = ''.join(format(x, '02x') for x in data)  
     if(data==''): 
         print("-E- Data timeout occured")
         return None
@@ -92,33 +92,33 @@ def serial_port_write_burst(port, addr, size, data_list):
     ack = port.read(1)
     ack = str(ack, 'utf-8')  
     if(ack==''):
-        print("-E- Write response timeout occured, no acknowledge recieved")
+        print("-E- Write burst response timeout occured, no acknowledge recieved")
     else:
-        print("-I- Write Acknowledge recieved ack: 0x{}".format(ack))
+        print("-I- Write burst Acknowledge recieved ack: 0x{}".format(ack))
     return
 
 
 def serial_port_read_burst(port, addr, size, file_name):
-    print('-I- reading data from address: 0x{} with size 0x{} to file "{}" to'.format(addr, size, file_name))
+    print('-I- reading data from address: 0x{} with size 0x{} to file "{}"'.format(addr, size, file_name))
     port.write(b'M')
     port.write(bytearray.fromhex(addr))
     port.write(bytearray.fromhex(size))
     ack = port.read(1)
     ack = str(ack, 'utf-8')  
     if(ack==''):
-        print("-E- read response timeout occured, no acknowledge recieved")
+        print("-E- Read Burst response timeout occured, no acknowledge recieved")
         return None
     else:
-        print("-I- Write Acknowledge recieved ack: 0x{}".format(ack))
+        print("-I- Read Burst Acknowledge recieved ack: 0x{}".format(ack))
     with open(file_name, 'w') as f:
-        for d in range(size>>2):
+        for d in range(int(size,16)>>2):
             data = port.read(4)
-            data = str(data, 'utf-8')  
+            data = ''.join(format(x, '02x') for x in data)
             if(data==''): 
                 print("-E- Data timeout occured")
                 return None
-            print("-I- Data: 0x{} read from address: 0x{}".format(data, addr+d*4))
-            f.write("Data: 0x{} read from address: 0x{}".format(data, addr+d*4))
+            print("-I- Data: 0x{} read from address: 0x{}".format(data, str(hex(int(addr,16)+d*4))))
+            f.write("Data: 0x{} read from address: 0x{}\n".format(data, str(hex(int(addr,16)+d*4))))
     return None
 
 
@@ -239,7 +239,7 @@ def handle_read_transfer_in_burst_mode(port):
     if(size==None): return None
     file_name = get_transfer_file()
     if(file_name==None): return None
-    serial_port_read_burst(port, addr, size<<2, file_name)
+    serial_port_read_burst(port, addr, size, file_name)
     return
 
 
