@@ -240,8 +240,10 @@ module transfer_handler_engine
 			next_state = DATA_PHASE;
 			write_transfer_valid 	= 1'b1;
 			address_counter_enable  = 1'b1;
-			if(transfer_state == WRITE_TRANS)
+			if(transfer_state == WRITE_TRANS) begin
 				next_state = ACK_RESP;
+				address_counter_enable  = 1'b0;
+			end
 			else if((transfer_state == WRITE_BURST_TRANS) && address_counter_last) begin 
 				next_state = ACK_RESP;
 				address_counter_set_zero = 1'b1;

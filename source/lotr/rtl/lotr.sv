@@ -50,15 +50,9 @@ import lotr_pkg::*;
     output logic [9:0] LED 
 );
 
-logic interrupt_sampled;
 
-logic [9:0] LED_aux;
 logic RstQnnnH;
 assign RstQnnnH = ~Button_0;
-always_ff @(posedge QClk or posedge RstQnnnH) begin
-    if(RstQnnnH) interrupt_sampled <= '0;
-    else if(interrupt) interrupt_sampled <= 1'b1;
-end
 
 //=========================================
 //=====    ===========
@@ -272,12 +266,9 @@ fpga_tile fpga_tile
     .BLUE    (BLUE),//(BLUE),//output logic [3:0] 
     .v_sync  (v_sync),//(v_sync),//output logic       
     .h_sync  (h_sync),//(h_sync),//output logic      
-    .LED     (LED_aux)//(LED)
+    .LED     (LED)//(LED)
 );
 
-
-assign LED[8:0] = LED_aux[8:0];
-assign LED[9]   = interrupt_sampled;
 // UART TILE
 uart_tile uart_tile
 	(

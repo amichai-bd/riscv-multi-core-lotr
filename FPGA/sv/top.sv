@@ -1,7 +1,6 @@
 `include "lotr_defines.sv"
 module top(
         input  logic        CLK_50,
-        //output logic        CLK_50_OUTPUT,
         input  logic [9:0]  SW,
         input  logic [1:0]  BUTTON,
         input  logic [15:0] Arduino_IO,
@@ -25,9 +24,6 @@ module top(
         output logic        v_sync
     );
 	 
-    //logic qclk_gen;
-
-    //assign CLK_50_OUTPUT = CLK_5;
 /*
 logic CLK_5;
 	pll_5Mhz pll_5Mhz (
