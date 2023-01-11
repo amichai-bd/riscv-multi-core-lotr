@@ -223,12 +223,22 @@ def handle_read_transfer(port):
     return
 
 
-def handle_write_transfer_in_burst_mode(port): 
+def handle_write_transfer_in_burst_mode(port):
+    addr = get_transfer_address()
+    if(addr==None): return None
     file_name = get_transfer_file()
     if(file_name==None): return None
     file_data = file_parser.parse_sv_file(file_name)
     for section in file_data:
-        serial_port_write_burst(port, section[0], section[1], section[2])
+        starting_addr = str(hex(int(section[0], 16)+int(addr, 16)))
+        length = len(starting_addr[2:])
+        if(length<8): 
+            padded_addr=''
+            for i in range(8-length):
+                padded_addr = padded_addr + '0'
+            padded_addr = padded_addr + starting_addr[2:]
+        else: padded_addr = starting_addr[2:]
+        serial_port_write_burst(port, padded_addr, section[1], section[2])
     return
 
 
