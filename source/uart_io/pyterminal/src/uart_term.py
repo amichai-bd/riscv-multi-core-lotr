@@ -117,8 +117,8 @@ def serial_port_read_burst(port, addr, size, file_name):
             if(data==''): 
                 print("-E- Data timeout occured")
                 return None
-            print("-I- Data: 0x{} read from address: 0x{}".format(data, str(hex(int(addr,16)+d*4))))
-            f.write("Data: 0x{} read from address: 0x{}\n".format(data, str(hex(int(addr,16)+d*4))))
+            print("-I- Data: 0x{} read from address: 0x{}".format(data, str(hex(int(addr,16)+d*4))[2:]))
+            f.write("Data: 0x{} read from address: 0x{}\n".format(data, str(hex(int(addr,16)+d*4))[2:]))
     return None
 
 
