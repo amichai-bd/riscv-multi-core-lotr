@@ -1,0 +1,15 @@
+COM3
+WB
+0x01000000
+../../../../verif/Tests/fpga_main/fpga_main_inst_mem_rv32i.sv
+WB
+0x01000000
+../../../../verif/Tests/fpga_main/fpga_main_data_mem_rv32i.sv
+WB
+0x02000000
+../../../../verif/Tests/fpga_main/fpga_main_inst_mem_rv32i.sv
+WB
+0x02000000
+../../../../verif/Tests/fpga_main/fpga_main_data_mem_rv32i.sv
+Q
+Q

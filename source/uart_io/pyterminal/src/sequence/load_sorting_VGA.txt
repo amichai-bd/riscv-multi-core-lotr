@@ -1,0 +1,15 @@
+COM3
+WB
+0x01000000
+../../../../verif/Tests/sorting_VGA/sorting_VGA_inst_mem_rv32i.sv
+WB
+0x01000000
+../../../../verif/Tests/sorting_VGA/sorting_VGA_data_mem_rv32i.sv
+WB
+0x02000000
+../../../../verif/Tests/sorting_VGA/sorting_VGA_inst_mem_rv32i.sv
+WB
+0x02000000
+../../../../verif/Tests/sorting_VGA/sorting_VGA_data_mem_rv32i.sv
+Q
+Q

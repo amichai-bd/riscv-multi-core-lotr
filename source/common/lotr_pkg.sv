@@ -312,6 +312,7 @@ parameter CR_SEG7_3    = 20'h200c ; // RW 7 bit
 parameter CR_SEG7_4    = 20'h2010 ; // RW 7 bit
 parameter CR_SEG7_5    = 20'h2014 ; // RW 7 bit
 parameter CR_LED       = 20'h2018 ; // RW 7 bit
+parameter CR_ALL_PC_RESET= 20'h2040 ;
 parameter CR_Button_0  = 20'h201c ; // RO 1 bit
 parameter CR_Button_1  = 20'h2020 ; // RO 1 bit
 parameter CR_Switch    = 20'h2024 ; // RO 10 bit
@@ -334,7 +335,10 @@ typedef struct packed { // RW
     logic [7:0] SEG7_4;
     logic [7:0] SEG7_5;
     logic [9:0] LED;
+    logic       ALL_PC_RESET;
+
 } t_cr_rw_fpga ;
+
 
 endpackage // lotr_pkg
 

@@ -25,6 +25,7 @@ module gpc_4t
     input  logic          QClk                ,
     input  logic          RstQnnnH            ,
     input  logic [7:0]    CoreID              ,
+    input  logic          ALL_PC_RESET        ,
     //Core To Fabric(C2F)
     //----input----
     input  logic          C2F_RspValidQ502H   ,  
@@ -134,6 +135,7 @@ d_mem_wrap d_mem_wrap (
     .RstQnnnH           (RstQnnnH)       ,  // input    
     .CoreIdStrap        (CoreID)         ,  // input    
     .CRQnnnH            (CRQnnnH)        ,  // output 
+    .ALL_PC_RESET(ALL_PC_RESET),
     //============================================
     //      core interface
     //============================================

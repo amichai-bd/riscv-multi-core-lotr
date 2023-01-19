@@ -32,10 +32,10 @@ import lotr_pkg::*;
     output logic [31:0] F2C_RspDataQ500H       ,//output
 
     // FPGA interface inputs
-    input  logic       Button_0,
-    input  logic       Button_1,
-    input  logic [9:0] Switch,
-    input logic [15:0] Arduino_dg_io,
+    input  logic        Button_0,
+    input  logic        Button_1,
+    input  logic [9:0]  Switch,
+    input  logic [15:0] Arduino_dg_io,
 
     // FPGA interface outputs
     output logic [7:0] SEG7_0,
@@ -49,7 +49,8 @@ import lotr_pkg::*;
     output logic [3:0] BLUE,
     output logic       v_sync,
     output logic       h_sync,
-    output logic [9:0] LED
+    output logic [9:0] LED,
+	 output logic       ALL_PC_RESET
 );
 
 // Memory CR objects (behavrial - not for FPGA/ASIC)
@@ -144,6 +145,7 @@ always_comb begin
             CR_SEG7_4 : cr_rw_next.SEG7_4 = F2C_ReqDataQ503H[7:0];
             CR_SEG7_5 : cr_rw_next.SEG7_5 = F2C_ReqDataQ503H[7:0];
             CR_LED    : cr_rw_next.LED    = F2C_ReqDataQ503H[9:0];
+			CR_ALL_PC_RESET: cr_rw_next.ALL_PC_RESET = F2C_ReqDataQ503H[0];
             // ---- Other ----
             default   : /* Do nothing */;
         endcase
@@ -172,6 +174,8 @@ always_comb begin
             CR_SEG7_4   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_4}   ;
             CR_SEG7_5   : F2C_RspDataQ503H = {24'b0 , cr_rw.SEG7_5}   ;
             CR_LED      : F2C_RspDataQ503H = {22'b0 , cr_rw.LED}      ;
+            CR_ALL_PC_RESET:F2C_RspDataQ503H = {31'b0 , cr_rw.ALL_PC_RESET};
+
             // ---- RO memory ----
             CR_Button_0 : F2C_RspDataQ503H = {31'b0 , cr_ro.Button_0} ;
             CR_Button_1 : F2C_RspDataQ503H = {31'b0 , cr_ro.Button_1} ;
@@ -212,13 +216,14 @@ assign F2C_RspDataQ504H  = CtrlCRMemRdEnQ504  ? CrRspDataQ504H  :
 `LOTR_RST_MSFF(cr_ro, cr_ro_next, QClk, RstQnnnH)
 
 // Reflects outputs to the FPGA - synchorus reflects
-`LOTR_RST_MSFF(SEG7_0 , cr_rw.SEG7_0 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_1 , cr_rw.SEG7_1 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_2 , cr_rw.SEG7_2 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_3 , cr_rw.SEG7_3 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_4 , cr_rw.SEG7_4 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(SEG7_5 , cr_rw.SEG7_5 , QClk, RstQnnnH)
-`LOTR_RST_MSFF(LED    , cr_rw.LED    , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_0      , cr_rw.SEG7_0      , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_1      , cr_rw.SEG7_1      , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_2      , cr_rw.SEG7_2      , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_3      , cr_rw.SEG7_3      , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_4      , cr_rw.SEG7_4      , QClk, RstQnnnH)
+`LOTR_RST_MSFF(SEG7_5      , cr_rw.SEG7_5      , QClk, RstQnnnH)
+`LOTR_RST_MSFF(LED         , cr_rw.LED         , QClk, RstQnnnH)
+`LOTR_RST_MSFF(ALL_PC_RESET, cr_rw.ALL_PC_RESET, QClk, RstQnnnH)
 
 
 // This logic is to get data from the DE10lite Analog pins

@@ -23,6 +23,7 @@ import lotr_pkg::*;
     input   logic         QClk                     ,
     input   logic         RstQnnnH                 ,
     input   logic  [7:0]  CoreID                   ,
+    input   logic         ALL_PC_RESET             ,
     //===================================
     // Tile <-> Fabric Inteface
     //===================================
@@ -150,6 +151,7 @@ gpc_4t gpc_4t(
     .QClk                   (QClk)                   ,//input
     .RstQnnnH               (RstQnnnH)               ,//input
     .CoreID                 (CoreID)                 ,//input
+    .ALL_PC_RESET(ALL_PC_RESET),
     //================================================
     //        Core to Fabric
     //================================================

@@ -1,0 +1,15 @@
+COM3
+WB
+0x01000000
+../../../../verif/Tests/graphic_test/graphic_test_inst_mem_rv32i.sv
+WB
+0x01000000
+../../../../verif/Tests/graphic_test/graphic_test_data_mem_rv32i.sv
+WB
+0x02000000
+../../../../verif/Tests/graphic_test/graphic_test_inst_mem_rv32i.sv
+WB
+0x02000000
+../../../../verif/Tests/graphic_test/graphic_test_data_mem_rv32i.sv
+Q
+Q

@@ -1,0 +1,8 @@
+COM3
+WB
+0x03400000
+clear_VGA.sv
+R
+0x03400000
+Q
+Q

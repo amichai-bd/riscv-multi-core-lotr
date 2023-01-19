@@ -73,7 +73,9 @@ import lotr_pkg::*;
     output logic [3:0] BLUE,
     output logic       v_sync,
     output logic       h_sync,
-    output logic [9:0] LED
+    output logic [9:0] LED,
+    output logic       ALL_PC_RESET
+
 );
 
 //================================================
@@ -190,7 +192,8 @@ DE10Lite_MMIO DE10Lite_MMIO(
     .BLUE    (BLUE  ),//output logic [3:0] 
     .v_sync  (v_sync),//output logic       
     .h_sync  (h_sync),//output logic       
-    .LED     (LED   )
+    .LED     (LED   ),
+    .ALL_PC_RESET(ALL_PC_RESET   )
 
 
 

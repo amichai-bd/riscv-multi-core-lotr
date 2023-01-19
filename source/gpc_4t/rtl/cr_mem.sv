@@ -19,6 +19,7 @@ import lotr_pkg::*;
                 (input   logic             QClk,          
                  input   logic             RstQnnnH,          
                  input   logic [7:0]       CoreIdStrap,          
+                 input  logic              ALL_PC_RESET,
                  //Core interface 
                  input   logic [MSB_D_MEM:0] CrAddressQ103H,
                  input   logic [3:0]         ThreadQ103H,
@@ -193,10 +194,18 @@ assign SelWrDataQ103H = cr_en[1];
 //===========================================
 //              CRs - Write from core/ring write request
 //===========================================
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_0, WrDataQ103H[SelWrDataQ103H.rst_pc_0][0]          , QClk  ,  CrEnQ103H.rst_pc_0     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_1, WrDataQ103H[SelWrDataQ103H.rst_pc_1][0]          , QClk  ,  CrEnQ103H.rst_pc_1     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_2, WrDataQ103H[SelWrDataQ103H.rst_pc_2][0]          , QClk  ,  CrEnQ103H.rst_pc_2     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
-`LOTR_EN_RST_VAL_MSFF(core_cr.rst_pc_3, WrDataQ103H[SelWrDataQ103H.rst_pc_3][0]          , QClk  ,  CrEnQ103H.rst_pc_3     , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+logic pre_rst_pc_0;
+logic pre_rst_pc_1;
+logic pre_rst_pc_2;
+logic pre_rst_pc_3;
+`LOTR_EN_RST_VAL_MSFF(pre_rst_pc_0, WrDataQ103H[SelWrDataQ103H.rst_pc_0][0]             , QClk  ,  CrEnQ103H.rst_pc_0      , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(pre_rst_pc_1, WrDataQ103H[SelWrDataQ103H.rst_pc_1][0]             , QClk  ,  CrEnQ103H.rst_pc_1      , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(pre_rst_pc_2, WrDataQ103H[SelWrDataQ103H.rst_pc_2][0]             , QClk  ,  CrEnQ103H.rst_pc_2      , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+`LOTR_EN_RST_VAL_MSFF(pre_rst_pc_3, WrDataQ103H[SelWrDataQ103H.rst_pc_3][0]             , QClk  ,  CrEnQ103H.rst_pc_3      , RstQnnnH  ,  1'b0)//FIXME - defualt value should be 1'b1 - reset thread.
+assign core_cr.rst_pc_0 = pre_rst_pc_0 || ALL_PC_RESET;
+assign core_cr.rst_pc_1 = pre_rst_pc_1 || ALL_PC_RESET;
+assign core_cr.rst_pc_2 = pre_rst_pc_2 || ALL_PC_RESET;
+assign core_cr.rst_pc_3 = pre_rst_pc_3 || ALL_PC_RESET;
 `LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_0 , WrDataQ103H[SelWrDataQ103H.en_pc_0][0]           , QClk  ,  CrEnQ103H.en_pc_0      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
 `LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_1 , WrDataQ103H[SelWrDataQ103H.en_pc_1][0]           , QClk  ,  CrEnQ103H.en_pc_1      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.
 `LOTR_EN_RST_VAL_MSFF(core_cr.en_pc_2 , WrDataQ103H[SelWrDataQ103H.en_pc_2][0]           , QClk  ,  CrEnQ103H.en_pc_2      , RstQnnnH  ,  1'b1)//FIXME - defualt value should be 1'b0 - desable thread.

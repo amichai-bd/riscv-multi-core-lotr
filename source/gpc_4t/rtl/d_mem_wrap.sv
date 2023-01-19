@@ -21,6 +21,7 @@ import lotr_pkg::*;
                 input  logic         RstQnnnH       ,
                 input  logic [7:0]   CoreIdStrap    ,
                 output t_core_cr     CRQnnnH        ,
+                input  logic         ALL_PC_RESET        ,
                 //============================================
                 //      core interface
                 //============================================
@@ -262,6 +263,7 @@ cr_mem cr_mem (
     .QClk           (QClk),          
     .RstQnnnH       (RstQnnnH),          
     .CoreIdStrap    (CoreIdStrap),          
+    .ALL_PC_RESET(ALL_PC_RESET),
     //============================================
     //      core interface
     //============================================

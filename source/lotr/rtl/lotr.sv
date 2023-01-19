@@ -52,7 +52,8 @@ import lotr_pkg::*;
 
 
 logic RstQnnnH;
-assign RstQnnnH = ~Button_0;
+logic ALL_PC_RESET;
+assign RstQnnnH = (~Button_0);
 
 //=========================================
 //=====    ===========
@@ -128,6 +129,7 @@ gpc_4t_tile gpc_4t_tile_1
     .QClk       (QClk)         , //input  logic        
     .RstQnnnH   (RstQnnnH)     , //input  logic        
     .CoreID     (8'd1) , //input  logic  [7:0] 
+    .ALL_PC_RESET(ALL_PC_RESET),
     //================================================
     //        RING Interface
     //================================================
@@ -163,6 +165,7 @@ gpc_4t_tile gpc_4t_tile_2
     .QClk       (QClk)         , //input  logic        
     .RstQnnnH   (RstQnnnH)     , //input  logic        
     .CoreID     (8'd2) , //input  logic  [7:0] 
+    .ALL_PC_RESET(ALL_PC_RESET),
     //================================================
     //        RING Interface
     //================================================
@@ -266,7 +269,9 @@ fpga_tile fpga_tile
     .BLUE    (BLUE),//(BLUE),//output logic [3:0] 
     .v_sync  (v_sync),//(v_sync),//output logic       
     .h_sync  (h_sync),//(h_sync),//output logic      
-    .LED     (LED)//(LED)
+    .LED     (LED),//(LED)
+    .ALL_PC_RESET(ALL_PC_RESET)
+
 );
 
 // UART TILE
