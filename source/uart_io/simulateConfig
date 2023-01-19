@@ -1,1 +1,0 @@
-vsim.exe -Ldir /c/Users/97250/Desktop/ProjectB/Lotr/source/uart_io -t 1ns work.uart_top_tb -gui -suppress 8315,3584,8233,3408

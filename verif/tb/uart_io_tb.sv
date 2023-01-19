@@ -39,13 +39,13 @@ module uart_io_tb;
    logic [31:0]       Write_transfer_buffer [N_WRITE_TRANSFERS-1:0][1:0]; 
    
    // GENERAL SIGNALS
-   logic          test_undone;
+   logic 	      test_undone;
    logic 	      clk;
    logic 	      rstn;
    logic 	      clk_en;
    logic 	      uart_master_tx; //pc side to uart
    logic 	      uart_master_rx; //pc side to uart
-   logic          interrupt;
+   logic 	      interrupt;
 
    //===================================
    // Ring Controler <-> Core Interface
@@ -55,25 +55,24 @@ module uart_io_tb;
    //---------------------------------------
    // REQUEST
    logic 	      C2F_ReqValidQ500H;
-   t_opcode       C2F_ReqOpcodeQ500H;
-   logic [31:0]   C2F_ReqAddressQ500H;
-   logic [31:0]   C2F_ReqDataQ500H;
-   logic [1:0] 	C2F_ReqThreadIDQ500H;
+   t_opcode           C2F_ReqOpcodeQ500H;
+   logic [31:0]       C2F_ReqAddressQ500H;
+   logic [31:0]       C2F_ReqDataQ500H;
+   logic [1:0] 	      C2F_ReqThreadIDQ500H;
    // RESPONSE
    logic 	      C2F_RspValidQ502H;
-   t_opcode       C2F_RspOpcodeQ502H;
-   logic [31:0]   C2F_RspDataQ502H;
+   t_opcode           C2F_RspOpcodeQ502H;
+   logic [31:0]       C2F_RspDataQ502H;
    logic 	      C2F_RspStall;
-   logic [1:0] 	C2F_RspThreadIDQ502H;
-
-   t_opcode      RingReqInOpcodeQ500H;
-   t_opcode      RingRspInOpcodeQ500H;
+   logic [1:0] 	      C2F_RspThreadIDQ502H;
+   
+   t_opcode           RingReqInOpcodeQ500H;
+   t_opcode           RingRspInOpcodeQ500H;
 
    initial begin;
       RingReqInOpcodeQ500H = WR;
       RingRspInOpcodeQ500H = RD_RSP;
    end
-
 
    always #HALF_CLK
      clk = (clk_en) ? ~clk : 0;
@@ -113,45 +112,42 @@ module uart_io_tb;
 	);
 */
 
-// UART TILE
-uart_tile uart_tile_DUT
-	(
-    //General Interface
-    .QClk                     (clk),
-    .RstQnnnH                 (~rstn),
-    .CoreID                   (8'd4),
-    //================================================
-    //        RING Interface
-    //================================================
-    //Ring ---> RC , RingReqIn
-    .RingReqInValidQ500H        ('0)  ,//input
-    .RingReqInRequestorQ500H    ('0)  ,//input
-    .RingReqInOpcodeQ500H       (RingReqInOpcodeQ500H)  ,//input
-    .RingReqInAddressQ500H      ('0)  ,//input
-    .RingReqInDataQ500H         ('0)  ,//input
-    //Ring ---> RC , RingRspIn                          
-    .RingRspInValidQ500H        ('0)  ,//input
-    .RingRspInRequestorQ500H    ('0)  ,//input
-    .RingRspInOpcodeQ500H       (RingRspInOpcodeQ500H),//input
-    .RingRspInAddressQ500H      ('0)  ,//input
-    .RingRspInDataQ500H         ('0)  ,//input
-    //RC   ---> Ring , RingReqOut
-    .RingReqOutValidQ502H       (),//output
-    .RingReqOutRequestorQ502H   (),//output
-    .RingReqOutOpcodeQ502H      (),//output
-    .RingReqOutAddressQ502H     (),//output
-    .RingReqOutDataQ502H        (),//output
-     //RC   ---> Ring , RingRspOut                     
-    .RingRspOutValidQ502H       (),//output
-    .RingRspOutRequestorQ502H   (),//output
-    .RingRspOutOpcodeQ502H      (),//output
-    .RingRspOutAddressQ502H     (),//output
-    .RingRspOutDataQ502H        (), //output
-    // UART RX/TX.
-    .uart_master_tx           (uart_master_tx), 
-    .uart_master_rx           (uart_master_rx),
-    .interrupt                (interrupt)
-    );
+   // UART TILE
+   uart_tile uart_tile_DUT
+     (
+      //General Interface
+      .QClk                     (clk),
+      .RstQnnnH                 (~rstn),
+      .CoreID                   (8'd4),
+      //Ring ---> RC , RingReqIn
+      .RingReqInValidQ500H      ('0)  ,//input
+      .RingReqInRequestorQ500H  ('0)  ,//input
+      .RingReqInOpcodeQ500H     (RingReqInOpcodeQ500H)  ,//input
+      .RingReqInAddressQ500H    ('0)  ,//input
+      .RingReqInDataQ500H       ('0)  ,//input
+      //Ring ---> RC , RingRspIn                          
+      .RingRspInValidQ500H      ('0)  ,//input
+      .RingRspInRequestorQ500H  ('0)  ,//input
+      .RingRspInOpcodeQ500H     (RingRspInOpcodeQ500H),//input
+      .RingRspInAddressQ500H    ('0)  ,//input
+      .RingRspInDataQ500H       ('0)  ,//input
+      //RC   ---> Ring , RingReqOut
+      .RingReqOutValidQ502H     (),//output
+      .RingReqOutRequestorQ502H (),//output
+      .RingReqOutOpcodeQ502H    (),//output
+      .RingReqOutAddressQ502H   (),//output
+      .RingReqOutDataQ502H      (),//output
+      //RC   ---> Ring , RingRspOut                     
+      .RingRspOutValidQ502H     (),//output
+      .RingRspOutRequestorQ502H (),//output
+      .RingRspOutOpcodeQ502H    (),//output
+      .RingRspOutAddressQ502H   (),//output
+      .RingRspOutDataQ502H      (), //output
+      // UART RX/TX.
+      .uart_master_tx           (uart_master_tx), 
+      .uart_master_rx           (uart_master_rx),
+      .interrupt                (interrupt)
+      );
 
 
 /*///////////////////////////
@@ -239,7 +235,6 @@ uart_tile uart_tile_DUT
 
    task C2F_request_monitor();
    endtask // C2F_request_monitor
-
    
    task Terminal_Write;
       input logic [3:0][7:0] address;
@@ -247,20 +242,18 @@ uart_tile uart_tile_DUT
       print($sformatf("Terminal transmit opcode: %d address: 0x%x, data: 0x%x", "W", address, data));
       UART_H2D_transmit(32'd87); //W in Ascci
       for(int i=4; i>0; i--)
-	      UART_H2D_transmit(address[i-1]);
+	UART_H2D_transmit(address[i-1]);
       for(int i=4; i>0; i--)
-	      UART_H2D_transmit(data[i-1]);
+	UART_H2D_transmit(data[i-1]);
    endtask // Terminal_Write
-
    
    task Terminal_Read;
       input logic [3:0][7:0] address;
       print($sformatf("Terminal transmit opcode: %d address: 0x%x", "R", address));
       UART_H2D_transmit(32'd82); //R in Ascci
       for(int i=4; i>0; --i)
-	      UART_H2D_transmit(address[i-1]);
+	UART_H2D_transmit(address[i-1]);
    endtask // Terminal_Read
-   //    
    
 /*/////////////////////////////////
    ___  _    _              _  _ 
