@@ -1,1 +1,0 @@
-vsim.exe -Ldir "uart_io" -t 1ns work.uart_io_tb -c -do "run -all" -checkvifacedrivers 1 -no_autoacc -keeploaded -suppress 8315,3584,8233,3408 +UART_SIMULATION

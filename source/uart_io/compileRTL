@@ -1,1 +1,0 @@
-vlog.exe -f ./uart_io/uart_io_list.f -work ./uart_io/work -skipsynthoffregion -lint -source -warning [] -fatal [] -note [] -error [] -suppress 2275
