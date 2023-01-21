@@ -13,7 +13,7 @@ W
 0x0
 WB
 0x01000000
-clear.sv
+sv/clear.sv
 WB
 0x01000000
 ../../../../verif/Tests/fpga_main/fpga_main_inst_mem_rv32i.sv

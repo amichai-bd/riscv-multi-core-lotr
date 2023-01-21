@@ -1,7 +1,7 @@
 COM3
 WB
 0x03400000
-set_VGA.sv
+sv/set_VGA.sv
 R
 0x03400000
 Q

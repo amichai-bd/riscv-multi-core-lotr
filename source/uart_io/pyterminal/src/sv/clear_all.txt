@@ -1,0 +1,15 @@
+COM3
+WB
+0x01000000
+clear.sv
+WB
+0x01400000
+clear.sv
+WB
+0x02000000
+clear.sv
+WB
+0x02400000
+clear.sv
+Q
+Q
