@@ -1,8 +1,5 @@
 	.file	"fpga_main.c"
 	.option nopic
-	.attribute arch, "rv32i2p0"
-	.attribute unaligned_access, 0
-	.attribute stack_align, 16
 	.text
 	.globl	ASCII_TOP
 	.data
@@ -885,9 +882,6 @@ show_menu:
 	.align	2
 .LC16:
 	.string	"011 : DECREASE BINARY COUNTER\n"
-	.align	2
-.LC17:
-	.string	"100 : ONE LED MOVING RIGHT\n"
 	.text
 	.align	2
 	.globl	led_blinky
@@ -942,13 +936,7 @@ led_blinky:
 	lui	a5,%hi(.LC16)
 	addi	a0,a5,%lo(.LC16)
 	call	rvc_printf
-	li	a1,20
-	li	a0,60
-	call	set_cursor
-	lui	a5,%hi(.LC17)
-	addi	a0,a5,%lo(.LC17)
-	call	rvc_printf
-.L42:
+.L41:
 	li	a5,62922752
 	addi	a5,a5,36
 	lw	a5,0(a5)
@@ -970,11 +958,11 @@ led_blinky:
 	li	a5,1023
 	bne	a4,a5,.L37
 	sw	zero,-28(s0)
-	j	.L42
+	j	.L41
 .L37:
 	li	a5,1023
 	sw	a5,-28(s0)
-	j	.L42
+	j	.L41
 .L36:
 	li	a5,62922752
 	addi	a5,a5,36
@@ -998,10 +986,10 @@ led_blinky:
 	sw	a5,-20(s0)
 	lw	a4,-20(s0)
 	li	a5,1023
-	bne	a4,a5,.L42
+	bne	a4,a5,.L41
 	li	a5,1
 	sw	a5,-20(s0)
-	j	.L42
+	j	.L41
 .L39:
 	li	a5,62922752
 	addi	a5,a5,36
@@ -1025,10 +1013,10 @@ led_blinky:
 	sw	a5,-32(s0)
 	lw	a4,-32(s0)
 	li	a5,512
-	ble	a4,a5,.L42
+	ble	a4,a5,.L41
 	li	a5,1
 	sw	a5,-32(s0)
-	j	.L42
+	j	.L41
 .L40:
 	li	a5,62922752
 	addi	a5,a5,36
@@ -1051,85 +1039,59 @@ led_blinky:
 	addi	a5,a5,-1
 	sw	a5,-24(s0)
 	lw	a5,-24(s0)
-	bne	a5,zero,.L42
+	bne	a5,zero,.L41
 	li	a5,1023
 	sw	a5,-24(s0)
-	j	.L42
-.L41:
-	li	a5,62922752
-	addi	a5,a5,36
-	lw	a4,0(a5)
-	li	a5,4
-	bne	a4,a5,.L42
-	li	a5,1
-	sw	a5,-20(s0)
-	li	a5,1023
-	sw	a5,-24(s0)
-	sw	zero,-28(s0)
-	li	a5,1
-	sw	a5,-32(s0)
-	call	delay
-	li	a5,62922752
-	addi	a5,a5,24
-	lw	a4,-36(s0)
-	sw	a4,0(a5)
-	lw	a5,-36(s0)
-	srai	a5,a5,1
-	sw	a5,-36(s0)
-	lw	a5,-36(s0)
-	bne	a5,zero,.L42
-	li	a5,512
-	sw	a5,-36(s0)
-	j	.L42
+	j	.L41
 	.size	led_blinky, .-led_blinky
 	.section	.rodata
 	.align	2
-.LC18:
+.LC17:
 	.string	"LOTR FABRIC\n"
 	.align	2
-.LC19:
+.LC18:
 	.string	"FPGA .\n"
 	.align	2
-.LC20:
+.LC19:
 	.string	"HW SYSTEM PROPERTIES:\n"
 	.align	2
-.LC21:
+.LC20:
 	.string	"NUMBER OF CORES: 2\n"
 	.align	2
-.LC22:
+.LC21:
 	.string	"NUMBER OF THREAD EACH CORE: 4\n"
 	.align	2
-.LC23:
+.LC22:
 	.string	"FPGA MODEL : DE10LIGHT\n"
 	.align	2
-.LC24:
+.LC23:
 	.string	"INSTRUCTION MEMORY SIZE FOR EACH CORE : 8 KB\n"
 	.align	2
-.LC25:
+.LC24:
 	.string	"DATA MEMORY SIZE FOR EACH CORE : 8 KB\n"
 	.align	2
-.LC26:
+.LC25:
 	.string	"VGA MEMORY SIZE : 38 KB\n"
 	.align	2
-.LC27:
+.LC26:
 	.string	"SOME CR FEATURES : \n"
 	.align	2
-.LC28:
+.LC27:
 	.string	"FREEZE THREAD PC\n"
 	.align	2
-.LC29:
+.LC28:
 	.string	"RESET THREAD PC\n"
 	.align	2
-.LC30:
+.LC29:
 	.string	"CREATORS: \n"
 	.align	2
-.LC31:
+.LC30:
 	.string	"ADI LEVY \n"
 	.align	2
-.LC32:
+.LC31:
 	.string	"SAAR KADOSH \n"
 	.align	2
-.LC33:
+.LC32:
 	.string	"AMICHAI BEN DAVID \n"
 	.text
 	.align	2
@@ -1143,98 +1105,98 @@ sys_info:
 	li	a1,1
 	li	a0,1
 	call	set_cursor
-	lui	a5,%hi(.LC18)
-	addi	a0,a5,%lo(.LC18)
+	lui	a5,%hi(.LC17)
+	addi	a0,a5,%lo(.LC17)
 	call	rvc_printf
 	li	a1,1
 	li	a0,5
+	call	set_cursor
+	lui	a5,%hi(.LC18)
+	addi	a0,a5,%lo(.LC18)
+	call	rvc_printf
+	li	a1,20
+	li	a0,10
 	call	set_cursor
 	lui	a5,%hi(.LC19)
 	addi	a0,a5,%lo(.LC19)
 	call	rvc_printf
 	li	a1,20
-	li	a0,10
+	li	a0,20
 	call	set_cursor
 	lui	a5,%hi(.LC20)
 	addi	a0,a5,%lo(.LC20)
 	call	rvc_printf
 	li	a1,20
-	li	a0,20
+	li	a0,25
 	call	set_cursor
 	lui	a5,%hi(.LC21)
 	addi	a0,a5,%lo(.LC21)
 	call	rvc_printf
 	li	a1,20
-	li	a0,25
+	li	a0,30
 	call	set_cursor
 	lui	a5,%hi(.LC22)
 	addi	a0,a5,%lo(.LC22)
 	call	rvc_printf
 	li	a1,20
-	li	a0,30
+	li	a0,35
 	call	set_cursor
 	lui	a5,%hi(.LC23)
 	addi	a0,a5,%lo(.LC23)
 	call	rvc_printf
 	li	a1,20
-	li	a0,35
+	li	a0,40
 	call	set_cursor
 	lui	a5,%hi(.LC24)
 	addi	a0,a5,%lo(.LC24)
 	call	rvc_printf
 	li	a1,20
-	li	a0,40
+	li	a0,45
 	call	set_cursor
 	lui	a5,%hi(.LC25)
 	addi	a0,a5,%lo(.LC25)
 	call	rvc_printf
 	li	a1,20
-	li	a0,45
+	li	a0,50
 	call	set_cursor
 	lui	a5,%hi(.LC26)
 	addi	a0,a5,%lo(.LC26)
 	call	rvc_printf
-	li	a1,20
-	li	a0,50
+	li	a1,25
+	li	a0,55
 	call	set_cursor
 	lui	a5,%hi(.LC27)
 	addi	a0,a5,%lo(.LC27)
 	call	rvc_printf
 	li	a1,25
-	li	a0,55
+	li	a0,60
 	call	set_cursor
 	lui	a5,%hi(.LC28)
 	addi	a0,a5,%lo(.LC28)
 	call	rvc_printf
-	li	a1,25
-	li	a0,60
+	li	a1,20
+	li	a0,65
 	call	set_cursor
 	lui	a5,%hi(.LC29)
 	addi	a0,a5,%lo(.LC29)
 	call	rvc_printf
-	li	a1,20
-	li	a0,65
+	li	a1,25
+	li	a0,70
 	call	set_cursor
 	lui	a5,%hi(.LC30)
 	addi	a0,a5,%lo(.LC30)
 	call	rvc_printf
 	li	a1,25
-	li	a0,70
+	li	a0,75
 	call	set_cursor
 	lui	a5,%hi(.LC31)
 	addi	a0,a5,%lo(.LC31)
 	call	rvc_printf
 	li	a1,25
-	li	a0,75
+	li	a0,80
 	call	set_cursor
 	lui	a5,%hi(.LC32)
 	addi	a0,a5,%lo(.LC32)
-	call	rvc_printf
-	li	a1,25
-	li	a0,80
-	call	set_cursor
-	lui	a5,%hi(.LC33)
-	addi	a0,a5,%lo(.LC33)
 	call	rvc_printf
 	nop
 	lw	ra,12(sp)
@@ -1256,46 +1218,46 @@ new_direction:
 	lw	a5,0(a5)
 	sb	a5,-17(s0)
 	lbu	a5,-17(s0)
-	beq	a5,zero,.L45
+	beq	a5,zero,.L44
 	lbu	a4,-17(s0)
 	li	a5,2
-	beq	a4,a5,.L45
+	beq	a4,a5,.L44
 	lbu	a4,-17(s0)
 	li	a5,4
-	beq	a4,a5,.L45
+	beq	a4,a5,.L44
 	lbu	a4,-17(s0)
 	li	a5,1
-	bne	a4,a5,.L46
-.L45:
+	bne	a4,a5,.L45
+.L44:
 	lbu	a5,-33(s0)
-	bne	a5,zero,.L47
+	bne	a5,zero,.L46
 	lbu	a4,-17(s0)
 	li	a5,4
-	beq	a4,a5,.L46
+	beq	a4,a5,.L45
+.L46:
+	lbu	a4,-33(s0)
+	li	a5,4
+	bne	a4,a5,.L47
+	lbu	a5,-17(s0)
+	beq	a5,zero,.L45
 .L47:
 	lbu	a4,-33(s0)
-	li	a5,4
+	li	a5,2
 	bne	a4,a5,.L48
-	lbu	a5,-17(s0)
-	beq	a5,zero,.L46
+	lbu	a4,-17(s0)
+	li	a5,1
+	beq	a4,a5,.L45
 .L48:
 	lbu	a4,-33(s0)
-	li	a5,2
+	li	a5,1
 	bne	a4,a5,.L49
 	lbu	a4,-17(s0)
-	li	a5,1
-	beq	a4,a5,.L46
-.L49:
-	lbu	a4,-33(s0)
-	li	a5,1
-	bne	a4,a5,.L50
-	lbu	a4,-17(s0)
 	li	a5,2
-	bne	a4,a5,.L50
-.L46:
+	bne	a4,a5,.L49
+.L45:
 	lbu	a5,-33(s0)
 	sb	a5,-17(s0)
-.L50:
+.L49:
 	lbu	a5,-17(s0)
 	mv	a0,a5
 	lw	s0,44(sp)
@@ -1319,8 +1281,8 @@ snk_move:
 	lbu	a5,-34(s0)
 	addi	a5,a5,-1
 	sw	a5,-20(s0)
-	j	.L53
-.L54:
+	j	.L52
+.L53:
 	lw	a5,-20(s0)
 	addi	a5,a5,-1
 	lw	a4,-40(s0)
@@ -1342,11 +1304,26 @@ snk_move:
 	lw	a5,-20(s0)
 	addi	a5,a5,-1
 	sw	a5,-20(s0)
-.L53:
+.L52:
 	lw	a5,-20(s0)
-	bgt	a5,zero,.L54
+	bgt	a5,zero,.L53
 	lbu	a4,-33(s0)
 	li	a5,2
+	bne	a4,a5,.L54
+	lw	a5,-40(s0)
+	lbu	a4,1(a5)
+	lw	a5,-40(s0)
+	sb	a4,0(a5)
+	lw	a5,-44(s0)
+	addi	a5,a5,1
+	lbu	a5,0(a5)
+	addi	a5,a5,-1
+	andi	a4,a5,0xff
+	lw	a5,-44(s0)
+	sb	a4,0(a5)
+.L54:
+	lbu	a4,-33(s0)
+	li	a5,1
 	bne	a4,a5,.L55
 	lw	a5,-40(s0)
 	lbu	a4,1(a5)
@@ -1355,33 +1332,32 @@ snk_move:
 	lw	a5,-44(s0)
 	addi	a5,a5,1
 	lbu	a5,0(a5)
-	addi	a5,a5,-1
+	addi	a5,a5,1
 	andi	a4,a5,0xff
 	lw	a5,-44(s0)
 	sb	a4,0(a5)
 .L55:
 	lbu	a4,-33(s0)
-	li	a5,1
-	bne	a4,a5,.L56
-	lw	a5,-40(s0)
-	lbu	a4,1(a5)
-	lw	a5,-40(s0)
-	sb	a4,0(a5)
-	lw	a5,-44(s0)
-	addi	a5,a5,1
-	lbu	a5,0(a5)
-	addi	a5,a5,1
-	andi	a4,a5,0xff
-	lw	a5,-44(s0)
-	sb	a4,0(a5)
-.L56:
-	lbu	a4,-33(s0)
 	li	a5,4
-	bne	a4,a5,.L57
+	bne	a4,a5,.L56
 	lw	a5,-40(s0)
 	addi	a5,a5,1
 	lbu	a5,0(a5)
 	addi	a5,a5,-1
+	andi	a4,a5,0xff
+	lw	a5,-40(s0)
+	sb	a4,0(a5)
+	lw	a5,-44(s0)
+	lbu	a4,1(a5)
+	lw	a5,-44(s0)
+	sb	a4,0(a5)
+.L56:
+	lbu	a5,-33(s0)
+	bne	a5,zero,.L57
+	lw	a5,-40(s0)
+	addi	a5,a5,1
+	lbu	a5,0(a5)
+	addi	a5,a5,1
 	andi	a4,a5,0xff
 	lw	a5,-40(s0)
 	sb	a4,0(a5)
@@ -1391,7 +1367,7 @@ snk_move:
 	sb	a4,0(a5)
 .L57:
 	lbu	a5,-33(s0)
-	bne	a5,zero,.L58
+	bne	a5,zero,.L59
 	lw	a5,-40(s0)
 	addi	a5,a5,1
 	lbu	a5,0(a5)
@@ -1403,21 +1379,7 @@ snk_move:
 	lbu	a4,1(a5)
 	lw	a5,-44(s0)
 	sb	a4,0(a5)
-.L58:
-	lbu	a5,-33(s0)
-	bne	a5,zero,.L60
-	lw	a5,-40(s0)
-	addi	a5,a5,1
-	lbu	a5,0(a5)
-	addi	a5,a5,1
-	andi	a4,a5,0xff
-	lw	a5,-40(s0)
-	sb	a4,0(a5)
-	lw	a5,-44(s0)
-	lbu	a4,1(a5)
-	lw	a5,-44(s0)
-	sb	a4,0(a5)
-.L60:
+.L59:
 	nop
 	lw	s0,44(sp)
 	addi	sp,sp,48
@@ -1439,13 +1401,13 @@ print_snake:
 	mv	a5,a4
 	sb	a5,-34(s0)
 	sw	zero,-20(s0)
-	j	.L62
-.L65:
+	j	.L61
+.L64:
 	lw	a5,-20(s0)
 	lw	a4,-40(s0)
 	add	a5,a4,a5
 	lbu	a5,0(a5)
-	beq	a5,zero,.L63
+	beq	a5,zero,.L62
 	lw	a5,-20(s0)
 	lw	a4,-48(s0)
 	add	a5,a4,a5
@@ -1464,9 +1426,9 @@ print_snake:
 	lw	a4,-40(s0)
 	add	a5,a4,a5
 	lbu	a5,0(a5)
-	bne	a5,zero,.L63
+	bne	a5,zero,.L62
 	lbu	a5,-33(s0)
-	beq	a5,zero,.L64
+	beq	a5,zero,.L63
 	lw	a5,-20(s0)
 	addi	a5,a5,1
 	lw	a4,-40(s0)
@@ -1474,8 +1436,8 @@ print_snake:
 	li	a4,1
 	sb	a4,0(a5)
 	sb	zero,-33(s0)
-	j	.L63
-.L64:
+	j	.L62
+.L63:
 	lw	a5,-20(s0)
 	addi	a5,a5,1
 	lw	a4,-48(s0)
@@ -1491,14 +1453,14 @@ print_snake:
 	mv	a1,a3
 	li	a0,32
 	call	draw_char
-.L63:
+.L62:
 	lw	a5,-20(s0)
 	addi	a5,a5,1
 	sw	a5,-20(s0)
-.L62:
+.L61:
 	lbu	a5,-34(s0)
 	lw	a4,-20(s0)
-	blt	a4,a5,.L65
+	blt	a4,a5,.L64
 	nop
 	nop
 	lw	ra,44(sp)
@@ -1525,25 +1487,25 @@ eat:
 	sb	a5,-40(s0)
 	lbu	a4,-37(s0)
 	lbu	a5,-39(s0)
-	bne	a4,a5,.L67
+	bne	a4,a5,.L66
 	lbu	a4,-38(s0)
 	lbu	a5,-40(s0)
-	bne	a4,a5,.L67
+	bne	a4,a5,.L66
 	li	a5,1
-	j	.L68
-.L67:
+	j	.L67
+.L66:
 	li	a5,0
-.L68:
+.L67:
 	sb	a5,-17(s0)
 	lbu	a5,-17(s0)
-	beq	a5,zero,.L69
+	beq	a5,zero,.L68
 	lw	a5,-44(s0)
 	lbu	a5,0(a5)
 	addi	a5,a5,1
 	andi	a4,a5,0xff
 	lw	a5,-44(s0)
 	sb	a4,0(a5)
-.L69:
+.L68:
 	lbu	a5,-17(s0)
 	mv	a0,a5
 	lw	s0,44(sp)
@@ -1552,7 +1514,7 @@ eat:
 	.size	eat, .-eat
 	.section	.rodata
 	.align	2
-.LC34:
+.LC33:
 	.string	"GAME SCORE\n"
 	.text
 	.align	2
@@ -1564,6 +1526,22 @@ snake_game:
 	sw	s0,88(sp)
 	addi	s0,sp,96
 	sb	zero,-17(s0)
+	li	a5,5
+	sb	a5,-18(s0)
+	li	a5,5
+	sb	a5,-19(s0)
+	sb	zero,-85(s0)
+	sb	zero,-20(s0)
+	sb	zero,-21(s0)
+	sb	zero,-22(s0)
+.L85:
+	li	a5,62922752
+	addi	a5,a5,36
+	lw	a5,0(a5)
+	sb	a5,-34(s0)
+	lb	a5,-34(s0)
+	bge	a5,zero,.L71
+	call	clear_screen
 	li	a5,5
 	sb	a5,-18(s0)
 	li	a5,5
@@ -1641,7 +1619,7 @@ snake_game:
 	lbu	a4,-33(s0)
 	li	a5,14
 	bleu	a4,a5,.L77
-.L85:
+.L71:
 	lbu	a5,-17(s0)
 	mv	a0,a5
 	call	new_direction
@@ -1665,8 +1643,8 @@ snake_game:
 	addi	a0,s0,-84
 	call	eat
 	mv	a5,a0
-	sb	a5,-34(s0)
-	lbu	a4,-34(s0)
+	sb	a5,-35(s0)
+	lbu	a4,-35(s0)
 	li	a5,1
 	bne	a4,a5,.L79
 	lbu	a5,-22(s0)
@@ -1692,8 +1670,8 @@ snake_game:
 	li	a1,20
 	li	a0,3
 	call	set_cursor
-	lui	a5,%hi(.LC34)
-	addi	a0,a5,%lo(.LC34)
+	lui	a5,%hi(.LC33)
+	addi	a0,a5,%lo(.LC33)
 	call	rvc_printf
 	lbu	a5,-19(s0)
 	slli	a5,a5,1
@@ -1705,7 +1683,7 @@ snake_game:
 	addi	a3,s0,-68
 	addi	a2,s0,-52
 	addi	a1,s0,-84
-	lbu	a5,-34(s0)
+	lbu	a5,-35(s0)
 	li	a4,15
 	mv	a0,a5
 	call	print_snake
@@ -1733,34 +1711,34 @@ snake_game:
 	li	a5,0
 .L84:
 	sb	a5,-21(s0)
-	sb	zero,-34(s0)
+	sb	zero,-35(s0)
 	call	delay
 	j	.L85
 	.size	snake_game, .-snake_game
 	.section	.rodata
 	.align	2
-.LC35:
+.LC34:
 	.string	"C1 T0, BUBBLE SORT RANDOM\n"
 	.align	2
-.LC36:
+.LC35:
 	.string	"C1 T1, BUBBLE SORT 3 UNIQUE\n"
 	.align	2
-.LC37:
+.LC36:
 	.string	"C1 T2, BUBBLE SORT REVERSE\n"
 	.align	2
-.LC38:
+.LC37:
 	.string	"C1 T3, BUBBLE SORT ALMOST SORTED\n"
 	.align	2
-.LC39:
+.LC38:
 	.string	"C2 T0 ,INSERTION SORT RANDOM\n"
 	.align	2
-.LC40:
+.LC39:
 	.string	"C2 T1, INSERTION SORT 3 UNIQUE\n"
 	.align	2
-.LC41:
+.LC40:
 	.string	"C2 T2, INSERTION SORT REVERSE\n"
 	.align	2
-.LC42:
+.LC41:
 	.string	"C2 T3, INSERTION SORT ALMOST SORTED.\n"
 	.align	2
 .LC0:
@@ -1888,8 +1866,8 @@ main:
 	li	a1,1
 	li	a0,30
 	call	set_cursor
-	lui	a5,%hi(.LC35)
-	addi	a0,a5,%lo(.LC35)
+	lui	a5,%hi(.LC34)
+	addi	a0,a5,%lo(.LC34)
 	call	rvc_printf
 	lui	a5,%hi(.LC0)
 	addi	a4,a5,%lo(.LC0)
@@ -2108,8 +2086,8 @@ main:
 	li	a1,40
 	li	a0,90
 	call	set_cursor
-	lui	a5,%hi(.LC36)
-	addi	a0,a5,%lo(.LC36)
+	lui	a5,%hi(.LC35)
+	addi	a0,a5,%lo(.LC35)
 	call	rvc_printf
 	lui	a5,%hi(.LC1)
 	addi	a4,a5,%lo(.LC1)
@@ -2257,8 +2235,8 @@ main:
 	li	a1,40
 	li	a0,30
 	call	set_cursor
-	lui	a5,%hi(.LC37)
-	addi	a0,a5,%lo(.LC37)
+	lui	a5,%hi(.LC36)
+	addi	a0,a5,%lo(.LC36)
 	call	rvc_printf
 	lui	a5,%hi(.LC2)
 	addi	a4,a5,%lo(.LC2)
@@ -2309,8 +2287,8 @@ main:
 	li	a1,1
 	li	a0,90
 	call	set_cursor
-	lui	a5,%hi(.LC38)
-	addi	a0,a5,%lo(.LC38)
+	lui	a5,%hi(.LC37)
+	addi	a0,a5,%lo(.LC37)
 	call	rvc_printf
 	lui	a5,%hi(.LC3)
 	addi	a4,a5,%lo(.LC3)
@@ -2363,8 +2341,8 @@ main:
 	li	a1,1
 	li	a0,1
 	call	set_cursor
-	lui	a5,%hi(.LC39)
-	addi	a0,a5,%lo(.LC39)
+	lui	a5,%hi(.LC38)
+	addi	a0,a5,%lo(.LC38)
 	call	rvc_printf
 	lui	a5,%hi(.LC0)
 	addi	a4,a5,%lo(.LC0)
@@ -2413,8 +2391,8 @@ main:
 	li	a1,40
 	li	a0,60
 	call	set_cursor
-	lui	a5,%hi(.LC40)
-	addi	a0,a5,%lo(.LC40)
+	lui	a5,%hi(.LC39)
+	addi	a0,a5,%lo(.LC39)
 	call	rvc_printf
 	lui	a5,%hi(.LC1)
 	addi	a4,a5,%lo(.LC1)
@@ -2465,8 +2443,8 @@ main:
 	li	a1,40
 	li	a0,1
 	call	set_cursor
-	lui	a5,%hi(.LC41)
-	addi	a0,a5,%lo(.LC41)
+	lui	a5,%hi(.LC40)
+	addi	a0,a5,%lo(.LC40)
 	call	rvc_printf
 	lui	a5,%hi(.LC2)
 	addi	a4,a5,%lo(.LC2)
@@ -2515,8 +2493,8 @@ main:
 	li	a1,1
 	li	a0,60
 	call	set_cursor
-	lui	a5,%hi(.LC42)
-	addi	a0,a5,%lo(.LC42)
+	lui	a5,%hi(.LC41)
+	addi	a0,a5,%lo(.LC41)
 	call	rvc_printf
 	lui	a5,%hi(.LC3)
 	addi	a4,a5,%lo(.LC3)
@@ -2571,4 +2549,4 @@ main:
 	addi	sp,sp,144
 	jr	ra
 	.size	main, .-main
-	.ident	"GCC: (GNU) 10.2.0"
+	.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 10.2.0"

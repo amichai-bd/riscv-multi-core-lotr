@@ -131,8 +131,8 @@ void led_blinky(){
     rvc_printf("010 : ONE LED MOVING LEFT\n"); 
     set_cursor(55,20);
     rvc_printf("011 : DECREASE BINARY COUNTER\n");     
-    set_cursor(60,20);
-    rvc_printf("100 : ONE LED MOVING RIGHT\n");    
+    //set_cursor(60,20);
+    //rvc_printf("100 : ONE LED MOVING RIGHT\n");    
 
 
     while (1){
@@ -173,14 +173,14 @@ void led_blinky(){
                 counter2 = 1023;
         }
 
-        else if (*SWITCH_FGPA == 4){
-            counter = 1; counter2 = 1023; allLed = 0; skipLed = 1;
-            delay();
-            *LED_FGPA = skipLedDown;
-            skipLedDown = skipLedDown >> 1 ;
-            if (skipLedDown == 0)
-                skipLedDown = 512;
-        }
+        //else if (*SWITCH_FGPA == 4){
+        //    counter = 1; counter2 = 1023; allLed = 0; skipLed = 1;
+        //    delay();
+        //    *LED_FGPA = skipLedDown;
+        //    skipLedDown = skipLedDown >> 1 ;
+        //    if (skipLedDown == 0)
+        //        skipLedDown = 512;
+        //}
 
 
 
@@ -325,26 +325,38 @@ void snake_game (){
     char apple_x = 5;
     char apple_y = 5;
     char apple_indx = 0;
-    char hit_apple;
     char score = 0;
     char kill = 0;
     char loc = 0;
-    for(int x = 0; x<80; x++) {
-        draw_char('A', 0  , x);
-        draw_char('A', 2*59, x);
-    }
-    for(int y = 0; y<60; y++) {
-        draw_char('A', y<<1,  0);
-        draw_char('A', y<<1, 79);
-    }
-    for(char i = 0; i < SNK_SIZE ; i ++) {
-        snk_x_pos[i] = i+20;
-        snk_y_pos[i] = 20;
-        snk_valid[i] = (i<5) ? 1 : 0;
-    }
+    char hit_apple;
+    char Switch;
+
     
     while (1)
     { 
+    Switch = *SWITCH_FGPA;
+        if(Switch>127){
+            clear_screen();
+            apple_x = 5;
+            apple_y = 5;
+            apple_indx = 0;
+            score = 0;
+            kill = 0;
+            loc = 0;
+            for(int x = 0; x<80; x++) {
+                draw_char('A', 0  , x);
+                draw_char('A', 2*59, x);
+            }
+            for(int y = 0; y<60; y++) {
+                draw_char('A', y<<1,  0);
+                draw_char('A', y<<1, 79);
+            }
+            for(char i = 0; i < SNK_SIZE ; i ++) {
+                snk_x_pos[i] = i+20;
+                snk_y_pos[i] = 20;
+                snk_valid[i] = (i<5) ? 1 : 0;
+            }
+        }
         direction = new_direction(direction);
         if(kill == 0 ){
             snk_move(direction, snk_x_pos, snk_y_pos, SNK_SIZE);
@@ -433,6 +445,7 @@ int main() {
                     draw_symbol(5, 50, 18);
                     draw_symbol(5, 60, 18);
                 }                 
+                //using switch [7] to select
                 else if(x == 129 || x == 130 || x == 132 || x == 133 ){
                     break;
                 }                
