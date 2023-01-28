@@ -8,10 +8,15 @@ Based on a Ring architecture to share all memory regions between threads, cores 
 The Design is loaded to the DE10Lite FPGA.  
 <img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="300">  
   
+Writing to FPGA IO - LED:
+<img src="https://user-images.githubusercontent.com/81047407/215293191-c94de6dd-c692-4a23-9371-06797f56941a.png" width="300"> 
+
 Writing to Display - accessable with LOAD/STORE from any Thread.  
 <img src="https://user-images.githubusercontent.com/81047407/178192931-b3714594-96ae-46d2-856a-4d72668a098f.jpeg" width="200">
-<img src="https://user-images.githubusercontent.com/81047407/183402390-398c9438-2080-494d-9e31-2f1f98b5255e.png" width="200">
+<img src="https://user-images.githubusercontent.com/81047407/215293221-36c92fe4-b7eb-45d6-8a4d-3bcce21c3fe0.png" width="200">
 <img src="https://user-images.githubusercontent.com/81047407/183402370-438cc503-4065-4fd7-b9e2-d2f81aa5d5fb.png" width="200">
+<img src="https://user-images.githubusercontent.com/81047407/215293172-04321d70-7c37-490d-8168-ac708b69acf0.png" width="200">
+<img src="https://user-images.githubusercontent.com/81047407/215293297-d192322d-9e78-4dc3-93b6-c4fabbd5003e.png" width="200">
 
 *** 
 ## The reposetory has 4 main projects:  
