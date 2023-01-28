@@ -1,4 +1,7 @@
 COM3
+W
+0x3C02040
+0x1
 WB
 0x01000000
 ../../../../verif/Tests/fpga_main/fpga_main_inst_mem_rv32i.sv
@@ -11,5 +14,8 @@ WB
 WB
 0x02000000
 ../../../../verif/Tests/fpga_main/fpga_main_data_mem_rv32i.sv
+W
+0x3C02040
+0x0
 Q
 Q

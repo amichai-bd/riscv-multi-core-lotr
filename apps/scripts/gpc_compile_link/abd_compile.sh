@@ -20,14 +20,14 @@ cp $1.c ../../../verif/Tests/$1
 mv $1_rv32i.c.s ../../../verif/Tests/$1
 mv $1_rv32i.elf ../../../verif/Tests/$1
 mv $1_rv32i_elf_txt.txt ../../../verif/Tests/$1
-if grep -q @00400800 "$1_inst_mem_rv32i.sv"; then
+if grep -q @00400000 "$1_inst_mem_rv32i.sv"; then
     c=`cat $1_inst_mem_rv32i.sv | wc -l`
-    y=`cat $1_inst_mem_rv32i.sv | grep -n @00400800 | cut -d ':' -f 1 |tail -n 1`
+    y=`cat $1_inst_mem_rv32i.sv | grep -n @00400000 | cut -d ':' -f 1 |tail -n 1`
     (( y-- ))
     cat $1_inst_mem_rv32i.sv | tail -n $(( c-y )) > $1_data_mem_rv32i.sv
     cat $1_inst_mem_rv32i.sv | head -n $(( y )) > $1_inst_mem_rv32i.sv
 else
-    echo "@00400800" > $1_data_mem_rv32i.sv
+    echo "@00400000" > $1_data_mem_rv32i.sv
 fi  
 mv $1_data_mem_rv32i.sv ../../../verif/Tests/$1
 mv $1_inst_mem_rv32i.sv ../../../verif/Tests/$1
