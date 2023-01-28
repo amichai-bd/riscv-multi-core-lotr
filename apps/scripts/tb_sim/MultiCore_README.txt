@@ -10,3 +10,4 @@ vsim.exe work.lotr_tb -c -do 'run -all'
 or with gui:
 
 vsim.exe -gui work.lotr_tb
+
