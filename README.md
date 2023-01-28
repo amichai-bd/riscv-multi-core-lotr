@@ -8,7 +8,7 @@ Based on a Ring architecture to share all memory regions between threads, cores 
 The Design is loaded to the DE10Lite FPGA.  
 <img src="https://user-images.githubusercontent.com/81047407/178192726-6d1c9de1-9247-433f-bb86-c1d0235372d0.jpeg" width="300">  
   
-Writing to FPGA IO - LED:
+Writing to FPGA IO - LED:  
 <img src="https://user-images.githubusercontent.com/81047407/215293191-c94de6dd-c692-4a23-9371-06797f56941a.png" width="300"> 
 
 Writing to Display - accessable with LOAD/STORE from any Thread.  
