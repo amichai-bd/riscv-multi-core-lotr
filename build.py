@@ -80,7 +80,7 @@ class Test:
             os.chdir(self.gcc_dir)
             try:
                 if not self.assembly:
-                    first_cmd  = 'riscv-none-embed-gcc.exe -S -ffreestanding -march=rv32i ../../../../../'+self.path+' -o '+cs_path
+                    first_cmd  = 'riscv-none-embed-gcc.exe -S -ffreestanding -march=rv32i  -I ../../../../../app/defines ../../../../../'+self.path+' -o '+cs_path
                     print_message(f'[COMMAND] '+first_cmd)
                     subprocess.check_output(first_cmd, shell=True)
                 else:
@@ -90,14 +90,9 @@ class Test:
                 self.fail_flag = True
             else:
                 try:
-                    second_cmd = 'riscv-none-embed-gcc.exe  -O3 -march=rv32i -T ../../../../../app/link.common.ld\
-                                    -Wl,--defsym=I_MEM_OFFSET='+Test.I_MEM_OFFSET+'\
-                                    -Wl,--defsym=I_MEM_LENGTH='+Test.I_MEM_LENGTH+'\
-                                    -Wl,--defsym=D_MEM_OFFSET='+Test.D_MEM_OFFSET+'\
-                                    -Wl,--defsym=D_MEM_LENGTH='+Test.D_MEM_LENGTH+'\
-                                    -nostartfiles -D__riscv__ ../../../../../app/crt0.S '+cs_path+' -o '+elf_path
+                    second_cmd = 'riscv-none-embed-gcc.exe  -O3 -march=rv32i -I ../../../../../app/defines -T ../../../../../app/link.common.ld -nostartfiles -D__riscv__ ../../../../../app/crt0.S '+cs_path+' -o '+elf_path
                     # TODO add verbosity option to print the command
-                    # print_message(f'[COMMAND] '+second_cmd)
+                    print_message(f'[COMMAND] '+second_cmd)
                     subprocess.check_output(second_cmd, shell=True)
                 except:
                     print_message(f'[ERROR] failed to insert linker & crt0.S to the test - {self.name}')

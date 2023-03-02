@@ -10,18 +10,18 @@ integer trk_thread0_reg_write,trk_thread1_reg_write,trk_thread2_reg_write,trk_th
 
 initial begin
     $timeformat(-9, 1, " ", 6);
-    trk_write_registers   = $fopen({"../target/",hpath,"/trk_write_registers.log"},"w");
-    trk_d_mem_access      = $fopen({"../target/",hpath,"/trk_d_mem_access.log"},"w");
-    trk_brach_op          = $fopen({"../target/",hpath,"/trk_brach_op.log"},"w");
-    trk_alu               = $fopen({"../target/",hpath,"/trk_alu.log"},"w");
-    trk_error             = $fopen({"../target/",hpath,"/trk_error.log"},"w");
-    trk_shared_space      = $fopen({"../target/",hpath,"/trk_shared_space.log"},"w");
-    trk_cr_space          = $fopen({"../target/",hpath,"/trk_cr_space.log"},"w");
-    trk_thread0_reg_write = $fopen({"../target/",hpath,"/trk_thread0_reg_write.log"},"w");  
-    trk_thread1_reg_write = $fopen({"../target/",hpath,"/trk_thread1_reg_write.log"},"w");  
-    trk_thread2_reg_write = $fopen({"../target/",hpath,"/trk_thread2_reg_write.log"},"w");  
-    trk_thread3_reg_write = $fopen({"../target/",hpath,"/trk_thread3_reg_write.log"},"w");    
-    trk_PC0               = $fopen({"../target/",hpath,"/trk_PC0.log"},"w"); 
+    trk_write_registers   = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_write_registers.log"},"w");
+    trk_d_mem_access      = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_d_mem_access.log"},"w");
+    trk_brach_op          = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_brach_op.log"},"w");
+    trk_alu               = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_alu.log"},"w");
+    trk_error             = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_error.log"},"w");
+    trk_shared_space      = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_shared_space.log"},"w");
+    trk_cr_space          = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_cr_space.log"},"w");
+    trk_thread0_reg_write = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_thread0_reg_write.log"},"w");  
+    trk_thread1_reg_write = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_thread1_reg_write.log"},"w");  
+    trk_thread2_reg_write = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_thread2_reg_write.log"},"w");  
+    trk_thread3_reg_write = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_thread3_reg_write.log"},"w");    
+    trk_PC0               = $fopen({"../../../target/gpc_4t/tests/",hpath,"/trk_PC0.log"},"w"); 
     $fwrite(trk_write_registers,"-------------------------------------------------\n");
     $fwrite(trk_write_registers,"Time\t| Thread| PC \t |Register Num\t| Wr Data\t|\n");
     $fwrite(trk_write_registers,"-------------------------------------------------\n");
@@ -212,7 +212,7 @@ end
 
 
 
-//asserssions//
+//assertions//
 always_comb begin
     if(gpc_4t_tb.gpc_4t.core_4t.AssertBadMemAccessReg)begin
         $fwrite(trk_error,"ERROR : AssertBadMemAccess - Memory access to forbiden memory Region on time %t The Address: %8h\n",$realtime ,MemAdrsQ104H);
@@ -238,5 +238,5 @@ always_comb begin
         $fwrite(trk_error, "ERROR : AssertIllegalOpCode - Illegal OpCode : %7b on time %t\n" ,ALU_OPQ103H,$realtime);
     end
 end //always_comb
-    
-
+//    
+//

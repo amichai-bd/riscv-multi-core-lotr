@@ -29,13 +29,9 @@ end: reset_gen
 //================================================================================
 //==========================      test_seq      ==================================
 //================================================================================
-// loading the test from verif/Tests/ - getting the HPATH from Environment
-`define TEST_DEFINE(x) `"x`"
-`define HPATH 
-string hpath = `TEST_DEFINE(`HPATH);
+string hpath;
 
-// 
-
+integer file;
 logic [7:0]  IMemQnnnH     [I_MEM_OFFSET+SIZE_I_MEM-1:I_MEM_OFFSET];
 logic [7:0]  DMemQnnnH     [D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
 
@@ -43,14 +39,17 @@ logic [7:0]  DMemQnnnH     [D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
 `LOTR_MSFF(DMemQnnnH, DMemQnnnH, clk)
 
 initial begin: test_seq
-    $display(hpath);
-    //$readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem);
-    //$readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem);
+    if ($value$plusargs ("STRING=%s", hpath))
+        $display("STRING value %s", hpath);
     //======================================
     //load the program to the TB
     //======================================
-    $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, IMemQnnnH);
-    $readmemh({"../verif/Tests/",hpath,"/",hpath,"_data_mem_rv32i.sv"}, DMemQnnnH);
+    $readmemh({"../../../target/gpc_4t/tests/",hpath,"/gcc_files/inst_mem.sv"}, IMemQnnnH);
+    file = $fopen({"../../../target/gpc_4t/tests/",hpath,"/gcc_files/data_mem.sv"}, "r");
+    if (file) begin
+        $fclose(file);
+        $readmemh({"../../../target/gpc_4t/tests/",hpath,"/gcc_files/data_mem.sv"}, DMemQnnnH);
+    end
     // Backdoor load the Instruction memory
     gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
     gpc_4t_tb.gpc_4t.i_mem_wrap.i_mem.mem      = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
@@ -68,6 +67,7 @@ gpc_4t gpc_4t(
               .QClk                 (clk)  ,
               .RstQnnnH             (rst)  ,
               .CoreID               (8'b01) ,
+              .ALL_PC_RESET         ('0) ,
               .C2F_RspValidQ502H    ('0)   ,
               .C2F_RspOpcodeQ502H   ('0)   ,
               .C2F_RspThreadIDQ502H ('0)   ,
@@ -105,12 +105,12 @@ task end_tb;
 
     input string msg;
     integer out1,out2,i,j,l;
-    out1=$fopen({"../target/",hpath,"/d_mem_snapshot.log"},"w");
+    out1=$fopen({"../../../target/gpc_4t/tests/",hpath,"/d_mem_snapshot.log"},"w");
     for (i = 0 ; i < SIZE_D_MEM; i = i+4) begin  
         $fwrite(out1,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+3],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+2],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+1],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
     end
     
-    out2=$fopen({"../target/",hpath,"/shrd_mem_snapshot.log"},"w");   
+    out2=$fopen({"../../../target/gpc_4t/tests/",hpath,"/shrd_mem_snapshot.log"},"w");   
 
     for (i = 0 ; i < SIZE_SHRD_MEM; i = i+4) begin  
         $fwrite(out2,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+3],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+2],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i+1],gpc_4t_tb.gpc_4t.d_mem_wrap.d_mem.mem[i]);
