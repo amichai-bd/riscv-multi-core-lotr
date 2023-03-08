@@ -231,11 +231,11 @@ always_comb begin
         end_tb(" Finished with EBREAK command");
     end
     if(gpc_4t_tb.gpc_4t.core_4t.AssertIllegalPC) begin
-        $fwrite(trk_error, "ERROR : AssertIllegalPC",$realtime);
+        $fwrite(trk_error, "ERROR : AssertIllegalPC %t\n",$realtime);
         end_tb(" Finished with PC overflow");
     end    
     if(AssertIllegalOpCode) begin
-        $fwrite(trk_error, "ERROR : AssertIllegalOpCode - Illegal OpCode : %7b on time %t\n" ,ALU_OPQ103H,$realtime);
+        $fwrite(trk_error, "ERROR : AssertIllegalOpCode - Illegal OpCode : %7b on time %t\n" ,ALU_OPQ103H, $realtime);
     end
 end //always_comb
 //    

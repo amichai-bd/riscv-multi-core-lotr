@@ -107,21 +107,22 @@ class Test:
                         self.fail_flag = True
                     else:
                         try:
-                            forth_cmd  = 'riscv-none-embed-objcopy.exe --srec-len 1 --output-target=verilog '+elf_path+' inst_mem.sv' 
-                            print_message(f'[COMMAND] '+forth_cmd)
+                            forth_cmd = 'riscv-none-embed-objcopy.exe --srec-len 0 --output-target=verilog ' + elf_path + ' inst_mem.sv'
+                            print_message(f'[COMMAND] ' + forth_cmd)
                             subprocess.check_output(forth_cmd, shell=True)
                         except:
-                            print_message(f'[ERROR] failed to create "inst_mem.sv" to the test - {self.name}')
+                            print_message(f'[ERROR] failed to create "inst_mem.sv" for the test - {self.name}')
                             self.fail_flag = True
                         else:
                             memories = open('inst_mem.sv', 'r').read()
-                            with open('data_mem.sv', 'w') as dmem:
-                                if (len(memories.split('@'))>2):
-                                    dmem.write('@'+memories.split('@')[-1])
-                                else:
-                                    pass
-                            with open('inst_mem.sv', 'w') as imem:
-                                imem.write('@'+memories.split('@')[1])
+                            if "@00400000" in memories:
+                                split_memories = memories.split("@00400000")
+                                with open('inst_mem.sv', 'w') as imem:
+                                    imem.write(split_memories[0])
+                                with open('data_mem.sv', 'w') as dmem:
+                                    dmem.write("@00400000" + split_memories[1])
+                            else:
+                                print_message(f'[INFO] "@00400000" not found in "inst_mem.sv" for the test - {self.name}')
             if not self.fail_flag:
                 print_message('[INFO] SW compilation finished with no errors\n')
         else:

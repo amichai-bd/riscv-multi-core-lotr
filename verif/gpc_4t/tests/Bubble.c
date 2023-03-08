@@ -30,22 +30,13 @@ void bubbleSort(int arr[], int n)
             if (arr[j] > arr[j+1])
                 swap(&arr[j], &arr[j+1]);
 }
- 
-#define MMIO_GENERAL  ((volatile int *) (0x00400f00))
+#include "LOTR_defines.h"
 int main() {
     int i;
-    int arr[8];
-    arr[0]=6;
-    arr[1]=1;
-    arr[2]=0;
-    arr[3]=3;
-    arr[4]=5;
-    arr[5]=9;
-    arr[6]=50;
-    arr[7]=2;
+    int arr[] = {6, 1, 0, 3, 5, 9, 50, 2};
     bubbleSort(arr, 8);
     for(i=0;i<8;i++){
-        MMIO_GENERAL[i]=arr[i];   
+        SHARED_SPACE[i]=arr[i];   
     }
     return 0;
 }
