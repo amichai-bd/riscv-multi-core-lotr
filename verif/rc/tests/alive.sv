@@ -1,0 +1,20 @@
+//RingReqIn(requestor     , opcode ,   address    ,   data       );
+RingReqIn(10'b0000000001, WR       , 32'h0200_0000, 32'h1111_1111);
+RingReqIn(10'b0000000011, WR       , 32'h0200_2222, 32'h2222_2222);
+RingReqIn(10'b0000000011, WR       , 32'h0200_0000, 32'h3333_3333);	
+RingReqIn(10'b0000000011, WR       , 32'hAA00_0000, 32'h4444_4444);
+RingReqIn(10'b0000000011, WR_BCAST , 32'hFF00_0000, 32'h6666_6666);
+RingReqIn(10'b0000000011, WR_BCAST , 32'hFF00_0000, 32'h7777_7777);
+RingReqIn(10'b0000000011, RD       , 32'h0200_0000, 32'h3333_3333);
+RingReqIn(10'b0000000011, RD       , 32'hAA00_0000, 32'h4444_4444);
+RingReqIn(10'b0000000011, RD       , 32'hAA00_0000, 32'h5555_5555);
+delay(3);
+RingReqIn(10'b0000000011, RD       , 32'h0200_0000, 32'h1111_1111);
+delay(3);
+RingReqIn(10'b0000000011, RD       , 32'h0200_0022, 32'h2222_2222);
+delay(3);
+F2C_Rsp(                  RD_RSP   , 32'h0200_0000, 32'h6666_6666);
+delay(3);
+F2C_Rsp(                  RD_RSP   , 32'h0200_0022, 32'h7777_7777);
+delay(3);
+

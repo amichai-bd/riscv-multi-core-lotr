@@ -29,11 +29,11 @@ print_message('--------------------------------------------------------')
 print_message("     gpc_4t Post-Process  : "+args.test_name )
 print_message('--------------------------------------------------------')
 # Path to the directory containing the tests
-base_path = "target/gpc_4t/tests"
+base_path = "target/rc/tests"
 
 # Construct the paths to the two files to compare
-file1_path = os.path.join(base_path, args.test_name, "shrd_mem_snapshot.log").replace("\\", "/")
-file2_path = os.path.join("verif", "gpc_4t", "golden_trk" , "golden_" + args.test_name + "_shrd_mem_snapshot.log").replace("\\", "/")
+file1_path = os.path.join(base_path, args.test_name, "rc_trk.log").replace("\\", "/")
+file2_path = os.path.join("verif", "rc", "golden_trk" , "golden_" + args.test_name + "_rc_trk.log").replace("\\", "/")
 
 num_diffs = 1
 if os.path.exists(file2_path):

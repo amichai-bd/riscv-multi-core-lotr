@@ -62,13 +62,6 @@ initial begin: clock_gen
 	end
 end: clock_gen
 
-// reset generation
-initial begin: reset_gen
-	RstQnnnH_tb = 1'b1;
-	#40 RstQnnnH_tb = 1'b0;
-end: reset_gen
-
-
 initial begin: first_insertion
 	CoreID_tb  		         = 8'b0000_0010 ; 
     RingReqInValidQ500H_tb   = '0 ; 
@@ -96,191 +89,23 @@ initial begin: first_insertion
 
 end: first_insertion
 
-
+string test_name;
 initial begin: main_testing
-
-// ================= writes ========================
-		#95
-// [1]  valid write_req_1(500)
-
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000001 ;
-        RingReqInOpcodeQ500H_tb  = WR ; //write     
-        RingReqInAddressQ500H_tb = 32'h0200_1111 ; // MSB 0x02 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h1111_1111 ; 
-
-		#10
-        RingReqInValidQ500H_tb   = 1'b0 ;
-		#10
-// expected : write[1] will get inserted to one of F2C entries (501) 
-//            this request will be candidate from F2C to core 
-
-// [2]  valid write_req_2(500)
-
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR ; //write     
-        RingReqInAddressQ500H_tb = 32'h0200_2222 ; // MSB 0x02 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h2222_2222 ;  
-		#10
-// expected : write[2] will get inserted to one of F2C entries (501) 
-//            this request will be candidate from F2C to core 
-//            write[1] will disptached to the core(502) .
-
-
-// [3]  invalid_write_1 (500)       
-
-        RingReqInValidQ500H_tb   = 1'b0 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR ; //write     
-        RingReqInAddressQ500H_tb = 32'h0200_0000 ; // MSB 0x02 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h3333_3333 ;  
-		#10                 
-// expected : write[2] will disptached to the core(502) .
-//            write[3] will get sampled (move to 501) . 
-
-// [4]  invalid_write_2 (500)   - doesnt match RC id ,          
-
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR ; //write     
-        RingReqInAddressQ500H_tb = 32'hAA00_0000 ; // MSB 0xAA not matches current RC 
-        RingReqInDataQ500H_tb    = 32'h4444_4444 ; 
-		#10                 
-// expected : write[4] will get sampled (move to 501) . 
-//            write[3] will get eliminated
-
-// [5]  invalid_write_3 (500)          
-        RingReqInValidQ500H_tb   = 1'b0 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR ; //write     
-        RingReqInAddressQ500H_tb = 32'h0200_0000 ; // MSB 0x20 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h5555_5555 ; 
-		#10                 
-// expected : write[5] will get sampled (move to 501) . 
-//            write[4] will get eliminated
-
-
-// dummy - inserting invalid request for 3 cycles - 
-        RingReqInValidQ500H_tb   = 1'b0 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR ; //write     
-        RingReqInAddressQ500H_tb = 32'h0200_0000 ; // MSB 0x20 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h5555_5555 ;
-		#10
-// expeteced to see the reqests in C2F+F2C buffer getting out throguh RingMuxOut in the following order : 9(F2C) -> 10(C2F old) -> 11 (C2F new) .
-
-// [6]  valid write_broadcast from ring (500)  
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR_BCAST ; //write     
-        RingReqInAddressQ500H_tb = 32'hFF00_0000 ; // MSB 0xFF indicates for BCAST req .
-        RingReqInDataQ500H_tb    = 32'h6666_6666 ;
-        #10
-// expected : write[6] will inserted to F2C buffer (move to 501)
-
-        RingReqInValidQ500H_tb   = 1'b0 ;
-		#10
-// [7]  valid write broadcast_2
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = WR_BCAST ; //write     
-        RingReqInAddressQ500H_tb = 32'hFF00_0000 ; // MSB 0xFF indicates for BCAST req .
-        RingReqInDataQ500H_tb    = 32'h7777_7777 ;
-        #10
-// expected :   write_bcast [6] will get forworded to the Ring output (move to 502) + will move to the core . 
-//              write[7] will get sampled (move to 501)
-
-// dummy - inserting invalid request for 1 cycles - 
-		RingReqInValidQ500H_tb     = 1'b0  ; 
-		#100
-
-
-// ================ Read  ======================
-// [1]  valid read_req_1(500)
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = RD ;    
-        RingReqInAddressQ500H_tb = 32'h0200_0000 ; // MSB 0x02 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h1111_1111 ; // no real need .
-		#10
-// expected : read[1] will get inserted to one of F2C entries (501) 
-//            this request will be candidate from F2C to core 
-
-		RingReqInValidQ500H_tb     = 1'b0  ; 
-		#10
-// [2]  valid read_req_2(500)
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = RD ;    
-        RingReqInAddressQ500H_tb = 32'h0200_0022 ; // MSB 0x02 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h2222_2222 ; // no real need .
-		#10
-// expected : read[2] will get inserted to one of F2C entries (501) 
-//            this request will be candidate from F2C to core 
-//            read[1] will disptached to the core(502) .
-
-
-// [3]  invalid_read_1 (500)       
-        RingReqInValidQ500H_tb   = 1'b0 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = RD ;    
-        RingReqInAddressQ500H_tb = 32'h0200_0000 ; // MSB 0x02 matches current RC 
-        RingReqInDataQ500H_tb    = 32'h3333_3333 ; // no real need .
-		#10                 
-// expected : read[2] will disptached to the core(502) .
-//            read[3] will get sampled (move to 501) . 
-
-// [4]  invalid_read_2 (500)         
-        RingReqInValidQ500H_tb   = 1'b1 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = RD ;    
-        RingReqInAddressQ500H_tb = 32'hAA00_0000 ; // MSB 0xAA matches current RC 
-        RingReqInDataQ500H_tb    = 32'h4444_4444 ; // no real need .
-		#10                 
-// expected :  read[3] will get eliminated 
-//             read[4] will get sampled (move to 501) . 
-
-// [5]  invalid_read_3 (500)          
-        RingReqInValidQ500H_tb   = 1'b0 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = RD ;    
-        RingReqInAddressQ500H_tb = 32'hAA00_0000 ; // MSB 0xAA matches current RC 
-        RingReqInDataQ500H_tb    = 32'h5555_5555 ; // no real need .
-		#10                 
-// expected : read[5] will get sampled (move to 501) . 
-//            read[4] will get eliminated . 
-
-
-// [6]  receiving read response of read[1] , from the ring input .
-        F2C_RspValidQ500H_tb    = 1'b1  ;
-        F2C_RspOpcodeQ500H_tb   = RD_RSP  ;
-        F2C_RspAddressQ500H_tb  = 32'h0200_0000 ;
-        F2C_RspDataQ500H_tb     = 32'h6666_6666 ;
-		#10    
-// expected :  read response[6](match for read[1]) will move to 501
-//             read[5] will get eliminated .
- 
-		F2C_RspValidQ500H_tb     = 1'b0  ; 
-		#10
-// [7]  receiving read response of read[1] , from the ring input .
-        F2C_RspValidQ500H_tb    = 1'b1  ;
-        F2C_RspOpcodeQ500H_tb   = RD_RSP  ;
-        F2C_RspAddressQ500H_tb  = 32'h0200_0022 ;
-        F2C_RspDataQ500H_tb     = 32'h7777_7777 ;
-		#10    
-		F2C_RspValidQ500H_tb     = 1'b0  ; 
-		#10
-// expected :  read response[7](match for read[2]) will move to 501
-
-// dummy - inserting invalid request for 1 cycles -
-        RingReqInValidQ500H_tb   = 1'b0 ;
-        RingReqInRequestorQ500H_tb = 10'b0000000011 ;
-        RingReqInOpcodeQ500H_tb  = RD ;    
-        RingReqInAddressQ500H_tb = 32'h0200_0000 ; 
-        RingReqInDataQ500H_tb    = 32'hFFFF_FFFF ; 
-// expected :  
-	end //initial 
+if ($value$plusargs ("STRING=%s", test_name))
+$display("STRING value %s", test_name);
+$display("================\n     START\n================\n");
+RstQnnnH_tb = 1'b1;
+delay(10);
+RstQnnnH_tb = 1'b0;
+delay(10);
+$display("====== Reset Done =======\n");
+if(test_name == "alive") begin
+    `include "alive.sv"
+end
+if(test_name == "core_req") begin
+    `include "core_req.sv"
+end
+end //initial 
 
 rc rc(	  
     //================================================
@@ -322,7 +147,7 @@ rc rc(
     // input - Req from Core
     .C2F_ReqValidQ500H      (C2F_ReqValidQ500H_tb)      ,//input
     .C2F_ReqOpcodeQ500H     (C2F_ReqOpcodeQ500H_tb)     ,//input
-    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H_tb[1:0])   ,//input
+    .C2F_ReqThreadIDQ500H   (C2F_ReqThreadIDQ500H_tb[1:0]),//input
     .C2F_ReqAddressQ500H    (C2F_ReqAddressQ500H_tb)    ,//input
     .C2F_ReqDataQ500H       (C2F_ReqDataQ500H_tb)       ,//input
     // output - Rsp to Core
@@ -342,6 +167,66 @@ rc rc(
     .F2C_ReqAddressQ502H    (F2C_ReqAddressQ502H_tb)    ,//output
     .F2C_ReqDataQ502H       (F2C_ReqDataQ502H_tb)        //output
     );
+
+`include "rc_trk.sv"
+
+
+task delay(input int cycles);
+  for(int i =0; i< cycles; i++) begin
+    @(posedge QClk_tb);
+  end
+endtask
+
+task RingReqIn( input logic [9:0]  Requestor, 
+                input t_opcode      Opcode   ,
+                input logic [31:0]  Address  ,
+                input logic [31:0]  Data     );
+        RingReqInValidQ500H_tb      = 1'b1 ;
+        RingReqInRequestorQ500H_tb  = Requestor;
+        RingReqInOpcodeQ500H_tb     = Opcode;
+        RingReqInAddressQ500H_tb    = Address;
+        RingReqInDataQ500H_tb       = Data ; 
+        delay(1);
+        RingReqInValidQ500H_tb   = 1'b0 ;
+endtask
+
+task RingRspIn ( input logic [9:0]  Requestor, 
+                 input t_opcode      Opcode   ,
+                 input logic [31:0]  Address  ,
+                 input logic [31:0]  Data     );
+        RingRspInValidQ500H_tb      = 1'b1 ;
+        RingRspInRequestorQ500H_tb  = Requestor;
+        RingRspInOpcodeQ500H_tb     = Opcode;
+        RingRspInAddressQ500H_tb    = Address;
+        RingRspInDataQ500H_tb       = Data ; 
+        delay(1);
+        RingRspInValidQ500H_tb   = 1'b0 ;
+endtask
+
+task C2F_Req ( input t_opcode      Opcode   ,
+               input logic [31:0]  Address  ,
+               input logic [31:0]  Data     ,
+               input logic [31:0]  Thread );
+        C2F_ReqValidQ500H_tb      = 1'b1 ;
+        C2F_ReqOpcodeQ500H_tb     = Opcode;
+        C2F_ReqAddressQ500H_tb    = Address;
+        C2F_ReqDataQ500H_tb       = Data ; 
+        C2F_ReqThreadIDQ500H_tb   = Thread ; 
+        delay(1);
+        C2F_ReqValidQ500H_tb   = 1'b0 ;
+endtask
+
+task F2C_Rsp (input t_opcode      Opcode   ,
+              input logic [31:0]  Address  ,
+              input logic [31:0]  Data     );
+        F2C_RspValidQ500H_tb      = 1'b1 ;
+        F2C_RspOpcodeQ500H_tb     = Opcode;
+        F2C_RspAddressQ500H_tb    = Address;
+        F2C_RspDataQ500H_tb       = Data ; 
+        delay(1);
+        F2C_RspValidQ500H_tb   = 1'b0 ;
+endtask
+
 initial begin 
    #10000 $finish;
 end
