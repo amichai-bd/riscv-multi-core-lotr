@@ -197,6 +197,7 @@ int main() {
         rvc_printf("A FORCE RUNNING IN EVERY BOY AND GIRL.\n");
         rvc_printf("ALL REJOICING IN THE WORLD, TAKE ME NOW WE CAN TRY.\n");
         rvc_printf("0123456789\n");
+        break;
         default :
             while(1); 
         break;

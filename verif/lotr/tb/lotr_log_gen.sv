@@ -4,7 +4,7 @@ integer trk_rc_transactions;
 
 initial begin
     $timeformat(-9, 1, " ", 6);
-    trk_rc_transactions   = $fopen({"../target/",hpath,"/trk_RC_transactions.log"},"w");
+    trk_rc_transactions   = $fopen({"../../../target/lotr/tests/",hpath,"/trk_RC_transactions.log"},"w");
     $fwrite(trk_rc_transactions,"------------------------------------------------------------------------------------\n");
     $fwrite(trk_rc_transactions,"Time\t| Tile ID\t\t| Channel\t| Requestor \t| OpCode \t| Address \t| Data\t|\n");
     $fwrite(trk_rc_transactions,"------------------------------------------------------------------------------------\n");
@@ -72,8 +72,8 @@ logic        AssertEBREAK       ;
 
 string opCode;
 
-assign AssertEBREAK = (lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
- //||                      (lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
+assign AssertEBREAK = (lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011)
+                    ||(lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.core_4t.OpcodeQ101H == 7'b1110011);
 
 assign C2F_ReqValidQ500H       [1] = lotr_tb.lotr.gpc_4t_tile_1.C2F_ReqValidQ500H         ;
 assign C2F_ReqOpcodeQ500H      [1] = lotr_tb.lotr.gpc_4t_tile_1.C2F_ReqOpcodeQ500H        ;
@@ -330,8 +330,6 @@ end
 
 
 always_comb begin
-
-
     if(AssertEBREAK) begin
         end_tb(" Finished with EBREAK command");
     end

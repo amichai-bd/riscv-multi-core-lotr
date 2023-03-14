@@ -150,13 +150,8 @@ import lotr_pkg::*;
 //================================================================================
 //==========================      test_seq      ==================================
 //================================================================================
-// loading the test from verif/Tests/ - getting the HPATH from Environment
-`define TEST_DEFINE(x) `"x`"
-`define HPATH 
-string hpath = `TEST_DEFINE(`HPATH);
-
-// 
-
+string hpath;
+integer file;
 logic [7:0]  IMemQnnnH     [I_MEM_OFFSET+SIZE_I_MEM-1:I_MEM_OFFSET];
 logic [7:0]  DMemQnnnH     [D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
 
@@ -167,12 +162,17 @@ genvar TILE;
 int TILE_FOR;
 int i,j,k,l;
 initial begin: test_seq
-    $display(hpath);
+    if ($value$plusargs ("STRING=%s", hpath))
+        $display("STRING value %s", hpath);
     //======================================
     //load the program to the TB
     //======================================
-    $readmemh({"../verif/Tests/",hpath,"/",hpath,"_inst_mem_rv32i.sv"}, IMemQnnnH);
-    $readmemh({"../verif/Tests/",hpath,"/",hpath,"_data_mem_rv32i.sv"}, DMemQnnnH);
+    $readmemh({"../../../target/lotr/tests/",hpath,"/gcc_files/inst_mem.sv"}, IMemQnnnH);
+    file = $fopen({"../../../target/lotr/tests/",hpath,"/gcc_files/data_mem.sv"}, "r");
+    if (file) begin
+        $fclose(file);
+        $readmemh({"../../../target/lotr/tests/",hpath,"/gcc_files/data_mem.sv"}, DMemQnnnH);
+    end
     ////TILE 1    
         // Backdoor load the Instruction memory
         lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.i_mem_wrap.i_mem.next_mem = IMemQnnnH[I_MEM_OFFSET+SIZE_I_MEM-1:0];
@@ -187,7 +187,7 @@ initial begin: test_seq
         // Backdoor load the Inst2uction memory
         lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.next_mem = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
         lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem      = DMemQnnnH[D_MEM_OFFSET+SIZE_D_MEM-1:D_MEM_OFFSET];
-    #900000         
+    #1000000         
     end_tb(" Finished With time out");
 end: test_seq
 
@@ -205,6 +205,8 @@ end: test_seq
 //================================================================================
 //==========================     LOTR instanse   ===============================
 //================================================================================
+
+logic interrupt;
 lotr lotr(
     //general signals input
     .QClk  		(clk),   //input
@@ -215,6 +217,7 @@ lotr lotr(
     .Arduino_dg_io (16'b0),
     .uart_master_tx (uart_master_tx),
     .uart_master_rx (uart_master_rx),
+    .interrupt      (interrupt),
 
     //outputs
     .SEG7_0  (SEG7_0),
@@ -258,8 +261,8 @@ task end_tb;
     input string msg;
     integer SHRD_1,SHRD_2,fd1;
     string draw;
-    SHRD_1=$fopen({"../target/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
-    SHRD_2=$fopen({"../target/",hpath,"/shrd_mem_2_snapshot.log"},"w");   
+    SHRD_1=$fopen({"../../../target/lotr/tests/",hpath,"/shrd_mem_1_snapshot.log"},"w");   
+    SHRD_2=$fopen({"../../../target/lotr/tests/",hpath,"/shrd_mem_2_snapshot.log"},"w");   
     for (i = SIZE_SHRD_MEM ; i < SIZE_D_MEM; i = i+4) begin  
         $fwrite(SHRD_1,"Offset %08x : %02x%02x%02x%02x\n",i+D_MEM_OFFSET, lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+3],
                                                                           lotr_tb.lotr.gpc_4t_tile_1.gpc_4t.d_mem_wrap.d_mem.mem[i+2],
@@ -271,9 +274,9 @@ task end_tb;
                                                                           lotr_tb.lotr.gpc_4t_tile_2.gpc_4t.d_mem_wrap.d_mem.mem[i]);
     end 
         // VGA memory snapshot - simulate a screen
-    fd1 = $fopen({"../target/",hpath,"/screen.log"},"w");
-    if (fd1) $display("File was open succesfully : %0d", fd1);
-    else $display("File was not open succesfully : %0d", fd1);
+    fd1 = $fopen({"../../../target/lotr/tests/",hpath,"/screen.log"},"w");
+    if (fd1) $display("File was open successfully : %0d", fd1);
+    else $display("File was not open successfully : %0d", fd1);
     for (i = 0 ; i < 38400; i = i+320) begin // Lines
         for (j = 0 ; j < 4; j = j+1) begin // Bytes
             for (k = 0 ; k < 320; k = k+4) begin // Words
@@ -289,7 +292,7 @@ task end_tb;
     $fclose(SHRD_1);
     $fclose(SHRD_2);
     $fclose(trk_rc_transactions);
-    $display({"Test : ",hpath,msg});        
+    $display({" EOT Test : ",hpath,msg});        
     $finish;
 endtask
 endmodule // tb_top

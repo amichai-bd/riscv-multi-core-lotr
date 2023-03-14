@@ -28,6 +28,7 @@ int main()
         draw_symbol(2, 10, 17);
         draw_symbol(3, 10, 18);
         draw_symbol(4, 10, 19);
+        break;
         default :
             while(1); 
         break;
