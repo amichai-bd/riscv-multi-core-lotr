@@ -26,13 +26,13 @@ int main() {
         rvc_printf("INPUT\n");
         for(i=0;i<8;i++){
             rvc_print_int(arr[i]);
-        rvc_printf(" ");
+            rvc_printf(" ");
         }
         bubbleSort(arr, 8);
         rvc_printf("\nOUTPUT\n");
         for(i=0;i<8;i++){
             rvc_print_int(arr[i]);
-        rvc_printf(" ");
+            rvc_printf(" ");
         }
         break;
         default :

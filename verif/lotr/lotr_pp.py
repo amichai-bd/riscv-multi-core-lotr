@@ -32,8 +32,8 @@ print_message('--------------------------------------------------------')
 base_path = "target/lotr/tests"
 
 # Construct the paths to the two files to compare
-file1_path = os.path.join(base_path, args.test_name, "trk_RC_transactions.log").replace("\\", "/")
-file2_path = os.path.join("verif", "lotr", "golden_trk" , "golden_" + args.test_name + "_trk_RC_transactions.log").replace("\\", "/")
+file1_path = os.path.join(base_path, args.test_name, "screen.log").replace("\\", "/")
+file2_path = os.path.join("verif", "lotr", "golden_trk" , "golden_" + args.test_name + "_screen.log").replace("\\", "/")
 num_diffs = 1
 if os.path.exists(file2_path):
     # Open the two files
