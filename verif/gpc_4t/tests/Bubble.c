@@ -14,6 +14,7 @@ Created : 06/06/2021
 // REGION == 2'b01;
 
 
+#include "LOTR_defines.h"
 void swap(int *xp, int *yp)
 {
     int temp = *xp;
@@ -30,7 +31,6 @@ void bubbleSort(int arr[], int n)
             if (arr[j] > arr[j+1])
                 swap(&arr[j], &arr[j+1]);
 }
-#include "LOTR_defines.h"
 int main() {
     int i;
     int arr[] = {6, 1, 0, 3, 5, 9, 50, 2};

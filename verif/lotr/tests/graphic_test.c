@@ -28,12 +28,17 @@ int main()
         draw_symbol(2, 10, 17);
         draw_symbol(3, 10, 18);
         draw_symbol(4, 10, 19);
+        draw_symbol(4, 10, 19);
+        rvc_print_int(123456);
         break;
         default :
             while(1); 
         break;
     }// case
 
+if(UniqeId != 0x4){
+    while(1); 
+}
 
     return 0;
 }

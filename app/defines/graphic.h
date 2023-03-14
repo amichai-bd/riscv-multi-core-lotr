@@ -214,3 +214,50 @@ void clear_screen()
         ptr[i] = 0;
     }
 }
+
+
+void rvc_print_int(int num)
+{
+    char str[12];  // Maximum length of a 32-bit integer is 11 digits + sign
+    int i = 0, j = 0;
+
+    // Convert integer to string
+    if (num < 0) {
+        str[i++] = '-';
+        num = -num;
+    }
+    do {
+        str[i++] = num % 10 + '0';
+        num /= 10;
+    } while (num > 0);
+
+    // Reverse the string
+    j = 0;
+    while (j < i / 2) {
+        char temp = str[j];
+        str[j] = str[i - j - 1];
+        str[i - j - 1] = temp;
+        j++;
+    }
+
+
+    // Print each digit using draw_char
+    int raw, col;
+    READ_REG(raw, CR_CURSOR_V);
+    READ_REG(col, CR_CURSOR_H);
+    for (j = 0; j < i; j++) {
+        draw_char(str[j], raw, col);
+        col++;
+        if (col == COLUMN) {
+            col = 0;
+            raw += 2;
+        }
+        if (raw >= RAWS * 2) {
+            raw = 0;
+        }
+    }
+
+    // Update cursor position
+    WRITE_REG(CR_CURSOR_H, col);
+    WRITE_REG(CR_CURSOR_V, raw);
+}

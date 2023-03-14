@@ -26,15 +26,14 @@ MODEL_ROOT = subprocess.check_output('git rev-parse --show-toplevel', shell=True
 os.chdir(MODEL_ROOT)
 
 print_message('--------------------------------------------------------')
-print_message("     gpc_4t Post-Process  : "+args.test_name )
+print_message("     LOTR Post-Process  : "+args.test_name )
 print_message('--------------------------------------------------------')
 # Path to the directory containing the tests
-base_path = "target/gpc_4t/tests"
+base_path = "target/lotr/tests"
 
 # Construct the paths to the two files to compare
-file1_path = os.path.join(base_path, args.test_name, "shrd_mem_snapshot.log").replace("\\", "/")
-file2_path = os.path.join("verif", "gpc_4t", "golden_trk" , "golden_" + args.test_name + "_shrd_mem_snapshot.log").replace("\\", "/")
-
+file1_path = os.path.join(base_path, args.test_name, "trk_RC_transactions.log").replace("\\", "/")
+file2_path = os.path.join("verif", "lotr", "golden_trk" , "golden_" + args.test_name + "_trk_RC_transactions.log").replace("\\", "/")
 num_diffs = 1
 if os.path.exists(file2_path):
     # Open the two files
