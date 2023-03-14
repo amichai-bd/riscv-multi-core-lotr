@@ -18,25 +18,24 @@ end //initial
 
 //****RC <---> Core C2F*****//
 //RC <-- CORE C2F
-logic  [2:1]       C2F_ReqValidQ500H      ;
-t_opcode[2:1]      C2F_ReqOpcodeQ500H     ;
-logic  [2:1][31:0] C2F_ReqAddressQ500H    ;
-logic  [2:1][31:0] C2F_ReqDataQ500H       ;
-logic  [2:1][9:0]  C2F_ReqThreadIDQ500H   ;
-//RC --> CORE C2F                    ;
-logic   [2:1]      C2F_RspValidQ502H      ;
-t_opcode[2:1]      C2F_RspOpcodeQ502H     ;
-logic  [2:1][31:0] C2F_RspDataQ502H       ;
-logic  [2:1]       C2F_RspStall           ;
-logic  [2:1][9:0]  C2F_RspThreadIDQ502H   ;
-                                     ;
-//******RC <---> Core F2C*****//     ;
-//RC_F2C <-- CORE                    ;
+logic  [2:1]       C2F_ReqValidQ500H;
+t_opcode[2:1]      C2F_ReqOpcodeQ500H;
+logic  [2:1][31:0] C2F_ReqAddressQ500H;
+logic  [2:1][31:0] C2F_ReqDataQ500H;
+logic  [2:1][9:0]  C2F_ReqThreadIDQ500H;
+//RC --> CORE C2F;
+logic   [2:1]      C2F_RspValidQ502H;
+t_opcode[2:1]      C2F_RspOpcodeQ502H;
+logic  [2:1][31:0] C2F_RspDataQ502H;
+logic  [2:1]       C2F_RspStall;
+logic  [2:1][9:0]  C2F_RspThreadIDQ502H;
+//******RC <---> Core F2C*****//     
+//RC_F2C <-- CORE                 
 logic  [2:1]       F2C_RspValidQ500H      ;
 t_opcode[2:1]      F2C_RspOpcodeQ500H     ;
 logic  [2:1][31:0] F2C_RspAddressQ500H    ;
 logic  [2:1][31:0] F2C_RspDataQ500H       ;
-//RC _F2C --> CORE                   ;
+//RC _F2C --> CORE                
 logic  [2:1]       F2C_ReqValidQ502H      ;
 t_opcode[2:1]      F2C_ReqOpcodeQ502H     ; 
 logic  [2:1][31:0] F2C_ReqAddressQ502H    ;
