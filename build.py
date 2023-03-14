@@ -177,6 +177,10 @@ class Test:
                 print_message(' compile results >>>>> target/'+self.project+'/tests/'+self.name+'/'+self.name+'_transcript')
         if os.path.exists('transcript'):  # copy transcript file to the test directory
             shutil.copy('transcript', '../tests/'+self.name+'/'+self.name+'_transcript')
+            grep_eot = 'grep EOT ../tests/'+self.name+'/'+self.name+'_transcript'
+            print_message(f'[COMMAND] '+grep_eot)
+            grep_eot_res = subprocess.run(grep_eot, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            print_message(f'[INFO] found:'+grep_eot_res.stdout)
         os.chdir(MODEL_ROOT)
     def _gui(self):
         os.chdir(MODELSIM)

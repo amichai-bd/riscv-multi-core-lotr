@@ -23,13 +23,9 @@ int main()
         set_cursor(30,0);
         rvc_printf("0123456789\n");
         case 0x8 : // Core 2 Thread 0
-        draw_symbol(0, 10, 15);
-        draw_symbol(1, 10, 16);
-        draw_symbol(2, 10, 17);
-        draw_symbol(3, 10, 18);
-        draw_symbol(4, 10, 19);
-        draw_symbol(4, 10, 19);
-        rvc_print_int(123456);
+        draw_symbol(0, 25, 15);
+        draw_symbol(1, 25, 16);
+        draw_symbol(2, 25, 17);
         break;
         default :
             while(1); 
