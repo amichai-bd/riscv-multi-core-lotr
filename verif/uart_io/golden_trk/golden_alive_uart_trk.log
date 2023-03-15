@@ -1,0 +1,36 @@
+==================================================================================
+-----------------------------------------------------------------------------------
+-I- time=200000[ns]: Initializing TB signals
+-I- time=400000[ns]: Asserting reset
+-I- time=2600000[ns]: Enabling main TB clock
+-I- time=2800000[ns]: Asserting reset
+-I- time=4830000[ns]: Terminal transmit opcode:  87 address: 0x03002018, data: 0xffffffff
+-I- time=4830000[ns]: UART transmiting Host to Device, Bin:01010111, Dec: 87, 0x57
+-I- time=88381000[ns]: UART interrupt caught $$$$
+-I- time=91630000[ns]: UART transmiting Host to Device, Bin:00000011, Dec:  3, 0x03
+-I- time=174781000[ns]: UART interrupt caught $$$$
+-I- time=178430000[ns]: UART transmiting Host to Device, Bin:00000000, Dec:  0, 0x00
+-I- time=261181000[ns]: UART interrupt caught $$$$
+-I- time=265230000[ns]: UART transmiting Host to Device, Bin:00100000, Dec: 32, 0x20
+-I- time=348121000[ns]: UART interrupt caught $$$$
+-I- time=352030000[ns]: UART transmiting Host to Device, Bin:00011000, Dec: 24, 0x18
+-I- time=435061000[ns]: UART interrupt caught $$$$
+-I- time=438830000[ns]: UART transmiting Host to Device, Bin:11111111, Dec:255, 0xff
+-I- time=522001000[ns]: UART interrupt caught $$$$
+-I- time=525630000[ns]: UART transmiting Host to Device, Bin:11111111, Dec:255, 0xff
+-I- time=608401000[ns]: UART interrupt caught $$$$
+-I- time=612430000[ns]: UART transmiting Host to Device, Bin:11111111, Dec:255, 0xff
+-I- time=695341000[ns]: UART interrupt caught $$$$
+-I- time=699230000[ns]: UART transmiting Host to Device, Bin:11111111, Dec:255, 0xff
+-I- time=782281000[ns]: UART interrupt caught $$$$
+-I- time=872830000[ns]: Terminal transmit opcode:  82 address: 0x03002018
+-I- time=872830000[ns]: UART transmiting Host to Device, Bin:01010010, Dec: 82, 0x52
+-I- time=955621000[ns]: UART interrupt caught $$$$
+-I- time=959630000[ns]: UART transmiting Host to Device, Bin:00000011, Dec:  3, 0x03
+-I- time=1042561000[ns]: UART interrupt caught $$$$
+-I- time=1046430000[ns]: UART transmiting Host to Device, Bin:00000000, Dec:  0, 0x00
+-I- time=1129501000[ns]: UART interrupt caught $$$$
+-I- time=1133230000[ns]: UART transmiting Host to Device, Bin:00100000, Dec: 32, 0x20
+-I- time=1216441000[ns]: UART interrupt caught $$$$
+-I- time=1220030000[ns]: UART transmiting Host to Device, Bin:00011000, Dec: 24, 0x18
+-I- time=1302841000[ns]: UART interrupt caught $$$$
