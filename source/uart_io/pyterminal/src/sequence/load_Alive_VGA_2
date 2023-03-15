@@ -7,10 +7,10 @@ WB
 sv/clear_VGA.sv
 WB
 0x01000000
-../../../../verif/Tests/Alive_VGA_2/Alive_VGA_2_inst_mem_rv32i.sv
+../../../../mem_sv_for_fpga_cache/Tests/Alive_VGA_2/inst_mem.sv
 WB
 0x02000000
-../../../../verif/Tests/Alive_VGA_2/Alive_VGA_2_inst_mem_rv32i.sv
+../../../../mem_sv_for_fpga_cache/Tests/Alive_VGA_2/inst_mem.sv
 W
 0x3C02040
 0x1

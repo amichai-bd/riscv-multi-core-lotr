@@ -16,5 +16,5 @@ WB
 sv/clear.sv
 WB
 0x01000000
-../../../../verif/Tests/fpga_main/fpga_main_inst_mem_rv32i.sv
+../../../../mem_sv_for_fpga_cache/Tests/fpga_main/inst_mem.sv
 Q
