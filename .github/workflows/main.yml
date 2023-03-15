@@ -15,5 +15,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run build rc -all -hw -sim -pp
         run: python build.py -dut rc -debug -all -hw -sim -pp
+      - name: Run build uart_io -all -hw -sim -pp
+        run: python build.py -dut uart_io -debug -all -hw -sim -pp
+      - name: Run build gpc_4t -all -app -hw -sim -pp
+        run: python build.py -dut gpc_4t -debug -all -app -hw -sim -pp
+      - name: Run build lotr -tests '' -app -hw -sim -pp
+        run: python build.py -dut lotr -debug -tests 'ascii_test print_int_test sorting_VGA parallel_7seg Alive_VGA_2' -app -hw -sim -pp  
 
 

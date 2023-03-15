@@ -1,9 +1,0 @@
-*
-!.gitignore
-!*/
-!Makefile
-!*.c
-!*.h
-!*.S
-!*.ld
-!*.lds
