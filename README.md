@@ -61,14 +61,8 @@ Proof of concept for multi-thread applications for the multi-core design.
 ***
 
 # Pointers To Get Started
-- WSL (Windows subsystem Linux):  
-https://docs.microsoft.com/en-us/windows/wsl/install-win10  
-Will allow you to install Linux on your Windows machine without Linux virtual machine.  
-This will help to install the RISC-V toolchain.  
-- RISCV Tool-Chain:  
-https://github.com/riscv/riscv-gnu-toolchain.  
-This will allow you to generate the machine code needed to load our instruction memory and simulate the RISCV multi-core design.  
-C -> Compile -> Assembly -> linker -> assembler -> Machin-Code -> System Verilog readfile  
+- RISCV GCC for windows:
+TODO - write a script to download and install the toolchain.
 
 - Compilation and Simulation:  
 Using Modelsim - https://fpgasoftware.intel.com/
@@ -81,17 +75,21 @@ MAS (Micro-Level-Architecture-Specification):
 see under documentation
 <TODO>  
 
-- Ring Controler - RC - RTL Deisgn:     
+- Ring Controler - RC - RTL Design:     
 HAS (High-Level-Architecture-Specification):        
 see under documentation     
 MAS (Micro-Level-Architecture-Specification):     
 <TODO>     
 
-- Fabric - LOTR - (Integration Model) - RTL Deisgn:  
+- Fabric - LOTR - (Integration Model) - RTL Design:  
 HAS (High-Level-Architecture-Specification):  
 MAS (Micro-Level-Architecture-Specification):  
 <TODO>  
 
+- uart_io tile- RTL Design & python terminal for FPGA IO:  
+HAS (High-Level-Architecture-Specification):  
+MAS (Micro-Level-Architecture-Specification):  
+<TODO>  
 - SW Stack: 
   <TODO>  
 
