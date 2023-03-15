@@ -11,13 +11,15 @@ Created : 22/08/2021
 // 0x400000 - 0x400200 - Thread 0
 
 // REGION == 2'b01;
-#define SCRATCHPAD0_CORE_1  ((volatile int *) (0x01C00200))
-#define SCRATCHPAD0_CORE_2  ((volatile int *) (0x02C00200))
-#define SCRATCHPAD0_CORE    ((volatile int *) (0x00C00200))
-#define SHARED_SPACE        ((volatile int *) (0x00400f00))
-#define CR_THREAD           ((volatile int *) (0x00C00004))
-#define CR_THREAD_PC_EN     ((volatile int *) (0x00C00150))
-#define CR_CORE_ID          ((volatile int *) (0x00C00008))
+//#define SCRATCHPAD0_CORE_1  ((volatile int *) (0x01C00200))
+//#define SCRATCHPAD0_CORE_2  ((volatile int *) (0x02C00200))
+//#define SCRATCHPAD0_CORE    ((volatile int *) (0x00C00200))
+//#define SHARED_SPACE        ((volatile int *) (0x00400f00))
+//#define CR_THREAD           ((volatile int *) (0x00C00004))
+//#define CR_PC_EN     ((volatile int *) (0x00C00150))
+//#define CR_CORE_ID          ((volatile int *) (0x00C00008))
+#include "LOTR_defines.h"
+#include "graphic.h"
 
 int main() {
     int ThreadId = CR_THREAD[0];
@@ -39,7 +41,11 @@ int main() {
                 SHARED_SPACE[5] = SCRATCHPAD0_CORE_2[1];
                 SHARED_SPACE[6] = SCRATCHPAD0_CORE_2[2];
                 SHARED_SPACE[7] = SCRATCHPAD0_CORE_2[3];
-                while(1);
+                set_cursor(10,0);
+                for(int i=0;i<8;i++){
+                    rvc_print_int(SHARED_SPACE[i]);
+                    rvc_printf(" ");
+                }
             }
             else if(CR_CORE_ID[0] == 2) {
                 SCRATCHPAD0_CORE_1[0] = 0x10;               //Writing to Core1
@@ -55,25 +61,31 @@ int main() {
                 SHARED_SPACE[5] = SCRATCHPAD0_CORE_1[1];
                 SHARED_SPACE[6] = SCRATCHPAD0_CORE_1[2];
                 SHARED_SPACE[7] = SCRATCHPAD0_CORE_1[3];
+                set_cursor(20,0);
+                for(int i=0;i<8;i++){
+                    rvc_print_int(SHARED_SPACE[i]);
+                    rvc_printf(" ");
+                }
                 while(1);
             }
             //CR_SCRATCHPAD0 - Core0 Data
             //CR_SCRATCHPAD1 - Core1 Data
             //CR_SCRATCHPAD2 - Core0 Ready flag
             //CR_SCRATCHPAD3 - Core1 Ready flag            
+        break;
         case 0x1 :
             // Write 0 to PC_En[1] CR
-            CR_THREAD_PC_EN[1] = 0;
+            CR_PC_EN[1] = 0;
             while(1);
         break;
         case 0x2 :
             // Write 0 to PC_En[2] CR
-            CR_THREAD_PC_EN[2] = 0;
+            CR_PC_EN[2] = 0;
             while(1);
         break;
         case 0x3 :
             // Write 0 to PC_En[3] CR
-            CR_THREAD_PC_EN[3] = 0;
+            CR_PC_EN[3] = 0;
             while(1);
         break;
     }   

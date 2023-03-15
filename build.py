@@ -152,8 +152,8 @@ class Test:
                     #print(results.stdout)
                     with open("hw_compile.log", "w") as file:
                         file.write(results.stdout)
-                    print_message('[INFO] hw compilation finished with - '+','.join(results.stdout.split('\n')[-2:-1]))
                     print_message(' compile results >>>>> target/'+self.project+'/modelsim/hw_compile.log')
+                    print_message('[INFO] hw compilation finished with - '+','.join(results.stdout.split('\n')[-2:-1]))
         else:
             print_message(f'[INFO] HW compilation is already done\n')
         os.chdir(MODEL_ROOT)
@@ -173,8 +173,8 @@ class Test:
                 print(results.stdout)
             else:
                 # print(results.stdout) - TODO write the results to a file instead of to display. print the path to the file
-                print_message('[INFO] hw simulation finished with - '+','.join(results.stdout.split('\n')[-2:-1]))
                 print_message(' compile results >>>>> target/'+self.project+'/tests/'+self.name+'/'+self.name+'_transcript')
+                print_message('[INFO] hw simulation finished with - '+','.join(results.stdout.split('\n')[-2:-1]))
         if os.path.exists('transcript'):  # copy transcript file to the test directory
             shutil.copy('transcript', '../tests/'+self.name+'/'+self.name+'_transcript')
             grep_eot = 'grep EOT ../tests/'+self.name+'/'+self.name+'_transcript'

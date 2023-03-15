@@ -104,7 +104,7 @@
 #define CLEAR_TOP         0x0             
 #define CLEAR_BOTTOM      0x0           
 
-/* ASCII tabels */
+/* ASCII tables */
 unsigned int ASCII_TOP[97] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SPACE_TOP,
                               0,0,0,0,0,0,0,0,0,0,COMMA_TOP,0,POINT_TOP,0,ZERO_TOP,ONE_TOP,TWO_TOP,
                               THREE_TOP,FOUR_TOP,FIVE_TOP,SIX_TOP,SEVEN_TOP,EIGHT_TOP,NINE_TOP,0,0,0,0,0,0,0,A_TOP,
@@ -118,7 +118,7 @@ unsigned int ASCII_BOTTOM[97] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
                                  M_BOTTOM,N_BOTTOM,O_BOTTOM,P_BOTTOM,Q_BOTTOM,R_BOTTOM,S_BOTTOM,T_BOTTOM,
                                  U_BOTTOM,V_BOTTOM,W_BOTTOM,X_BOTTOM,Y_BOTTOM,Z_BOTTOM};
 
-/* ANIME tabels */
+/* ANIME tables */
 unsigned int ANIME_TOP[6] = {WALK_MAN_TOP_0,WALK_MAN_TOP_1,WALK_MAN_TOP_2,WALK_MAN_TOP_3,WALK_MAN_TOP_4,CLEAR_TOP};
 unsigned int ANIME_BOTTOM[6] = {WALK_MAN_BOTTOM_0,WALK_MAN_BOTTOM_1,WALK_MAN_BOTTOM_2,WALK_MAN_BOTTOM_3,
                                 WALK_MAN_BOTTOM_4,CLEAR_BOTTOM};

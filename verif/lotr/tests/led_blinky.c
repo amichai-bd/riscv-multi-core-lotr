@@ -5,11 +5,8 @@ test owner: Adi Levy
 Created : 16.6.2022
 */
 
-#define LED_FGPA  ((volatile int *) (0x03002018))
-#define SEG0_FGPA  ((volatile int *) (0x03002000))
-#define SWITCH_FGPA  ((volatile int *) (0x03002024))
-#define CR_WHO_AM_I ((volatile int *) (0x00C00000))
-
+#include "LOTR_defines.h"
+#include "graphic.h"
 int main() {
     int UniqeId = CR_WHO_AM_I[0];
     int counter = 1 , timer = 0, counter2 = 1023;

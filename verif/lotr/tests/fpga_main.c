@@ -9,17 +9,6 @@ Created : 01/08/2022
 #include "graphic.h"
 #define BUBBLE
 #define INSERTION
-
-#define CR_ID10_PC_EN  ((volatile int *)  (0x01C00150))
-#define CR_ID11_PC_EN  ((volatile int *)  (0x01C00154))
-#define CR_ID12_PC_EN  ((volatile int *)  (0x01C00158))
-#define CR_ID13_PC_EN  ((volatile int *)  (0x01C0015c))
-
-#define CR_ID20_PC_EN  ((volatile int *)  (0x02C00150))
-#define CR_ID21_PC_EN  ((volatile int *)  (0x02C00154))
-#define CR_ID22_PC_EN  ((volatile int *)  (0x02C00158))
-#define CR_ID23_PC_EN  ((volatile int *)  (0x02C0015c))   
-
 void delay(){
     int timer = 0;       
     while(timer < 80000){
@@ -64,8 +53,6 @@ void bubbleSort(int arr[], int n, int offset1, int offset2)
                 delay();
             }
 }
-
-
 
 #endif
 
@@ -225,169 +212,151 @@ void sys_info(){
 
 }
 
-#define WRITE_REG(REG,VAL) (*REG) = VAL
-#define READ_REG(VAL,REG)  VAL    = (*REG)
-#define VGA_PTR(PTR,OFF)   PTR    = (volatile int *) (VGA_MEM_BASE + OFF)
-/* VGA defines */
-#define VGA_MEM_BASE       0x03400000
-#define VGA_MEM_SIZE_BYTES 38400
-#define VGA_MEM_SIZE_WORDS 9600
-#define LINE               320
-#define BYTES              4
-#define COLUMN             80 /* COLUMN between 0 - 79 (80x60) */
-#define RAWS               60 /* RAWS between 0 - 59 (80x60) */
-/* ASCII tables addresses */
-#define ASCII_TOP_BASE       ((volatile int *) 0x00400900) //= 20'h2100 ; // RO 32 bit
-#define ASCII_BOTTOM_BASE    ((volatile int *) 0x00400a00)
-/* This function print a char note on the screen in (raw,col) position */
-//void draw_char(char note, int raw, int col) ->FIXME use char
-
-
 #define SNK_RIGHT 0
 #define SNK_DOWN  1
 #define SNK_UP    2
 #define SNK_LEFT  4
 #define SNK_SIZE  15
-char new_direction(char cur_direction){
-    char new_direction;
-    new_direction = SWITCH_FGPA[0];
-
-    if((new_direction != SNK_RIGHT) && (new_direction != SNK_UP) && (new_direction != SNK_LEFT) && (new_direction != SNK_DOWN) ||
-        (cur_direction == SNK_RIGHT) && (new_direction == SNK_LEFT) || (cur_direction == SNK_LEFT) && (new_direction == SNK_RIGHT) ||
-         (cur_direction == SNK_UP) && (new_direction == SNK_DOWN) || (cur_direction == SNK_DOWN) && (new_direction == SNK_UP) ){
-        new_direction = cur_direction;
-    }
-    return new_direction;
-}
-void snk_move (char direction, char *snk_x_pos, char *snk_y_pos, char size){
-    for (int i =(size-1); i>0 ; i--){
-        snk_x_pos[i] = snk_x_pos[i-1];
-        snk_y_pos[i] = snk_y_pos[i-1];
-    } //for
-    if(direction == SNK_UP) {
-        snk_x_pos[0] = snk_x_pos[1];
-        snk_y_pos[0] = snk_y_pos[1] -1;
-    } //if SNK_UP
-    if(direction == SNK_DOWN) {
-        snk_x_pos[0] = snk_x_pos[1];
-        snk_y_pos[0] = snk_y_pos[1] + 1;
-    } //if SNK_DOWN
-    if(direction == SNK_LEFT) {
-        snk_x_pos[0] = snk_x_pos[1] - 1;
-        snk_y_pos[0] = snk_y_pos[1];
-    } //if SNK_LEFT
-    if(direction == SNK_RIGHT) {
-        snk_x_pos[0] = snk_x_pos[1] + 1;
-        snk_y_pos[0] = snk_y_pos[1];
-    } //if SNK_RIGHT
-    if(direction == 0) {
-        snk_x_pos[0] = snk_x_pos[1] + 1;
-        snk_y_pos[0] = snk_y_pos[1];
-    } //if NO direction set
-}
-void print_snake (char hit, char *snk_valid, char *snk_x_pos, char *snk_y_pos, char size) {
-    for(int i = 0; i<size; i++) {
-        if(snk_valid[i]){
-            draw_char('X', 2*snk_y_pos[i],  snk_x_pos[i]);
-            if(snk_valid[i+1] == 0) {
-                if(hit) {
-                    snk_valid[i+1] = 1;
-                    hit = 0;
-                } else {
-                    draw_char(' ', 2*snk_y_pos[i+1],  snk_x_pos[i+1]);
-                }
-            } 
-        }
-    }
-}
-char eat(char *snk_valid, char snk_x_pos, char snk_y_pos, char apple_x, char apple_y , char *apple_indx){
-    char hit = ((snk_x_pos == apple_x) && (snk_y_pos == apple_y)) ? 1 : 0;
-    if (hit) {
-         *apple_indx = *apple_indx +1;
-    }
-    return hit;
-}
-// int check_hit (int snk_x_pos, int snk_y_pos) {
-//     int kill = 0;
-//     if(snk_x_pos == 0 || snk_x_pos ==79 || snk_y_pos == 0 || snk_y_pos ==59)  kill = 1;
-//     return kill;
-// }
-// void new_apple (int * apple_x, int *apple_y){
-//     *apple_x = 9;
-//     *apple_y = 9;
-// }
-
-void snake_game (){
-    char snk_x_pos [SNK_SIZE];
-    char snk_y_pos [SNK_SIZE];
-    char snk_valid [SNK_SIZE];
-    char direction = SNK_RIGHT;
-    char apple_x = 5;
-    char apple_y = 5;
-    char apple_indx = 0;
-    char score = 0;
-    char kill = 0;
-    char loc = 0;
-    char hit_apple;
-    char Switch;
-
-    
-    while (1)
-    { 
-    Switch = *SWITCH_FGPA;
-        if(Switch>127){
-            clear_screen();
-            apple_x = 5;
-            apple_y = 5;
-            apple_indx = 0;
-            score = 0;
-            kill = 0;
-            loc = 0;
-            for(int x = 0; x<80; x++) {
-                draw_char('A', 0  , x);
-                draw_char('A', 2*59, x);
-            }
-            for(int y = 0; y<60; y++) {
-                draw_char('A', y<<1,  0);
-                draw_char('A', y<<1, 79);
-            }
-            for(char i = 0; i < SNK_SIZE ; i ++) {
-                snk_x_pos[i] = i+20;
-                snk_y_pos[i] = 20;
-                snk_valid[i] = (i<5) ? 1 : 0;
-            }
-        }
-        direction = new_direction(direction);
-        if(kill == 0 ){
-            snk_move(direction, snk_x_pos, snk_y_pos, SNK_SIZE);
-        }
-        hit_apple = eat(snk_valid, snk_x_pos[0], snk_y_pos[0], apple_x, apple_y, &apple_indx);
-        if( hit_apple == 1 ) {
-            if (loc == 0){
-                apple_x = 9, apple_y = 9;
-                loc = 1;
-            }
-            else {
-                apple_x = 29, apple_y = 29;
-                loc = 0;
-            }            
-
-            score++;
-        }
-        set_cursor(3,20);
-        rvc_printf("GAME SCORE\n");    
-        //print_apple
-        draw_char('O', 2*apple_y,  apple_x);
-        print_snake(hit_apple, snk_valid, snk_x_pos, snk_y_pos, SNK_SIZE);   
-        //print_score
-        draw_char((score+'0'), 3,  39);
-        kill =  (snk_x_pos[0] == 0 || snk_x_pos[0] ==79 || snk_y_pos[0] == 0 || snk_y_pos[0] ==59);
-        hit_apple = 0;
-
-        delay();
-    }
-    
-}
+//char new_direction(char cur_direction){
+//    char new_direction;
+//    new_direction = SWITCH_FGPA[0];
+//
+//    if((new_direction != SNK_RIGHT) && (new_direction != SNK_UP) && (new_direction != SNK_LEFT) && (new_direction != SNK_DOWN) ||
+//        (cur_direction == SNK_RIGHT) && (new_direction == SNK_LEFT) || (cur_direction == SNK_LEFT) && (new_direction == SNK_RIGHT) ||
+//         (cur_direction == SNK_UP) && (new_direction == SNK_DOWN) || (cur_direction == SNK_DOWN) && (new_direction == SNK_UP) ){
+//        new_direction = cur_direction;
+//    }
+//    return new_direction;
+//}
+//void snk_move (char direction, char *snk_x_pos, char *snk_y_pos, char size){
+//    for (int i =(size-1); i>0 ; i--){
+//        snk_x_pos[i] = snk_x_pos[i-1];
+//        snk_y_pos[i] = snk_y_pos[i-1];
+//    } //for
+//    if(direction == SNK_UP) {
+//        snk_x_pos[0] = snk_x_pos[1];
+//        snk_y_pos[0] = snk_y_pos[1] -1;
+//    } //if SNK_UP
+//    if(direction == SNK_DOWN) {
+//        snk_x_pos[0] = snk_x_pos[1];
+//        snk_y_pos[0] = snk_y_pos[1] + 1;
+//    } //if SNK_DOWN
+//    if(direction == SNK_LEFT) {
+//        snk_x_pos[0] = snk_x_pos[1] - 1;
+//        snk_y_pos[0] = snk_y_pos[1];
+//    } //if SNK_LEFT
+//    if(direction == SNK_RIGHT) {
+//        snk_x_pos[0] = snk_x_pos[1] + 1;
+//        snk_y_pos[0] = snk_y_pos[1];
+//    } //if SNK_RIGHT
+//    if(direction == 0) {
+//        snk_x_pos[0] = snk_x_pos[1] + 1;
+//        snk_y_pos[0] = snk_y_pos[1];
+//    } //if NO direction set
+//}
+//void print_snake (char hit, char *snk_valid, char *snk_x_pos, char *snk_y_pos, char size) {
+//    for(int i = 0; i<size; i++) {
+//        if(snk_valid[i]){
+//            draw_char('X', 2*snk_y_pos[i],  snk_x_pos[i]);
+//            if(snk_valid[i+1] == 0) {
+//                if(hit) {
+//                    snk_valid[i+1] = 1;
+//                    hit = 0;
+//                } else {
+//                    draw_char(' ', 2*snk_y_pos[i+1],  snk_x_pos[i+1]);
+//                }
+//            } 
+//        }
+//    }
+//}
+//char eat(char *snk_valid, char snk_x_pos, char snk_y_pos, char apple_x, char apple_y , char *apple_indx){
+//    char hit = ((snk_x_pos == apple_x) && (snk_y_pos == apple_y)) ? 1 : 0;
+//    if (hit) {
+//         *apple_indx = *apple_indx +1;
+//    }
+//    return hit;
+//}
+//// int check_hit (int snk_x_pos, int snk_y_pos) {
+////     int kill = 0;
+////     if(snk_x_pos == 0 || snk_x_pos ==79 || snk_y_pos == 0 || snk_y_pos ==59)  kill = 1;
+////     return kill;
+//// }
+//// void new_apple (int * apple_x, int *apple_y){
+////     *apple_x = 9;
+////     *apple_y = 9;
+//// }
+//
+//void snake_game (){
+//    char snk_x_pos [SNK_SIZE];
+//    char snk_y_pos [SNK_SIZE];
+//    char snk_valid [SNK_SIZE];
+//    char direction = SNK_RIGHT;
+//    char apple_x = 5;
+//    char apple_y = 5;
+//    char apple_indx = 0;
+//    char score = 0;
+//    char kill = 0;
+//    char loc = 0;
+//    char hit_apple;
+//    char Switch;
+//
+//    
+//    while (1)
+//    { 
+//    Switch = *SWITCH_FGPA;
+//        if(Switch>127){
+//            clear_screen();
+//            apple_x = 5;
+//            apple_y = 5;
+//            apple_indx = 0;
+//            score = 0;
+//            kill = 0;
+//            loc = 0;
+//            for(int x = 0; x<80; x++) {
+//                draw_char('A', 0  , x);
+//                draw_char('A', 2*59, x);
+//            }
+//            for(int y = 0; y<60; y++) {
+//                draw_char('A', y<<1,  0);
+//                draw_char('A', y<<1, 79);
+//            }
+//            for(char i = 0; i < SNK_SIZE ; i ++) {
+//                snk_x_pos[i] = i+20;
+//                snk_y_pos[i] = 20;
+//                snk_valid[i] = (i<5) ? 1 : 0;
+//            }
+//        }
+//        direction = new_direction(direction);
+//        if(kill == 0 ){
+//            snk_move(direction, snk_x_pos, snk_y_pos, SNK_SIZE);
+//        }
+//        hit_apple = eat(snk_valid, snk_x_pos[0], snk_y_pos[0], apple_x, apple_y, &apple_indx);
+//        if( hit_apple == 1 ) {
+//            if (loc == 0){
+//                apple_x = 9, apple_y = 9;
+//                loc = 1;
+//            }
+//            else {
+//                apple_x = 29, apple_y = 29;
+//                loc = 0;
+//            }            
+//
+//            score++;
+//        }
+//        set_cursor(3,20);
+//        rvc_printf("GAME SCORE\n");    
+//        //print_apple
+//        draw_char('O', 2*apple_y,  apple_x);
+//        print_snake(hit_apple, snk_valid, snk_x_pos, snk_y_pos, SNK_SIZE);   
+//        //print_score
+//        draw_char((score+'0'), 3,  39);
+//        kill =  (snk_x_pos[0] == 0 || snk_x_pos[0] ==79 || snk_y_pos[0] == 0 || snk_y_pos[0] ==59);
+//        hit_apple = 0;
+//
+//        delay();
+//    }
+//    
+//}
 
 
 int main() {
@@ -470,7 +439,8 @@ int main() {
             }
             else if( x == 133){
                 clear_screen();
-                snake_game();
+                //snake_game();
+                rvc_printf("THE SNAKE GAME IS DISABLED DUE TO MEMORY SIZE\n");                  
                 while(1);
             }            
             else if (x == 132){

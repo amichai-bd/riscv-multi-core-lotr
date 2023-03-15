@@ -4,19 +4,19 @@ owner: Adi Levy
 Created : 1/07/2022
 */
 
-//Core1 Scrachpad
+//Core1 Scratchpad
 #define SCRATCHPAD0_CORE_1  ((volatile int *) (0x01400900))
 #define SCRATCHPAD1_CORE_1  ((volatile int *) (0x01400A00))
 #define SCRATCHPAD2_CORE_1  ((volatile int *) (0x01400B00))
 #define SCRATCHPAD3_CORE_1  ((volatile int *) (0x01400C00))
 
-//Core1 Scrachpad
+//Core1 Scratchpad
 #define SCRATCHPAD0_CORE_2  ((volatile int *) (0x02400900))
 #define SCRATCHPAD1_CORE_2  ((volatile int *) (0x02400A00))
 #define SCRATCHPAD2_CORE_2  ((volatile int *) (0x02400B00))
 #define SCRATCHPAD3_CORE_2  ((volatile int *) (0x02400C00))
 
-//Local Core screchpad
+//Local Core scratchpad
 #define SCRATCHPAD0_CORE    ((volatile int *) (0x00400900))
 #define SCRATCHPAD1_CORE    ((volatile int *) (0x00400A00))
 #define SCRATCHPAD2_CORE    ((volatile int *) (0x00400B00))
@@ -26,6 +26,8 @@ Created : 1/07/2022
 #define SHARED_SPACE ((volatile int *) (0x00400f00))
 
 //CRs
+#define CR_PC_EN     ((volatile int *) (0x00C00150))
+
 #define CR_ID10_PC_EN  ((volatile int *)  (0x01C00150))
 #define CR_ID11_PC_EN  ((volatile int *)  (0x01C00154))
 #define CR_ID12_PC_EN  ((volatile int *)  (0x01C00158))

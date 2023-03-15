@@ -128,7 +128,7 @@ task end_tb;
     $fclose(trk_thread1_reg_write);
     $fclose(trk_thread2_reg_write);  
     $fclose(trk_thread3_reg_write);          
-    $display({"Test : ",hpath,msg});        
+    $display({" EOT Test : ",hpath,msg});        
     $finish;
 endtask
     
