@@ -1,0 +1,19 @@
+# this is a github action that runs the python build
+name: lotr_sanity
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: [self-hosted , windows, x64]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run build rc -all -app -hw -sim
+        run: python build.py -dut rc -debug -all -hw -sim
+
+
