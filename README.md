@@ -1,6 +1,4 @@
 [![LOTR](https://github.com/amichai-bd/riscv-multi-core-lotr/actions/workflows/main.yml/badge.svg)](https://github.com/amichai-bd/riscv-multi-core-lotr/actions/workflows/main.yml)  
-![example event parameter](https://github.com/amichai-bd/riscv-multi-core-lotr/actions/workflows/main.yml/badge.svg?event=push)
-
 
 # riscv-multi-core-lotr
 Accelerator for multi-thread processing IP.     
