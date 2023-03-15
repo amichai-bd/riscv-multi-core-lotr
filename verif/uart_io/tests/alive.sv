@@ -34,4 +34,6 @@
       join_any
       uart_bit_wait(10);
       $display("%s", {50{"*"}});
+      $display("EOT - alive | reached end of test");
+      $display("%s", {50{"*"}});
       $finish(1);

@@ -290,7 +290,7 @@ end
        `include "alive.sv"
    end
       $display("======================================");
-      $display("EOT - not sequence ran");
+      $display("EOT - [ERROR] - did the sequence run?");
       $display("======================================");
       $finish(1);
    end   
