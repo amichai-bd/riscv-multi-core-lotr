@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted , windows, x64]
     steps:
       - uses: actions/checkout@v2
-      - name: Run build rc -all -app -hw -sim
-        run: python build.py -dut rc -debug -all -hw -sim
+      - name: Run build rc -all -hw -sim -pp
+        run: python build.py -dut rc -debug -all -hw -sim -pp
 
 
