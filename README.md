@@ -81,6 +81,8 @@ TODO - write a script to download and install the toolchain.
 - Compilation and Simulation:  
 Using Modelsim - https://fpgasoftware.intel.com/
 
+### The HW & SW in the project:
+
 - Core - GPC_4T - RTL Design:   
 HAS (High-Level-Architecture-Specification):     
 RISCV Spec - https://github.com/amichai-bd/riscv-multi-core-lotr/blob/master/doc/GPC_4T_doc/riscv-spec-20191213.pdf   
