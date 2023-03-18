@@ -65,7 +65,13 @@ Proof of concept for multi-thread applications for the multi-core design.
 ## Getting Started
 To see your build and run options, run the following command:  
 ```python build.py -h ```  
-
+example:  
+```python build.py -dut 'lotr' -debug -tests 'wip' -app ```   
+Will compile using gcc the program called 'wip', which then can be used to load the FPGA with the uart:   
+``` cd source/uart_io/pyterminal/src ```   
+Then:   
+``` python uart_term.py < sequence_abd/load_wip.txt  ```   
+will load the FGPA with the program 'wip' and run it.   
 ## Prerequisite
 Before you start, make sure you have the following tools and software installed:
 - [RISCV gcc releases](https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/) & [install](https://xpack.github.io/riscv-none-embed-gcc/install/), a Windows gcc for RISCV ISA.  

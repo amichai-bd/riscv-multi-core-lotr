@@ -261,3 +261,9 @@ void rvc_print_int(int num)
     WRITE_REG(CR_CURSOR_H, col);
     WRITE_REG(CR_CURSOR_V, raw);
 }
+void rvc_delay(int delay){
+    int timer = 0;       
+    while(timer < delay){
+        timer++;
+    }      
+}
