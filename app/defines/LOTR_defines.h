@@ -10,7 +10,7 @@ Created : 1/07/2022
 #define SCRATCHPAD2_CORE_1  ((volatile int *) (0x01400B00))
 #define SCRATCHPAD3_CORE_1  ((volatile int *) (0x01400C00))
 
-//Core1 Scratchpad
+//Core2 Scratchpad
 #define SCRATCHPAD0_CORE_2  ((volatile int *) (0x02400900))
 #define SCRATCHPAD1_CORE_2  ((volatile int *) (0x02400A00))
 #define SCRATCHPAD2_CORE_2  ((volatile int *) (0x02400B00))

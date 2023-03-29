@@ -71,12 +71,27 @@ t_opcode      RingRspOpcodeQnnnH   [NUM_TILE + 1 : 1];
 logic  [31:0] RingRspAddressQnnnH  [NUM_TILE + 1 : 1];
 logic  [31:0] RingRspDataQnnnH     [NUM_TILE + 1 : 1];
 //assign the last ring output to first ring input
-assign RingReqValidQnnnH    [1] = RingReqValidQnnnH    [NUM_TILE+1];
+// garbage collector
+logic RingReqGarbage;
+logic RingRspGarbage;
+assign RingReqGarbage = (RingReqAddressQnnnH[NUM_TILE+1][31:24] != 8'h1) &&
+                        (RingReqAddressQnnnH[NUM_TILE+1][31:24] != 8'h2) &&
+                        (RingReqAddressQnnnH[NUM_TILE+1][31:24] != 8'h3) &&
+                        (RingReqAddressQnnnH[NUM_TILE+1][31:24] != 8'h4) &&
+                        (RingReqAddressQnnnH[NUM_TILE+1][31:24] != 8'hff) ;
+assign RingRspGarbage = (RingRspAddressQnnnH[NUM_TILE+1][31:24] != 8'h1) &&
+                        (RingRspAddressQnnnH[NUM_TILE+1][31:24] != 8'h2) &&
+                        (RingRspAddressQnnnH[NUM_TILE+1][31:24] != 8'h3) &&
+                        (RingRspAddressQnnnH[NUM_TILE+1][31:24] != 8'h4) &&
+                        (RingRspAddressQnnnH[NUM_TILE+1][31:24] != 8'hff) ;                        
+
+assign RingReqValidQnnnH    [1] = RingReqGarbage ? 1'b0 : RingReqValidQnnnH[NUM_TILE+1];
 assign RingReqRequestorQnnnH[1] = RingReqRequestorQnnnH[NUM_TILE+1];
 assign RingReqOpcodeQnnnH   [1] = RingReqOpcodeQnnnH   [NUM_TILE+1];
 assign RingReqAddressQnnnH  [1] = RingReqAddressQnnnH  [NUM_TILE+1];
 assign RingReqDataQnnnH     [1] = RingReqDataQnnnH     [NUM_TILE+1];
-assign RingRspValidQnnnH    [1] = RingRspValidQnnnH    [NUM_TILE+1];
+
+assign RingRspValidQnnnH    [1] = RingRspGarbage ? 1'b0 : RingRspValidQnnnH[NUM_TILE+1];
 assign RingRspRequestorQnnnH[1] = RingRspRequestorQnnnH[NUM_TILE+1];
 assign RingRspOpcodeQnnnH   [1] = RingRspOpcodeQnnnH   [NUM_TILE+1];
 assign RingRspAddressQnnnH  [1] = RingRspAddressQnnnH  [NUM_TILE+1];

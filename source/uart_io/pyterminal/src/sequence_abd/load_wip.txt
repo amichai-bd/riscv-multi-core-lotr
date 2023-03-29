@@ -2,6 +2,9 @@ COM3
 W
 0x3C02040
 0x1
+W
+0x01C00150
+0x0
 WB
 0x01000000
 ../../../../target/lotr/tests/wip/gcc_files/inst_mem.sv
@@ -14,6 +17,9 @@ WB
 WB
 0x02000000
 ../../../../target/lotr/tests/wip/gcc_files/data_mem.sv
+W
+0x01C00150
+0x1
 W
 0x3C02040
 0x0

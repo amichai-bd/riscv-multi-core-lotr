@@ -44,12 +44,14 @@ SECTIONS
         . = ALIGN(4);
         *(.rodata);
         *(.rodata.*)
+        . = ALIGN(4);
     } > dataram
 
     .shbss :
     {
         . = ALIGN(4);
         *(.shbss)
+        . = ALIGN(4);
     } > dataram
 
     .data : {
@@ -58,6 +60,7 @@ SECTIONS
         _sdata  =  .;
         *(.data);
         *(.data.*)
+        . = ALIGN(4);
         edata  =  .;
         _edata  =  .;
     } > dataram
@@ -71,6 +74,7 @@ SECTIONS
         *(.sbss)
         *(.sbss.*)
         *(COMMON)
+        . = ALIGN(4);
         _bss_end = .;
     } > dataram
 
