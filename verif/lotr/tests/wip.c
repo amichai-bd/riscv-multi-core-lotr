@@ -126,7 +126,8 @@ int main()
         break;
         case 0x5 : run_t1(); // Core 1 Thread 1
         break;
-        case  0x6   : matrix_calc(); // Core 1 Thread 0
+        case  0x6   :     while(1){matrix_calc();}; // Core 1 Thread 0
+
         break;
         default :
             while(1); 
