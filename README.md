@@ -21,7 +21,7 @@ Writing to Display - accessable with LOAD/STORE from any Thread.
 
 *** 
 ## The reposetory has 4 main projects:  
-### *1) GPC_4T - RISCV core RV32I/E.*  
+### *1) GPC_4T - RISCV core RV32I/E. with 4 HW threads*  
 <img src="https://user-images.githubusercontent.com/81047407/183592644-405f9afd-e804-4680-8908-1f82b70eb6db.png" width="500">
 
 Written in System verilog.   
