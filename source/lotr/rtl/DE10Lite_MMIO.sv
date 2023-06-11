@@ -201,7 +201,7 @@ assign      F2C_RspOpcodeQ504H  = RD_RSP;
 `LOTR_MSFF(CtrlCRMemRdEnQ504,    CtrlCRMemRdEnQ503, QClk)
 `LOTR_MSFF(CtrlCRMemWrEnQ504,    CtrlCRMemWrEnQ503, QClk)
 
-assign F2C_RspValidQ504H = CtrlCRMemRdEnQ504 || CtrlCRMemWrEnQ504 || CtrlVgaMemRdEnQ504 || CtrlVgaMemWrEnQ504;
+assign F2C_RspValidQ504H = CtrlCRMemRdEnQ504 || CtrlVgaMemRdEnQ504;
 assign F2C_RspDataQ504H  = CtrlCRMemRdEnQ504  ? CrRspDataQ504H  : 
                            CtrlVgaMemRdEnQ504 ? VgaRspDataQ504H :
                                                 '0              ;

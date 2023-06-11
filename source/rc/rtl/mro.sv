@@ -51,7 +51,7 @@ end //always_comb  valid_col_set
 always_comb begin : enable
 	EnShiftCol[0][MRO_MSB:0] = {MRO_SIZE{EnAlloc}} ; 
 	for(int col_i =1 ;col_i<MRO_SIZE ;col_i++) begin	
-		EnShiftCol[col_i][MRO_MSB:0] = validCol[col_i-1] && EnShiftCol[col_i-1][MRO_MSB:0] ;
+		EnShiftCol[col_i][MRO_MSB:0] = validCol[col_i-1] & EnShiftCol[col_i-1][MRO_MSB:0] ;
 	end // for
 end //always_comb  enable
 
