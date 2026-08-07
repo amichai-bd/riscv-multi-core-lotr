@@ -30,6 +30,7 @@ parser.add_argument('-dut',   default='gpc_4t',     help='insert your project na
 parser.add_argument('-pp',          action='store_true',    help='run post-process on the tests')
 parser.add_argument('-fpga',        action='store_true',    help='run compile & synthesis for the fpga')
 parser.add_argument('-regress',     default='',             help='insert a level of regression to run on')
+parser.add_argument('-load_seq',    default='',             help='load sequence of instructions from a txt file')
 args = parser.parse_args()
 
 MODEL_ROOT = subprocess.check_output('git rev-parse --show-toplevel', shell=True).decode().split('\n')[0]
@@ -249,6 +250,35 @@ def print_message(msg):
     print(colored(msg,color,attrs=['bold']))        
 
 #####################################################################################################
+#                                           load sequence
+#####################################################################################################
+def load_sequence_instructions(file_path):
+    instructions = []
+    if not file_path or not os.path.exists(file_path):
+        return instructions
+
+    def _parse(file, base_dir):
+        if not os.path.exists(file):
+            print_message(f"[WARNING] Included file not found: {file}")
+            return
+        with open(file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('//') or line.startswith('==='):
+                    continue
+                if line.startswith('`include'):
+                    inc_file = line.split(None, 1)[-1]
+                    inc_path = os.path.join(base_dir, inc_file)
+                    _parse(os.path.abspath(inc_path), os.path.dirname(os.path.abspath(inc_path)))
+                    continue
+                parts = [p.strip() for p in line.split(',')]
+                if len(parts) >= 3 and parts[0] in ('W', 'WB'):
+                    instructions.append((parts[0], parts[1], parts[2]))
+
+    _parse(os.path.abspath(file_path), os.path.dirname(os.path.abspath(file_path)))
+    return instructions
+
+#####################################################################################################
 #                                           main
 #####################################################################################################       
 def main():
@@ -260,6 +290,16 @@ def main():
     # log_file = "target/gpc_4t/build_log.txt"
     
     tests = []
+    # Load sequence instructions if specified
+    if args.load_seq:
+        seq_instructions = load_sequence_instructions(args.load_seq)
+        if seq_instructions:
+            print_message(f"[INFO] Loaded {len(seq_instructions)} sequence instructions from {args.load_seq}")
+            for cmd, addr, val in seq_instructions:
+                print_message(f"[SEQ] {cmd} {addr} {val}")
+        else:
+            print_message(f"[WARNING] No valid instructions found in {args.load_seq}")
+
     if args.all:
         test_list = os.listdir(TESTS)
         for test in test_list:
